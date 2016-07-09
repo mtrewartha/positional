@@ -15,6 +15,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @BindView(R.id.altitude_meters_text_view) TextView metersTextView;
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
     @BindView(R.id.coordinates_longitude_text_view) TextView longitudeTextView;
+    @BindView(R.id.ad_view) AdView adView;
 
     private boolean useMeters;
     private GoogleApiClient googleApiClient;
@@ -68,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } else {
             onFeetClicked();
         }
+
+        loadBannerAd();
     }
 
     @Override
@@ -188,5 +194,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         final SharedPreferences.Editor editor = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE).edit();
         editor.putBoolean(Prefs.KEY_USE_METERS, useMeters);
         editor.apply();
+    }
+
+    private void loadBannerAd() {
+        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_mob_app_id));
+        final AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+        if (BuildConfig.DEBUG) {
+            adRequestBuilder
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice(getString(R.string.ad_mob_device_id_mike_trewartha));
+        }
+        adView.loadAd(adRequestBuilder.build());
     }
 }

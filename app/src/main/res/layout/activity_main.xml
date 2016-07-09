@@ -1,92 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="io.trewartha.positional.MainActivity">
 
     <LinearLayout
-        android:id="@+id/elevation_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/altitude_text_view"
+        <LinearLayout
+            android:id="@+id/elevation_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/elevation_text_size"
-            tools:text="14,110"/>
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/altitude_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/elevation_text_size"
+                tools:text="14,110"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/altitude_feet_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/unit_feet"
+                    android:textSize="@dimen/elevation_unit_text_size"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginStart="12dp"
+                    android:text="|"
+                    android:textSize="32sp"
+                    tools:ignore="HardcodedText"/>
+
+                <TextView
+                    android:id="@+id/altitude_meters_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/unit_meters"
+                    android:textSize="@dimen/elevation_unit_text_size"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/coordinates_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/altitude_feet_text_view"
+                android:id="@+id/coordinates_latitude_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/unit_feet"
-                android:textSize="@dimen/elevation_unit_text_size"/>
+                android:textSize="@dimen/coordinates_text_size"
+                tools:text="-100.000000"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
-                android:text="|"
-                android:textSize="@dimen/elevation_unit_text_size"
+                android:layout_marginEnd="6dp"
+                android:layout_marginStart="6dp"
+                android:text=","
+                android:textSize="@dimen/coordinates_text_size"
                 tools:ignore="HardcodedText"/>
 
             <TextView
-                android:id="@+id/altitude_meters_text_view"
+                android:id="@+id/coordinates_longitude_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/unit_meters"
-                android:textSize="@dimen/elevation_unit_text_size"/>
+                android:textSize="@dimen/coordinates_text_size"
+                tools:text="-100.000000"/>
 
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/coordinates_layout"
-        android:layout_width="wrap_content"
+        android:id="@+id/ad_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/elevation_layout"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="56dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/coordinates_latitude_text_view"
+        <Button
+            android:id="@+id/remove_ads_button"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/coordinates_text_size"
-            tools:text="-100.000000"/>
+            android:layout_gravity="end"
+            android:text="@string/ad_mob_remove_button"/>
 
-        <TextView
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
-            android:layout_marginStart="6dp"
-            android:text=","
-            android:textSize="@dimen/coordinates_text_size"
-            tools:ignore="HardcodedText"/>
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/ad_mob_main_activity_banner_unit_id"/>
 
-        <TextView
-            android:id="@+id/coordinates_longitude_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/coordinates_text_size"
-            tools:text="-100.000000"/>
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>
