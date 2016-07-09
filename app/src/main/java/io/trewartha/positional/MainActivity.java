@@ -1,9 +1,11 @@
 package io.trewartha.positional;
 
 import android.Manifest;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +26,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks {
 
@@ -32,12 +35,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int REQUEST_CODE_ACCESS_FINE_LOCATION = 1;
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
 
-    @BindView(R.id.elevation_text_view) TextView elevationTextView;
-    @BindView(R.id.elevation_unit_text_view) TextView elevationUnitTextView;
+    @BindView(R.id.altitude_text_view) TextView altitudeTextView;
+    @BindView(R.id.altitude_feet_text_view) TextView feetTextView;
+    @BindView(R.id.altitude_meters_text_view) TextView metersTextView;
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
     @BindView(R.id.coordinates_longitude_text_view) TextView longitudeTextView;
 
+    private boolean useMeters;
     private GoogleApiClient googleApiClient;
+    private Location location;
     private LocationRequest locationRequest;
 
     @Override
@@ -55,6 +61,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         locationRequest = LocationRequest.create()
                 .setPriority(LOCATION_UPDATE_PRIORITY)
                 .setInterval(LOCATION_UPDATE_INTERVAL);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE);
+        useMeters = sharedPreferences.getBoolean(Prefs.KEY_USE_METERS, false);
+        if (useMeters) {
+            onMetersClicked();
+        } else {
+            onFeetClicked();
+        }
     }
 
     @Override
@@ -111,9 +125,41 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onLocationChanged(Location location) {
-        elevationTextView.setText(String.format(Locale.getDefault(), "%.1f", location.getAltitude()));
-        latitudeTextView.setText(String.format(Locale.getDefault(), "%.5f", location.getLatitude()));
-        longitudeTextView.setText(String.format(Locale.getDefault(), "%.5f", location.getLongitude()));
+        this.location = location;
+        final String altitude;
+        if (useMeters) {
+            altitude = String.format(Locale.getDefault(), "%,d", (int) location.getAltitude());
+        } else {
+            altitude = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));
+        }
+        final String latitude = String.format(Locale.getDefault(), "%.5f", location.getLatitude());
+        final String longitude = String.format(Locale.getDefault(), "%.5f", location.getLongitude());
+
+        altitudeTextView.setText(altitude);
+        latitudeTextView.setText(latitude);
+        longitudeTextView.setText(longitude);
+    }
+
+    @OnClick(R.id.altitude_feet_text_view)
+    public void onFeetClicked() {
+        useMeters = false;
+        feetTextView.setTypeface(Typeface.DEFAULT_BOLD);
+        metersTextView.setTypeface(Typeface.DEFAULT);
+        if (location != null) {
+            onLocationChanged(location);
+        }
+        saveMetersPreference(false);
+    }
+
+    @OnClick(R.id.altitude_meters_text_view)
+    public void onMetersClicked() {
+        useMeters = true;
+        feetTextView.setTypeface(Typeface.DEFAULT);
+        metersTextView.setTypeface(Typeface.DEFAULT_BOLD);
+        if (location != null) {
+            onLocationChanged(location);
+        }
+        saveMetersPreference(true);
     }
 
     private void requestAccessFineLocationPermission() {
@@ -134,5 +180,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void suspendLocationUpdates() {
         Log.v(TAG, "Suspending location updates");
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+    }
+
+    private void saveMetersPreference(boolean useMeters) {
+        final SharedPreferences.Editor editor = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(Prefs.KEY_USE_METERS, useMeters);
+        editor.apply();
     }
 }

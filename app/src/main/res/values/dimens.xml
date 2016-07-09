@@ -4,5 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="coordinates_text_size">24sp</dimen>
     <dimen name="elevation_text_size">96sp</dimen>
-    <dimen name="elevation_unit_text_size">32sp</dimen>
+    <dimen name="elevation_unit_text_size">24sp</dimen>
 </resources>

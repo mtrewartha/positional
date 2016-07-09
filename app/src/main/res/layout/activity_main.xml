@@ -20,18 +20,40 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/elevation_text_view"
+            android:id="@+id/altitude_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/elevation_text_size"
             tools:text="14,110"/>
 
-        <TextView
-            android:id="@+id/elevation_unit_text_view"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/elevation_unit_text_size"
-            android:text="@string/unit_meters"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/altitude_feet_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unit_feet"
+                android:textSize="@dimen/elevation_unit_text_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="|"
+                android:textSize="@dimen/elevation_unit_text_size"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/altitude_meters_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unit_meters"
+                android:textSize="@dimen/elevation_unit_text_size"/>
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
