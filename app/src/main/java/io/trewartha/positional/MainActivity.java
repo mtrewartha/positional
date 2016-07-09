@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -21,6 +20,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.Locale;
 
@@ -30,7 +30,6 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final int REQUEST_CODE_ACCESS_FINE_LOCATION = 1;
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
@@ -76,10 +75,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_ACCESS_FINE_LOCATION) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "ACCESS_FINE_LOCATION permission granted");
+                FirebaseCrash.log("ACCESS_FINE_LOCATION permission granted");
                 requestLocationUpdates();
             } else {
-                Log.v(TAG, "ACCESS_FINE_LOCATION permission request cancelled");
+                FirebaseCrash.log("ACCESS_FINE_LOCATION permission request cancelled");
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.access_fine_location_permission_explanation_title)
                         .setMessage(R.string.access_fine_location_permission_explanation_message)
@@ -97,19 +96,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.v(TAG, "Google Play Services connection established");
+        FirebaseCrash.log("Google Play Services connection established");
         requestLocationUpdates();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.v(TAG, "Google Play Services connection suspended");
+        FirebaseCrash.log("Google Play Services connection suspended");
         suspendLocationUpdates();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.v(TAG, "Google Play Services connection failed");
+        FirebaseCrash.log("Google Play Services connection failed");
         new AlertDialog.Builder(this)
                 .setTitle(R.string.google_play_services_connection_failed_title)
                 .setMessage(R.string.google_play_services_connection_failed_message)
@@ -142,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @OnClick(R.id.altitude_feet_text_view)
     public void onFeetClicked() {
+        FirebaseCrash.log("Switching to feet");
         useMeters = false;
         feetTextView.setTypeface(Typeface.DEFAULT_BOLD);
         metersTextView.setTypeface(Typeface.DEFAULT);
@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @OnClick(R.id.altitude_meters_text_view)
     public void onMetersClicked() {
+        FirebaseCrash.log("Switching to meters");
         useMeters = true;
         feetTextView.setTypeface(Typeface.DEFAULT);
         metersTextView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -163,26 +164,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void requestAccessFineLocationPermission() {
-        Log.v(TAG, "Requesting permission for ACCESS_FINE_LOCATION");
+        FirebaseCrash.log("Requesting permission for ACCESS_FINE_LOCATION");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ACCESS_FINE_LOCATION);
     }
 
     private void requestLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.v(TAG, "ACCESS_FINE_LOCATION permission is needed");
+            FirebaseCrash.log("ACCESS_FINE_LOCATION permission is needed");
             requestAccessFineLocationPermission();
         } else {
-            Log.v(TAG, "Requesting location updates");
+            FirebaseCrash.log("Requesting location updates");
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
     }
 
     private void suspendLocationUpdates() {
-        Log.v(TAG, "Suspending location updates");
+        FirebaseCrash.log("Suspending location updates");
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 
     private void saveMetersPreference(boolean useMeters) {
+        FirebaseCrash.log("Saving meters preference as " + useMeters);
         final SharedPreferences.Editor editor = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE).edit();
         editor.putBoolean(Prefs.KEY_USE_METERS, useMeters);
         editor.apply();
