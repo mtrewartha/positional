@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="io.trewartha.positional.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/elevation_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/elevation_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/elevation_text_size"
+            tools:text="14,110"/>
+
+        <TextView
+            android:id="@+id/elevation_unit_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/elevation_unit_text_size"
+            android:text="@string/unit_meters"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/coordinates_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/elevation_layout"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="56dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/coordinates_latitude_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/coordinates_text_size"
+            tools:text="-100.000000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="6dp"
+            android:text=","
+            android:textSize="@dimen/coordinates_text_size"
+            tools:ignore="HardcodedText"/>
+
+        <TextView
+            android:id="@+id/coordinates_longitude_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/coordinates_text_size"
+            tools:text="-100.000000"/>
+    </LinearLayout>
+</RelativeLayout>
