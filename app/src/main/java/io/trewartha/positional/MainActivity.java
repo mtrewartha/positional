@@ -129,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
-        populateLocationViews(altitudeUnit, location);
+        if (location != null && location.hasAltitude()) {
+            populateLocationViews(altitudeUnit, location);
+        }
     }
 
     @OnClick(R.id.altitude_unit_text_view)
