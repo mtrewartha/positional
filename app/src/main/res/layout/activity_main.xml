@@ -20,58 +20,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
             <TextView
                 android:id="@+id/altitude_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:textSize="@dimen/elevation_text_size"
-                tools:text="14,110"/>
+                tools:text="0"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/waiting_text_view"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:gravity="center"
+                android:textSize="@dimen/waiting_text_size"
+                android:textColor="@color/gray"
+                android:text="@string/waiting_for_location"/>
 
-                <TextView
-                    android:id="@+id/altitude_feet_text_view"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/unit_feet"
-                    android:textSize="@dimen/elevation_unit_text_size"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginStart="12dp"
-                    android:text="|"
-                    android:textSize="32sp"
-                    tools:ignore="HardcodedText"/>
-
-                <TextView
-                    android:id="@+id/altitude_meters_text_view"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/unit_meters"
-                    android:textSize="@dimen/elevation_unit_text_size"/>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/altitude_unit_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:padding="16dp"
+                android:textSize="@dimen/elevation_unit_text_size"
+                tools:text="@string/unit_feet"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/coordinates_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="64dp"
             android:gravity="center"
             android:orientation="horizontal">
 

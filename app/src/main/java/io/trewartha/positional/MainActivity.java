@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -33,18 +33,20 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks {
 
-    private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
+    private static final String ALTITUDE_UNIT_FEET = "feet";
+    private static final String ALTITUDE_UNIT_METERS = "meters";
     private static final int REQUEST_CODE_ACCESS_FINE_LOCATION = 1;
+    private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
 
+    @BindView(R.id.waiting_text_view) TextView waitingTextView;
     @BindView(R.id.altitude_text_view) TextView altitudeTextView;
-    @BindView(R.id.altitude_feet_text_view) TextView feetTextView;
-    @BindView(R.id.altitude_meters_text_view) TextView metersTextView;
+    @BindView(R.id.altitude_unit_text_view) TextView altitudeUnitTextView;
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
     @BindView(R.id.coordinates_longitude_text_view) TextView longitudeTextView;
     @BindView(R.id.ad_view) AdView adView;
 
-    private boolean useMeters;
+    private String altitudeUnit;
     private GoogleApiClient googleApiClient;
     private Location location;
     private LocationRequest locationRequest;
@@ -66,12 +68,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .setInterval(LOCATION_UPDATE_INTERVAL);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE);
-        useMeters = sharedPreferences.getBoolean(Prefs.KEY_USE_METERS, false);
-        if (useMeters) {
-            onMetersClicked();
-        } else {
-            onFeetClicked();
-        }
+        altitudeUnit = sharedPreferences.getString(Prefs.KEY_ALTITUDE_UNIT, ALTITUDE_UNIT_FEET);
+        populateLocationViews(altitudeUnit, location);
 
         loadBannerAd();
     }
@@ -131,42 +129,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
-        final String altitude;
-        if (useMeters) {
-            altitude = String.format(Locale.getDefault(), "%,d", (int) location.getAltitude());
+        populateLocationViews(altitudeUnit, location);
+    }
+
+    @OnClick(R.id.altitude_unit_text_view)
+    public void onAltitudeUnitClicked() {
+        altitudeUnit = altitudeUnit.equals(ALTITUDE_UNIT_FEET) ? ALTITUDE_UNIT_METERS : ALTITUDE_UNIT_FEET;
+        FirebaseCrash.log("Switching altitude unit to " + altitudeUnit);
+        populateLocationViews(altitudeUnit, location);
+        saveAltitudeUnit(altitudeUnit);
+    }
+
+    private void populateLocationViews(@Nullable String altitudeUnit, @Nullable Location location) {
+        final String latitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLatitude());
+        final String longitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLongitude());
+        final String altitudeText;
+        final String altitudeUnitText;
+        if (altitudeUnit == null || altitudeUnit.equals(ALTITUDE_UNIT_FEET)) {
+            altitudeText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location == null ? 0.0 : location.getAltitude()));
+            altitudeUnitText = getString(R.string.unit_feet);
         } else {
-            altitude = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));
+            altitudeText = String.format(Locale.getDefault(), "%,d", (int) (location == null ? 0.0 : location.getAltitude()));
+            altitudeUnitText = getString(R.string.unit_meters);
         }
-        final String latitude = String.format(Locale.getDefault(), "%.5f", location.getLatitude());
-        final String longitude = String.format(Locale.getDefault(), "%.5f", location.getLongitude());
-
-        altitudeTextView.setText(altitude);
-        latitudeTextView.setText(latitude);
-        longitudeTextView.setText(longitude);
-    }
-
-    @OnClick(R.id.altitude_feet_text_view)
-    public void onFeetClicked() {
-        FirebaseCrash.log("Switching to feet");
-        useMeters = false;
-        feetTextView.setTypeface(Typeface.DEFAULT_BOLD);
-        metersTextView.setTypeface(Typeface.DEFAULT);
-        if (location != null) {
-            onLocationChanged(location);
-        }
-        saveMetersPreference(false);
-    }
-
-    @OnClick(R.id.altitude_meters_text_view)
-    public void onMetersClicked() {
-        FirebaseCrash.log("Switching to meters");
-        useMeters = true;
-        feetTextView.setTypeface(Typeface.DEFAULT);
-        metersTextView.setTypeface(Typeface.DEFAULT_BOLD);
-        if (location != null) {
-            onLocationChanged(location);
-        }
-        saveMetersPreference(true);
+        waitingTextView.setVisibility(location == null ? View.VISIBLE : View.INVISIBLE);
+        latitudeTextView.setText(latitudeText);
+        longitudeTextView.setText(longitudeText);
+        altitudeTextView.setText(altitudeText);
+        altitudeUnitTextView.setText(altitudeUnitText);
     }
 
     private void requestAccessFineLocationPermission() {
@@ -189,10 +179,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 
-    private void saveMetersPreference(boolean useMeters) {
-        FirebaseCrash.log("Saving meters preference as " + useMeters);
+    private void saveAltitudeUnit(@NonNull String altitudeUnit) {
+        FirebaseCrash.log("Saving altitude unit as " + altitudeUnit);
         final SharedPreferences.Editor editor = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE).edit();
-        editor.putBoolean(Prefs.KEY_USE_METERS, useMeters);
+        editor.putString(Prefs.KEY_ALTITUDE_UNIT, altitudeUnit);
         editor.apply();
     }
 
