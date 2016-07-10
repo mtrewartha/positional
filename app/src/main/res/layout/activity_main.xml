@@ -19,26 +19,27 @@
             android:id="@+id/elevation_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:gravity="center"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/altitude_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="0"
                 android:textSize="@dimen/elevation_text_size"
-                tools:text="0"/>
+                tools:ignore="HardcodedText"/>
 
             <TextView
                 android:id="@+id/waiting_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="@dimen/waiting_text_size"
+                android:text="@string/waiting_for_location"
                 android:textColor="@color/gray"
-                android:text="@string/waiting_for_location"/>
+                android:textSize="@dimen/waiting_text_size"/>
 
             <TextView
                 android:id="@+id/altitude_unit_text_view"
