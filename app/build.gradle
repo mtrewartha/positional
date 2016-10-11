@@ -36,17 +36,18 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.google.android.gms:play-services-location:9.2.1'
-    compile 'com.google.firebase:firebase-ads:9.2.1'
-    compile 'com.google.firebase:firebase-crash:9.2.1'
-    compile 'com.jakewharton:butterknife:8.1.0'
-    apt 'com.jakewharton:butterknife-compiler:8.1.0'
     testCompile('com.squareup.assertj:assertj-android:1.1.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.android.gms:play-services-location:9.6.1'
+    compile 'com.google.firebase:firebase-ads:9.6.1'
+    compile 'com.google.firebase:firebase-crash:9.6.1'
+    compile 'com.jakewharton:butterknife:8.1.0'
+    compile 'com.android.support:support-v4:24.2.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.82-beta'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
