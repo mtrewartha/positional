@@ -100,11 +100,13 @@
         android:text="@string/settings_screen_lock_label"
         android:switchPadding="16dp"/>
 
+    <!-- Disable the banner ad for now -->
     <LinearLayout
         android:id="@+id/ad_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/remove_ads_button"

@@ -84,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         screenLockSwitch.setOnCheckedChangeListener(this);
         screenLockSwitch.setChecked(screenLock);
 
-        loadBannerAd();
+        // Disable the banner ad for now. Remember to change
+        // the visibility of the ad layout when re-enabling
+        // this later.
+        //loadBannerAd();
     }
 
     @Override
