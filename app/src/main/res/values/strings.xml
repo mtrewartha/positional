@@ -7,7 +7,7 @@
     <string name="google_play_services_connection_failed_message">Would you like to try again?</string>
     <string name="access_fine_location_permission_explanation_title">Location Permission Required</string>
     <string name="access_fine_location_permission_explanation_message">In order to show your elevation, location and other statistics, we need access to your device\'s location.</string>
-    <string name="waiting_for_location">waiting for location…</string>
+    <string name="locating">locating…</string>
     <string name="unit_feet">feet</string>
     <string name="unit_meters">meters</string>
     <string name="try_again">Try Again</string>

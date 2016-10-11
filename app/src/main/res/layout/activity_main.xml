@@ -8,16 +8,17 @@
     android:orientation="vertical"
     tools:context="io.trewartha.positional.MainActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/altitude_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:animateLayoutChanges="true"
             android:gravity="center"
             android:orientation="vertical"
@@ -31,15 +32,6 @@
                 android:text="0"
                 android:textSize="@dimen/elevation_text_size"
                 tools:ignore="HardcodedText"/>
-
-            <TextView
-                android:id="@+id/waiting_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/waiting_for_location"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/waiting_text_size"/>
 
             <TextView
                 android:id="@+id/altitude_unit_text_view"
@@ -58,9 +50,6 @@
             android:id="@+id/coordinates_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/altitude_layout"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="64dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -89,14 +78,14 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <Switch
         android:id="@+id/screen_lock_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="6dp"
+        android:layout_margin="12dp"
         android:text="@string/settings_screen_lock_label"
         android:switchPadding="16dp"/>
 

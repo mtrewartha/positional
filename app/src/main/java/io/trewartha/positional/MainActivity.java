@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
 
-    @BindView(R.id.waiting_text_view) TextView waitingTextView;
     @BindView(R.id.altitude_text_view) TextView altitudeTextView;
     @BindView(R.id.altitude_unit_text_view) TextView altitudeUnitTextView;
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private String altitudeUnit;
     private boolean screenLock;
-    private GoogleApiClient googleApiClient;
+    private GoogleApiClient googleAPIClient;
     private Location location;
     private LocationRequest locationRequest;
     private SharedPreferences sharedPreferences;
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         initializeNightMode();
         ButterKnife.bind(this);
 
-        googleApiClient = new GoogleApiClient.Builder(this)
+        googleAPIClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
@@ -207,14 +205,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         final String longitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLongitude());
         final String altitudeText;
         final String altitudeUnitText;
-        if (altitudeUnit == null || altitudeUnit.equals(ALTITUDE_UNIT_FEET)) {
-            altitudeText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location == null ? 0.0 : location.getAltitude()));
+        if (location == null) {
+            altitudeText = getString(R.string.locating);
+            altitudeUnitText = "";
+        } else if (altitudeUnit == null || altitudeUnit.equals(ALTITUDE_UNIT_FEET)) {
+            altitudeText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));
             altitudeUnitText = getString(R.string.unit_feet);
         } else {
-            altitudeText = String.format(Locale.getDefault(), "%,d", (int) (location == null ? 0.0 : location.getAltitude()));
+            altitudeText = String.format(Locale.getDefault(), "%,d", (int) (location.getAltitude()));
             altitudeUnitText = getString(R.string.unit_meters);
         }
-        waitingTextView.setVisibility(location == null ? View.VISIBLE : View.INVISIBLE);
         latitudeTextView.setText(latitudeText);
         longitudeTextView.setText(longitudeText);
         altitudeTextView.setText(altitudeText);
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             requestAccessFineLocationPermission();
         } else {
             FirebaseCrash.log("Requesting location updates");
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleAPIClient, locationRequest, this);
         }
     }
 
@@ -248,6 +248,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void suspendLocationUpdates() {
         FirebaseCrash.log("Suspending location updates");
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleAPIClient, this);
     }
 }
