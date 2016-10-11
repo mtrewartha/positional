@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +13,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -31,7 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks, CompoundButton.OnCheckedChangeListener {
 
     private static final String ALTITUDE_UNIT_FEET = "feet";
     private static final String ALTITUDE_UNIT_METERS = "meters";
@@ -44,17 +49,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @BindView(R.id.altitude_unit_text_view) TextView altitudeUnitTextView;
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
     @BindView(R.id.coordinates_longitude_text_view) TextView longitudeTextView;
+    @BindView(R.id.screen_lock_switch) Switch screenLockSwitch;
     @BindView(R.id.ad_view) AdView adView;
 
     private String altitudeUnit;
+    private boolean screenLock;
     private GoogleApiClient googleApiClient;
     private Location location;
     private LocationRequest locationRequest;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeNightMode();
         ButterKnife.bind(this);
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -67,11 +76,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .setPriority(LOCATION_UPDATE_PRIORITY)
                 .setInterval(LOCATION_UPDATE_INTERVAL);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE);
-        altitudeUnit = sharedPreferences.getString(Prefs.KEY_ALTITUDE_UNIT, ALTITUDE_UNIT_FEET);
+        sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
+        altitudeUnit = sharedPreferences.getString(getString(R.string.settings_altitude_unit_key), getString(R.string.settings_altitude_unit_default));
+        screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), Boolean.parseBoolean(getString(R.string.settings_screen_lock_default)));
+
         populateLocationViews(altitudeUnit, location);
+        screenLockSwitch.setOnCheckedChangeListener(this);
+        screenLockSwitch.setChecked(screenLock);
 
         loadBannerAd();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        initializeNightMode();
     }
 
     @Override
@@ -139,7 +158,45 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         altitudeUnit = altitudeUnit.equals(ALTITUDE_UNIT_FEET) ? ALTITUDE_UNIT_METERS : ALTITUDE_UNIT_FEET;
         FirebaseCrash.log("Switching altitude unit to " + altitudeUnit);
         populateLocationViews(altitudeUnit, location);
-        saveAltitudeUnit(altitudeUnit);
+        setAltitudeUnit(altitudeUnit);
+    }
+
+    @OnClick(R.id.screen_lock_switch)
+    public void onScreenLockClicked() {
+        screenLock = screenLockSwitch.isChecked();
+        FirebaseCrash.log("Switching screen lock to " + altitudeUnit);
+        saveScreenLockPreference(screenLock);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+        if (compoundButton.getId() == R.id.screen_lock_switch) {
+            saveScreenLockPreference(checked);
+            lockScreen(checked);
+        }
+    }
+
+    private void initializeNightMode() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+    }
+
+    private void loadBannerAd() {
+        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_mob_app_id));
+        final AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+        if (BuildConfig.DEBUG) {
+            adRequestBuilder
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice(getString(R.string.ad_mob_device_id_mike_trewartha));
+        }
+        adView.loadAd(adRequestBuilder.build());
+    }
+
+    private void lockScreen(boolean lock) {
+        if (lock) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     private void populateLocationViews(@Nullable String altitudeUnit, @Nullable Location location) {
@@ -176,26 +233,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
+    private void saveScreenLockPreference(boolean screenLock) {
+        FirebaseCrash.log("Saving screen lock preference as " + screenLock);
+        sharedPreferences.edit().putBoolean(getString(R.string.settings_screen_lock_key), screenLock).apply();
+    }
+
+    private void setAltitudeUnit(@NonNull String altitudeUnit) {
+        FirebaseCrash.log("Saving altitude unit preference as " + altitudeUnit);
+        sharedPreferences.edit().putString(getString(R.string.settings_altitude_unit_key), altitudeUnit).apply();
+    }
+
     private void suspendLocationUpdates() {
         FirebaseCrash.log("Suspending location updates");
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
-    }
-
-    private void saveAltitudeUnit(@NonNull String altitudeUnit) {
-        FirebaseCrash.log("Saving altitude unit as " + altitudeUnit);
-        final SharedPreferences.Editor editor = getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE).edit();
-        editor.putString(Prefs.KEY_ALTITUDE_UNIT, altitudeUnit);
-        editor.apply();
-    }
-
-    private void loadBannerAd() {
-        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_mob_app_id));
-        final AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        if (BuildConfig.DEBUG) {
-            adRequestBuilder
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice(getString(R.string.ad_mob_device_id_mike_trewartha));
-        }
-        adView.loadAd(adRequestBuilder.build());
     }
 }

@@ -8,20 +8,20 @@
     android:orientation="vertical"
     tools:context="io.trewartha.positional.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/elevation_layout"
+            android:id="@+id/altitude_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:animateLayoutChanges="true"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RelativeOverlap">
 
             <TextView
                 android:id="@+id/altitude_text_view"
@@ -58,6 +58,8 @@
             android:id="@+id/coordinates_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/altitude_layout"
+            android:layout_centerInParent="true"
             android:layout_marginTop="64dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -87,7 +89,16 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
+
+    <Switch
+        android:id="@+id/screen_lock_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dp"
+        android:text="@string/settings_screen_lock_label"
+        android:switchPadding="16dp"/>
 
     <LinearLayout
         android:id="@+id/ad_layout"

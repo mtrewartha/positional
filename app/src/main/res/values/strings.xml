@@ -18,4 +18,12 @@
     <string name="ad_mob_main_activity_banner_unit_id">ca-app-pub-2302907862321663/4306420033</string>
     <string name="ad_mob_remove_button">Remove Ads</string>
 
+    <!-- Settings -->
+    <string name="settings_filename">Positional</string>
+    <string name="settings_altitude_unit_default">feet</string>
+    <string name="settings_altitude_unit_key">altitudeUnit</string>
+    <string name="settings_screen_lock_default">true</string>
+    <string name="settings_screen_lock_key">screenLock</string>
+    <string name="settings_screen_lock_label">Screen Lock</string>
+
 </resources>
