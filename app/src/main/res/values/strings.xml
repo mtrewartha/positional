@@ -3,6 +3,7 @@
     <string name="ad_mob_app_id">ca-app-pub-2302907862321663~2829686839</string>
 
     <!-- Main Activity -->
+    <string name="accuracy">accuracy:</string>
     <string name="google_play_services_connection_failed_title">Google Play Services Connection Failed</string>
     <string name="google_play_services_connection_failed_message">Would you like to try again?</string>
     <string name="access_fine_location_permission_explanation_title">Location Permission Required</string>

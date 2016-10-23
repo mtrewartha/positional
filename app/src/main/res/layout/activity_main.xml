@@ -50,6 +50,7 @@
             android:id="@+id/coordinates_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -75,6 +76,32 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/coordinates_text_size"
                 tools:text="-100.000000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/accuracy_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:text="@string/accuracy"/>
+
+            <TextView
+                android:id="@+id/accuracy_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                tools:text="100.00"/>
+
+            <TextView
+                android:id="@+id/accuracy_unit_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/unit_feet"/>
 
         </LinearLayout>
 

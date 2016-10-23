@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
 
+    @BindView(R.id.accuracy_text_view) TextView accuracyTextView;
+    @BindView(R.id.accuracy_unit_text_view) TextView accuracyUnitTextView;
     @BindView(R.id.altitude_text_view) TextView altitudeTextView;
     @BindView(R.id.altitude_unit_text_view) TextView altitudeUnitTextView;
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
@@ -201,24 +203,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void populateLocationViews(@Nullable String altitudeUnit, @Nullable Location location) {
+        final String accuracyText;
+        final String altitudeText;
         final String latitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLatitude());
         final String longitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLongitude());
-        final String altitudeText;
-        final String altitudeUnitText;
+        final String unitText;
         if (location == null) {
+            accuracyText = "";
             altitudeText = getString(R.string.locating);
-            altitudeUnitText = "";
+            unitText = "";
         } else if (altitudeUnit == null || altitudeUnit.equals(ALTITUDE_UNIT_FEET)) {
+            accuracyText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAccuracy()));
             altitudeText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));
-            altitudeUnitText = getString(R.string.unit_feet);
+            unitText = getString(R.string.unit_feet);
         } else {
+            accuracyText = String.format(Locale.getDefault(), "%,d", (int) (location.getAccuracy()));
             altitudeText = String.format(Locale.getDefault(), "%,d", (int) (location.getAltitude()));
-            altitudeUnitText = getString(R.string.unit_meters);
+            unitText = getString(R.string.unit_meters);
         }
+        accuracyTextView.setText(accuracyText);
+        accuracyUnitTextView.setText(unitText);
+        altitudeTextView.setText(altitudeText);
+        altitudeUnitTextView.setText(unitText);
         latitudeTextView.setText(latitudeText);
         longitudeTextView.setText(longitudeText);
-        altitudeTextView.setText(altitudeText);
-        altitudeUnitTextView.setText(altitudeUnitText);
     }
 
     private void requestAccessFineLocationPermission() {
