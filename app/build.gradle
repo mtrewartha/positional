@@ -40,9 +40,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.google.android.gms:play-services-location:9.8.00'
-    compile 'com.google.firebase:firebase-ads:9.8.00'
-    compile 'com.google.firebase:firebase-crash:9.8.00'
+    compile 'com.google.android.gms:play-services-location:9.8.0'
+    compile 'com.google.firebase:firebase-ads:9.8.0'
+    compile 'com.google.firebase:firebase-crash:9.8.0'
     compile 'com.jakewharton:butterknife:8.1.0'
     compile 'com.android.support:support-v4:25.0.0'
     testCompile 'junit:junit:4.12'
