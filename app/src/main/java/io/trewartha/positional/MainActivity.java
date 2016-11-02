@@ -79,11 +79,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         populateLocationViews(altitudeUnit, location);
         screenLockSwitch.setOnCheckedChangeListener(this);
         screenLockSwitch.setChecked(screenLock);
-
-        // Disable the banner ad for now. Remember to change
-        // the visibility of the ad layout when re-enabling
-        // this later.
-        //loadBannerAd();
     }
 
     @Override
