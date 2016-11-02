@@ -14,8 +14,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @BindView(R.id.altitude_unit_text_view) TextView altitudeUnitTextView;
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
     @BindView(R.id.coordinates_longitude_text_view) TextView longitudeTextView;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.screen_lock_switch) Switch screenLockSwitch;
 
     private String altitudeUnit;
@@ -141,10 +144,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onLocationChanged(Location location) {
-        this.location = location;
-        if (location != null && location.hasAltitude()) {
+        if (location == null) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else if (location.hasAltitude()) {
+            if (progressBar.getVisibility() == View.VISIBLE) {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
             populateLocationViews(altitudeUnit, location);
         }
+        this.location = location;
     }
 
     @OnClick(R.id.altitude_unit_text_view)
@@ -189,9 +197,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         final String longitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLongitude());
         final String unitText;
         if (location == null) {
-            accuracyText = "";
-            altitudeText = getString(R.string.locating);
-            unitText = "";
+            accuracyText = "0";
+            altitudeText = "0";
+            unitText = getString(R.string.unit_feet);
         } else if (altitudeUnit == null || altitudeUnit.equals(ALTITUDE_UNIT_FEET)) {
             accuracyText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAccuracy()));
             altitudeText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));

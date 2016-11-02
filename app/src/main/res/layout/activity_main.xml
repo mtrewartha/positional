@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="12dp"
     tools:context="io.trewartha.positional.MainActivity">
 
     <LinearLayout
@@ -19,6 +19,7 @@
             android:id="@+id/altitude_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:animateLayoutChanges="true"
             android:gravity="center"
             android:orientation="vertical"
@@ -32,6 +33,15 @@
                 android:text="0"
                 android:textSize="@dimen/elevation_text_size"
                 tools:ignore="HardcodedText"/>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="-16dp"
+                android:indeterminateOnly="true"/>
 
             <TextView
                 android:id="@+id/altitude_unit_text_view"
@@ -113,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="12dp"
-        android:text="@string/settings_screen_lock_label"
-        android:switchPadding="16dp"/>
+        android:switchPadding="16dp"
+        android:text="@string/settings_screen_lock_label"/>
 
 </LinearLayout>
