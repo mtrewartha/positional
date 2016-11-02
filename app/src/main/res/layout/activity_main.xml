@@ -133,13 +133,6 @@
             android:text="@string/ad_mob_remove_button"
             android:visibility="gone"/>
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/ad_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/ad_mob_main_activity_banner_unit_id"/>
-
     </LinearLayout>
 
 </LinearLayout>

@@ -19,9 +19,6 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -50,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @BindView(R.id.coordinates_latitude_text_view) TextView latitudeTextView;
     @BindView(R.id.coordinates_longitude_text_view) TextView longitudeTextView;
     @BindView(R.id.screen_lock_switch) Switch screenLockSwitch;
-    @BindView(R.id.ad_view) AdView adView;
 
     private String altitudeUnit;
     private boolean screenLock;
@@ -181,17 +177,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void initializeNightMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
-    }
-
-    private void loadBannerAd() {
-        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_mob_app_id));
-        final AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        if (BuildConfig.DEBUG) {
-            adRequestBuilder
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice(getString(R.string.ad_mob_device_id_mike_trewartha));
-        }
-        adView.loadAd(adRequestBuilder.build());
     }
 
     private void lockScreen(boolean lock) {
