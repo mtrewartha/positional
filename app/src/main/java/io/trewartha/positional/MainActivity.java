@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private static final String ALTITUDE_UNIT_FEET = "feet";
     private static final String ALTITUDE_UNIT_METERS = "meters";
+    private static final String COORDINATES_FORMAT_DD = "dd";
+    private static final String COORDINATES_FORMAT_DMS = "dms";
     private static final int REQUEST_CODE_ACCESS_FINE_LOCATION = 1;
     private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @BindView(R.id.screen_lock_switch) Switch screenLockSwitch;
 
     private String altitudeUnit;
+    private String coordinatesFormat;
     private boolean screenLock;
     private GoogleApiClient googleAPIClient;
     private Location location;
@@ -77,9 +80,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
         altitudeUnit = sharedPreferences.getString(getString(R.string.settings_altitude_unit_key), getString(R.string.settings_altitude_unit_default));
+        coordinatesFormat = sharedPreferences.getString(getString(R.string.settings_coordinates_format_key), getString(R.string.settings_coordinates_format_default));
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), Boolean.parseBoolean(getString(R.string.settings_screen_lock_default)));
 
-        populateLocationViews(altitudeUnit, location);
+        populateLocationViews(altitudeUnit, coordinatesFormat, location);
         screenLockSwitch.setOnCheckedChangeListener(this);
         screenLockSwitch.setChecked(screenLock);
     }
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.INVISIBLE);
             }
-            populateLocationViews(altitudeUnit, location);
+            populateLocationViews(altitudeUnit, coordinatesFormat, location);
         }
         this.location = location;
     }
@@ -159,8 +163,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onAltitudeUnitClicked() {
         altitudeUnit = altitudeUnit.equals(ALTITUDE_UNIT_FEET) ? ALTITUDE_UNIT_METERS : ALTITUDE_UNIT_FEET;
         FirebaseCrash.log("Switching altitude unit to " + altitudeUnit);
-        populateLocationViews(altitudeUnit, location);
-        setAltitudeUnit(altitudeUnit);
+        populateLocationViews(altitudeUnit, coordinatesFormat, location);
+        setStringPreference(getString(R.string.settings_altitude_unit_key), altitudeUnit);
+    }
+
+    @OnClick(R.id.coordinates_layout)
+    public void onCoordinatesClicked() {
+        coordinatesFormat = coordinatesFormat.equals(COORDINATES_FORMAT_DD) ? COORDINATES_FORMAT_DMS : COORDINATES_FORMAT_DD;
+        FirebaseCrash.log("Switching coordinates format to " + coordinatesFormat);
+        populateLocationViews(altitudeUnit, coordinatesFormat, location);
+        setStringPreference(getString(R.string.settings_coordinates_format_key), coordinatesFormat);
     }
 
     @OnClick(R.id.screen_lock_switch)
@@ -190,24 +202,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void populateLocationViews(@Nullable String altitudeUnit, @Nullable Location location) {
+    private void populateLocationViews(@Nullable String altitudeUnit, @Nullable String coordinatesFormat, @Nullable Location location) {
         final String accuracyText;
         final String altitudeText;
-        final String latitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLatitude());
-        final String longitudeText = String.format(Locale.getDefault(), "%.5f", location == null ? 0.0f : location.getLongitude());
+        final String latitudeText;
+        final String longitudeText;
         final String unitText;
         if (location == null) {
             accuracyText = "0";
             altitudeText = "0";
-            unitText = getString(R.string.unit_feet);
-        } else if (altitudeUnit == null || altitudeUnit.equals(ALTITUDE_UNIT_FEET)) {
-            accuracyText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAccuracy()));
-            altitudeText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));
+            latitudeText = "0";
+            longitudeText = "0";
             unitText = getString(R.string.unit_feet);
         } else {
-            accuracyText = String.format(Locale.getDefault(), "%,d", (int) (location.getAccuracy()));
-            altitudeText = String.format(Locale.getDefault(), "%,d", (int) (location.getAltitude()));
-            unitText = getString(R.string.unit_meters);
+            if (coordinatesFormat == null || coordinatesFormat.equals(COORDINATES_FORMAT_DD)) {
+                latitudeText = String.format(Locale.getDefault(), "%.5f", location.getLatitude());
+                longitudeText = String.format(Locale.getDefault(), "%.5f", location.getLongitude());
+            } else {
+                latitudeText = UnitConverter.getLatitudeAsDMS(location, 2);
+                longitudeText = UnitConverter.getLongitudeAsDMS(location, 2);
+            }
+            if (altitudeUnit == null || altitudeUnit.equals(ALTITUDE_UNIT_FEET)) {
+                accuracyText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAccuracy()));
+                altitudeText = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));
+                unitText = getString(R.string.unit_feet);
+            } else {
+                accuracyText = String.format(Locale.getDefault(), "%,d", (int) (location.getAccuracy()));
+                altitudeText = String.format(Locale.getDefault(), "%,d", (int) (location.getAltitude()));
+                unitText = getString(R.string.unit_meters);
+            }
         }
         accuracyTextView.setText(accuracyText);
         accuracyUnitTextView.setText(unitText);
@@ -237,9 +260,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         sharedPreferences.edit().putBoolean(getString(R.string.settings_screen_lock_key), screenLock).apply();
     }
 
-    private void setAltitudeUnit(@NonNull String altitudeUnit) {
-        FirebaseCrash.log("Saving altitude unit preference as " + altitudeUnit);
-        sharedPreferences.edit().putString(getString(R.string.settings_altitude_unit_key), altitudeUnit).apply();
+    private void setStringPreference(@NonNull String key, @NonNull String value) {
+        FirebaseCrash.log("Saving " + key + " preference as " + value);
+        sharedPreferences.edit().putString(key, value).apply();
     }
 
     private void suspendLocationUpdates() {

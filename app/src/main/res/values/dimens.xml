@@ -2,7 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="coordinates_text_size">24sp</dimen>
+    <dimen name="coordinates_text_size">20sp</dimen>
     <dimen name="elevation_text_size">96sp</dimen>
     <dimen name="elevation_unit_text_size">24sp</dimen>
     <dimen name="waiting_text_size">12sp</dimen>

@@ -23,6 +23,8 @@
     <string name="settings_filename">Positional</string>
     <string name="settings_altitude_unit_default">feet</string>
     <string name="settings_altitude_unit_key">altitudeUnit</string>
+    <string name="settings_coordinates_format_default">dd</string>
+    <string name="settings_coordinates_format_key">coordinatesFormat</string>
     <string name="settings_screen_lock_default">true</string>
     <string name="settings_screen_lock_key">screenLock</string>
     <string name="settings_screen_lock_label">Screen Lock</string>
