@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Positional</string>
-    <string name="ad_mob_app_id">ca-app-pub-2302907862321663~2829686839</string>
 
     <!-- Main Activity -->
     <string name="accuracy">accuracy:</string>
@@ -13,11 +12,6 @@
     <string name="unit_meters">meters</string>
     <string name="try_again">Try Again</string>
     <string name="exit">Exit</string>
-
-    <!-- Ad Mob-->
-    <string name="ad_mob_device_id_mike_trewartha">090CB08C1F7EEC65738661F15553DCD9</string>
-    <string name="ad_mob_main_activity_banner_unit_id">ca-app-pub-2302907862321663/4306420033</string>
-    <string name="ad_mob_remove_button">Remove Ads</string>
 
     <!-- Settings -->
     <string name="settings_filename">Positional</string>
