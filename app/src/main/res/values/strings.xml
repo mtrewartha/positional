@@ -2,23 +2,36 @@
     <string name="app_name">Positional</string>
 
     <!-- Main Activity -->
-    <string name="accuracy">accuracy:</string>
     <string name="google_play_services_connection_failed_title">Google Play Services Connection Failed</string>
     <string name="google_play_services_connection_failed_message">Would you like to try again?</string>
     <string name="access_fine_location_permission_explanation_title">Location Permission Required</string>
     <string name="access_fine_location_permission_explanation_message">In order to show your elevation, location and other statistics, we need access to your device\'s location.</string>
     <string name="locating">locating…</string>
-    <string name="unit_feet">feet</string>
-    <string name="unit_meters">meters</string>
+    <string name="unit_degrees">°</string>
+    <string name="unit_feet">ft</string>
+    <string name="unit_meters">m</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_mps">m/s</string>
     <string name="try_again">Try Again</string>
     <string name="exit">Exit</string>
 
+    <string name="accuracy">accuracy</string>
+    <string name="bearing">bearing</string>
+    <string name="coordinates">coordinates</string>
+    <string name="elevation">elevation</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="provider">provider</string>
+    <string name="satellites">satellites</string>
+    <string name="sats">sats</string>
+    <string name="speed">speed</string>
+
     <!-- Settings -->
     <string name="settings_filename">Positional</string>
-    <string name="settings_altitude_unit_default">feet</string>
-    <string name="settings_altitude_unit_key">altitudeUnit</string>
+    <string name="settings_elevation_unit_default">feet</string>
+    <string name="settings_metric_units_key">metricUnits</string>
     <string name="settings_coordinates_format_default">dd</string>
-    <string name="settings_coordinates_format_key">coordinatesFormat</string>
+    <string name="settings_decimal_degrees_key">coordinatesFormat</string>
     <string name="settings_screen_lock_default">true</string>
     <string name="settings_screen_lock_key">screenLock</string>
     <string name="settings_screen_lock_label">Screen Lock</string>

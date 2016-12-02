@@ -9,4 +9,30 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="TopValueTextView">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="GridValueTextView">
+        <item name="android:textSize">42sp</item>
+        <item name="android:layout_marginEnd">6dp</item>
+    </style>
+
+    <style name="SmallUnitTextView">
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="StatRow">
+        <item name="android:layout_margin">12dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="StatImageView">
+        <item name="android:layout_height">@dimen/stat_image_size</item>
+        <item name="android:layout_width">@dimen/stat_image_size</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:tint">@color/darkGray</item>
+    </style>
+
 </resources>
