@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onLocationChanged(Location location) {
         if (location == null) {
             progressBar.setVisibility(View.VISIBLE);
-        } else if (location.hasAltitude()) {
+        } else {
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.INVISIBLE);
             }
