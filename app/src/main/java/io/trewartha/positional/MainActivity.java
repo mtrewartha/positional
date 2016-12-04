@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         if (location == null) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
+            logLocation(location);
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.INVISIBLE);
             }
@@ -296,5 +297,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private void setBooleanPreference(@NonNull String key, boolean value) {
         Log.info(TAG, "Saving " + key + " preference as " + value);
         sharedPreferences.edit().putBoolean(key, value).apply();
+    }
+
+    private void logLocation(@NonNull Location location) {
+        Log.debug(TAG, "Location received:");
+        Log.debug(TAG, "       Latitude: " + location.getLatitude());
+        Log.debug(TAG, "      Longitude: " + location.getLongitude());
+        Log.debug(TAG, "       Accuracy: " + (location.hasAccuracy() ? location.getAccuracy() + " m" : "none"));
+        Log.debug(TAG, "        Bearing: " + (location.hasBearing() ? location.getBearing() + "°" : "none"));
+        Log.debug(TAG, "      Elevation: " + (location.hasAltitude() ? location.getAltitude() + " m/s" : "none"));
+        Log.debug(TAG, "          Speed: " + (location.hasSpeed() ? location.getSpeed() + " m/s" : "none"));
     }
 }

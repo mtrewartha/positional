@@ -21,6 +21,7 @@
     <string name="elevation">elevation</string>
     <string name="latitude">latitude</string>
     <string name="longitude">longitude</string>
+    <string name="none">none</string>
     <string name="provider_status">provider status</string>
     <string name="provider_status_available">active</string>
     <string name="provider_status_out_of_service">waiting</string>
