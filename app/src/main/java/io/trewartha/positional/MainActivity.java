@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,11 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.Locale;
@@ -34,11 +32,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements LocationListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final int REQUEST_CODE_ACCESS_FINE_LOCATION = 1;
-    private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
-    private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
+    private static final int REQUEST_CODE_LOCATION_PERMISSIONS = 1;
 
     @BindView(R.id.accuracy_value_text_view) TextView accuracyValueTextView;
     @BindView(R.id.accuracy_unit_text_view) TextView accuracyUnitTextView;
@@ -51,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @BindView(R.id.bearing_value_text_view) TextView bearingValueTextView;
     @BindView(R.id.bearing_unit_text_view) TextView bearingUnitTextView;
     @BindView(R.id.satellites_value_text_view) TextView satellitesValueTextView;
-    @BindView(R.id.provider_value_text_view) TextView providerValueTextView;
+    @BindView(R.id.provider_status_value_text_view) TextView providerStatusValueTextView;
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.screen_lock_switch) Switch screenLockSwitch;
@@ -59,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private boolean useDecimalDegrees;
     private boolean useMetricUnits;
     private boolean screenLock;
-    private GoogleApiClient googleAPIClient;
+    private LocationManager locationManager;
     private Location location;
-    private LocationRequest locationRequest;
+    private int providerStatus;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -71,24 +67,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         initializeNightMode();
         ButterKnife.bind(this);
 
-        googleAPIClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        locationRequest = LocationRequest.create()
-                .setPriority(LOCATION_UPDATE_PRIORITY)
-                .setInterval(LOCATION_UPDATE_INTERVAL);
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        providerStatus = LocationProvider.TEMPORARILY_UNAVAILABLE;
         sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
         useMetricUnits = sharedPreferences.getBoolean(getString(R.string.settings_metric_units_key), false);
         useDecimalDegrees = sharedPreferences.getBoolean(getString(R.string.settings_decimal_degrees_key), false);
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false);
 
-        populateLocationViews(useMetricUnits, useDecimalDegrees, location);
+        populateLocationViews(useMetricUnits, useDecimalDegrees, LocationProvider.TEMPORARILY_UNAVAILABLE, location);
         screenLockSwitch.setOnCheckedChangeListener(this);
         screenLockSwitch.setChecked(screenLock);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        requestLocationUpdates();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        suspendLocationUpdates();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_ACCESS_FINE_LOCATION) {
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSIONS) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 FirebaseCrash.log("ACCESS_FINE_LOCATION permission granted");
                 requestLocationUpdates();
@@ -113,40 +113,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         .setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                requestAccessFineLocationPermission();
+                                requestLocationPermissions();
                             }
                         })
                         .show();
             }
         }
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        FirebaseCrash.log("Google Play Services connection established");
-        requestLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        FirebaseCrash.log("Google Play Services connection suspended");
-        suspendLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        FirebaseCrash.log("Google Play Services connection failed");
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.google_play_services_connection_failed_title)
-                .setMessage(R.string.google_play_services_connection_failed_message)
-                .setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // TODO: Log this to Firebase
-                        MainActivity.this.finish();
-                    }
-                })
-                .show();
     }
 
     @Override
@@ -157,22 +129,40 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.INVISIBLE);
             }
-            populateLocationViews(useMetricUnits, useDecimalDegrees, location);
+            populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
         }
         this.location = location;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        if (LocationManager.GPS_PROVIDER.equals(provider)) {
+            providerStatus = status;
+            populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
+        }
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        requestLocationUpdates();
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        suspendLocationUpdates();
     }
 
     @OnClick({R.id.elevation_unit_text_view, R.id.speed_unit_text_view, R.id.accuracy_unit_text_view})
     public void onDistanceUnitClicked() {
         useMetricUnits = !useMetricUnits;
-        populateLocationViews(useMetricUnits, useDecimalDegrees, location);
+        populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
         setBooleanPreference(getString(R.string.settings_metric_units_key), useMetricUnits);
     }
 
     @OnClick(R.id.coordinates_layout)
     public void onCoordinatesClicked() {
         useDecimalDegrees = !useDecimalDegrees;
-        populateLocationViews(useMetricUnits, useDecimalDegrees, location);
+        populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
         setBooleanPreference(getString(R.string.settings_decimal_degrees_key), useDecimalDegrees);
     }
 
@@ -202,22 +192,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void populateLocationViews(boolean useMetricUnits, boolean useDecimalDegrees, @Nullable Location location) {
-        final String accuracy, bearing, elevation, latitude, longitude, provider, satellites, speed, distanceUnit, speedUnit;
+    private void populateLocationViews(boolean useMetricUnits, boolean useDecimalDegrees, int providerStatus, @Nullable Location location) {
+        final String accuracy, bearing, elevation, latitude, longitude, status, satellites, speed, distanceUnit, speedUnit;
+        switch (providerStatus) {
+            case LocationProvider.OUT_OF_SERVICE:
+                status = getString(R.string.provider_status_out_of_service);
+                break;
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                status = getString(R.string.provider_status_temporarily_unavailable);
+                break;
+            default: // AVAILABLE
+                status = getString(R.string.provider_status_available);
+                break;
+        }
         if (location == null) {
             accuracy = "0";
             bearing = "0";
             elevation = "0";
             latitude = "0";
             longitude = "0";
-            provider = "";
             satellites = "0";
             speed = "0";
             distanceUnit = getString(R.string.unit_feet);
             speedUnit = getString(R.string.unit_mph);
         } else {
             bearing = String.format(Locale.getDefault(), "%.0f", location.getBearing());
-            provider = location.getProvider();
             final Bundle locationExtras = location.getExtras();
             if (locationExtras == null) {
                 satellites = "0";
@@ -252,34 +251,49 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         elevationUnitTextView.setText(distanceUnit);
         latitudeValueTextView.setText(latitude);
         longitudeValueTextView.setText(longitude);
-        providerValueTextView.setText(provider);
+        providerStatusValueTextView.setText(status);
         satellitesValueTextView.setText(satellites);
         speedValueTextView.setText(speed);
         speedUnitTextView.setText(speedUnit);
     }
 
-    private void requestAccessFineLocationPermission() {
-        FirebaseCrash.log("Requesting permission for ACCESS_FINE_LOCATION");
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ACCESS_FINE_LOCATION);
+    private boolean haveLocationPermissions() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestLocationPermissions() {
+        FirebaseCrash.log("Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION");
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+        }, REQUEST_CODE_LOCATION_PERMISSIONS);
     }
 
     private void requestLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            FirebaseCrash.log("ACCESS_FINE_LOCATION permission is needed");
-            requestAccessFineLocationPermission();
-        } else {
+        if (haveLocationPermissions()) {
             FirebaseCrash.log("Requesting location updates");
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleAPIClient, locationRequest, this);
+            //noinspection MissingPermission
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.0f, this);
+        } else {
+            FirebaseCrash.log("Location permissions are needed");
+            requestLocationPermissions();
+        }
+    }
+
+    private void suspendLocationUpdates() {
+        if (haveLocationPermissions()) {
+            FirebaseCrash.log("Suspending location updates");
+            //noinspection MissingPermission
+            locationManager.removeUpdates(this);
+        } else {
+            FirebaseCrash.log("Location permissions are needed");
+            requestLocationPermissions();
         }
     }
 
     private void setBooleanPreference(@NonNull String key, boolean value) {
         FirebaseCrash.log("Saving " + key + " preference as " + value);
         sharedPreferences.edit().putBoolean(key, value).apply();
-    }
-
-    private void suspendLocationUpdates() {
-        FirebaseCrash.log("Suspending location updates");
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleAPIClient, this);
     }
 }

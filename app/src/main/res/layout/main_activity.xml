@@ -184,7 +184,7 @@
 
             <ImageView
                 style="@style/StatImageView"
-                android:contentDescription="@string/provider"
+                android:contentDescription="@string/accuracy"
                 android:src="@drawable/bullseye"/>
 
             <LinearLayout
@@ -256,7 +256,7 @@
 
         </LinearLayout>
 
-        <!-- Provider -->
+        <!-- Provider Status -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -267,11 +267,11 @@
 
             <ImageView
                 style="@style/StatImageView"
-                android:contentDescription="@string/provider"
-                android:src="@drawable/information_outline"/>
+                android:contentDescription="@string/provider_status"
+                android:src="@drawable/pulse"/>
 
             <TextView
-                android:id="@+id/provider_value_text_view"
+                android:id="@+id/provider_status_value_text_view"
                 style="@style/GridValueTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
