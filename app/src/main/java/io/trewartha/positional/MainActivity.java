@@ -34,6 +34,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements LocationListener, CompoundButton.OnCheckedChangeListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_PERMISSIONS = 1;
 
     @BindView(R.id.accuracy_value_text_view) TextView accuracyValueTextView;
@@ -102,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_LOCATION_PERMISSIONS) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                FirebaseCrash.log("ACCESS_FINE_LOCATION permission granted");
+                Log.info(TAG, "Location permissions granted");
                 requestLocationUpdates();
             } else {
-                FirebaseCrash.log("ACCESS_FINE_LOCATION permission request cancelled");
+                Log.info(TAG, "Location permissions request cancelled");
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.access_fine_location_permission_explanation_title)
                         .setMessage(R.string.access_fine_location_permission_explanation_message)
@@ -263,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void requestLocationPermissions() {
-        FirebaseCrash.log("Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION");
+        Log.info(TAG, "Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION");
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -272,18 +273,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     private void requestLocationUpdates() {
         if (haveLocationPermissions()) {
-            FirebaseCrash.log("Requesting location updates");
+            Log.info(TAG, "Requesting location updates");
             //noinspection MissingPermission
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.0f, this);
         } else {
-            FirebaseCrash.log("Location permissions are needed");
+            Log.info(TAG, "Location permissions are needed");
             requestLocationPermissions();
         }
     }
 
     private void suspendLocationUpdates() {
         if (haveLocationPermissions()) {
-            FirebaseCrash.log("Suspending location updates");
+            Log.info(TAG, "Suspending location updates");
             //noinspection MissingPermission
             locationManager.removeUpdates(this);
         } else {
@@ -293,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void setBooleanPreference(@NonNull String key, boolean value) {
-        FirebaseCrash.log("Saving " + key + " preference as " + value);
+        Log.info(TAG, "Saving " + key + " preference as " + value);
         sharedPreferences.edit().putBoolean(key, value).apply();
     }
 }
