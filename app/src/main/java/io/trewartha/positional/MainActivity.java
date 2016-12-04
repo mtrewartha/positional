@@ -36,10 +36,6 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks, CompoundButton.OnCheckedChangeListener {
 
-    private static final String ELEVATION_UNIT_FEET = "feet";
-    private static final String ELEVATION_UNIT_METERS = "meters";
-    private static final String COORDINATES_FORMAT_DD = "dd";
-    private static final String COORDINATES_FORMAT_DMS = "dms";
     private static final int REQUEST_CODE_ACCESS_FINE_LOCATION = 1;
     private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
