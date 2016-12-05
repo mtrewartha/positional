@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         useDecimalDegrees = sharedPreferences.getBoolean(getString(R.string.settings_decimal_degrees_key), false);
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false);
 
-        populateLocationViews(useMetricUnits, useDecimalDegrees, LocationProvider.TEMPORARILY_UNAVAILABLE, location);
+        populateLocationViews(useMetricUnits, useDecimalDegrees, LocationProvider.AVAILABLE, location);
         screenLockSwitch.setOnCheckedChangeListener(this);
         screenLockSwitch.setChecked(screenLock);
     }
