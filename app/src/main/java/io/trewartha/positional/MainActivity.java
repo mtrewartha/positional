@@ -26,8 +26,6 @@ import android.widget.TextView;
 
 import com.google.firebase.crash.FirebaseCrash;
 
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private boolean useDecimalDegrees;
     private boolean useMetricUnits;
     private boolean screenLock;
+    private LocationFormatter locationFormatter;
     private LocationManager locationManager;
     private Location location;
     private int providerStatus;
@@ -68,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         initializeNightMode();
         ButterKnife.bind(this);
 
+        locationFormatter = new LocationFormatter(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         providerStatus = LocationProvider.TEMPORARILY_UNAVAILABLE;
         sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
@@ -195,68 +195,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void populateLocationViews(boolean useMetricUnits, boolean useDecimalDegrees, int providerStatus, @Nullable Location location) {
-        final String accuracy, bearing, elevation, latitude, longitude, status, satellites, speed, distanceUnit, speedUnit;
-        switch (providerStatus) {
-            case LocationProvider.OUT_OF_SERVICE:
-                status = getString(R.string.provider_status_out_of_service);
-                break;
-            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                status = getString(R.string.provider_status_temporarily_unavailable);
-                break;
-            default: // AVAILABLE
-                status = getString(R.string.provider_status_available);
-                break;
-        }
-        if (location == null) {
-            accuracy = "0";
-            bearing = "0";
-            elevation = "0";
-            latitude = "0";
-            longitude = "0";
-            satellites = "0";
-            speed = "0";
-            distanceUnit = getString(R.string.unit_feet);
-            speedUnit = getString(R.string.unit_mph);
-        } else {
-            bearing = String.format(Locale.getDefault(), "%.0f", location.getBearing());
-            final Bundle locationExtras = location.getExtras();
-            if (locationExtras == null) {
-                satellites = "0";
-            } else {
-                satellites = String.format(Locale.getDefault(), "%d", locationExtras.getInt("satellites", 0));
-            }
-            if (useDecimalDegrees) {
-                latitude = String.format(Locale.getDefault(), "%+03.5f", location.getLatitude());
-                longitude = String.format(Locale.getDefault(), "%+03.5f", location.getLongitude());
-            } else {
-                latitude = UnitConverter.getLatitudeAsDMS(location, 2);
-                longitude = UnitConverter.getLongitudeAsDMS(location, 2);
-            }
-            if (useMetricUnits) {
-                accuracy = String.format(Locale.getDefault(), "%,d", (int) location.getAccuracy());
-                elevation = String.format(Locale.getDefault(), "%,d", (int) location.getAltitude());
-                speed = String.format(Locale.getDefault(), "%.1f", location.getSpeed());
-                distanceUnit = getString(R.string.unit_meters);
-                speedUnit = getString(R.string.unit_mps);
-            } else {
-                accuracy = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAccuracy()));
-                elevation = String.format(Locale.getDefault(), "%,d", (int) UnitConverter.metersToFeet(location.getAltitude()));
-                speed = String.format(Locale.getDefault(), "%.1f", UnitConverter.metersPerSecondToMilesPerHour(location.getSpeed()));
-                distanceUnit = getString(R.string.unit_feet);
-                speedUnit = getString(R.string.unit_mph);
-            }
-        }
-        accuracyValueTextView.setText(accuracy);
-        accuracyUnitTextView.setText(distanceUnit);
-        bearingValueTextView.setText(bearing);
-        elevationValueTextView.setText(elevation);
-        elevationUnitTextView.setText(distanceUnit);
-        latitudeValueTextView.setText(latitude);
-        longitudeValueTextView.setText(longitude);
-        providerStatusValueTextView.setText(status);
-        satellitesValueTextView.setText(satellites);
-        speedValueTextView.setText(speed);
-        speedUnitTextView.setText(speedUnit);
+        accuracyValueTextView.setText(locationFormatter.getAccuracy(location, useMetricUnits));
+        bearingValueTextView.setText(locationFormatter.getBearing(location));
+        elevationValueTextView.setText(locationFormatter.getElevation(location, useMetricUnits));
+        latitudeValueTextView.setText(locationFormatter.getLatitude(location, useDecimalDegrees));
+        longitudeValueTextView.setText(locationFormatter.getLongitude(location, useDecimalDegrees));
+        providerStatusValueTextView.setText(locationFormatter.getProviderStatus(providerStatus));
+        satellitesValueTextView.setText(locationFormatter.getSatellites(location));
+        speedValueTextView.setText(locationFormatter.getSpeed(location, useMetricUnits));
+
+        accuracyUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
+        elevationUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
+        speedUnitTextView.setText(locationFormatter.getSpeedUnit(useMetricUnits));
     }
 
     private boolean haveLocationPermissions() {
@@ -289,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             //noinspection MissingPermission
             locationManager.removeUpdates(this);
         } else {
-            FirebaseCrash.log("Location permissions are needed");
+            Log.info(TAG, "Location permissions are needed");
             requestLocationPermissions();
         }
     }

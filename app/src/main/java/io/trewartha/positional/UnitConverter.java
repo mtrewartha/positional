@@ -3,27 +3,29 @@ package io.trewartha.positional;
 import android.location.Location;
 import android.support.annotation.NonNull;
 
-public class UnitConverter {
+class UnitConverter {
 
     private static final double FEET_PER_METER = 3.2808399200439453;
     private static final double MPH_PER_MPS = 0.44704;
 
-    public static double metersToFeet(double meters) {
+    static double metersToFeet(double meters) {
         return meters * FEET_PER_METER;
     }
 
-    public static double metersPerSecondToMilesPerHour(double metersPerSecond) {
+    static double metersPerSecondToMilesPerHour(double metersPerSecond) {
         return metersPerSecond * MPH_PER_MPS;
     }
 
-    public static String getLatitudeAsDMS(@NonNull Location location, int decimalPlaces) {
+    @NonNull
+    static String getLatitudeAsDMS(@NonNull Location location, int decimalPlaces) {
         String latitude = Location.convert(location.getLatitude(), Location.FORMAT_SECONDS);
         latitude = replaceDelimiters(latitude, decimalPlaces);
         latitude = latitude + " N";
         return latitude;
     }
 
-    public static String getLongitudeAsDMS(@NonNull Location location, int decimalPlaces) {
+    @NonNull
+    static String getLongitudeAsDMS(@NonNull Location location, int decimalPlaces) {
         String longitude = Location.convert(location.getLongitude(), Location.FORMAT_SECONDS);
         longitude = replaceDelimiters(longitude, decimalPlaces);
         longitude = longitude + " W";

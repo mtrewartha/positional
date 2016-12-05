@@ -29,6 +29,7 @@
     <string name="satellites">satellites</string>
     <string name="sats">sats</string>
     <string name="speed">speed</string>
+    <string name="unknown">unknown</string>
 
     <!-- Settings -->
     <string name="settings_filename">Positional</string>
