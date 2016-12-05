@@ -3,8 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="coordinates_text_size">20sp</dimen>
-    <dimen name="elevation_text_size">96sp</dimen>
-    <dimen name="elevation_unit_text_size">24sp</dimen>
+    <dimen name="value_text_size_big">24sp</dimen>
+    <dimen name="value_text_size_small">18sp</dimen>
+    <dimen name="unit_text_size_big">22sp</dimen>
 
     <dimen name="stat_image_size">56dp</dimen>
 </resources>

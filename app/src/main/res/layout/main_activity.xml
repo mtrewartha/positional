@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="18dp">
+    android:paddingTop="18dp"
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -24,12 +25,12 @@
 
         <TextView
             android:id="@+id/coordinates_latitude_value_text_view"
-            style="@style/TopValueTextView"
+            style="@style/ValueTextViewSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            tools:text="+100.00000"/>
+            tools:text="+100° 60' 60.00'' N"/>
 
         <ImageView
             android:layout_width="36dp"
@@ -41,12 +42,12 @@
 
         <TextView
             android:id="@+id/coordinates_longitude_value_text_view"
-            style="@style/TopValueTextView"
+            style="@style/ValueTextViewSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
-            tools:text="+100.00000"/>
+            tools:text="+100° 60' 60.00'' W"/>
 
     </LinearLayout>
 
@@ -78,14 +79,14 @@
 
                 <TextView
                     android:id="@+id/elevation_value_text_view"
-                    style="@style/GridValueTextView"
+                    style="@style/ValueTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="10000"/>
 
                 <TextView
                     android:id="@+id/elevation_unit_text_view"
-                    style="@style/SmallUnitTextView"
+                    style="@style/UnitTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="ft"/>
@@ -114,14 +115,14 @@
 
                 <TextView
                     android:id="@+id/speed_value_text_view"
-                    style="@style/GridValueTextView"
+                    style="@style/ValueTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="100"/>
 
                 <TextView
                     android:id="@+id/speed_unit_text_view"
-                    style="@style/SmallUnitTextView"
+                    style="@style/UnitTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="mph"/>
@@ -160,7 +161,7 @@
 
                 <TextView
                     android:id="@+id/bearing_value_text_view"
-                    style="@style/GridValueTextView"
+                    style="@style/ValueTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
@@ -168,7 +169,7 @@
 
                 <TextView
                     android:id="@+id/bearing_unit_text_view"
-                    style="@style/GridValueTextView"
+                    style="@style/ValueTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/unit_degrees"/>
@@ -197,14 +198,14 @@
 
                 <TextView
                     android:id="@+id/accuracy_value_text_view"
-                    style="@style/GridValueTextView"
+                    style="@style/ValueTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="10"/>
 
                 <TextView
                     android:id="@+id/accuracy_unit_text_view"
-                    style="@style/SmallUnitTextView"
+                    style="@style/UnitTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="ft"/>
@@ -243,14 +244,14 @@
 
                 <TextView
                     android:id="@+id/satellites_value_text_view"
-                    style="@style/GridValueTextView"
+                    style="@style/ValueTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="10"/>
 
                 <TextView
                     android:id="@+id/satellites_unit_text_view"
-                    style="@style/SmallUnitTextView"
+                    style="@style/UnitTextViewBig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sats"/>
@@ -275,7 +276,7 @@
 
             <TextView
                 android:id="@+id/provider_status_value_text_view"
-                style="@style/GridValueTextView"
+                style="@style/ValueTextViewBig"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
