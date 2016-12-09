@@ -20,11 +20,10 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
-
-import com.google.firebase.crash.FirebaseCrash;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,10 +45,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @BindView(R.id.bearing_value_text_view) TextView bearingValueTextView;
     @BindView(R.id.bearing_unit_text_view) TextView bearingUnitTextView;
     @BindView(R.id.satellites_value_text_view) TextView satellitesValueTextView;
-    @BindView(R.id.provider_status_value_text_view) TextView providerStatusValueTextView;
+    @BindView(R.id.gps_status_value_text_view) TextView providerStatusValueTextView;
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindView(R.id.screen_lock_switch) Switch screenLockSwitch;
+    @BindView(R.id.screen_lock_switch) ImageView screenLockSwitch;
 
     private boolean useDecimalDegrees;
     private boolean useMetricUnits;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.main_activity_cascade);
         initializeNightMode();
         ButterKnife.bind(this);
 
@@ -76,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false);
 
         populateLocationViews(useMetricUnits, useDecimalDegrees, LocationProvider.AVAILABLE, location);
-        screenLockSwitch.setOnCheckedChangeListener(this);
-        screenLockSwitch.setChecked(screenLock);
     }
 
     @Override
@@ -170,8 +167,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @OnClick(R.id.screen_lock_switch)
     public void onScreenLockClicked() {
-        screenLock = screenLockSwitch.isChecked();
+        screenLock = !screenLock;
         setBooleanPreference(getString(R.string.settings_screen_lock_key), screenLock);
+        final int textRes = screenLock ? R.string.screen_lock_on : R.string.screen_lock_off;
+        Toast.makeText(this, textRes, Toast.LENGTH_SHORT).show();
     }
 
     @Override

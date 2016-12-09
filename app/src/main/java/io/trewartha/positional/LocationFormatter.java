@@ -73,11 +73,11 @@ class LocationFormatter {
     String getProviderStatus(int providerStatus) {
         switch (providerStatus) {
             case LocationProvider.OUT_OF_SERVICE:
-                return context.getString(R.string.provider_status_out_of_service);
+                return context.getString(R.string.gps_status_out_of_service);
             case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                return context.getString(R.string.provider_status_temporarily_unavailable);
+                return context.getString(R.string.gps_status_temporarily_unavailable);
             default: // AVAILABLE
-                return context.getString(R.string.provider_status_available);
+                return context.getString(R.string.gps_status_available);
         }
     }
 

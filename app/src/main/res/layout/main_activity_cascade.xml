@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/main_activity_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray7">
+
+    <ImageView
+        android:id="@+id/screen_lock_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/settings_screen_lock_label"
+        android:src="@drawable/ic_screen_lock_portrait_black_24dp"
+        android:text="@string/settings_screen_lock_label"
+        android:tint="@color/gray16"
+        android:translationZ="1dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray1"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            android:background="@color/gray1"
+            android:elevation="2.0dp"
+            android:indeterminateOnly="true"/>
+
+        <!-- Coordinates -->
+        <LinearLayout
+            android:id="@+id/coordinates_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray1"
+            android:elevation="2.0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                style="@style/StatImageView"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="12dp"
+                android:layout_marginBottom="12dp"
+                android:contentDescription="@string/coordinates"
+                android:src="@drawable/ic_my_location_black_24dp"/>
+
+            <TextView
+                android:id="@+id/coordinates_latitude_value_text_view"
+                style="@style/ValueTextViewTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="+100° 60' 60.00'' N"/>
+
+            <TextView
+                android:id="@+id/coordinates_longitude_value_text_view"
+                style="@style/ValueTextViewTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="+100° 60' 60.00'' W"/>
+
+        </LinearLayout>
+
+        <!-- Elevation -->
+        <LinearLayout
+            style="@style/StatRow"
+            android:background="@color/gray2"
+            android:elevation="1.8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/StatImageView"
+                android:contentDescription="@string/elevation"
+                android:src="@drawable/ic_terrain_black_24dp"/>
+
+            <TextView
+                android:id="@+id/elevation_label_text_view"
+                style="@style/LabelTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/elevation"/>
+
+            <TextView
+                android:id="@+id/elevation_value_text_view"
+                style="@style/ValueTextViewBig"
+                tools:text="10000"/>
+
+            <TextView
+                android:id="@+id/elevation_unit_text_view"
+                style="@style/UnitTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="ft"/>
+
+        </LinearLayout>
+
+        <!-- Speed -->
+        <LinearLayout
+            style="@style/StatRow"
+            android:background="@color/gray3"
+            android:elevation="1.6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/StatImageView"
+                android:contentDescription="@string/speed"
+                android:src="@drawable/speedometer"/>
+
+            <TextView
+                android:id="@+id/speed_label_text_view"
+                style="@style/LabelTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/speed"/>
+
+            <TextView
+                android:id="@+id/speed_value_text_view"
+                style="@style/ValueTextViewBig"
+                tools:text="100"/>
+
+            <TextView
+                android:id="@+id/speed_unit_text_view"
+                style="@style/UnitTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="mph"/>
+
+        </LinearLayout>
+
+        <!-- Bearing -->
+        <LinearLayout
+            style="@style/StatRow"
+            android:background="@color/gray4"
+            android:elevation="1.4dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/StatImageView"
+                android:contentDescription="@string/bearing"
+                android:src="@drawable/ic_explore_black_24dp"/>
+
+            <TextView
+                android:id="@+id/bearing_label_text_view"
+                style="@style/LabelTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bearing"/>
+
+            <TextView
+                android:id="@+id/bearing_value_text_view"
+                style="@style/ValueTextViewBig"
+                tools:text="359"/>
+
+            <TextView
+                android:id="@+id/bearing_unit_text_view"
+                style="@style/UnitTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unit_degrees"/>
+
+        </LinearLayout>
+
+        <!-- Accuracy -->
+        <LinearLayout
+            style="@style/StatRow"
+            android:background="@color/gray5"
+            android:elevation="1.2dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/StatImageView"
+                android:contentDescription="@string/accuracy"
+                android:src="@drawable/bullseye"/>
+
+            <TextView
+                android:id="@+id/accuracy_label_text_view"
+                style="@style/LabelTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accuracy"/>
+
+            <TextView
+                android:id="@+id/accuracy_value_text_view"
+                style="@style/ValueTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="10"/>
+
+            <TextView
+                android:id="@+id/accuracy_unit_text_view"
+                style="@style/UnitTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="ft"/>
+
+        </LinearLayout>
+
+        <!-- Satellites -->
+        <LinearLayout
+            style="@style/StatRow"
+            android:background="@color/gray6"
+            android:elevation="1.0dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/StatImageView"
+                android:contentDescription="@string/satellites"
+                android:src="@drawable/satellite_variant"/>
+
+            <TextView
+                android:id="@+id/satellites_label_text_view"
+                style="@style/LabelTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/satellites"/>
+
+            <TextView
+                android:id="@+id/satellites_value_text_view"
+                style="@style/ValueTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="10"/>
+
+            <TextView
+                android:id="@+id/satellites_unit_text_view"
+                style="@style/UnitTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sats"/>
+
+        </LinearLayout>
+
+        <!-- GPS Status -->
+        <LinearLayout
+            style="@style/StatRow"
+            android:background="@color/gray7"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/StatImageView"
+                android:contentDescription="@string/gps_status"
+                android:src="@drawable/pulse"/>
+
+            <TextView
+                android:id="@+id/gps_status_label_text_view"
+                style="@style/LabelTextViewBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gps_status"/>
+
+            <TextView
+                android:id="@+id/gps_status_value_text_view"
+                style="@style/ValueTextViewBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="@string/gps_status_available"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

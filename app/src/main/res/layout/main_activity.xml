@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/coordinates_latitude_value_text_view"
-            style="@style/ValueTextViewSmall"
+            style="@style/ValueTextViewTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -42,7 +42,7 @@
 
         <TextView
             android:id="@+id/coordinates_longitude_value_text_view"
-            style="@style/ValueTextViewSmall"
+            style="@style/ValueTextViewTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -271,11 +271,11 @@
 
             <ImageView
                 style="@style/StatImageView"
-                android:contentDescription="@string/provider_status"
+                android:contentDescription="@string/gps_status"
                 android:src="@drawable/pulse"/>
 
             <TextView
-                android:id="@+id/provider_status_value_text_view"
+                android:id="@+id/gps_status_value_text_view"
                 style="@style/ValueTextViewBig"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -15,20 +15,22 @@
     <string name="try_again">Try Again</string>
     <string name="exit">Exit</string>
 
-    <string name="accuracy">accuracy</string>
-    <string name="bearing">bearing</string>
-    <string name="coordinates">coordinates</string>
-    <string name="elevation">elevation</string>
-    <string name="latitude">latitude</string>
-    <string name="longitude">longitude</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="bearing">Bearing</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="elevation">Elevation</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
     <string name="none">none</string>
-    <string name="provider_status">provider status</string>
-    <string name="provider_status_available">active</string>
-    <string name="provider_status_out_of_service">waiting</string>
-    <string name="provider_status_temporarily_unavailable">unavailable</string>
-    <string name="satellites">satellites</string>
+    <string name="gps_status">GPS Status</string>
+    <string name="gps_status_available">active</string>
+    <string name="gps_status_out_of_service">waiting</string>
+    <string name="gps_status_temporarily_unavailable">unavailable</string>
+    <string name="satellites">Satellites</string>
     <string name="sats">sats</string>
-    <string name="speed">speed</string>
+    <string name="screen_lock_off">Screen lock disabled</string>
+    <string name="screen_lock_on">Screen lock enabled</string>
+    <string name="speed">Speed</string>
     <string name="unknown">unknown</string>
 
     <!-- Settings -->
