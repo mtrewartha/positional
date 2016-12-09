@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         useDecimalDegrees = sharedPreferences.getBoolean(getString(R.string.settings_decimal_degrees_key), false);
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false);
 
-        populateLocationViews(useMetricUnits, useDecimalDegrees, LocationProvider.AVAILABLE, location);
+        populateLocationViews();
     }
 
     @Override
@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
+        this.location = location;
         if (location == null) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
@@ -128,16 +129,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.INVISIBLE);
             }
-            populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
+            populateLocationViews();
         }
-        this.location = location;
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         if (LocationManager.GPS_PROVIDER.equals(provider)) {
             providerStatus = status;
-            populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
+            populateLocationViews();
         }
     }
 
@@ -154,14 +154,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @OnClick({R.id.elevation_unit_text_view, R.id.speed_unit_text_view, R.id.accuracy_unit_text_view})
     public void onDistanceUnitClicked() {
         useMetricUnits = !useMetricUnits;
-        populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
+        populateLocationViews();
         setBooleanPreference(getString(R.string.settings_metric_units_key), useMetricUnits);
     }
 
     @OnClick(R.id.coordinates_layout)
     public void onCoordinatesClicked() {
         useDecimalDegrees = !useDecimalDegrees;
-        populateLocationViews(useMetricUnits, useDecimalDegrees, providerStatus, location);
+        populateLocationViews();
         setBooleanPreference(getString(R.string.settings_decimal_degrees_key), useDecimalDegrees);
     }
 
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    private void populateLocationViews(boolean useMetricUnits, boolean useDecimalDegrees, int providerStatus, @Nullable Location location) {
+    private void populateLocationViews() {
         accuracyValueTextView.setText(locationFormatter.getAccuracy(location, useMetricUnits));
         bearingValueTextView.setText(locationFormatter.getBearing(location));
         elevationValueTextView.setText(locationFormatter.getElevation(location, useMetricUnits));
