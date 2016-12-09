@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+        logLocationStatus(provider, status, extras);
         if (LocationManager.GPS_PROVIDER.equals(provider)) {
             providerStatus = status;
             populateLocationViews();
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         latitudeValueTextView.setText(locationFormatter.getLatitude(location, useDecimalDegrees));
         longitudeValueTextView.setText(locationFormatter.getLongitude(location, useDecimalDegrees));
         providerStatusValueTextView.setText(locationFormatter.getProviderStatus(providerStatus));
-        satellitesValueTextView.setText(locationFormatter.getSatellites(location));
+        satellitesValueTextView.setText(locationFormatter.getSatellites(location == null ? null : location.getExtras()));
         speedValueTextView.setText(locationFormatter.getSpeed(location, useMetricUnits));
 
         accuracyUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
@@ -256,5 +257,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Log.debug(TAG, "        Bearing: " + (location.hasBearing() ? location.getBearing() + "°" : "none"));
         Log.debug(TAG, "      Elevation: " + (location.hasAltitude() ? location.getAltitude() + " m/s" : "none"));
         Log.debug(TAG, "          Speed: " + (location.hasSpeed() ? location.getSpeed() + " m/s" : "none"));
+    }
+
+    private void logLocationStatus(@NonNull String provider, int status, @Nullable Bundle extras) {
+        Log.debug(TAG, "Location status change:");
+        Log.debug(TAG, "        Provider: " + provider);
+        Log.debug(TAG, "          Status: " + locationFormatter.getProviderStatus(status));
+        Log.debug(TAG, "      Satellites: " + locationFormatter.getSatellites(extras));
     }
 }

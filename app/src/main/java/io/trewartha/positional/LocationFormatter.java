@@ -82,13 +82,12 @@ class LocationFormatter {
     }
 
     @NonNull
-    String getSatellites(@Nullable Location location) {
+    String getSatellites(@Nullable Bundle locationExtras) {
         final int satellites;
-        if (location == null) {
+        if (locationExtras == null) {
             satellites = 0;
         } else {
-            final Bundle extras = location.getExtras();
-            satellites = extras == null ? 0 : extras.getInt(LOCATION_EXTRAS_SATELLITES_KEY, -1);
+            satellites = locationExtras.getInt(LOCATION_EXTRAS_SATELLITES_KEY, -1);
         }
         return satellites < 0 ? context.getString(R.string.unknown) : String.format(LOCALE, FORMAT_SATELLITES, satellites);
     }
