@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         useDecimalDegrees = sharedPreferences.getBoolean(getString(R.string.settings_decimal_degrees_key), false);
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false);
 
+        screenLockSwitch.setSelected(screenLock);
+
         populateLocationViews();
     }
 
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @OnClick(R.id.screen_lock_switch)
     public void onScreenLockClicked() {
         screenLock = !screenLock;
+        screenLockSwitch.setSelected(screenLock);
         setBooleanPreference(getString(R.string.settings_screen_lock_key), screenLock);
         final int textRes = screenLock ? R.string.screen_lock_on : R.string.screen_lock_off;
         Toast.makeText(this, textRes, Toast.LENGTH_SHORT).show();

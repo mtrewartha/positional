@@ -18,7 +18,7 @@
         android:contentDescription="@string/settings_screen_lock_label"
         android:src="@drawable/ic_screen_lock_portrait_black_24dp"
         android:text="@string/settings_screen_lock_label"
-        android:tint="@color/gray16"
+        android:tint="@color/screen_lock"
         android:translationZ="1dp"/>
 
     <LinearLayout
