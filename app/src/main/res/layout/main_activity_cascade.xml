@@ -23,7 +23,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/gray1"
         android:orientation="vertical">
 
@@ -41,7 +41,8 @@
         <LinearLayout
             android:id="@+id/coordinates_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="@color/gray1"
             android:elevation="2.0dp"
             android:gravity="center"
@@ -241,33 +242,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sats"/>
-
-        </LinearLayout>
-
-        <!-- GPS Status -->
-        <LinearLayout
-            style="@style/StatRow"
-            android:background="@color/gray7"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/StatImageView"
-                android:contentDescription="@string/gps_status"
-                android:src="@drawable/pulse"/>
-
-            <TextView
-                android:id="@+id/gps_status_label_text_view"
-                style="@style/LabelTextViewBig"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/gps_status"/>
-
-            <TextView
-                android:id="@+id/gps_status_value_text_view"
-                style="@style/ValueTextViewBig"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="@string/gps_status_available"/>
 
         </LinearLayout>
 

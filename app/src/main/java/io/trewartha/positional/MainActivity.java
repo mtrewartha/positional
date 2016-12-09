@@ -9,7 +9,6 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @BindView(R.id.bearing_value_text_view) TextView bearingValueTextView;
     @BindView(R.id.bearing_unit_text_view) TextView bearingUnitTextView;
     @BindView(R.id.satellites_value_text_view) TextView satellitesValueTextView;
-    @BindView(R.id.gps_status_value_text_view) TextView providerStatusValueTextView;
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.screen_lock_switch) ImageView screenLockSwitch;
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private LocationFormatter locationFormatter;
     private LocationManager locationManager;
     private Location location;
-    private int providerStatus;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -68,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         locationFormatter = new LocationFormatter(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        providerStatus = LocationProvider.TEMPORARILY_UNAVAILABLE;
         sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
         useMetricUnits = sharedPreferences.getBoolean(getString(R.string.settings_metric_units_key), false);
         useDecimalDegrees = sharedPreferences.getBoolean(getString(R.string.settings_decimal_degrees_key), false);
@@ -136,10 +132,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         logLocationStatus(provider, status, extras);
-        if (LocationManager.GPS_PROVIDER.equals(provider)) {
-            providerStatus = status;
-            populateLocationViews();
-        }
     }
 
     @Override
@@ -200,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         elevationValueTextView.setText(locationFormatter.getElevation(location, useMetricUnits));
         latitudeValueTextView.setText(locationFormatter.getLatitude(location, useDecimalDegrees));
         longitudeValueTextView.setText(locationFormatter.getLongitude(location, useDecimalDegrees));
-        providerStatusValueTextView.setText(locationFormatter.getProviderStatus(providerStatus));
         satellitesValueTextView.setText(locationFormatter.getSatellites(location == null ? null : location.getExtras()));
         speedValueTextView.setText(locationFormatter.getSpeed(location, useMetricUnits));
 
