@@ -3,12 +3,7 @@
     <color name="colorPrimary">@color/darkGray</color>
     <color name="colorPrimaryDark">@color/black</color>
     <color name="colorAccent">@color/blue</color>
-    <color name="iconTint">@color/colorPrimary</color>
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="darkGray">#333333</color>
-    <color name="lightGray">#CCCCCC</color>
-    <color name="blue">#00a9e7</color>
+    <color name="iconTint">@color/lightGray</color>
 
     <color name="gray1">#202020</color>
     <color name="gray2">#282828</color>
