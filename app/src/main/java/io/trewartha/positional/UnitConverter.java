@@ -18,18 +18,28 @@ class UnitConverter {
 
     @NonNull
     static String getLatitudeAsDMS(@NonNull Location location, int decimalPlaces) {
-        String latitude = Location.convert(location.getLatitude(), Location.FORMAT_SECONDS);
-        latitude = replaceDelimiters(latitude, decimalPlaces);
-        latitude = latitude + " N";
-        return latitude;
+        final double latitude = location.getLatitude();
+        String latitudeDMS = Location.convert(latitude, Location.FORMAT_SECONDS);
+        latitudeDMS = replaceDelimiters(latitudeDMS, decimalPlaces);
+        if (latitude >= 0.0) {
+            latitudeDMS = latitudeDMS + " N";
+        } else {
+            latitudeDMS = latitudeDMS.replaceFirst("-", "") + " S";
+        }
+        return latitudeDMS;
     }
 
     @NonNull
     static String getLongitudeAsDMS(@NonNull Location location, int decimalPlaces) {
-        String longitude = Location.convert(location.getLongitude(), Location.FORMAT_SECONDS);
-        longitude = replaceDelimiters(longitude, decimalPlaces);
-        longitude = longitude + " W";
-        return longitude;
+        final double longitude = location.getLongitude();
+        String longitudeDMS = Location.convert(longitude, Location.FORMAT_SECONDS);
+        longitudeDMS = replaceDelimiters(longitudeDMS, decimalPlaces);
+        if (longitude >= 0.0) {
+            longitudeDMS = longitudeDMS + " E";
+        } else {
+            longitudeDMS = longitudeDMS.replaceFirst("-", "") + " W";
+        }
+        return longitudeDMS;
     }
 
     @NonNull
