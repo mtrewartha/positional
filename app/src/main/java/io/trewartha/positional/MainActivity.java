@@ -90,7 +90,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         coordinatesViewPager.setOffscreenPageLimit(coordinatesFragments.length - 1);
         coordinatesViewPager.setCurrentItem(getCoordinatesFragmentIndex(coordinatesFormat), true);
         coordinatesViewPager.addOnPageChangeListener(new CoordinatesPageChangeListener());
-        updateCoordinatesFragments(0.0, 0.0);
+
+        updateLocationViews(null);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(@Nullable Location location) {
         this.location = location;
         if (location == null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -145,7 +146,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.INVISIBLE);
             }
-            updateLocationViews();
+            updateLocationViews(location);
         }
     }
 
@@ -167,7 +168,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @OnClick({R.id.elevation_unit_text_view, R.id.speed_unit_text_view, R.id.accuracy_unit_text_view})
     public void onDistanceUnitClicked() {
         useMetricUnits = !useMetricUnits;
-        updateLocationViews();
+        updateLocationViews(location);
         setBooleanPreference(getString(R.string.settings_metric_units_key), useMetricUnits);
     }
 
@@ -237,16 +238,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         Log.debug(TAG, "      Satellites: " + locationFormatter.getSatellites(extras));
     }
 
-    private void updateLocationViews() {
-        final double latitude, longitude;
-        if (location == null) {
-            latitude = 0.0;
-            longitude = 0.0;
-        } else {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        }
-        updateCoordinatesFragments(latitude, longitude);
+    private void updateLocationViews(@Nullable Location location) {
+        updateCoordinatesFragments(location);
         accuracyValueTextView.setText(locationFormatter.getAccuracy(location, useMetricUnits));
         accuracyUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
         bearingValueTextView.setText(locationFormatter.getBearing(location));
@@ -302,7 +295,15 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         }
     }
 
-    private void updateCoordinatesFragments(double latitude, double longitude) {
+    private void updateCoordinatesFragments(@Nullable Location location) {
+        final double latitude, longitude;
+        if (location == null) {
+            latitude = 0.0;
+            longitude = 0.0;
+        } else {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
         for (CoordinatesFragment coordinatesFragment : coordinatesFragments) {
             coordinatesFragment.setCoordinates(latitude, longitude);
         }
