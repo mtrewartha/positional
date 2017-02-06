@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    style="@style/CoordinatesFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <io.trewartha.positional.AutoResizeTextView
+        android:id="@+id/mgrs_text_view"
+        style="@style/Coordinates"
+        tools:text="MGRS"/>
+
+    <TextView
+        style="@style/CoordinatesFormatLabel"
+        android:text="@string/coordinate_format_label_mgrs"/>
+
+</LinearLayout>

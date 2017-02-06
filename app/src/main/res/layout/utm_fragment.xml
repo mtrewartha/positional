@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    style="@style/CoordinatesFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <io.trewartha.positional.AutoResizeTextView
+        android:id="@+id/utm_zone_text_view"
+        style="@style/Coordinates"
+        tools:text="10N"/>
+
+    <io.trewartha.positional.AutoResizeTextView
+        android:id="@+id/utm_easting_text_view"
+        style="@style/Coordinates"
+        tools:text="1234567m E"/>
+
+    <io.trewartha.positional.AutoResizeTextView
+        android:id="@+id/utm_northing_text_view"
+        style="@style/Coordinates"
+        tools:text="1234567m N"/>
+
+    <TextView
+        style="@style/CoordinatesFormatLabel"
+        android:text="@string/coordinate_format_label_utm"/>
+
+</LinearLayout>

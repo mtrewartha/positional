@@ -8,40 +8,64 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ValueTextViewTop">
-        <item name="android:textSize">@dimen/value_text_size_top</item>
+    <style name="Coordinates">
+        <item name="android:ellipsize">none</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">100sp</item>
+    </style>
+
+    <style name="CoordinatesFragment">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <style name="CoordinatesFormatLabel">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="LabelTextViewBig">
         <item name="android:textSize">@dimen/value_text_size_standard</item>
     </style>
 
-    <style name="ValueTextViewBig">
-        <item name="android:textSize">@dimen/value_text_size_standard</item>
-        <item name="android:layout_marginEnd">6dp</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:gravity">end</item>
-    </style>
-
-    <style name="UnitTextViewBig">
-        <item name="android:textSize">@dimen/unit_text_size_big</item>
-    </style>
-
     <style name="StatRow">
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">72dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
         <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
-        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="StatImageView">
         <item name="android:layout_height">@dimen/stat_image_size</item>
-        <item name="android:layout_width">@dimen/stat_image_size</item>
         <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:layout_width">@dimen/stat_image_size</item>
         <item name="android:tint">@color/iconTint</item>
+    </style>
+
+    <style name="UnitTextViewBig">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textSize">@dimen/unit_text_size_big</item>
+    </style>
+
+    <style name="ValueTextViewBig">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:gravity">end</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">6dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textSize">@dimen/value_text_size_standard</item>
     </style>
 
 </resources>

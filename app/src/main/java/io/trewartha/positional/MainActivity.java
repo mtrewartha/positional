@@ -13,8 +13,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,17 +29,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements LocationListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends FragmentActivity implements LocationListener, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_LOCATION_PERMISSIONS = 1;
+    private static final int MINIMUM_LOCATION_UPDATE_TIME_MS = 3000;
+    private static final float MINIMUM_LOCATION_UPDATE_DISTANCE_M = 3.0f;
 
+    @BindView(R.id.coordinates_view_pager) ViewPager coordinatesViewPager;
     @BindView(R.id.accuracy_value_text_view) TextView accuracyValueTextView;
     @BindView(R.id.accuracy_unit_text_view) TextView accuracyUnitTextView;
     @BindView(R.id.elevation_value_text_view) TextView elevationValueTextView;
     @BindView(R.id.elevation_unit_text_view) TextView elevationUnitTextView;
-    @BindView(R.id.coordinates_latitude_value_text_view) TextView latitudeValueTextView;
-    @BindView(R.id.coordinates_longitude_value_text_view) TextView longitudeValueTextView;
     @BindView(R.id.speed_value_text_view) TextView speedValueTextView;
     @BindView(R.id.speed_unit_text_view) TextView speedUnitTextView;
     @BindView(R.id.bearing_value_text_view) TextView bearingValueTextView;
@@ -48,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.screen_lock_switch) ImageView screenLockSwitch;
 
-    private boolean useDecimalDegrees;
+    private CoordinatesFormat coordinatesFormat;
+    private CoordinatesFragment[] coordinatesFragments;
     private boolean useMetricUnits;
     private boolean screenLock;
     private LocationFormatter locationFormatter;
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity_cascade);
+        setContentView(R.layout.main_activity);
         initializeNightMode();
         ButterKnife.bind(this);
 
@@ -67,12 +70,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
         useMetricUnits = sharedPreferences.getBoolean(getString(R.string.settings_metric_units_key), false);
-        useDecimalDegrees = sharedPreferences.getBoolean(getString(R.string.settings_decimal_degrees_key), false);
+        coordinatesFormat = CoordinatesFormat.valueOf(
+                sharedPreferences.getString(getString(R.string.settings_coordinates_format_key), CoordinatesFormat.DMS.name())
+        );
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false);
+        coordinatesFragments = new CoordinatesFragment[]{
+                new DegreesDecimalFragment(),
+                new DegreesMinutesSecondsFragment(),
+                new UTMFragment(),
+                new MGRSFragment()
+        };
 
         screenLockSwitch.setSelected(screenLock);
-
-        populateLocationViews();
+        final CoordinatesFragmentPagerAdapter coordinatesPagerAdapter = new CoordinatesFragmentPagerAdapter(
+                getSupportFragmentManager(),
+                coordinatesFragments
+        );
+        coordinatesViewPager.setAdapter(coordinatesPagerAdapter);
+        coordinatesViewPager.setOffscreenPageLimit(coordinatesFragments.length - 1);
+        updateCoordinatesFragments(0.0, 0.0);
     }
 
     @Override
@@ -127,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.INVISIBLE);
             }
-            populateLocationViews();
+            updateLocationViews();
         }
     }
 
@@ -149,15 +165,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @OnClick({R.id.elevation_unit_text_view, R.id.speed_unit_text_view, R.id.accuracy_unit_text_view})
     public void onDistanceUnitClicked() {
         useMetricUnits = !useMetricUnits;
-        populateLocationViews();
+        updateLocationViews();
         setBooleanPreference(getString(R.string.settings_metric_units_key), useMetricUnits);
     }
 
     @OnClick(R.id.coordinates_layout)
     public void onCoordinatesClicked() {
-        useDecimalDegrees = !useDecimalDegrees;
-        populateLocationViews();
-        setBooleanPreference(getString(R.string.settings_decimal_degrees_key), useDecimalDegrees);
+        toggleCoordinatesFormat();
+        updateLocationViews();
+        setStringPreference(getString(R.string.settings_coordinates_format_key), coordinatesFormat.name());
     }
 
     @OnClick(R.id.screen_lock_switch)
@@ -177,6 +193,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
+    private boolean haveLocationPermissions() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
     private void initializeNightMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
     }
@@ -187,60 +208,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
-    }
-
-    private void populateLocationViews() {
-        accuracyValueTextView.setText(locationFormatter.getAccuracy(location, useMetricUnits));
-        bearingValueTextView.setText(locationFormatter.getBearing(location));
-        elevationValueTextView.setText(locationFormatter.getElevation(location, useMetricUnits));
-        latitudeValueTextView.setText(locationFormatter.getLatitude(location, useDecimalDegrees));
-        longitudeValueTextView.setText(locationFormatter.getLongitude(location, useDecimalDegrees));
-        satellitesValueTextView.setText(locationFormatter.getSatellites(location == null ? null : location.getExtras()));
-        speedValueTextView.setText(locationFormatter.getSpeed(location, useMetricUnits));
-
-        accuracyUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
-        elevationUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
-        speedUnitTextView.setText(locationFormatter.getSpeedUnit(useMetricUnits));
-    }
-
-    private boolean haveLocationPermissions() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestLocationPermissions() {
-        Log.info(TAG, "Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION");
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-        }, REQUEST_CODE_LOCATION_PERMISSIONS);
-    }
-
-    private void requestLocationUpdates() {
-        if (haveLocationPermissions()) {
-            Log.info(TAG, "Requesting location updates");
-            //noinspection MissingPermission
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.0f, this);
-        } else {
-            Log.info(TAG, "Location permissions are needed");
-            requestLocationPermissions();
-        }
-    }
-
-    private void suspendLocationUpdates() {
-        if (haveLocationPermissions()) {
-            Log.info(TAG, "Suspending location updates");
-            //noinspection MissingPermission
-            locationManager.removeUpdates(this);
-        } else {
-            Log.info(TAG, "Location permissions are needed");
-            requestLocationPermissions();
-        }
-    }
-
-    private void setBooleanPreference(@NonNull String key, boolean value) {
-        Log.info(TAG, "Saving " + key + " preference as " + value);
-        sharedPreferences.edit().putBoolean(key, value).apply();
     }
 
     private void logLocation(@NonNull Location location) {
@@ -258,5 +225,100 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Log.debug(TAG, "        Provider: " + provider);
         Log.debug(TAG, "          Status: " + locationFormatter.getProviderStatus(status));
         Log.debug(TAG, "      Satellites: " + locationFormatter.getSatellites(extras));
+    }
+
+    private void updateLocationViews() {
+        final double latitude, longitude;
+        if (location == null) {
+            latitude = 0.0;
+            longitude = 0.0;
+        } else {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+        updateCoordinatesFragments(latitude, longitude);
+        accuracyValueTextView.setText(locationFormatter.getAccuracy(location, useMetricUnits));
+        accuracyUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
+        bearingValueTextView.setText(locationFormatter.getBearing(location));
+        elevationValueTextView.setText(locationFormatter.getElevation(location, useMetricUnits));
+        elevationUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
+        satellitesValueTextView.setText(locationFormatter.getSatellites(location == null ? null : location.getExtras()));
+        speedValueTextView.setText(locationFormatter.getSpeed(location, useMetricUnits));
+        speedUnitTextView.setText(locationFormatter.getSpeedUnit(useMetricUnits));
+    }
+
+    private void requestLocationPermissions() {
+        Log.info(TAG, "Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION");
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+        }, REQUEST_CODE_LOCATION_PERMISSIONS);
+    }
+
+    private void requestLocationUpdates() {
+        if (haveLocationPermissions()) {
+            Log.info(TAG, "Requesting location updates");
+            //noinspection MissingPermission
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    MINIMUM_LOCATION_UPDATE_TIME_MS,
+                    MINIMUM_LOCATION_UPDATE_DISTANCE_M,
+                    this
+            );
+        } else {
+            Log.info(TAG, "Location permissions are needed");
+            requestLocationPermissions();
+        }
+    }
+
+    private void setBooleanPreference(@NonNull String key, boolean value) {
+        Log.info(TAG, "Saving " + key + " preference as " + value);
+        sharedPreferences.edit().putBoolean(key, value).apply();
+    }
+
+    private void setStringPreference(@NonNull String key, @Nullable String value) {
+        Log.info(TAG, "Saving " + key + " preference as " + value);
+        sharedPreferences.edit().putString(key, value).apply();
+    }
+
+    private void suspendLocationUpdates() {
+        if (haveLocationPermissions()) {
+            Log.info(TAG, "Suspending location updates");
+            //noinspection MissingPermission
+            locationManager.removeUpdates(this);
+        } else {
+            Log.info(TAG, "Location permissions are needed");
+            requestLocationPermissions();
+        }
+    }
+
+    @NonNull
+    private CoordinatesFormat toggleCoordinatesFormat() {
+        switch (coordinatesFormat) {
+            case DECIMAL:
+                coordinatesFormat = CoordinatesFormat.UTM;
+                break;
+            case DMS:
+                coordinatesFormat = CoordinatesFormat.DECIMAL;
+                break;
+            case MGRS:
+                coordinatesFormat = CoordinatesFormat.DMS;
+                break;
+            case UTM:
+                coordinatesFormat = CoordinatesFormat.MGRS;
+                break;
+            default:
+                final String message = "The coordinate format has not been set properly. Defaulting to DMS.";
+                Log.warn(TAG, message, new RuntimeException(message));
+                coordinatesFormat = CoordinatesFormat.DMS;
+                break;
+        }
+        return coordinatesFormat;
+    }
+
+    private void updateCoordinatesFragments(double latitude, double longitude) {
+        for (CoordinatesFragment coordinatesFragment : coordinatesFragments) {
+            coordinatesFragment.setCoordinates(latitude, longitude);
+        }
     }
 }

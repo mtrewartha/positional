@@ -17,6 +17,10 @@
 
     <string name="accuracy">Accuracy</string>
     <string name="bearing">Bearing</string>
+    <string name="coordinate_format_label_degrees_decimal">degrees</string>
+    <string name="coordinate_format_label_degrees_minutes_seconds">degrees, minutes, seconds</string>
+    <string name="coordinate_format_label_mgrs">MGRS</string>
+    <string name="coordinate_format_label_utm">UTM</string>
     <string name="coordinates">Coordinates</string>
     <string name="elevation">Elevation</string>
     <string name="latitude">Latitude</string>
@@ -37,8 +41,7 @@
     <string name="settings_filename">Positional</string>
     <string name="settings_elevation_unit_default">feet</string>
     <string name="settings_metric_units_key">metricUnits</string>
-    <string name="settings_coordinates_format_default">dd</string>
-    <string name="settings_decimal_degrees_key">coordinatesFormat</string>
+    <string name="settings_coordinates_format_key">coordsFormat</string>
     <string name="settings_screen_lock_default">true</string>
     <string name="settings_screen_lock_key">screenLock</string>
     <string name="settings_screen_lock_label">Screen Lock</string>

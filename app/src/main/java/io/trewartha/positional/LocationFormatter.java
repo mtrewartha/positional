@@ -50,26 +50,6 @@ class LocationFormatter {
     }
 
     @NonNull
-    String getLatitude(@Nullable Location location, boolean decimalDegrees) {
-        final Location nonNullLocation = location == null ? new Location("") : location;
-        if (decimalDegrees) {
-            return String.format(Locale.getDefault(), "%03.5f", nonNullLocation.getLatitude());
-        } else {
-            return UnitConverter.getLatitudeAsDMS(nonNullLocation, 2);
-        }
-    }
-
-    @NonNull
-    String getLongitude(@Nullable Location location, boolean decimalDegrees) {
-        final Location nonNullLocation = location == null ? new Location("") : location;
-        if (decimalDegrees) {
-            return String.format(Locale.getDefault(), "%03.5f", nonNullLocation.getLongitude());
-        } else {
-            return UnitConverter.getLongitudeAsDMS(nonNullLocation, 2);
-        }
-    }
-
-    @NonNull
     String getProviderStatus(int providerStatus) {
         switch (providerStatus) {
             case LocationProvider.OUT_OF_SERVICE:

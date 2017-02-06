@@ -15,7 +15,7 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "io.trewartha.positional"
         minSdkVersion 21
@@ -40,10 +40,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.2'
     compile 'com.google.android.gms:play-services-location:10.0.1'
     compile 'com.google.firebase:firebase-crash:10.0.1'
     compile 'com.jakewharton:butterknife:8.1.0'
     compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
+    compile 'me.grantland:autofittextview:0.2.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.82-beta'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
