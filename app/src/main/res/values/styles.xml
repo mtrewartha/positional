@@ -27,7 +27,6 @@
     </style>
 
     <style name="CoordinatesFormatLabel">
-        <item name="android:fontFamily">monospace</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:paddingTop">12dp</item>
@@ -54,12 +53,10 @@
     </style>
 
     <style name="UnitTextViewBig">
-        <item name="android:fontFamily">monospace</item>
         <item name="android:textSize">@dimen/unit_text_size_big</item>
     </style>
 
     <style name="ValueTextViewBig">
-        <item name="android:fontFamily">monospace</item>
         <item name="android:gravity">end</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginEnd">6dp</item>
