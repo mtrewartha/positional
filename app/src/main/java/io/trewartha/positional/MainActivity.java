@@ -88,6 +88,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         );
         coordinatesViewPager.setAdapter(coordinatesPagerAdapter);
         coordinatesViewPager.setOffscreenPageLimit(coordinatesFragments.length - 1);
+        coordinatesViewPager.setCurrentItem(getCoordinatesFragmentIndex(coordinatesFormat), true);
+        coordinatesViewPager.addOnPageChangeListener(new CoordinatesPageChangeListener());
         updateCoordinatesFragments(0.0, 0.0);
     }
 
@@ -169,13 +171,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         setBooleanPreference(getString(R.string.settings_metric_units_key), useMetricUnits);
     }
 
-    @OnClick(R.id.coordinates_layout)
-    public void onCoordinatesClicked() {
-        toggleCoordinatesFormat();
-        updateLocationViews();
-        setStringPreference(getString(R.string.settings_coordinates_format_key), coordinatesFormat.name());
-    }
-
     @OnClick(R.id.screen_lock_switch)
     public void onScreenLockClicked() {
         screenLock = !screenLock;
@@ -190,6 +185,21 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         if (compoundButton.getId() == R.id.screen_lock_switch) {
             setBooleanPreference(getString(R.string.settings_screen_lock_key), checked);
             lockScreen(checked);
+        }
+    }
+
+    private int getCoordinatesFragmentIndex(@NonNull CoordinatesFormat coordinatesFormat) {
+        switch (coordinatesFormat) {
+            case DECIMAL:
+                return 0;
+            case DMS:
+                return 1;
+            case UTM:
+                return 2;
+            case MGRS:
+                return 3;
+            default:
+                return 0;
         }
     }
 
@@ -292,33 +302,43 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         }
     }
 
-    @NonNull
-    private CoordinatesFormat toggleCoordinatesFormat() {
-        switch (coordinatesFormat) {
-            case DECIMAL:
-                coordinatesFormat = CoordinatesFormat.UTM;
-                break;
-            case DMS:
-                coordinatesFormat = CoordinatesFormat.DECIMAL;
-                break;
-            case MGRS:
-                coordinatesFormat = CoordinatesFormat.DMS;
-                break;
-            case UTM:
-                coordinatesFormat = CoordinatesFormat.MGRS;
-                break;
-            default:
-                final String message = "The coordinate format has not been set properly. Defaulting to DMS.";
-                Log.warn(TAG, message, new RuntimeException(message));
-                coordinatesFormat = CoordinatesFormat.DMS;
-                break;
-        }
-        return coordinatesFormat;
-    }
-
     private void updateCoordinatesFragments(double latitude, double longitude) {
         for (CoordinatesFragment coordinatesFragment : coordinatesFragments) {
             coordinatesFragment.setCoordinates(latitude, longitude);
+        }
+    }
+
+    private class CoordinatesPageChangeListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            // Don't do anything here
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            switch (position) {
+                case 0:
+                    coordinatesFormat = CoordinatesFormat.DECIMAL;
+                    break;
+                case 1:
+                    coordinatesFormat = CoordinatesFormat.DMS;
+                    break;
+                case 2:
+                    coordinatesFormat = CoordinatesFormat.UTM;
+                    break;
+                case 3:
+                    coordinatesFormat = CoordinatesFormat.MGRS;
+                    break;
+                default:
+                    coordinatesFormat = CoordinatesFormat.DECIMAL;
+                    break;
+            }
+            setStringPreference(getString(R.string.settings_coordinates_format_key), coordinatesFormat.name());
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            // Don't do anything here
         }
     }
 }
