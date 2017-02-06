@@ -1,6 +1,7 @@
 package io.trewartha.positional;
 
 import android.Manifest;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -65,6 +66,10 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         setContentView(R.layout.main_activity);
         initializeNightMode();
         ButterKnife.bind(this);
+
+        // Uncomment these lines to force night mode for development/testing
+        // final UiModeManager uiModeManager = (UiModeManager) getSystemService(Context.UI_MODE_SERVICE);
+        // uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
 
         locationFormatter = new LocationFormatter(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

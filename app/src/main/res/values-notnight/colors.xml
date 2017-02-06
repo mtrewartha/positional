@@ -3,7 +3,7 @@
     <color name="colorPrimary">@color/white</color>
     <color name="colorPrimaryDark">@color/lightGray</color>
     <color name="colorAccent">@color/blue</color>
-    <color name="iconTint">@color/darkGray</color>
+    <color name="iconTint">@color/gray18</color>
 
     <color name="gray1">#F8F8F8</color>
     <color name="gray2">#F0F0F0</color>
@@ -21,4 +21,6 @@
     <color name="gray14">#909090</color>
     <color name="gray15">#888888</color>
     <color name="gray16">#808080</color>
+    <color name="gray17">#787878</color>
+    <color name="gray18">#707070</color>
 </resources>
