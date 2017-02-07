@@ -204,41 +204,6 @@
 
         </LinearLayout>
 
-        <!-- Satellites -->
-        <LinearLayout
-            style="@style/StatRow"
-            android:background="@color/gray6"
-            android:elevation="1.0dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/StatImageView"
-                android:contentDescription="@string/satellites"
-                android:src="@drawable/satellite_variant"/>
-
-            <TextView
-                android:id="@+id/satellites_label_text_view"
-                style="@style/LabelTextViewBig"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/satellites"/>
-
-            <TextView
-                android:id="@+id/satellites_value_text_view"
-                style="@style/ValueTextViewBig"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="10"/>
-
-            <TextView
-                android:id="@+id/satellites_unit_text_view"
-                style="@style/UnitTextViewBig"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sats"/>
-
-        </LinearLayout>
-
     </LinearLayout>
 
 </FrameLayout>

@@ -1,15 +1,12 @@
 package io.trewartha.positional;
 
 import android.Manifest;
-import android.app.UiModeManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,16 +23,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends FragmentActivity implements LocationListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends FragmentActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
+    private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final int REQUEST_CODE_LOCATION_PERMISSIONS = 1;
-    private static final int MINIMUM_LOCATION_UPDATE_TIME_MS = 3000;
-    private static final float MINIMUM_LOCATION_UPDATE_DISTANCE_M = 3.0f;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.coordinates_view_pager) ViewPager coordinatesViewPager;
     @BindView(R.id.accuracy_value_text_view) TextView accuracyValueTextView;
@@ -46,19 +49,20 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @BindView(R.id.speed_unit_text_view) TextView speedUnitTextView;
     @BindView(R.id.bearing_value_text_view) TextView bearingValueTextView;
     @BindView(R.id.bearing_unit_text_view) TextView bearingUnitTextView;
-    @BindView(R.id.satellites_value_text_view) TextView satellitesValueTextView;
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.screen_lock_switch) ImageView screenLockSwitch;
 
     private CoordinatesFormat coordinatesFormat;
     private CoordinatesFragment[] coordinatesFragments;
-    private boolean useMetricUnits;
-    private boolean screenLock;
-    private LocationFormatter locationFormatter;
-    private LocationManager locationManager;
+    private GoogleApiClient googleAPIClient;
     private Location location;
+    private LocationFormatter locationFormatter;
+    private LocationListener locationListener;
+    private LocationRequest locationRequest;
+    private boolean screenLock;
     private SharedPreferences sharedPreferences;
+    private boolean useMetricUnits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +75,20 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         // final UiModeManager uiModeManager = (UiModeManager) getSystemService(Context.UI_MODE_SERVICE);
         // uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
 
+        final GoogleConnectionCallbacks googleConnectionCallbacks = new GoogleConnectionCallbacks();
+        googleAPIClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, googleConnectionCallbacks)
+                .addConnectionCallbacks(googleConnectionCallbacks)
+                .addApi(LocationServices.API)
+                .build();
+
         locationFormatter = new LocationFormatter(this);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new FusedLocationListener();
+
+        locationRequest = LocationRequest.create()
+                .setPriority(LOCATION_UPDATE_PRIORITY)
+                .setInterval(LOCATION_UPDATE_INTERVAL);
+
         sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
         useMetricUnits = sharedPreferences.getBoolean(getString(R.string.settings_metric_units_key), false);
         coordinatesFormat = CoordinatesFormat.valueOf(
@@ -97,18 +113,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         coordinatesViewPager.addOnPageChangeListener(new CoordinatesPageChangeListener());
 
         updateLocationViews(null);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        requestLocationUpdates();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        suspendLocationUpdates();
     }
 
     @Override
@@ -139,35 +143,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                         .show();
             }
         }
-    }
-
-    @Override
-    public void onLocationChanged(@Nullable Location location) {
-        this.location = location;
-        if (location == null) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            logLocation(location);
-            if (progressBar.getVisibility() == View.VISIBLE) {
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-            updateLocationViews(location);
-        }
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        logLocationStatus(provider, status, extras);
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        requestLocationUpdates();
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        suspendLocationUpdates();
     }
 
     @OnClick({R.id.elevation_unit_text_view, R.id.speed_unit_text_view, R.id.accuracy_unit_text_view})
@@ -236,13 +211,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         Log.debug(TAG, "          Speed: " + (location.hasSpeed() ? location.getSpeed() + " m/s" : "none"));
     }
 
-    private void logLocationStatus(@NonNull String provider, int status, @Nullable Bundle extras) {
-        Log.debug(TAG, "Location status change:");
-        Log.debug(TAG, "        Provider: " + provider);
-        Log.debug(TAG, "          Status: " + locationFormatter.getProviderStatus(status));
-        Log.debug(TAG, "      Satellites: " + locationFormatter.getSatellites(extras));
-    }
-
     private void updateLocationViews(@Nullable Location location) {
         updateCoordinatesFragments(location);
         accuracyValueTextView.setText(locationFormatter.getAccuracy(location, useMetricUnits));
@@ -250,7 +218,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         bearingValueTextView.setText(locationFormatter.getBearing(location));
         elevationValueTextView.setText(locationFormatter.getElevation(location, useMetricUnits));
         elevationUnitTextView.setText(locationFormatter.getDistanceUnit(useMetricUnits));
-        satellitesValueTextView.setText(locationFormatter.getSatellites(location == null ? null : location.getExtras()));
         speedValueTextView.setText(locationFormatter.getSpeed(location, useMetricUnits));
         speedUnitTextView.setText(locationFormatter.getSpeedUnit(useMetricUnits));
     }
@@ -267,12 +234,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         if (haveLocationPermissions()) {
             Log.info(TAG, "Requesting location updates");
             //noinspection MissingPermission
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    MINIMUM_LOCATION_UPDATE_TIME_MS,
-                    MINIMUM_LOCATION_UPDATE_DISTANCE_M,
-                    this
-            );
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleAPIClient, locationRequest, locationListener);
         } else {
             Log.info(TAG, "Location permissions are needed");
             requestLocationPermissions();
@@ -290,14 +252,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     }
 
     private void suspendLocationUpdates() {
-        if (haveLocationPermissions()) {
-            Log.info(TAG, "Suspending location updates");
-            //noinspection MissingPermission
-            locationManager.removeUpdates(this);
-        } else {
-            Log.info(TAG, "Location permissions are needed");
-            requestLocationPermissions();
-        }
+        Log.info(TAG, "Suspending location updates");
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleAPIClient, locationListener);
     }
 
     private void updateCoordinatesFragments(@Nullable Location location) {
@@ -315,6 +271,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     }
 
     private class CoordinatesPageChangeListener implements ViewPager.OnPageChangeListener {
+
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             // Don't do anything here
@@ -345,6 +302,53 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         @Override
         public void onPageScrollStateChanged(int state) {
             // Don't do anything here
+        }
+    }
+
+    private class FusedLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(@Nullable Location location) {
+            MainActivity.this.location = location;
+            if (location == null) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                logLocation(location);
+                if (progressBar.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                updateLocationViews(location);
+            }
+        }
+    }
+
+    private class GoogleConnectionCallbacks implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+        @Override
+        public void onConnected(@Nullable Bundle bundle) {
+            Log.info(TAG, "Google Play Services connection established");
+            requestLocationUpdates();
+        }
+
+        @Override
+        public void onConnectionSuspended(int i) {
+            Log.info(TAG, "Google Play Services connection suspended");
+            suspendLocationUpdates();
+        }
+
+        @Override
+        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+            Log.error(TAG, "Google Play Services connection failed");
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle(R.string.google_play_services_connection_failed_title)
+                    .setMessage(R.string.google_play_services_connection_failed_message)
+                    .setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .show();
         }
     }
 }

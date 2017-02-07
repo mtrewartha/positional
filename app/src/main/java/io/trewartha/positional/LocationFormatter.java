@@ -2,8 +2,6 @@ package io.trewartha.positional;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationProvider;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -47,29 +45,6 @@ class LocationFormatter {
             elevation = (int) UnitConverter.metersToFeet(elevation);
         }
         return String.format(LOCALE, FORMAT_ELEVATION, elevation);
-    }
-
-    @NonNull
-    String getProviderStatus(int providerStatus) {
-        switch (providerStatus) {
-            case LocationProvider.OUT_OF_SERVICE:
-                return context.getString(R.string.gps_status_out_of_service);
-            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                return context.getString(R.string.gps_status_temporarily_unavailable);
-            default: // AVAILABLE
-                return context.getString(R.string.gps_status_available);
-        }
-    }
-
-    @NonNull
-    String getSatellites(@Nullable Bundle locationExtras) {
-        final int satellites;
-        if (locationExtras == null) {
-            satellites = 0;
-        } else {
-            satellites = locationExtras.getInt(LOCATION_EXTRAS_SATELLITES_KEY, -1);
-        }
-        return satellites < 0 ? context.getString(R.string.unknown) : String.format(LOCALE, FORMAT_SATELLITES, satellites);
     }
 
     @NonNull
