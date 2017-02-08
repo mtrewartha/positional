@@ -12,10 +12,8 @@ class LocationFormatter {
     private static final String FORMAT_ACCURACY = "%d";
     private static final String FORMAT_BEARING = "%d";
     private static final String FORMAT_ELEVATION = "%,d";
-    private static final String FORMAT_SATELLITES = "%d";
-    private static final String FORMAT_SPEED = "%,d";
+    private static final String FORMAT_SPEED = "%.0f";
     private static final Locale LOCALE = Locale.getDefault();
-    private static final String LOCATION_EXTRAS_SATELLITES_KEY = "satellites";
 
     @NonNull private Context context;
 
@@ -25,33 +23,45 @@ class LocationFormatter {
 
     @NonNull
     String getAccuracy(@Nullable Location location, boolean metric) {
-        int accuracy = location == null || !location.hasAccuracy() ? 0 : (int) location.getAccuracy();
-        if (!metric) {
-            accuracy = (int) UnitConverter.metersToFeet(accuracy);
+        final int accuracy;
+        if (location == null) {
+            accuracy = 0;
+        } else if (metric) {
+            accuracy = (int) location.getAccuracy();
+        } else {
+            accuracy = (int) UnitConverter.metersToFeet(location.getAccuracy());
         }
         return String.format(LOCALE, FORMAT_ACCURACY, accuracy);
     }
 
     @NonNull
     String getBearing(@Nullable Location location) {
-        final int bearing = location == null || !location.hasBearing() ? 0 : (int) location.getBearing();
+        final int bearing = location == null ? 0 : (int) location.getBearing();
         return String.format(LOCALE, FORMAT_BEARING, bearing);
     }
 
     @NonNull
     String getElevation(@Nullable Location location, boolean metric) {
-        int elevation = location == null || !location.hasAltitude() ? 0 : (int) location.getAltitude();
-        if (!metric) {
-            elevation = (int) UnitConverter.metersToFeet(elevation);
+        final int elevation;
+        if (location == null) {
+            elevation = 0;
+        } else if (metric) {
+            elevation = (int) location.getAltitude();
+        } else {
+            elevation = (int) UnitConverter.metersToFeet((float) location.getAltitude());
         }
         return String.format(LOCALE, FORMAT_ELEVATION, elevation);
     }
 
     @NonNull
     String getSpeed(@Nullable Location location, boolean metric) {
-        int speed = location == null || !location.hasSpeed() ? 0 : (int) location.getSpeed();
-        if (!metric) {
-            speed = (int) UnitConverter.metersPerSecondToMilesPerHour(speed);
+        final float speed;
+        if (location == null) {
+            speed = 0.0f;
+        } else if (metric) {
+            speed = UnitConverter.metersPerSecondToKilometersPerHour(location.getSpeed());
+        } else {
+            speed = UnitConverter.metersPerSecondToMilesPerHour(location.getSpeed());
         }
         return String.format(LOCALE, FORMAT_SPEED, speed);
     }
@@ -64,7 +74,7 @@ class LocationFormatter {
 
     @NonNull
     String getSpeedUnit(boolean metric) {
-        int stringRes = metric ? R.string.unit_mps : R.string.unit_mph;
+        int stringRes = metric ? R.string.unit_kmh : R.string.unit_mph;
         return context.getString(stringRes);
     }
 }
