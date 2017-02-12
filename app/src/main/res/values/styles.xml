@@ -33,9 +33,7 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="LabelTextViewBig">
-        <item name="android:textSize">@dimen/value_text_size_standard</item>
-    </style>
+    <!-- Stat Rows -->
 
     <style name="StatRow">
         <item name="android:gravity">center_vertical</item>
@@ -45,24 +43,103 @@
         <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
     </style>
 
+    <style name="StatRowLandscape" parent="StatRow">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+    </style>
+
+    <style name="StatRowLarge" parent="StatRow">
+        <item name="android:layout_height">96dp</item>
+    </style>
+
+    <style name="StatRowLargeLandscape" parent="StatRowLandscape">
+    </style>
+
+    <!-- Label Styles -->
+
+    <style name="LabelTextView">
+        <item name="android:textSize">@dimen/label_text_size</item>
+    </style>
+
+    <style name="LabelTextViewLandscape" parent="LabelTextView">
+        <item name="android:textSize">@dimen/label_text_size_landscape</item>
+    </style>
+
+    <style name="LabelTextViewLarge" parent="LabelTextView">
+        <item name="android:textSize">@dimen/label_text_size_large</item>
+    </style>
+
+    <style name="LabelTextViewLargeLandscape" parent="LabelTextViewLandscape">
+        <item name="android:textSize">@dimen/label_text_size_large_landscape</item>
+    </style>
+
+    <!-- Stat Icon Styles-->
+
     <style name="StatImageView">
         <item name="android:layout_height">@dimen/stat_image_size</item>
-        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
         <item name="android:layout_width">@dimen/stat_image_size</item>
         <item name="android:tint">@color/iconTint</item>
     </style>
 
-    <style name="UnitTextViewBig">
-        <item name="android:textSize">@dimen/unit_text_size_big</item>
+    <style name="StatImageViewLarge" parent="StatImageView">
+        <item name="android:layout_height">@dimen/stat_image_size_large</item>
+        <item name="android:layout_width">@dimen/stat_image_size_large</item>
     </style>
 
-    <style name="ValueTextViewBig">
+    <style name="StatImageViewLandscape" parent="StatImageView">
+        <item name="android:layout_height">@dimen/stat_image_size_landscape</item>
+        <item name="android:layout_width">@dimen/stat_image_size_landscape</item>
+    </style>
+
+    <style name="StatImageViewLargeLandscape" parent="StatImageViewLandscape">
+        <item name="android:layout_height">@dimen/stat_image_size_large_landscape</item>
+        <item name="android:layout_width">@dimen/stat_image_size_large_landscape</item>
+    </style>
+
+    <!-- Unit Styles -->
+
+    <style name="UnitTextView">
+        <item name="android:textSize">@dimen/unit_text_size</item>
+    </style>
+
+    <style name="UnitTextViewLandscape" parent="UnitTextView">
+        <item name="android:textSize">@dimen/unit_text_size_landscape</item>
+    </style>
+
+    <style name="UnitTextViewLarge" parent="UnitTextView">
+        <item name="android:textSize">@dimen/unit_text_size_large</item>
+    </style>
+
+    <style name="UnitTextViewLargeLandscape" parent="UnitTextViewLandscape">
+        <item name="android:textSize">@dimen/unit_text_size_large_landscape</item>
+    </style>
+
+    <!-- Value Styles -->
+
+    <style name="ValueTextView">
         <item name="android:gravity">end</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginEnd">6dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:textSize">@dimen/value_text_size_standard</item>
+        <item name="android:textSize">@dimen/value_text_size</item>
+    </style>
+
+    <style name="ValueTextViewLandscape" parent="ValueTextView">
+        <item name="android:textSize">@dimen/value_text_size_landscape</item>
+    </style>
+
+    <style name="ValueTextViewLarge" parent="ValueTextView">
+        <item name="android:textSize">@dimen/value_text_size_large</item>
+    </style>
+
+    <style name="ValueTextViewLargeLandscape" parent="ValueTextViewLandscape">
+        <item name="android:textSize">@dimen/value_text_size_large_landscape</item>
     </style>
 
 </resources>

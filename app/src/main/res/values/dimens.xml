@@ -2,10 +2,28 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="coordinates_text_size">20sp</dimen>
-    <dimen name="value_text_size_standard">24sp</dimen>
-    <dimen name="value_text_size_top">42sp</dimen>
-    <dimen name="unit_text_size_big">22sp</dimen>
 
-    <dimen name="stat_image_size">36dp</dimen>
+    <dimen name="text_size_small">25sp</dimen>
+    <dimen name="text_size_medium">36sp</dimen>
+    <dimen name="text_size_large">46sp</dimen>
+
+    <dimen name="label_text_size">@dimen/text_size_small</dimen>
+    <dimen name="label_text_size_landscape">@dimen/text_size_small</dimen>
+    <dimen name="label_text_size_large">@dimen/text_size_medium</dimen>
+    <dimen name="label_text_size_large_landscape">@dimen/text_size_large</dimen>
+
+    <dimen name="value_text_size">@dimen/text_size_small</dimen>
+    <dimen name="value_text_size_landscape">@dimen/text_size_small</dimen>
+    <dimen name="value_text_size_large">@dimen/text_size_medium</dimen>
+    <dimen name="value_text_size_large_landscape">@dimen/text_size_large</dimen>
+
+    <dimen name="unit_text_size">@dimen/text_size_small</dimen>
+    <dimen name="unit_text_size_landscape">@dimen/text_size_small</dimen>
+    <dimen name="unit_text_size_large">@dimen/text_size_medium</dimen>
+    <dimen name="unit_text_size_large_landscape">@dimen/text_size_large</dimen>
+
+    <dimen name="stat_image_size">@dimen/text_size_small</dimen>
+    <dimen name="stat_image_size_landscape">@dimen/text_size_small</dimen>
+    <dimen name="stat_image_size_large">@dimen/text_size_medium</dimen>
+    <dimen name="stat_image_size_large_landscape">@dimen/text_size_large</dimen>
 </resources>
