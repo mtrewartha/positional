@@ -1,4 +1,4 @@
-package io.trewartha.positional;
+package io.trewartha.positional.coordinates;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.coords.MGRSCoord;
+import io.trewartha.positional.R;
 
 public class MGRSFragment extends CoordinatesFragment {
 

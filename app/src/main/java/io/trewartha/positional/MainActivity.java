@@ -32,6 +32,12 @@ import com.google.android.gms.location.LocationServices;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.trewartha.positional.coordinates.CoordinatesFragment;
+import io.trewartha.positional.coordinates.CoordinatesFragmentPagerAdapter;
+import io.trewartha.positional.coordinates.DegreesDecimalFragment;
+import io.trewartha.positional.coordinates.DegreesMinutesSecondsFragment;
+import io.trewartha.positional.coordinates.MGRSFragment;
+import io.trewartha.positional.coordinates.UTMFragment;
 
 public class MainActivity extends FragmentActivity implements CompoundButton.OnCheckedChangeListener {
 

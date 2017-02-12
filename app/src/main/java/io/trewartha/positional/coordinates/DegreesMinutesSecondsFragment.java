@@ -1,4 +1,4 @@
-package io.trewartha.positional;
+package io.trewartha.positional.coordinates;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.trewartha.positional.R;
 
 public class DegreesMinutesSecondsFragment extends CoordinatesFragment {
 

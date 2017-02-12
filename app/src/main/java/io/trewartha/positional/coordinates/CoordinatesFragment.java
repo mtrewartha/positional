@@ -1,4 +1,4 @@
-package io.trewartha.positional;
+package io.trewartha.positional.coordinates;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
