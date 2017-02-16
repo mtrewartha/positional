@@ -7,23 +7,26 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class CoordinatesFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    @NonNull private Fragment[] fragments;
-
-    public CoordinatesFragmentPagerAdapter(
-            @NonNull FragmentManager fragmentManager,
-            @NonNull Fragment[] fragments
-    ) {
+    public CoordinatesFragmentPagerAdapter(@NonNull FragmentManager fragmentManager) {
         super(fragmentManager);
-        this.fragments = fragments;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragments[position];
+        switch (position) {
+            case 0:
+                return new DegreesDecimalFragment();
+            case 1:
+                return new DegreesMinutesSecondsFragment();
+            case 2:
+                return new UTMFragment();
+            default:
+                return new MGRSFragment();
+        }
     }
 
     @Override
     public int getCount() {
-        return fragments.length;
+        return 4;
     }
 }

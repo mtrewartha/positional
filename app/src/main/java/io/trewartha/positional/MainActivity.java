@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -29,15 +30,14 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.trewartha.positional.coordinates.CoordinatesFragment;
 import io.trewartha.positional.coordinates.CoordinatesFragmentPagerAdapter;
-import io.trewartha.positional.coordinates.DegreesDecimalFragment;
-import io.trewartha.positional.coordinates.DegreesMinutesSecondsFragment;
-import io.trewartha.positional.coordinates.MGRSFragment;
-import io.trewartha.positional.coordinates.UTMFragment;
 
 public class MainActivity extends FragmentActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -59,13 +59,13 @@ public class MainActivity extends FragmentActivity implements CompoundButton.OnC
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.screen_lock_switch) ImageView screenLockSwitch;
 
+    @NonNull private List<CoordinatesFragment> coordinatesFragments = new LinkedList<>();
+    @NonNull private LocationFormatter locationFormatter = new LocationFormatter(this);
+    @NonNull private LocationListener locationListener = new FusedLocationListener();
+
     private CoordinatesFormat coordinatesFormat;
-    private CoordinatesFragment[] coordinatesFragments;
     private GoogleApiClient googleAPIClient;
     private Location location;
-    private LocationFormatter locationFormatter;
-    private LocationListener locationListener;
-    private LocationRequest locationRequest;
     private boolean screenLock;
     private SharedPreferences sharedPreferences;
     private boolean useMetricUnits;
@@ -88,33 +88,19 @@ public class MainActivity extends FragmentActivity implements CompoundButton.OnC
                 .addApi(LocationServices.API)
                 .build();
 
-        locationFormatter = new LocationFormatter(this);
-        locationListener = new FusedLocationListener();
-
-        locationRequest = LocationRequest.create()
-                .setPriority(LOCATION_UPDATE_PRIORITY)
-                .setInterval(LOCATION_UPDATE_INTERVAL);
-
         sharedPreferences = getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
         useMetricUnits = sharedPreferences.getBoolean(getString(R.string.settings_metric_units_key), false);
         coordinatesFormat = CoordinatesFormat.valueOf(
                 sharedPreferences.getString(getString(R.string.settings_coordinates_format_key), CoordinatesFormat.DMS.name())
         );
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false);
-        coordinatesFragments = new CoordinatesFragment[]{
-                new DegreesDecimalFragment(),
-                new DegreesMinutesSecondsFragment(),
-                new UTMFragment(),
-                new MGRSFragment()
-        };
-
         screenLockSwitch.setSelected(screenLock);
+
         final CoordinatesFragmentPagerAdapter coordinatesPagerAdapter = new CoordinatesFragmentPagerAdapter(
-                getSupportFragmentManager(),
-                coordinatesFragments
+                getSupportFragmentManager()
         );
         coordinatesViewPager.setAdapter(coordinatesPagerAdapter);
-        coordinatesViewPager.setOffscreenPageLimit(coordinatesFragments.length - 1);
+        coordinatesViewPager.setOffscreenPageLimit(coordinatesPagerAdapter.getCount());
         coordinatesViewPager.setCurrentItem(getCoordinatesFragmentIndex(coordinatesFormat), true);
         coordinatesViewPager.addOnPageChangeListener(new CoordinatesPageChangeListener());
 
@@ -125,6 +111,13 @@ public class MainActivity extends FragmentActivity implements CompoundButton.OnC
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         initializeNightMode();
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof CoordinatesFragment) {
+            coordinatesFragments.add((CoordinatesFragment) fragment);
+        }
     }
 
     @Override
@@ -239,6 +232,9 @@ public class MainActivity extends FragmentActivity implements CompoundButton.OnC
     private void requestLocationUpdates() {
         if (haveLocationPermissions()) {
             Log.info(TAG, "Requesting location updates");
+            final LocationRequest locationRequest = LocationRequest.create()
+                    .setPriority(LOCATION_UPDATE_PRIORITY)
+                    .setInterval(LOCATION_UPDATE_INTERVAL);
             //noinspection MissingPermission
             LocationServices.FusedLocationApi.requestLocationUpdates(googleAPIClient, locationRequest, locationListener);
         } else {
