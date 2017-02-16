@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 import io.trewartha.positional.R;
@@ -23,13 +24,20 @@ public class UTMFragment extends CoordinatesFragment {
     @BindView(R.id.utm_zone_text_view) @Nullable TextView zoneTextView;
     @BindView(R.id.utm_easting_text_view) @Nullable TextView eastingTextView;
     @BindView(R.id.utm_northing_text_view) @Nullable TextView northingTextView;
+    private Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.utm_fragment, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         setCoordinates(latitude, longitude);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override

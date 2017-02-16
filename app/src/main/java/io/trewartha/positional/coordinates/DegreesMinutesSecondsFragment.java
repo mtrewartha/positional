@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.trewartha.positional.R;
 
 public class DegreesMinutesSecondsFragment extends CoordinatesFragment {
@@ -18,12 +19,20 @@ public class DegreesMinutesSecondsFragment extends CoordinatesFragment {
     @BindView(R.id.degrees_minutes_seconds_latitude_text_view) @Nullable TextView latitudeTextView;
     @BindView(R.id.degrees_minutes_seconds_longitude_text_view) @Nullable TextView longitudeTextView;
 
+    private Unbinder unbinder;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.degrees_minutes_seconds_fragment, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         setCoordinates(latitude, longitude);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override

@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.trewartha.positional.R;
 
 public class DegreesDecimalFragment extends CoordinatesFragment {
@@ -22,12 +23,20 @@ public class DegreesDecimalFragment extends CoordinatesFragment {
     @BindView(R.id.degrees_decimal_latitude_text_view) @Nullable TextView latitudeTextView;
     @BindView(R.id.degrees_decimal_longitude_text_view) @Nullable TextView longitudeTextView;
 
+    private Unbinder unbinder;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.degrees_decimal_fragment, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         setCoordinates(latitude, longitude);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
