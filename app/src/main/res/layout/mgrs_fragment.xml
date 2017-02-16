@@ -8,6 +8,8 @@
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/mgrs_text_view"
         style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:text="MGRS"/>
 
     <TextView

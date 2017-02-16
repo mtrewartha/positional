@@ -6,11 +6,19 @@
 
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/degrees_decimal_latitude_text_view"
-        style="@style/Coordinates"/>
+        style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom|center_horizontal"/>
 
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/degrees_decimal_longitude_text_view"
-        style="@style/Coordinates"/>
+        style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top|center_horizontal"/>
 
     <TextView
         style="@style/CoordinatesFormatLabel"

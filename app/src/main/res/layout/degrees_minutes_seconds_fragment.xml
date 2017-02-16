@@ -8,11 +8,19 @@
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/degrees_minutes_seconds_latitude_text_view"
         style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom|center_horizontal"
         tools:text="-100° 60' 60&quot;"/>
 
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/degrees_minutes_seconds_longitude_text_view"
         style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top|center_horizontal"
         tools:text="-100° 60' 60&quot;"/>
 
     <TextView

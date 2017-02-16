@@ -8,16 +8,27 @@
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/utm_zone_text_view"
         style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom|center_horizontal"
         tools:text="10N"/>
 
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/utm_easting_text_view"
         style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         tools:text="1234567m E"/>
 
     <io.trewartha.positional.AutoResizeTextView
         android:id="@+id/utm_northing_text_view"
         style="@style/Coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top|center_horizontal"
         tools:text="1234567m N"/>
 
     <TextView
