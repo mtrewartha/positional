@@ -9,7 +9,8 @@
         android:id="@+id/mgrs_text_view"
         style="@style/Coordinates"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         tools:text="MGRS"/>
 
     <TextView
