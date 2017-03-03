@@ -8,15 +8,14 @@
     android:layout_height="match_parent"
     android:background="@color/gray7"
     android:baselineAligned="false"
-    android:orientation="horizontal"
-    tools:context=".MainActivity">
+    android:orientation="horizontal">
 
     <!-- Coordinates -->
     <RelativeLayout
         android:id="@+id/coordinates_layout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight=".5"
+        android:layout_weight="1"
         android:background="@color/gray1"
         android:elevation="2.0dp"
         android:gravity="center">
@@ -69,37 +68,37 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight=".5"
+        android:layout_weight="1"
         android:background="@color/gray1"
         android:orientation="vertical">
 
         <!-- Elevation -->
         <LinearLayout
-            style="@style/StatRowLandscape"
+            style="@style/StatRowLargeLandscape"
             android:background="@color/gray2"
             android:elevation="1.8dp"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/StatImageViewLargeLandscape"
                 android:contentDescription="@string/elevation"
                 android:src="@drawable/ic_terrain_black_24dp"/>
 
             <TextView
                 android:id="@+id/elevation_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/LabelTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/elevation"/>
 
             <TextView
                 android:id="@+id/elevation_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/ValueTextViewLargeLandscape"
                 tools:text="10000"/>
 
             <TextView
                 android:id="@+id/elevation_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/UnitTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="ft"/>
@@ -108,31 +107,31 @@
 
         <!-- Speed -->
         <LinearLayout
-            style="@style/StatRowLandscape"
+            style="@style/StatRowLargeLandscape"
             android:background="@color/gray3"
             android:elevation="1.6dp"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/StatImageViewLargeLandscape"
                 android:contentDescription="@string/speed"
                 android:src="@drawable/speedometer"/>
 
             <TextView
                 android:id="@+id/speed_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/LabelTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/speed"/>
 
             <TextView
                 android:id="@+id/speed_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/ValueTextViewLargeLandscape"
                 tools:text="100"/>
 
             <TextView
                 android:id="@+id/speed_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/UnitTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="mph"/>
@@ -141,31 +140,31 @@
 
         <!-- Bearing -->
         <LinearLayout
-            style="@style/StatRowLandscape"
+            style="@style/StatRowLargeLandscape"
             android:background="@color/gray4"
             android:elevation="1.4dp"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/StatImageViewLargeLandscape"
                 android:contentDescription="@string/bearing"
                 android:src="@drawable/ic_explore_black_24dp"/>
 
             <TextView
                 android:id="@+id/bearing_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/LabelTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bearing"/>
 
             <TextView
                 android:id="@+id/bearing_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/ValueTextViewLargeLandscape"
                 tools:text="359"/>
 
             <TextView
                 android:id="@+id/bearing_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/UnitTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/unit_degrees"/>
@@ -174,33 +173,33 @@
 
         <!-- Accuracy -->
         <LinearLayout
-            style="@style/StatRowLandscape"
+            style="@style/StatRowLargeLandscape"
             android:background="@color/gray5"
             android:elevation="1.2dp"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/StatImageViewLargeLandscape"
                 android:contentDescription="@string/accuracy"
                 android:src="@drawable/bullseye"/>
 
             <TextView
                 android:id="@+id/accuracy_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/LabelTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/accuracy"/>
 
             <TextView
                 android:id="@+id/accuracy_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/ValueTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="10"/>
 
             <TextView
                 android:id="@+id/accuracy_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/UnitTextViewLargeLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="ft"/>

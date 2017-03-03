@@ -1,21 +1,25 @@
 <resources>
     <string name="app_name">Positional</string>
 
-    <!-- Main Activity -->
-    <string name="google_play_services_connection_failed_title">Google Play Services Connection Failed</string>
-    <string name="google_play_services_connection_failed_message">Would you like to try again?</string>
+    <!-- Common Dialog Button Text -->
+    <string name="exit">Exit</string>
+    <string name="try_again">Try Again</string>
+
+    <!-- Google Play Services -->
+    <string name="google_play_services_update">Update</string>
+    <string name="google_play_services_connection_failed_title">Connection Failed</string>
+    <string name="google_play_services_connection_failed_message">Something is wrong with your Google Play Services. Please send an email about this to mike@trewartha.io.</string>
+    <string name="google_play_services_connection_update_title">Update Required</string>
+    <string name="google_play_services_connection_update_message">You are running an old version of Google Play Services. Please update through the Play Store.</string>
+
+    <!-- Permissions -->
     <string name="access_fine_location_permission_explanation_title">Location Permission Required</string>
     <string name="access_fine_location_permission_explanation_message">In order to show your elevation, location and other statistics, we need access to your device\'s location.</string>
-    <string name="locating">locating…</string>
-    <string name="unit_degrees">°</string>
-    <string name="unit_feet">ft</string>
-    <string name="unit_meters">m</string>
-    <string name="unit_kmh">km/h</string>
-    <string name="unit_mph">mph</string>
-    <string name="unit_mps">m/s</string>
-    <string name="try_again">Try Again</string>
-    <string name="exit">Exit</string>
 
+    <!-- Bottom Navigation -->
+    <string name="position">Position</string>
+
+    <!-- Position -->
     <string name="accuracy">Accuracy</string>
     <string name="bearing">Bearing</string>
     <string name="coordinate_format_label_degrees_decimal">degrees</string>
@@ -31,6 +35,12 @@
     <string name="screen_lock_off">Screen lock disabled</string>
     <string name="screen_lock_on">Screen lock enabled</string>
     <string name="speed">Speed</string>
+    <string name="unit_degrees">°</string>
+    <string name="unit_feet">ft</string>
+    <string name="unit_meters">m</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_mps">m/s</string>
     <string name="unknown">unknown</string>
 
     <!-- Settings -->

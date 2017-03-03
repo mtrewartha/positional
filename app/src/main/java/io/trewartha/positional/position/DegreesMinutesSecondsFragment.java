@@ -1,4 +1,4 @@
-package io.trewartha.positional.coordinates;
+package io.trewartha.positional.position;
 
 import android.location.Location;
 import android.os.Bundle;

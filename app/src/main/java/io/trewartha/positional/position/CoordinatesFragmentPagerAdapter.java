@@ -1,4 +1,4 @@
-package io.trewartha.positional.coordinates;
+package io.trewartha.positional.position;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;

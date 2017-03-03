@@ -1,4 +1,4 @@
-package io.trewartha.positional;
+package io.trewartha.positional.position;
 
 import android.content.Context;
 import android.location.Location;
@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Locale;
+
+import io.trewartha.positional.R;
+import io.trewartha.positional.UnitConverter;
 
 class LocationFormatter {
 
