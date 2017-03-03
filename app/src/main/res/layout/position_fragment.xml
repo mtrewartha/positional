@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray1"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <!-- Coordinates -->
@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/gray1"
-        android:elevation="2.0dp"
+        android:background="@color/white"
+        android:elevation="0dp"
         android:gravity="center">
 
         <android.support.v4.view.ViewPager
@@ -66,8 +66,8 @@
     <!-- Elevation -->
     <LinearLayout
         style="@style/StatRow"
-        android:background="@color/gray2"
-        android:elevation="1.8dp"
+        android:background="@color/white"
+        android:elevation="1dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -99,8 +99,8 @@
     <!-- Speed -->
     <LinearLayout
         style="@style/StatRow"
-        android:background="@color/gray3"
-        android:elevation="1.6dp"
+        android:background="@color/white"
+        android:elevation="2dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -132,8 +132,8 @@
     <!-- Bearing -->
     <LinearLayout
         style="@style/StatRow"
-        android:background="@color/gray4"
-        android:elevation="1.4dp"
+        android:background="@color/white"
+        android:elevation="3dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -165,8 +165,8 @@
     <!-- Accuracy -->
     <LinearLayout
         style="@style/StatRow"
-        android:background="@color/gray5"
-        android:elevation="1.2dp"
+        android:background="@color/white"
+        android:elevation="4dp"
         android:orientation="horizontal">
 
         <ImageView

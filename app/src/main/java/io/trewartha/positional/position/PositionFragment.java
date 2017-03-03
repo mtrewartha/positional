@@ -50,7 +50,7 @@ public class PositionFragment extends Fragment implements CompoundButton.OnCheck
     private static final long LOCATION_UPDATE_INTERVAL = 1000; // ms
     private static final int LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final int REQUEST_CODE_LOCATION_PERMISSIONS = 1;
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = PositionFragment.class.getSimpleName();
 
     @BindView(R.id.coordinates_view_pager) ViewPager coordinatesViewPager;
     @BindView(R.id.accuracy_value_text_view) TextView accuracyValueTextView;

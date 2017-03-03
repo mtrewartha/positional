@@ -17,6 +17,7 @@
     <string name="access_fine_location_permission_explanation_message">In order to show your elevation, location and other statistics, we need access to your device\'s location.</string>
 
     <!-- Bottom Navigation -->
+    <string name="compass">Compass</string>
     <string name="position">Position</string>
 
     <!-- Position -->

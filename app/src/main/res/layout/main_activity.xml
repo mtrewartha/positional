@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray7"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <android.support.design.widget.BottomNavigationView
@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemBackground="@color/colorPrimary"
+        android:background="@color/white"
+        android:elevation="24dp"
+        app:itemBackground="@color/white"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
         app:menu="@menu/main_bottom_navigation"/>
@@ -24,6 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/main_bottom_navigation_view"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:background="@color/white"
+        android:elevation="0dp"/>
 
 </RelativeLayout>

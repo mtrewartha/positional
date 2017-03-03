@@ -10,4 +10,11 @@
         android:title="@string/position"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/main_bottom_navigation_compass_menu_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_explore_black_24dp"
+        android:title="@string/compass"
+        app:showAsAction="ifRoom"/>
+
 </menu>

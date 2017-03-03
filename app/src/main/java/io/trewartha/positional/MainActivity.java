@@ -14,13 +14,15 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends FragmentActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends FragmentActivity {
 
     public static int REQUEST_CODE_GOOGLE_PLAY_SERVICES = 1;
 
     @BindView(R.id.main_view_pager) ViewPager viewPager;
     @BindView(R.id.main_bottom_navigation_view) BottomNavigationView bottomNavigationView;
+
     private MainFragmentPagerAdapter fragmentPagerAdapter;
+    private MenuItem selectedMenuItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,8 +33,9 @@ public class MainActivity extends FragmentActivity implements BottomNavigationVi
 
         fragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentPagerAdapter);
+        viewPager.addOnPageChangeListener(new PageChangeListener());
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new NavigationItemSelectedListener());
     }
 
     @Override
@@ -53,13 +56,43 @@ public class MainActivity extends FragmentActivity implements BottomNavigationVi
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.main_bottom_navigation_position_menu_item:
-                viewPager.setCurrentItem(0);
-                break;
+    private class NavigationItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.main_bottom_navigation_position_menu_item:
+                    viewPager.setCurrentItem(0);
+                    break;
+                case R.id.main_bottom_navigation_compass_menu_item:
+                    viewPager.setCurrentItem(1);
+                    break;
+            }
+            return true;
         }
-        return true;
+    }
+
+    private class PageChangeListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (selectedMenuItem != null) {
+                selectedMenuItem.setChecked(false);
+            } else {
+                bottomNavigationView.getMenu().getItem(0).setChecked(false);
+            }
+
+            MenuItem newSelectedMenuItem = bottomNavigationView.getMenu().getItem(position);
+            newSelectedMenuItem.setChecked(true);
+            selectedMenuItem = newSelectedMenuItem;
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
     }
 }
