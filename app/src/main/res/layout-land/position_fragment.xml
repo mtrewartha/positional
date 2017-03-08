@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray7"
+    android:background="@color/backgroundFragment"
     android:baselineAligned="false"
     android:orientation="horizontal">
 
@@ -16,8 +16,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight=".5"
-        android:background="@color/gray1"
-        android:elevation="2.0dp"
         android:gravity="center">
 
         <android.support.v4.view.ViewPager
@@ -34,8 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
                 android:gravity="center_vertical"
-                app:selectedDotColor="@color/gray12"
-                app:unselectedDotColor="@color/gray4"/>
+                app:selectedDotColor="@color/viewPagerTabDotSelected"
+                app:unselectedDotColor="@color/viewPagerTabDotUnselected"/>
 
         </android.support.v4.view.ViewPager>
 
@@ -69,137 +67,138 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight=".5"
-        android:background="@color/gray1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <!-- Elevation -->
         <LinearLayout
-            style="@style/StatRowLandscape"
-            android:background="@color/gray2"
-            android:elevation="1.8dp"
+            style="@style/PositionStatRowLandscape"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/PositionStatIconLandscape"
                 android:contentDescription="@string/elevation"
                 android:src="@drawable/ic_terrain_black_24dp"/>
 
             <TextView
                 android:id="@+id/elevation_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/PositionStatLabelLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/elevation"/>
 
             <TextView
                 android:id="@+id/elevation_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/PositionStatValueLandscape"
                 tools:text="10000"/>
 
             <TextView
                 android:id="@+id/elevation_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/PositionStatUnitLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="ft"/>
 
         </LinearLayout>
 
+        <include layout="@layout/divider"/>
+
         <!-- Speed -->
         <LinearLayout
-            style="@style/StatRowLandscape"
-            android:background="@color/gray3"
-            android:elevation="1.6dp"
+            style="@style/PositionStatRowLandscape"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/PositionStatIconLandscape"
                 android:contentDescription="@string/speed"
                 android:src="@drawable/speedometer"/>
 
             <TextView
                 android:id="@+id/speed_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/PositionStatLabelLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/speed"/>
 
             <TextView
                 android:id="@+id/speed_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/PositionStatValueLandscape"
                 tools:text="100"/>
 
             <TextView
                 android:id="@+id/speed_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/PositionStatUnitLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="mph"/>
 
         </LinearLayout>
 
+        <include layout="@layout/divider"/>
+
         <!-- Bearing -->
         <LinearLayout
-            style="@style/StatRowLandscape"
-            android:background="@color/gray4"
-            android:elevation="1.4dp"
+            style="@style/PositionStatRowLandscape"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/PositionStatIconLandscape"
                 android:contentDescription="@string/bearing"
                 android:src="@drawable/ic_explore_black_24dp"/>
 
             <TextView
                 android:id="@+id/bearing_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/PositionStatLabelLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bearing"/>
 
             <TextView
                 android:id="@+id/bearing_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/PositionStatValueLandscape"
                 tools:text="359"/>
 
             <TextView
                 android:id="@+id/bearing_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/PositionStatUnitLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/unit_degrees"/>
 
         </LinearLayout>
 
+        <include layout="@layout/divider"/>
+
         <!-- Accuracy -->
         <LinearLayout
-            style="@style/StatRowLandscape"
-            android:background="@color/gray5"
-            android:elevation="1.2dp"
+            style="@style/PositionStatRowLandscape"
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/StatImageViewLandscape"
+                style="@style/PositionStatIconLandscape"
                 android:contentDescription="@string/accuracy"
                 android:src="@drawable/bullseye"/>
 
             <TextView
                 android:id="@+id/accuracy_label_text_view"
-                style="@style/LabelTextViewLandscape"
+                style="@style/PositionStatLabelLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/accuracy"/>
 
             <TextView
                 android:id="@+id/accuracy_value_text_view"
-                style="@style/ValueTextViewLandscape"
+                style="@style/PositionStatValueLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="10"/>
 
             <TextView
                 android:id="@+id/accuracy_unit_text_view"
-                style="@style/UnitTextViewLandscape"
+                style="@style/PositionStatUnitLandscape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="ft"/>

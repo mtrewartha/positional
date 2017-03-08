@@ -1,20 +1,23 @@
 package io.trewartha.positional;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
+
+    static {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+    }
 
     public static int REQUEST_CODE_GOOGLE_PLAY_SERVICES = 1;
 
@@ -29,7 +32,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
-        initializeNightMode();
 
         fragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentPagerAdapter);
@@ -39,21 +41,11 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        initializeNightMode();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_GOOGLE_PLAY_SERVICES) {
             fragmentPagerAdapter.notifyDataSetChanged();
         }
-    }
-
-    private void initializeNightMode() {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
     }
 
     private class NavigationItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {

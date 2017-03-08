@@ -16,7 +16,7 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 import io.trewartha.positional.R;
 
-public class UTMFragment extends CoordinatesFragment {
+public class CoordinatesUTMFragment extends CoordinatesFragment {
 
     private static final String FORMAT = "%7.0f";
     private static final Locale LOCALE = Locale.getDefault();
@@ -28,7 +28,7 @@ public class UTMFragment extends CoordinatesFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.utm_fragment, container, false);
+        final View view = inflater.inflate(R.layout.coordinates_utm_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
         setCoordinates(latitude, longitude);
         return view;

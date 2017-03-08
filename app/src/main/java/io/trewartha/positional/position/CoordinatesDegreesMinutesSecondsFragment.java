@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.trewartha.positional.R;
 
-public class DegreesMinutesSecondsFragment extends CoordinatesFragment {
+public class CoordinatesDegreesMinutesSecondsFragment extends CoordinatesFragment {
 
     @BindView(R.id.degrees_minutes_seconds_latitude_text_view) @Nullable TextView latitudeTextView;
     @BindView(R.id.degrees_minutes_seconds_longitude_text_view) @Nullable TextView longitudeTextView;
@@ -23,7 +23,7 @@ public class DegreesMinutesSecondsFragment extends CoordinatesFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.degrees_minutes_seconds_fragment, container, false);
+        final View view = inflater.inflate(R.layout.coordinates_degrees_minutes_seconds_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
         setCoordinates(latitude, longitude);
         return view;

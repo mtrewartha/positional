@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/darkGray</color>
-    <color name="colorPrimaryDark">@color/black</color>
-    <color name="colorAccent">@color/blue</color>
-    <color name="iconTint">@color/gray11</color>
+    <!-- Base Colors -->
+    <!-- NOTE: ONLY OTHER COLORS SHOULD REFER TO THESE -->
     <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="darkGray">#333333</color>
-    <color name="lightGray">#CCCCCC</color>
     <color name="blue">#00a9e7</color>
+    <color name="gray1">#333333</color>
+    <color name="gray2">#666666</color>
+    <color name="gray3">#AAAAAA</color>
+    <color name="gray4">#EEEEEE</color>
+    <color name="white">#FFFFFF</color>
 
-    <color name="gray1">#202020</color>
-    <color name="gray2">#282828</color>
-    <color name="gray3">#303030</color>
-    <color name="gray4">#383838</color>
-    <color name="gray5">#404040</color>
-    <color name="gray6">#484848</color>
-    <color name="gray7">#505050</color>
-    <color name="gray8">#585858</color>
-    <color name="gray9">#606060</color>
-    <color name="gray10">#686868</color>
-    <color name="gray11">#707070</color>
-    <color name="gray12">#787878</color>
-    <color name="gray13">#808080</color>
-    <color name="gray14">#888888</color>
-    <color name="gray15">#909090</color>
-    <color name="gray16">#989898</color>
+    <!-- Material Theme Colors -->
+    <color name="colorAccent">@color/blue</color>
+    <color name="colorPrimary">@color/gray1</color>
+    <color name="colorPrimaryDark">@color/black</color>
+
+    <!-- Generic UI Components -->
+    <color name="backgroundActivity">@color/white</color>
+    <color name="backgroundFragment">@color/white</color>
+
+    <!-- Navigation Bar -->
+    <color name="navigationBarBackground">@color/white</color>
+    <color name="navigationBarIconTint">@color/gray1</color>
+    <color name="navigationBarItemBackground">@color/white</color>
+    <color name="navigationBarTextColor">@color/gray1</color>
+
+    <!-- Position Stats -->
+    <color name="positionStatDivider">@color/gray4</color>
+    <color name="positionStatTextColor">@color/gray1</color>
+    <color name="positionStatIconTint">@color/gray1</color>
+
+    <!-- View Pagers -->
+    <color name="viewPagerTabDotSelected">@color/gray2</color>
+    <color name="viewPagerTabDotUnselected">@color/gray3</color>
+
 </resources>

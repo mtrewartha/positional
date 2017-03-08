@@ -1,208 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     android:id="@+id/main_activity_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray7">
+    android:background="@color/backgroundFragment"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <LinearLayout
+    <!-- Coordinates -->
+    <RelativeLayout
+        android:id="@+id/coordinates_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray1"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:elevation="2.0dp"
+        android:gravity="center">
 
-        <!-- Coordinates -->
-        <RelativeLayout
-            android:id="@+id/coordinates_layout"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/coordinates_view_pager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/gray1"
-            android:elevation="2.0dp"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/coordinates_view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin">
-
-                <com.itsronald.widget.ViewPagerIndicator
-                    android:id="@+id/view_pager_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:gravity="center_vertical"
-                    app:selectedDotColor="@color/gray12"
-                    app:unselectedDotColor="@color/gray4"/>
-
-            </android.support.v4.view.ViewPager>
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:indeterminateOnly="true"
-                android:layout_margin="16dp"/>
-
-            <ImageView
-                android:id="@+id/screen_lock_switch"
-                android:layout_width="58dp"
-                android:layout_height="58dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/settings_screen_lock_label"
-                android:padding="16dp"
-                android:src="@drawable/ic_screen_lock_portrait_black_24dp"
-                android:text="@string/settings_screen_lock_label"
-                android:tint="@color/screen_lock"
-                android:translationZ="1dp"/>
-
-        </RelativeLayout>
-
-        <!-- Elevation -->
-        <LinearLayout
-            style="@style/StatRowLarge"
-            android:background="@color/gray2"
-            android:elevation="1.8dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/StatImageViewLarge"
-                android:contentDescription="@string/elevation"
-                android:src="@drawable/ic_terrain_black_24dp"/>
-
-            <TextView
-                android:id="@+id/elevation_label_text_view"
-                style="@style/LabelTextViewLarge"
+            <com.itsronald.widget.ViewPagerIndicator
+                android:id="@+id/view_pager_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/elevation"/>
+                android:layout_gravity="bottom|center_horizontal"
+                android:gravity="center_vertical"
+                app:selectedDotColor="@color/viewPagerTabDotSelected"
+                app:unselectedDotColor="@color/viewPagerTabDotUnselected"/>
 
-            <TextView
-                android:id="@+id/elevation_value_text_view"
-                style="@style/ValueTextViewLarge"
-                tools:text="10000"/>
+        </android.support.v4.view.ViewPager>
 
-            <TextView
-                android:id="@+id/elevation_unit_text_view"
-                style="@style/UnitTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="ft"/>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:indeterminateOnly="true"/>
 
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/screen_lock_switch"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/settings_screen_lock_label"
+            android:padding="16dp"
+            android:src="@drawable/ic_screen_lock_portrait_black_24dp"
+            android:text="@string/settings_screen_lock_label"
+            android:tint="@color/screen_lock"
+            android:translationZ="1dp"/>
 
-        <!-- Speed -->
-        <LinearLayout
-            style="@style/StatRowLarge"
-            android:background="@color/gray3"
-            android:elevation="1.6dp"
-            android:orientation="horizontal">
+    </RelativeLayout>
 
-            <ImageView
-                style="@style/StatImageViewLarge"
-                android:contentDescription="@string/speed"
-                android:src="@drawable/speedometer"/>
+    <include layout="@layout/divider"/>
 
-            <TextView
-                android:id="@+id/speed_label_text_view"
-                style="@style/LabelTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/speed"/>
+    <!-- Elevation -->
+    <LinearLayout
+        style="@style/PositionStatRowLarge"
+        android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/speed_value_text_view"
-                style="@style/ValueTextViewLarge"
-                tools:text="100"/>
+        <ImageView
+            style="@style/PositionStatIconLarge"
+            android:contentDescription="@string/elevation"
+            android:src="@drawable/ic_terrain_black_24dp"/>
 
-            <TextView
-                android:id="@+id/speed_unit_text_view"
-                style="@style/UnitTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="mph"/>
+        <TextView
+            android:id="@+id/elevation_label_text_view"
+            style="@style/PositionStatLabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/elevation"/>
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/elevation_value_text_view"
+            style="@style/PositionStatValueLarge"
+            tools:text="10000"/>
 
-        <!-- Bearing -->
-        <LinearLayout
-            style="@style/StatRowLarge"
-            android:background="@color/gray4"
-            android:elevation="1.4dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/StatImageViewLarge"
-                android:contentDescription="@string/bearing"
-                android:src="@drawable/ic_explore_black_24dp"/>
-
-            <TextView
-                android:id="@+id/bearing_label_text_view"
-                style="@style/LabelTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bearing"/>
-
-            <TextView
-                android:id="@+id/bearing_value_text_view"
-                style="@style/ValueTextViewLarge"
-                tools:text="359"/>
-
-            <TextView
-                android:id="@+id/bearing_unit_text_view"
-                style="@style/UnitTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/unit_degrees"/>
-
-        </LinearLayout>
-
-        <!-- Accuracy -->
-        <LinearLayout
-            style="@style/StatRowLarge"
-            android:background="@color/gray5"
-            android:elevation="1.2dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/StatImageViewLarge"
-                android:contentDescription="@string/accuracy"
-                android:src="@drawable/bullseye"/>
-
-            <TextView
-                android:id="@+id/accuracy_label_text_view"
-                style="@style/LabelTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/accuracy"/>
-
-            <TextView
-                android:id="@+id/accuracy_value_text_view"
-                style="@style/ValueTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="10"/>
-
-            <TextView
-                android:id="@+id/accuracy_unit_text_view"
-                style="@style/UnitTextViewLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="ft"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/elevation_unit_text_view"
+            style="@style/PositionStatUnitLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="ft"/>
 
     </LinearLayout>
 
-</FrameLayout>
+    <include layout="@layout/divider"/>
+
+    <!-- Speed -->
+    <LinearLayout
+        style="@style/PositionStatRowLarge"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/PositionStatIconLarge"
+            android:contentDescription="@string/speed"
+            android:src="@drawable/speedometer"/>
+
+        <TextView
+            android:id="@+id/speed_label_text_view"
+            style="@style/PositionStatLabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/speed"/>
+
+        <TextView
+            android:id="@+id/speed_value_text_view"
+            style="@style/PositionStatValueLarge"
+            tools:text="100"/>
+
+        <TextView
+            android:id="@+id/speed_unit_text_view"
+            style="@style/PositionStatUnitLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="mph"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/divider"/>
+
+    <!-- Bearing -->
+    <LinearLayout
+        style="@style/PositionStatRowLarge"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/PositionStatIconLarge"
+            android:contentDescription="@string/bearing"
+            android:src="@drawable/ic_explore_black_24dp"/>
+
+        <TextView
+            android:id="@+id/bearing_label_text_view"
+            style="@style/PositionStatLabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bearing"/>
+
+        <TextView
+            android:id="@+id/bearing_value_text_view"
+            style="@style/PositionStatValueLarge"
+            tools:text="359"/>
+
+        <TextView
+            android:id="@+id/bearing_unit_text_view"
+            style="@style/PositionStatUnitLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/unit_degrees"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/divider"/>
+
+    <!-- Accuracy -->
+    <LinearLayout
+        style="@style/PositionStatRowLarge"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/PositionStatIconLarge"
+            android:contentDescription="@string/accuracy"
+            android:src="@drawable/bullseye"/>
+
+        <TextView
+            android:id="@+id/accuracy_label_text_view"
+            style="@style/PositionStatLabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accuracy"/>
+
+        <TextView
+            android:id="@+id/accuracy_value_text_view"
+            style="@style/PositionStatValueLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="10"/>
+
+        <TextView
+            android:id="@+id/accuracy_unit_text_view"
+            style="@style/PositionStatUnitLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="ft"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -15,13 +15,13 @@ public class CoordinatesFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new DegreesDecimalFragment();
+                return new CoordinatesDegreesDecimalFragment();
             case 1:
-                return new DegreesMinutesSecondsFragment();
+                return new CoordinatesDegreesMinutesSecondsFragment();
             case 2:
-                return new UTMFragment();
+                return new CoordinatesUTMFragment();
             default:
-                return new MGRSFragment();
+                return new CoordinatesMGRSFragment();
         }
     }
 

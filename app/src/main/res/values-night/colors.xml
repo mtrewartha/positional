@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/darkGray</color>
-    <color name="colorPrimaryDark">@color/black</color>
+    <!-- Material Theme Colors -->
     <color name="colorAccent">@color/blue</color>
-    <color name="iconTint">@color/lightGray</color>
+    <color name="colorPrimary">@color/gray1</color>
+    <color name="colorPrimaryDark">@color/black</color>
 
-    <color name="gray1">#202020</color>
-    <color name="gray2">#282828</color>
-    <color name="gray3">#303030</color>
-    <color name="gray4">#383838</color>
-    <color name="gray5">#404040</color>
-    <color name="gray6">#484848</color>
-    <color name="gray7">#505050</color>
-    <color name="gray8">#585858</color>
-    <color name="gray9">#606060</color>
-    <color name="gray10">#686868</color>
-    <color name="gray11">#707070</color>
-    <color name="gray12">#787878</color>
-    <color name="gray13">#808080</color>
-    <color name="gray14">#888888</color>
-    <color name="gray15">#909090</color>
-    <color name="gray16">#989898</color>
-    <color name="gray17">#A0A0A0</color>
-    <color name="gray18">#A8A8A8</color>
+    <!-- Generic UI Components -->
+    <color name="backgroundActivity">@color/black</color>
+    <color name="backgroundFragment">@color/black</color>
+
+    <!-- Navigation Bar -->
+    <color name="navigationBarBackground">@color/black</color>
+    <color name="navigationBarIconTint">@color/white</color>
+    <color name="navigationBarItemBackground">@color/black</color>
+    <color name="navigationBarTextColor">@color/white</color>
+
+    <!-- Position Stats -->
+    <color name="positionStatDivider">@color/gray1</color>
+    <color name="positionStatTextColor">@color/white</color>
+    <color name="positionStatIconTint">@color/white</color>
+
+    <!-- View Pagers -->
+    <color name="viewPagerTabDotSelected">@color/gray2</color>
+    <color name="viewPagerTabDotUnselected">@color/gray1</color>
 </resources>

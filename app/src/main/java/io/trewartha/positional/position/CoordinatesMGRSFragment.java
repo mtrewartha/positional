@@ -14,7 +14,7 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.coords.MGRSCoord;
 import io.trewartha.positional.R;
 
-public class MGRSFragment extends CoordinatesFragment {
+public class CoordinatesMGRSFragment extends CoordinatesFragment {
 
     @BindView(R.id.mgrs_text_view) @Nullable TextView coordinatesTextView;
 
@@ -22,7 +22,7 @@ public class MGRSFragment extends CoordinatesFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.mgrs_fragment, container, false);
+        final View view = inflater.inflate(R.layout.coordinates_mgrs_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
         setCoordinates(latitude, longitude);
         return view;

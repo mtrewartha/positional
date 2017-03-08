@@ -13,6 +13,7 @@
         <item name="android:fontFamily">monospace</item>
         <item name="android:gravity">center</item>
         <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/positionStatTextColor</item>
         <item name="android:textSize">100sp</item>
     </style>
 
@@ -27,12 +28,53 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:paddingTop">12dp</item>
+        <item name="android:textColor">@color/positionStatTextColor</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- Stat Rows -->
+    <!-- Position Stats -->
 
-    <style name="StatRow">
+    <style name="PositionStatIcon">
+        <item name="android:layout_height">@dimen/stat_image_size</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_width">@dimen/stat_image_size</item>
+        <item name="android:tint">@color/positionStatIconTint</item>
+        <item name="android:tintMode">src_in</item>
+    </style>
+
+    <style name="PositionStatIconLarge" parent="PositionStatIcon">
+        <item name="android:layout_height">@dimen/stat_image_size_large</item>
+        <item name="android:layout_width">@dimen/stat_image_size_large</item>
+    </style>
+
+    <style name="PositionStatIconLandscape" parent="PositionStatIcon">
+        <item name="android:layout_height">@dimen/stat_image_size_landscape</item>
+        <item name="android:layout_width">@dimen/stat_image_size_landscape</item>
+    </style>
+
+    <style name="PositionStatIconLargeLandscape" parent="PositionStatIconLandscape">
+        <item name="android:layout_height">@dimen/stat_image_size_large_landscape</item>
+        <item name="android:layout_width">@dimen/stat_image_size_large_landscape</item>
+    </style>
+
+    <style name="PositionStatLabel">
+        <item name="android:textColor">@color/positionStatTextColor</item>
+        <item name="android:textSize">@dimen/label_text_size</item>
+    </style>
+
+    <style name="PositionStatLabelLandscape" parent="PositionStatLabel">
+        <item name="android:textSize">@dimen/label_text_size_landscape</item>
+    </style>
+
+    <style name="PositionStatLabelLarge" parent="PositionStatLabel">
+        <item name="android:textSize">@dimen/label_text_size_large</item>
+    </style>
+
+    <style name="PositionStatLabelLargeLandscape" parent="PositionStatLabelLandscape">
+        <item name="android:textSize">@dimen/label_text_size_large_landscape</item>
+    </style>
+
+    <style name="PositionStatRow">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">72dp</item>
         <item name="android:layout_width">match_parent</item>
@@ -40,7 +82,7 @@
         <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
     </style>
 
-    <style name="StatRowLandscape" parent="StatRow">
+    <style name="PositionStatRowLandscape" parent="PositionStatRow">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
@@ -49,93 +91,49 @@
         <item name="android:paddingEnd">20dp</item>
     </style>
 
-    <style name="StatRowLarge" parent="StatRow">
+    <style name="PositionStatRowLarge" parent="PositionStatRow">
         <item name="android:layout_height">96dp</item>
     </style>
 
-    <style name="StatRowLargeLandscape" parent="StatRowLandscape">
+    <style name="PositionStatRowLargeLandscape" parent="PositionStatRowLandscape">
     </style>
 
-    <!-- Label Styles -->
-
-    <style name="LabelTextView">
-        <item name="android:textSize">@dimen/label_text_size</item>
-    </style>
-
-    <style name="LabelTextViewLandscape" parent="LabelTextView">
-        <item name="android:textSize">@dimen/label_text_size_landscape</item>
-    </style>
-
-    <style name="LabelTextViewLarge" parent="LabelTextView">
-        <item name="android:textSize">@dimen/label_text_size_large</item>
-    </style>
-
-    <style name="LabelTextViewLargeLandscape" parent="LabelTextViewLandscape">
-        <item name="android:textSize">@dimen/label_text_size_large_landscape</item>
-    </style>
-
-    <!-- Stat Icon Styles-->
-
-    <style name="StatImageView">
-        <item name="android:layout_height">@dimen/stat_image_size</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:layout_width">@dimen/stat_image_size</item>
-        <item name="android:tint">@color/iconTint</item>
-    </style>
-
-    <style name="StatImageViewLarge" parent="StatImageView">
-        <item name="android:layout_height">@dimen/stat_image_size_large</item>
-        <item name="android:layout_width">@dimen/stat_image_size_large</item>
-    </style>
-
-    <style name="StatImageViewLandscape" parent="StatImageView">
-        <item name="android:layout_height">@dimen/stat_image_size_landscape</item>
-        <item name="android:layout_width">@dimen/stat_image_size_landscape</item>
-    </style>
-
-    <style name="StatImageViewLargeLandscape" parent="StatImageViewLandscape">
-        <item name="android:layout_height">@dimen/stat_image_size_large_landscape</item>
-        <item name="android:layout_width">@dimen/stat_image_size_large_landscape</item>
-    </style>
-
-    <!-- Unit Styles -->
-
-    <style name="UnitTextView">
+    <style name="PositionStatUnit">
+        <item name="android:textColor">@color/positionStatTextColor</item>
         <item name="android:textSize">@dimen/unit_text_size</item>
     </style>
 
-    <style name="UnitTextViewLandscape" parent="UnitTextView">
+    <style name="PositionStatUnitLandscape" parent="PositionStatUnit">
         <item name="android:textSize">@dimen/unit_text_size_landscape</item>
     </style>
 
-    <style name="UnitTextViewLarge" parent="UnitTextView">
+    <style name="PositionStatUnitLarge" parent="PositionStatUnit">
         <item name="android:textSize">@dimen/unit_text_size_large</item>
     </style>
 
-    <style name="UnitTextViewLargeLandscape" parent="UnitTextViewLandscape">
+    <style name="PositionStatUnitLargeLandscape" parent="PositionStatUnitLandscape">
         <item name="android:textSize">@dimen/unit_text_size_large_landscape</item>
     </style>
 
-    <!-- Value Styles -->
-
-    <style name="ValueTextView">
+    <style name="PositionStatValue">
         <item name="android:gravity">end</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginEnd">6dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
+        <item name="android:textColor">@color/positionStatTextColor</item>
         <item name="android:textSize">@dimen/value_text_size</item>
     </style>
 
-    <style name="ValueTextViewLandscape" parent="ValueTextView">
+    <style name="PositionStatValueLandscape" parent="PositionStatValue">
         <item name="android:textSize">@dimen/value_text_size_landscape</item>
     </style>
 
-    <style name="ValueTextViewLarge" parent="ValueTextView">
+    <style name="PositionStatValueLarge" parent="PositionStatValue">
         <item name="android:textSize">@dimen/value_text_size_large</item>
     </style>
 
-    <style name="ValueTextViewLargeLandscape" parent="ValueTextViewLandscape">
+    <style name="PositionStatValueLargeLandscape" parent="PositionStatValueLandscape">
         <item name="android:textSize">@dimen/value_text_size_large_landscape</item>
     </style>
 
