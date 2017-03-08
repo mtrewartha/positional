@@ -287,7 +287,9 @@ public class PositionFragment extends Fragment implements CompoundButton.OnCheck
 
     private void suspendLocationUpdates() {
         Log.info(TAG, "Suspending location updates");
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleAPIClient, locationListener);
+        if (googleAPIClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleAPIClient, locationListener);
+        }
     }
 
     private void updateCoordinatesFragments(@Nullable Location location) {
