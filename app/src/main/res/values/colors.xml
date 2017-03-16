@@ -19,6 +19,12 @@
     <color name="backgroundActivity">@color/white</color>
     <color name="backgroundFragment">@color/white</color>
 
+    <!-- Compass -->
+    <color name="compassAccuracyTitleColor">@color/gray1</color>
+    <color name="compassAccuracyValueColor">@color/gray1</color>
+    <color name="compassArrow">@color/black</color>
+    <color name="compassDegrees">@color/white</color>
+
     <!-- Navigation Bar -->
     <color name="navigationBarBackground">@color/white</color>
     <color name="navigationBarIconTint">@color/gray1</color>

@@ -8,6 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Compass -->
+
+    <style name="CompassAccuracyTitle">
+        <item name="android:textColor">@color/compassAccuracyTitleColor</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CompassAccuracyValue">
+        <item name="android:textColor">@color/compassAccuracyValueColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CompassArrow">
+        <item name="android:tint">@color/compassArrow</item>
+    </style>
+
+    <style name="CompassDegrees">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/compassDegrees</item>
+    </style>
+
+    <!-- Coordinates -->
+
     <style name="Coordinates">
         <item name="android:ellipsize">none</item>
         <item name="android:fontFamily">monospace</item>
