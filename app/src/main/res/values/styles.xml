@@ -26,7 +26,6 @@
     </style>
 
     <style name="CompassDegrees">
-        <item name="android:textSize">48sp</item>
         <item name="android:textColor">@color/compassDegrees</item>
     </style>
 
