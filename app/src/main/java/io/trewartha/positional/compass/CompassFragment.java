@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import io.trewartha.positional.R;
 
 public class CompassFragment extends Fragment implements SensorEventListener {
 
-    private static final float ALPHA = 0.35f; // if ALPHA = 1 OR 0, no filter applies
+    private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
 
     @BindView(R.id.compass_degrees_image_view) CompassView compassDegreesImageView;
     @BindView(R.id.compass_degrees_text_view) TextView compassDegreesTextView;
@@ -58,14 +59,28 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewUnbinder = ButterKnife.bind(this, view);
+
+        if (accelerometerSensor == null) {
+            accelerometerAccuracyTextView.setText(getString(R.string.compass_accuracy_accelerometer, getString(R.string.compass_accuracy_no_sensor_found)));
+            magnetometerAccuracyTextView.setText(getString(R.string.compass_accuracy_magnetometer, getString(R.string.compass_accuracy_not_applicable)));
+        }
+        if (magnetometerSensor == null) {
+            accelerometerAccuracyTextView.setText(getString(R.string.compass_accuracy_accelerometer, getString(R.string.compass_accuracy_not_applicable)));
+            magnetometerAccuracyTextView.setText(getString(R.string.compass_accuracy_magnetometer, getString(R.string.compass_accuracy_no_sensor_found)));
+        }
+        if (accelerometerSensor == null || magnetometerSensor == null) {
+            new AlertDialog.Builder(getContext())
+                    .setTitle(R.string.compass_sensor_missing_title)
+                    .setMessage(R.string.compass_sensor_missing_message)
+                    .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
+                    .show();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (accelerometerSensor == null || magnetometerSensor == null) {
-
-        } else {
+        if (accelerometerSensor != null && magnetometerSensor != null) {
             sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
             sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
         }
@@ -74,10 +89,8 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     @Override
     public void onPause() {
         super.onPause();
-        if (accelerometerSensor != null) {
+        if (accelerometerSensor != null && magnetometerSensor != null) {
             sensorManager.unregisterListener(this, accelerometerSensor);
-        }
-        if (magnetometerSensor != null) {
             sensorManager.unregisterListener(this, magnetometerSensor);
         }
     }

@@ -22,8 +22,8 @@
     <!-- Compass -->
     <color name="compassAccuracyTitleColor">@color/gray1</color>
     <color name="compassAccuracyValueColor">@color/gray1</color>
-    <color name="compassArrow">@color/black</color>
-    <color name="compassDegrees">@color/white</color>
+    <color name="compass">@color/black</color>
+    <color name="compassDegrees">@color/black</color>
 
     <!-- Navigation Bar -->
     <color name="navigationBarBackground">@color/white</color>

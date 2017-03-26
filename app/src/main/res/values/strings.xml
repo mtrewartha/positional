@@ -2,6 +2,7 @@
     <string name="app_name">Positional</string>
 
     <!-- Common Dialog Button Text -->
+    <string name="ok">OK</string>
     <string name="exit">Exit</string>
     <string name="try_again">Try Again</string>
 
@@ -46,15 +47,20 @@
 
     <!-- Compass -->
     <string name="compass_degrees">%d°</string>
-    <string name="compass_accuracy_title">ACCURACY</string>
     <string name="compass_accuracy_accelerometer">accelerometer: %s</string>
-    <string name="compass_accuracy_magnetometer">magnetometer: %s</string>
-    <string name="compass_accuracy_unknown">unknown</string>
-    <string name="compass_accuracy_no_contact">unusable</string>
-    <string name="compass_accuracy_unreliable">unreliable</string>
-    <string name="compass_accuracy_low">low</string>
-    <string name="compass_accuracy_medium">medium</string>
     <string name="compass_accuracy_high">high</string>
+    <string name="compass_accuracy_low">low</string>
+    <string name="compass_accuracy_magnetometer">magnetometer: %s</string>
+    <string name="compass_accuracy_medium">medium</string>
+    <string name="compass_accuracy_no_contact">unusable</string>
+    <string name="compass_accuracy_no_sensor_found">no sensor found</string>
+    <string name="compass_accuracy_not_applicable">n/a</string>
+    <string name="compass_accuracy_title">ACCURACY</string>
+    <string name="compass_accuracy_unknown">unknown</string>
+    <string name="compass_accuracy_unreliable">unreliable</string>
+    <string name="compass_sensor_missing_button_positive">@string/ok</string>
+    <string name="compass_sensor_missing_message">Hmm… Your device is missing an accelerometer or magnetometer, but the compass needs both of them. The compass will be disabled, but the rest of the app will function normally.</string>
+    <string name="compass_sensor_missing_title">Missing Required Sensor</string>
 
     <!-- Settings -->
     <string name="settings_filename">Positional</string>
