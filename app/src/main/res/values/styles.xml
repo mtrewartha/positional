@@ -21,13 +21,17 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="Compass">
-        <item name="android:tint">@color/compass</item>
+    <style name="CompassBackground">
+        <item name="android:tint">@color/compassBackground</item>
     </style>
 
     <style name="CompassDegrees">
         <item name="android:textSize">48sp</item>
         <item name="android:textColor">@color/compassDegrees</item>
+    </style>
+
+    <style name="CompassPin">
+        <item name="android:tint">@color/compassPin</item>
     </style>
 
     <!-- Coordinates -->

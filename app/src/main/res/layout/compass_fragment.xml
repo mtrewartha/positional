@@ -18,10 +18,10 @@
 
         <io.trewartha.positional.compass.CompassView
             android:id="@+id/compass_degrees_image_view"
-            style="@style/Compass"
+            style="@style/CompassBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_compass"
+            android:src="@drawable/ic_compass_background"
             tools:ignore="ContentDescription"/>
 
         <ImageView
@@ -30,6 +30,14 @@
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_compass_needle"
+            tools:ignore="ContentDescription"/>
+
+        <ImageView
+            android:id="@+id/compass_pin_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_compass_pin"
             tools:ignore="ContentDescription"/>
 
     </FrameLayout>
