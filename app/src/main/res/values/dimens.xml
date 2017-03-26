@@ -10,17 +10,17 @@
     <dimen name="label_text_size">@dimen/text_size_small</dimen>
     <dimen name="label_text_size_landscape">@dimen/text_size_small</dimen>
     <dimen name="label_text_size_large">@dimen/text_size_medium</dimen>
-    <dimen name="label_text_size_large_landscape">@dimen/text_size_large</dimen>
+    <dimen name="label_text_size_large_landscape">@dimen/text_size_medium</dimen>
 
     <dimen name="value_text_size">@dimen/text_size_small</dimen>
     <dimen name="value_text_size_landscape">@dimen/text_size_small</dimen>
     <dimen name="value_text_size_large">@dimen/text_size_medium</dimen>
-    <dimen name="value_text_size_large_landscape">@dimen/text_size_large</dimen>
+    <dimen name="value_text_size_large_landscape">@dimen/text_size_medium</dimen>
 
     <dimen name="unit_text_size">@dimen/text_size_small</dimen>
     <dimen name="unit_text_size_landscape">@dimen/text_size_small</dimen>
     <dimen name="unit_text_size_large">@dimen/text_size_medium</dimen>
-    <dimen name="unit_text_size_large_landscape">@dimen/text_size_large</dimen>
+    <dimen name="unit_text_size_large_landscape">@dimen/text_size_medium</dimen>
 
     <dimen name="stat_image_size">@dimen/text_size_small</dimen>
     <dimen name="stat_image_size_landscape">@dimen/text_size_small</dimen>
