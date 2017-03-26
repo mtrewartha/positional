@@ -74,6 +74,9 @@ public class CompassFragment extends Fragment implements SensorEventListener {
                     .setMessage(R.string.compass_sensor_missing_message)
                     .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
                     .show();
+        } else {
+            accelerometerAccuracyTextView.setText(getString(R.string.compass_accuracy_accelerometer, getString(R.string.compass_accuracy_unknown)));
+            magnetometerAccuracyTextView.setText(getString(R.string.compass_accuracy_magnetometer, getString(R.string.compass_accuracy_unknown)));
         }
     }
 
