@@ -11,9 +11,12 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -30,12 +33,13 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     @BindView(R.id.compass_accuracy_accelerometer_text_view) TextView accelerometerAccuracyTextView;
     @BindView(R.id.compass_accuracy_magnetometer_text_view) TextView magnetometerAccuracyTextView;
 
-    private Sensor accelerometerSensor;
-    private Sensor magnetometerSensor;
     private float[] accelerometerReading;
+    private Sensor accelerometerSensor;
     private float[] magnetometerReading;
+    private Sensor magnetometerSensor;
     private float[] mR = new float[9];
     private float[] orientation = new float[3];
+    private int screenOrientation;
     private SensorManager sensorManager;
     private Unbinder viewUnbinder;
 
@@ -47,6 +51,10 @@ public class CompassFragment extends Fragment implements SensorEventListener {
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        screenOrientation = display.getRotation();
     }
 
     @Nullable
@@ -116,7 +124,7 @@ public class CompassFragment extends Fragment implements SensorEventListener {
         if (accelerometerReading != null && magnetometerReading != null) {
             SensorManager.getRotationMatrix(mR, null, accelerometerReading, magnetometerReading);
             SensorManager.getOrientation(mR, orientation);
-            float degrees = (float) (Math.toDegrees(orientation[0]) + 360) % 360;
+            float degrees = (float) (Math.toDegrees(orientation[0]) + 360 + getScreenOrientationCompassOffset()) % 360;
             updateCompassDegrees(degrees);
         }
     }
@@ -155,6 +163,21 @@ public class CompassFragment extends Fragment implements SensorEventListener {
                 break;
         }
         return getString(accuracyStringRes, getString(accuracyTextRes));
+    }
+
+    private int getScreenOrientationCompassOffset() {
+        switch (screenOrientation) {
+            case Surface.ROTATION_0:
+                return 0;
+            case Surface.ROTATION_90:
+                return 90;
+            case Surface.ROTATION_180:
+                return 180;
+            case Surface.ROTATION_270:
+                return 270;
+            default:
+                return 0;
+        }
     }
 
     @NonNull
