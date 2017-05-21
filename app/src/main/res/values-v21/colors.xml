@@ -38,7 +38,7 @@
     <color name="positionStatIconTint">@color/gray1</color>
 
     <!-- Screen Lock -->
-    <color name="screenLockButtonTint">@color/positionStatIconTint</color>
+    <color name="screenLockButtonTint">@color/screen_lock_selector</color>
 
     <!-- View Pagers -->
     <color name="viewPagerTabDotSelected">@color/gray2</color>

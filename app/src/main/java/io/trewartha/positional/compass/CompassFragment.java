@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -24,8 +25,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.trewartha.positional.R;
 
-public class CompassFragment extends Fragment implements SensorEventListener {
+public class CompassFragment extends Fragment {
 
+    private static final String LOG_TAG = CompassFragment.class.getSimpleName();
     private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
 
     @BindView(R.id.compass_degrees_image_view) CompassView compassDegreesImageView;
@@ -35,6 +37,7 @@ public class CompassFragment extends Fragment implements SensorEventListener {
 
     private float[] accelerometerReading;
     private Sensor accelerometerSensor;
+    private CompassSensorsListener compassSensorsListener;
     private float[] magnetometerReading;
     private Sensor magnetometerSensor;
     private float[] mR = new float[9];
@@ -46,6 +49,7 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d(LOG_TAG, "Attaching...");
         accelerometerReading = new float[3];
         magnetometerReading = new float[3];
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
@@ -60,12 +64,14 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "Creating view");
         return inflater.inflate(R.layout.compass_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(LOG_TAG, "View created");
         viewUnbinder = ButterKnife.bind(this, view);
 
         if (accelerometerSensor == null) {
@@ -91,108 +97,112 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(LOG_TAG, "Resuming...");
         if (accelerometerSensor != null && magnetometerSensor != null) {
-            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
-            sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
+            compassSensorsListener = new CompassSensorsListener();
+            sensorManager.registerListener(compassSensorsListener, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(compassSensorsListener, magnetometerSensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (accelerometerSensor != null && magnetometerSensor != null) {
-            sensorManager.unregisterListener(this, accelerometerSensor);
-            sensorManager.unregisterListener(this, magnetometerSensor);
-        }
+        Log.d(LOG_TAG, "Pausing...");
+        sensorManager.unregisterListener(compassSensorsListener, accelerometerSensor);
+        sensorManager.unregisterListener(compassSensorsListener, magnetometerSensor);
+        compassSensorsListener = null;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.d(LOG_TAG, "Destroying view...");
         viewUnbinder.unbind();
     }
 
-    //region SensorEventListener methods
+    private class CompassSensorsListener implements SensorEventListener {
 
-    @Override
-    public void onSensorChanged(@NonNull SensorEvent event) {
-        if (event.sensor == accelerometerSensor) {
-            accelerometerReading = lowPass(event.values.clone(), accelerometerReading);
-        } else if (event.sensor == magnetometerSensor) {
-            magnetometerReading = lowPass(event.values.clone(), magnetometerReading);
+        @Override
+        public void onSensorChanged(@NonNull SensorEvent event) {
+            if (event.sensor == accelerometerSensor) {
+                accelerometerReading = lowPass(event.values.clone(), accelerometerReading);
+            } else if (event.sensor == magnetometerSensor) {
+                magnetometerReading = lowPass(event.values.clone(), magnetometerReading);
+            }
+            if (accelerometerReading != null && magnetometerReading != null) {
+                SensorManager.getRotationMatrix(mR, null, accelerometerReading, magnetometerReading);
+                SensorManager.getOrientation(mR, orientation);
+                float degrees = (float) (Math.toDegrees(orientation[0]) + 360 + getScreenOrientationCompassOffset()) % 360;
+                updateCompassDegrees(degrees);
+            }
         }
-        if (accelerometerReading != null && magnetometerReading != null) {
-            SensorManager.getRotationMatrix(mR, null, accelerometerReading, magnetometerReading);
-            SensorManager.getOrientation(mR, orientation);
-            float degrees = (float) (Math.toDegrees(orientation[0]) + 360 + getScreenOrientationCompassOffset()) % 360;
-            updateCompassDegrees(degrees);
-        }
-    }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        if (sensor == accelerometerSensor) {
-            accelerometerAccuracyTextView.setText(getAccuracyText(R.string.compass_accuracy_accelerometer, accuracy));
-        } else if (sensor == magnetometerSensor) {
-            magnetometerAccuracyTextView.setText(getAccuracyText(R.string.compass_accuracy_magnetometer, accuracy));
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            if (sensor == accelerometerSensor) {
+                accelerometerAccuracyTextView.setText(getAccuracyText(R.string.compass_accuracy_accelerometer, accuracy));
+            } else if (sensor == magnetometerSensor) {
+                magnetometerAccuracyTextView.setText(getAccuracyText(R.string.compass_accuracy_magnetometer, accuracy));
+            }
         }
-    }
 
-    //endregion
-
-    private String getAccuracyText(@StringRes int accuracyStringRes, int accuracyConstant) {
-        int accuracyTextRes;
-        switch (accuracyConstant) {
-            case SensorManager.SENSOR_STATUS_NO_CONTACT:
-                accuracyTextRes = R.string.compass_accuracy_no_contact;
-                break;
-            case SensorManager.SENSOR_STATUS_UNRELIABLE:
-                accuracyTextRes = R.string.compass_accuracy_unreliable;
-                break;
-            case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
-                accuracyTextRes = R.string.compass_accuracy_low;
-                break;
-            case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
-                accuracyTextRes = R.string.compass_accuracy_medium;
-                break;
-            case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
-                accuracyTextRes = R.string.compass_accuracy_high;
-                break;
-            default:
-                accuracyTextRes = R.string.compass_accuracy_unknown;
-                break;
+        private String getAccuracyText(@StringRes int accuracyStringRes, int accuracyConstant) {
+            int accuracyTextRes;
+            switch (accuracyConstant) {
+                case SensorManager.SENSOR_STATUS_NO_CONTACT:
+                    accuracyTextRes = R.string.compass_accuracy_no_contact;
+                    break;
+                case SensorManager.SENSOR_STATUS_UNRELIABLE:
+                    accuracyTextRes = R.string.compass_accuracy_unreliable;
+                    break;
+                case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
+                    accuracyTextRes = R.string.compass_accuracy_low;
+                    break;
+                case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
+                    accuracyTextRes = R.string.compass_accuracy_medium;
+                    break;
+                case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
+                    accuracyTextRes = R.string.compass_accuracy_high;
+                    break;
+                default:
+                    accuracyTextRes = R.string.compass_accuracy_unknown;
+                    break;
+            }
+            return getString(accuracyStringRes, getString(accuracyTextRes));
         }
-        return getString(accuracyStringRes, getString(accuracyTextRes));
-    }
 
-    private int getScreenOrientationCompassOffset() {
-        switch (screenOrientation) {
-            case Surface.ROTATION_0:
-                return 0;
-            case Surface.ROTATION_90:
-                return 90;
-            case Surface.ROTATION_180:
-                return 180;
-            case Surface.ROTATION_270:
-                return 270;
-            default:
-                return 0;
+        private int getScreenOrientationCompassOffset() {
+            switch (screenOrientation) {
+                case Surface.ROTATION_0:
+                    return 0;
+                case Surface.ROTATION_90:
+                    return 90;
+                case Surface.ROTATION_180:
+                    return 180;
+                case Surface.ROTATION_270:
+                    return 270;
+                default:
+                    return 0;
+            }
         }
-    }
 
-    @NonNull
-    private float[] lowPass(@NonNull float[] input, @Nullable float[] output) {
-        if (output == null) {
-            return input;
+        @NonNull
+        private float[] lowPass(@NonNull float[] input, @Nullable float[] output) {
+            if (output == null) {
+                return input;
+            }
+            for (int i = 0; i < input.length; i++) {
+                output[i] = output[i] + ALPHA * (input[i] - output[i]);
+            }
+            return output;
         }
-        for (int i = 0; i < input.length; i++) {
-            output[i] = output[i] + ALPHA * (input[i] - output[i]);
-        }
-        return output;
-    }
 
-    private void updateCompassDegrees(float degrees) {
-        compassDegreesTextView.setText(getString(R.string.compass_degrees, (int) degrees));
-        compassDegreesImageView.rotationUpdate(360f - degrees, true);
+        private void updateCompassDegrees(float degrees) {
+            if (isAdded()) {
+                compassDegreesTextView.setText(getString(R.string.compass_degrees, (int) degrees));
+                compassDegreesImageView.rotationUpdate(360f - degrees, true);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.trewartha.positional.position;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentSender;
@@ -258,6 +259,7 @@ public class PositionFragment extends Fragment implements CompoundButton.OnCheck
         }, REQUEST_CODE_LOCATION_PERMISSIONS);
     }
 
+    @SuppressLint("MissingPermission")
     private void requestLocationUpdates() {
         if (!haveLocationPermissions()) {
             requestLocationPermissions();
@@ -268,7 +270,6 @@ public class PositionFragment extends Fragment implements CompoundButton.OnCheck
             final LocationRequest locationRequest = LocationRequest.create()
                     .setPriority(LOCATION_UPDATE_PRIORITY)
                     .setInterval(LOCATION_UPDATE_INTERVAL);
-            //noinspection MissingPermission
             LocationServices.FusedLocationApi.requestLocationUpdates(googleAPIClient, locationRequest, locationListener);
         } else {
             Log.info(TAG, "Location updates will resume once the Google API client is connected");

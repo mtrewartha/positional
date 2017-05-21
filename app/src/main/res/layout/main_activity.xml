@@ -19,7 +19,8 @@
         app:itemBackground="@color/navigationBarItemBackground"
         app:itemIconTint="@color/navigationBarIconTint"
         app:itemTextColor="@color/navigationBarTextColor"
-        app:menu="@menu/main_bottom_navigation"/>
+        app:menu="@menu/main_bottom_navigation"
+        tools:targetApi="lollipop"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_view_pager"
@@ -27,6 +28,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/main_bottom_navigation_view"
         android:layout_alignParentTop="true"
-        android:elevation="0dp"/>
+        android:elevation="0dp"
+        tools:targetApi="lollipop"/>
 
 </RelativeLayout>

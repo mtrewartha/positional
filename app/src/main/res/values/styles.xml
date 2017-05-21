@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -37,7 +37,7 @@
 
     <style name="Coordinates">
         <item name="android:ellipsize">none</item>
-        <item name="android:fontFamily">monospace</item>
+        <item name="android:typeface">monospace</item>
         <item name="android:gravity">center</item>
         <item name="android:maxLines">1</item>
         <item name="android:textColor">@color/positionStatTextColor</item>
@@ -63,10 +63,11 @@
 
     <style name="PositionStatIcon">
         <item name="android:layout_height">@dimen/stat_image_size</item>
-        <item name="android:layout_marginEnd">20dp</item>
         <item name="android:layout_width">@dimen/stat_image_size</item>
+        <item name="android:layout_marginEnd" tools:ignore="NewApi">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
         <item name="android:tint">@color/positionStatIconTint</item>
-        <item name="android:tintMode">src_in</item>
+        <item name="android:tintMode" tools:ignore="NewApi">src_in</item>
     </style>
 
     <style name="PositionStatIconLarge" parent="PositionStatIcon">
@@ -103,10 +104,14 @@
 
     <style name="PositionStatRow">
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_height">72dp</item>
+        <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_weight">.2</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:paddingEnd" tools:ignore="NewApi">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingStart" tools:ignore="NewApi">@dimen/activity_horizontal_margin</item>
     </style>
 
     <style name="PositionStatRowLandscape" parent="PositionStatRow">
@@ -114,8 +119,10 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingEnd" tools:ignore="NewApi">20dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingStart" tools:ignore="NewApi">20dp</item>
     </style>
 
     <style name="PositionStatRowLarge" parent="PositionStatRow">
@@ -143,9 +150,10 @@
     </style>
 
     <style name="PositionStatValue">
-        <item name="android:gravity">end</item>
+        <item name="android:gravity">end|right</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd">6dp</item>
+        <item name="android:layout_marginEnd" tools:ignore="NewApi">6dp</item>
+        <item name="android:layout_marginRight">6dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textColor">@color/positionStatTextColor</item>

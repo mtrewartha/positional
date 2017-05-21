@@ -16,8 +16,8 @@ import io.trewartha.positional.R;
 
 public class CoordinatesDegreesDecimalFragment extends CoordinatesFragment {
 
-    private static final String FORMAT_LATITUDE = "%+10.5f";
-    private static final String FORMAT_LONGITUDE = "%+10.5f";
+    private static final String FORMAT_LATITUDE = "% 10.5f";
+    private static final String FORMAT_LONGITUDE = "% 10.5f";
     private static final Locale LOCALE = Locale.getDefault();
 
     @BindView(R.id.degrees_decimal_latitude_text_view) @Nullable TextView latitudeTextView;
@@ -42,8 +42,10 @@ public class CoordinatesDegreesDecimalFragment extends CoordinatesFragment {
     @Override
     public void setCoordinates(double latitude, double longitude) {
         if (latitudeTextView != null && longitudeTextView != null) {
-            latitudeTextView.setText(String.format(LOCALE, FORMAT_LATITUDE, latitude));
-            longitudeTextView.setText(String.format(LOCALE, FORMAT_LONGITUDE, longitude));
+            String latitudeText = String.format(LOCALE, FORMAT_LATITUDE, latitude);
+            String longitudeText = String.format(LOCALE, FORMAT_LONGITUDE, longitude);
+            latitudeTextView.setText(latitudeText);
+            longitudeTextView.setText(longitudeText);
         }
     }
 }

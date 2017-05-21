@@ -10,6 +10,8 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
@@ -28,6 +30,8 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingStart="@dimen/activity_horizontal_margin">
 
             <com.itsronald.widget.ViewPagerIndicator
@@ -46,6 +50,7 @@
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_gravity="center"
             android:layout_margin="16dp"
@@ -57,13 +62,15 @@
             android:layout_height="58dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/settings_screen_lock_label"
             android:padding="16dp"
             android:src="@drawable/ic_screen_lock_portrait_black_24dp"
             android:text="@string/settings_screen_lock_label"
-            android:tint="@color/screen_lock"
-            android:translationZ="1dp"/>
+            android:tint="@color/screen_lock_selector"
+            android:translationZ="1dp"
+            tools:targetApi="lollipop"/>
 
     </RelativeLayout>
 
