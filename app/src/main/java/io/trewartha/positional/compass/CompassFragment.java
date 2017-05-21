@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -27,7 +26,6 @@ import io.trewartha.positional.R;
 
 public class CompassFragment extends Fragment {
 
-    private static final String LOG_TAG = CompassFragment.class.getSimpleName();
     private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
 
     @BindView(R.id.compass_degrees_image_view) CompassView compassDegreesImageView;
@@ -49,7 +47,6 @@ public class CompassFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(LOG_TAG, "Attaching...");
         accelerometerReading = new float[3];
         magnetometerReading = new float[3];
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
@@ -64,14 +61,12 @@ public class CompassFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "Creating view");
         return inflater.inflate(R.layout.compass_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(LOG_TAG, "View created");
         viewUnbinder = ButterKnife.bind(this, view);
 
         if (accelerometerSensor == null) {
@@ -97,7 +92,6 @@ public class CompassFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "Resuming...");
         if (accelerometerSensor != null && magnetometerSensor != null) {
             compassSensorsListener = new CompassSensorsListener();
             sensorManager.registerListener(compassSensorsListener, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
@@ -108,7 +102,6 @@ public class CompassFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "Pausing...");
         sensorManager.unregisterListener(compassSensorsListener, accelerometerSensor);
         sensorManager.unregisterListener(compassSensorsListener, magnetometerSensor);
         compassSensorsListener = null;
@@ -117,7 +110,6 @@ public class CompassFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d(LOG_TAG, "Destroying view...");
         viewUnbinder.unbind();
     }
 
