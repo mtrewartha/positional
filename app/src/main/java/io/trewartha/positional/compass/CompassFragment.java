@@ -28,7 +28,7 @@ public class CompassFragment extends Fragment {
 
     private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
 
-    @BindView(R.id.compass_degrees_image_view) CompassView compassDegreesImageView;
+    @BindView(R.id.compass_view) CompassView compassDegreesImageView;
     @BindView(R.id.compass_degrees_text_view) TextView compassDegreesTextView;
     @BindView(R.id.compass_accuracy_accelerometer_text_view) TextView accelerometerAccuracyTextView;
     @BindView(R.id.compass_accuracy_magnetometer_text_view) TextView magnetometerAccuracyTextView;

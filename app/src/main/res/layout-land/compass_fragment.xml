@@ -20,7 +20,7 @@
         android:layout_weight="1">
 
         <io.trewartha.positional.compass.CompassView
-            android:id="@+id/compass_degrees_image_view"
+            android:id="@+id/compass_view"
             style="@style/CompassBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
