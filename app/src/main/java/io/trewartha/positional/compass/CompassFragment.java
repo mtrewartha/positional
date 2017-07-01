@@ -1,15 +1,17 @@
 package io.trewartha.positional.compass;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -19,29 +21,43 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationRequest;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.trewartha.positional.R;
+import io.trewartha.positional.common.LocationAwareFragment;
 
-public class CompassFragment extends Fragment {
+public class CompassFragment extends LocationAwareFragment {
+
+    private enum Mode {
+        TRUE_NORTH, MAGNETIC_NORTH
+    }
 
     private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
+    private static final long LOCATION_UPDATE_INTERVAL = 30 * 60 * 1000;// 30 mins in ms
 
-    @BindView(R.id.compass_view) CompassView compassDegreesImageView;
-    @BindView(R.id.compass_degrees_text_view) TextView compassDegreesTextView;
     @BindView(R.id.compass_accuracy_accelerometer_text_view) TextView accelerometerAccuracyTextView;
+    @BindView(R.id.compass_background_view) CompassView compassBackgroundView;
+    @BindView(R.id.compass_degrees_text_view) TextView compassDegreesTextView;
+    @BindView(R.id.compass_needle_view) CompassView compassNeedleView;
+    @BindView(R.id.compass_declination_text_view) TextView declinationTextView;
     @BindView(R.id.compass_accuracy_magnetometer_text_view) TextView magnetometerAccuracyTextView;
+    @BindView(R.id.compass_mode_text_view) TextView modeTextView;
 
     private float[] accelerometerReading;
     private Sensor accelerometerSensor;
+    private int declination;
     private CompassSensorsListener compassSensorsListener;
     private float[] magnetometerReading;
     private Sensor magnetometerSensor;
+    private Mode mode;
     private float[] mR = new float[9];
     private float[] orientation = new float[3];
     private int screenOrientation;
     private SensorManager sensorManager;
+    private SharedPreferences sharedPreferences;
     private Unbinder viewUnbinder;
 
     @Override
@@ -56,6 +72,11 @@ public class CompassFragment extends Fragment {
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         screenOrientation = display.getRotation();
+
+        sharedPreferences = context.getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
+
+        setLocationUpdateInterval(LOCATION_UPDATE_INTERVAL);
+        setLocationUpdatePriority(LocationRequest.PRIORITY_LOW_POWER);
     }
 
     @Nullable
@@ -87,6 +108,20 @@ public class CompassFragment extends Fragment {
             accelerometerAccuracyTextView.setText(getString(R.string.compass_accuracy_accelerometer, getString(R.string.compass_accuracy_unknown)));
             magnetometerAccuracyTextView.setText(getString(R.string.compass_accuracy_magnetometer, getString(R.string.compass_accuracy_unknown)));
         }
+
+        Mode restoredMode = Mode.valueOf(sharedPreferences.getString(
+                getString(R.string.settings_compass_mode),
+                Mode.TRUE_NORTH.name())
+        );
+        setMode(restoredMode);
+        modeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleMode();
+            }
+        });
+
+        declinationTextView.setText(R.string.unknown);
     }
 
     @Override
@@ -111,6 +146,45 @@ public class CompassFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         viewUnbinder.unbind();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        String declinationText;
+        if (location == null) {
+            declination = 0;
+            declinationText = getString(R.string.unknown);
+        } else {
+            declination = (int) getDeclination(location);
+            declinationText = String.valueOf(declination);
+        }
+        declinationTextView.setText(getString(R.string.compass_declination, declinationText));
+    }
+
+    private float getDeclination(Location location) {
+        return new GeomagneticField(
+                (float) location.getLatitude(),
+                (float) location.getLongitude(),
+                (float) location.getAltitude(),
+                location.getTime()
+        ).getDeclination();
+    }
+
+    private void setMode(@NonNull Mode mode) {
+        this.mode = mode;
+
+        sharedPreferences.edit()
+                .putString(getString(R.string.settings_compass_mode), mode.name())
+                .apply();
+
+        int modeName = mode == Mode.TRUE_NORTH ?
+                R.string.compass_mode_true_north :
+                R.string.compass_mode_magnetic_north;
+        modeTextView.setText(modeName);
+    }
+
+    private void toggleMode() {
+        setMode(mode == Mode.TRUE_NORTH ? Mode.MAGNETIC_NORTH : Mode.TRUE_NORTH);
     }
 
     private class CompassSensorsListener implements SensorEventListener {
@@ -192,8 +266,11 @@ public class CompassFragment extends Fragment {
 
         private void updateCompassDegrees(float degrees) {
             if (isAdded()) {
-                compassDegreesTextView.setText(getString(R.string.compass_degrees, (int) degrees));
-                compassDegreesImageView.rotationUpdate(360f - degrees, true);
+                int declination = mode == Mode.TRUE_NORTH ? CompassFragment.this.declination : 0;
+                compassDegreesTextView.setText(getString(R.string.compass_degrees, (int) degrees - declination));
+                float newDegrees = 360f - degrees + declination;
+                compassBackgroundView.rotationUpdate(newDegrees, true);
+                compassNeedleView.rotationUpdate(newDegrees, true);
             }
         }
     }

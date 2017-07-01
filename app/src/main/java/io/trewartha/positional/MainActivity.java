@@ -13,13 +13,13 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static io.trewartha.positional.common.LocationAwareFragment.REQUEST_CODE_GOOGLE_PLAY_SERVICES;
+
 public class MainActivity extends AppCompatActivity {
 
     static {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
     }
-
-    public static int REQUEST_CODE_GOOGLE_PLAY_SERVICES = 1;
 
     @BindView(R.id.main_view_pager) ViewPager viewPager;
     @BindView(R.id.main_bottom_navigation_view) BottomNavigationView bottomNavigationView;

@@ -10,8 +10,8 @@
     <color name="backgroundFragment">@color/black</color>
 
     <!-- Compass -->
-    <color name="compassAccuracyTitleColor">@color/gray4</color>
-    <color name="compassAccuracyValueColor">@color/gray4</color>
+    <color name="compassAttributeTitleColor">@color/gray4</color>
+    <color name="compassAttributeValueColor">@color/gray4</color>
     <color name="compassBackground">@color/white</color>
     <color name="compassDegrees">@color/white</color>
     <color name="compassPin">@color/gray1</color>
