@@ -39,13 +39,13 @@ dependencies {
 
     // Compile Time Dependencies
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:support-v4:25.4.0'
     compile 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
     compile 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.2'
-    compile 'com.google.android.gms:play-services-location:10.2.6'
-    compile 'com.google.firebase:firebase-crash:10.2.6'
+    compile 'com.google.android.gms:play-services-location:11.0.2'
+    compile 'com.google.firebase:firebase-crash:11.0.2'
     compile 'com.jakewharton:butterknife:8.4.0'
 
     // Unit Test Dependencies
