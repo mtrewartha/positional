@@ -1,7 +1,6 @@
 package io.trewartha.positional.position;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,8 @@ public class CoordinatesDegreesDecimalFragment extends CoordinatesFragment {
     private static final String FORMAT_LONGITUDE = "% 10.5f";
     private static final Locale LOCALE = Locale.getDefault();
 
-    @BindView(R.id.degrees_decimal_latitude_text_view) @Nullable TextView latitudeTextView;
-    @BindView(R.id.degrees_decimal_longitude_text_view) @Nullable TextView longitudeTextView;
+    @BindView(R.id.degrees_decimal_latitude_text_view) TextView latitudeTextView;
+    @BindView(R.id.degrees_decimal_longitude_text_view) TextView longitudeTextView;
 
     private Unbinder unbinder;
 

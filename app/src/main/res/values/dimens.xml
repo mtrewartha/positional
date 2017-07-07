@@ -3,6 +3,13 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="bottom_sheet_list_item_height">48dp</dimen>
+    <dimen name="bottom_sheet_title_height">56dp</dimen>
+    <dimen name="bottom_sheet_padding_horizontal">16dp</dimen>
+    <dimen name="bottom_sheet_padding_vertical">8dp</dimen>
+    <dimen name="bottom_sheet_list_item_text_size">16sp</dimen>
+    <dimen name="bottom_sheet_title_text_size">16sp</dimen>
+
     <dimen name="text_size_small">25sp</dimen>
     <dimen name="text_size_medium">36sp</dimen>
     <dimen name="text_size_large">46sp</dimen>

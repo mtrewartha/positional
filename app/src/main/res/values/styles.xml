@@ -8,6 +8,33 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Bottom Sheets -->
+
+    <style name="BottomSheetTitle">
+        <item name="android:gravity">center_vertical|left|start</item>
+        <item name="android:layout_height">@dimen/bottom_sheet_title_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingLeft">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:textColor">@color/bottomSheetTitle</item>
+        <item name="android:textSize">@dimen/bottom_sheet_title_text_size</item>
+    </style>
+
+    <style name="BottomSheetListItem">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center_vertical|left|start</item>
+        <item name="android:layout_height">@dimen/bottom_sheet_list_item_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingLeft">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:textColor">@color/bottomSheetListItem</item>
+        <item name="android:textSize">@dimen/bottom_sheet_list_item_text_size</item>
+    </style>
+
     <!-- Compass -->
 
     <style name="CompassAttributeTitle">
@@ -36,6 +63,7 @@
     <!-- Coordinates -->
 
     <style name="Coordinates">
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:ellipsize">none</item>
         <item name="android:typeface">monospace</item>
         <item name="android:gravity">center</item>

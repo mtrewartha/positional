@@ -1,11 +1,14 @@
 package io.trewartha.positional.position;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +50,7 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
 
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.screen_lock_switch) ImageView screenLockSwitch;
+    @BindView(R.id.copy_button) ImageView copyButton;
 
     private List<CoordinatesFragment> coordinatesFragments;
     private CoordinatesFormat coordinatesFormat;
@@ -119,6 +124,37 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
             }
             updateLocationViews(location);
         }
+    }
+
+    @OnClick(R.id.copy_button)
+    public void onCopyClicked() {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog.setCanceledOnTouchOutside(true);
+        bottomSheetDialog.setCancelable(true);
+        bottomSheetDialog.setTitle(R.string.settings_copy_coordinates_title);
+        bottomSheetDialog.setContentView(R.layout.coordinates_copy_fragment);
+
+        CoordinatesCopier coordinatesCopier = new CoordinatesCopier(new OnCoordinatesCopiedListener() {
+            @Override
+            public void onCopy() {
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        View bothTextView = bottomSheetDialog.findViewById(R.id.coordinates_copy_both_text_view);
+        View latitudeTextView = bottomSheetDialog.findViewById(R.id.coordinates_copy_latitude_text_view);
+        View longitudeTextView = bottomSheetDialog.findViewById(R.id.coordinates_copy_longitude_text_view);
+
+        if (bothTextView == null || latitudeTextView == null || longitudeTextView == null) {
+            Toast.makeText(getContext(), R.string.copied_coordinates_failure, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        bothTextView.setOnClickListener(coordinatesCopier);
+        latitudeTextView.setOnClickListener(coordinatesCopier);
+        longitudeTextView.setOnClickListener(coordinatesCopier);
+
+        bottomSheetDialog.show();
     }
 
     @OnClick({R.id.elevation_unit_text_view, R.id.speed_unit_text_view, R.id.accuracy_unit_text_view})
@@ -246,5 +282,55 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
         public void onPageScrollStateChanged(int state) {
             // Don't do anything here
         }
+    }
+
+    private class CoordinatesCopier implements View.OnClickListener {
+
+        private OnCoordinatesCopiedListener onCoordinatesCopiedListener;
+
+        CoordinatesCopier(@Nullable OnCoordinatesCopiedListener onCoordinatesCopiedListener) {
+            this.onCoordinatesCopiedListener = onCoordinatesCopiedListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (location == null) {
+                Toast.makeText(getContext(), R.string.copied_coordinates_failure, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            String clipDataLabel = getString(R.string.copied_coordinates_label);
+            String clipDataText = "";
+            String toastText = "";
+
+            switch (v.getId()) {
+                case R.id.coordinates_copy_both_text_view:
+                    clipDataText = String.format(Locale.US, "%f, %f", location.getLatitude(), location.getLongitude());
+                    toastText = getString(R.string.copied_coordinates_both_success);
+                    break;
+                case R.id.coordinates_copy_latitude_text_view:
+                    clipDataText = String.format(Locale.US, "%f", location.getLatitude());
+                    toastText = getString(R.string.copied_coordinates_latitude_success);
+                    break;
+                case R.id.coordinates_copy_longitude_text_view:
+                    clipDataText = String.format(Locale.US, "%f", location.getLongitude());
+                    toastText = getString(R.string.copied_coordinates_longitude_success);
+                    break;
+            }
+
+            ClipData coordinatesClipData = ClipData.newPlainText(clipDataLabel, clipDataText);
+            clipboardManager.setPrimaryClip(coordinatesClipData);
+
+            Toast.makeText(getContext(), toastText, Toast.LENGTH_SHORT).show();
+
+            if (onCoordinatesCopiedListener != null) {
+                onCoordinatesCopiedListener.onCopy();
+            }
+        }
+    }
+
+    private interface OnCoordinatesCopiedListener {
+        void onCopy();
     }
 }

@@ -45,30 +45,44 @@
 
         </android.support.v4.view.ViewPager>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:indeterminateOnly="true"/>
-
         <ImageView
             android:id="@+id/screen_lock_switch"
             android:layout_width="58dp"
             android:layout_height="58dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/settings_screen_lock_label"
+            android:contentDescription="@string/settings_screen_lock_content_description"
             android:padding="16dp"
             android:src="@drawable/ic_screen_lock_portrait_black_24dp"
-            android:text="@string/settings_screen_lock_label"
             android:tint="@color/screen_lock_selector"
+            android:translationZ="1dp"
+            tools:targetApi="lollipop"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/screen_lock_switch"
+            android:layout_toEndOf="@id/screen_lock_switch"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:indeterminateOnly="true"/>
+
+        <ImageView
+            android:id="@+id/copy_button"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/settings_copy_coordinates_content_description"
+            android:padding="16dp"
+            android:src="@drawable/ic_content_copy_black_24dp"
+            android:tint="@color/screenLockButtonTint"
             android:translationZ="1dp"
             tools:targetApi="lollipop"/>
 

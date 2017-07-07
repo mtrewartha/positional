@@ -19,6 +19,11 @@
     <color name="backgroundActivity">@color/white</color>
     <color name="backgroundFragment">@color/white</color>
 
+    <!-- Bottom Sheets -->
+    <color name="bottomSheetBackground">@color/white</color>
+    <color name="bottomSheetListItem">#DE000000</color>
+    <color name="bottomSheetTitle">#8A000000</color>
+
     <!-- Compass -->
     <color name="compassAttributeTitleColor">@color/gray1</color>
     <color name="compassAttributeValueColor">@color/gray1</color>

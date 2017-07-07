@@ -29,6 +29,11 @@
     <string name="coordinate_format_label_mgrs">MGRS</string>
     <string name="coordinate_format_label_utm">UTM</string>
     <string name="coordinates">Coordinates</string>
+    <string name="copied_coordinates_label">Coordinates</string>
+    <string name="copied_coordinates_failure">Hold tight, still trying to get your coordinates…</string>
+    <string name="copied_coordinates_both_success">Copied your coordinates. Ready to paste!</string>
+    <string name="copied_coordinates_latitude_success">Copied your latitude. Ready to paste!</string>
+    <string name="copied_coordinates_longitude_success">Copied your longitude. Ready to paste!</string>
     <string name="elevation">Elevation</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
@@ -74,6 +79,11 @@
     <string name="settings_coordinates_format_key">coordsFormat</string>
     <string name="settings_screen_lock_default">true</string>
     <string name="settings_screen_lock_key">screenLock</string>
-    <string name="settings_screen_lock_label">Screen Lock</string>
+    <string name="settings_screen_lock_content_description">lock screen</string>
+    <string name="settings_copy_coordinates_both">Latitude and longitude</string>
+    <string name="settings_copy_coordinates_content_description">copy coordinates</string>
+    <string name="settings_copy_coordinates_latitude">Latitude only</string>
+    <string name="settings_copy_coordinates_longitude">Longitude only</string>
+    <string name="settings_copy_coordinates_title">Which coordinates would you like to copy?</string>
 
 </resources>
