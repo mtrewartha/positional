@@ -1,7 +1,6 @@
 package io.trewartha.positional.position;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,6 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 import io.trewartha.positional.R;
@@ -21,23 +17,18 @@ public class CoordinatesUTMFragment extends CoordinatesFragment {
     private static final String FORMAT = "%7.0f";
     private static final Locale LOCALE = Locale.getDefault();
 
-    @BindView(R.id.utm_zone_text_view) @Nullable TextView zoneTextView;
-    @BindView(R.id.utm_easting_text_view) @Nullable TextView eastingTextView;
-    @BindView(R.id.utm_northing_text_view) @Nullable TextView northingTextView;
-    private Unbinder unbinder;
+    private TextView zoneTextView;
+    private TextView eastingTextView;
+    private TextView northingTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.coordinates_utm_fragment, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        zoneTextView = view.findViewById(R.id.utm_zone_text_view);
+        eastingTextView = view.findViewById(R.id.utm_easting_text_view);
+        northingTextView = view.findViewById(R.id.utm_northing_text_view);
         setCoordinates(latitude, longitude);
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override

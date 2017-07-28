@@ -25,10 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import io.trewartha.positional.CoordinatesFormat;
 import io.trewartha.positional.Log;
 import io.trewartha.positional.R;
@@ -38,19 +34,18 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
 
     private static final String TAG = PositionFragment.class.getSimpleName();
 
-    @BindView(R.id.coordinates_view_pager) ViewPager coordinatesViewPager;
-    @BindView(R.id.accuracy_value_text_view) TextView accuracyValueTextView;
-    @BindView(R.id.accuracy_unit_text_view) TextView accuracyUnitTextView;
-    @BindView(R.id.elevation_value_text_view) TextView elevationValueTextView;
-    @BindView(R.id.elevation_unit_text_view) TextView elevationUnitTextView;
-    @BindView(R.id.speed_value_text_view) TextView speedValueTextView;
-    @BindView(R.id.speed_unit_text_view) TextView speedUnitTextView;
-    @BindView(R.id.bearing_value_text_view) TextView bearingValueTextView;
-    @BindView(R.id.bearing_unit_text_view) TextView bearingUnitTextView;
-
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindView(R.id.screen_lock_switch) ImageView screenLockSwitch;
-    @BindView(R.id.copy_button) ImageView copyButton;
+    private ViewPager coordinatesViewPager;
+    private TextView accuracyValueTextView;
+    private TextView accuracyUnitTextView;
+    private TextView elevationValueTextView;
+    private TextView elevationUnitTextView;
+    private TextView speedValueTextView;
+    private TextView speedUnitTextView;
+    private TextView bearingValueTextView;
+    private TextView bearingUnitTextView;
+    private ProgressBar progressBar;
+    private ImageView screenLockSwitch;
+    private ImageView copyButton;
 
     private List<CoordinatesFragment> coordinatesFragments;
     private CoordinatesFormat coordinatesFormat;
@@ -60,7 +55,6 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
     private boolean screenLock;
     private SharedPreferences sharedPreferences;
     private boolean useMetricUnits;
-    private Unbinder viewUnbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -79,7 +73,44 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewUnbinder = ButterKnife.bind(this, view);
+
+        // TODO: Clean up the view initialization and listeners below after converting to Kotlin
+        coordinatesViewPager = view.findViewById(R.id.coordinates_view_pager);
+        accuracyValueTextView = view.findViewById(R.id.accuracy_value_text_view);
+        accuracyUnitTextView = view.findViewById(R.id.accuracy_unit_text_view);
+        elevationValueTextView = view.findViewById(R.id.elevation_value_text_view);
+        elevationUnitTextView = view.findViewById(R.id.elevation_unit_text_view);
+        speedValueTextView = view.findViewById(R.id.speed_value_text_view);
+        speedUnitTextView = view.findViewById(R.id.speed_unit_text_view);
+        bearingValueTextView = view.findViewById(R.id.bearing_value_text_view);
+        bearingUnitTextView = view.findViewById(R.id.bearing_unit_text_view);
+        progressBar = view.findViewById(R.id.progress_bar);
+        screenLockSwitch = view.findViewById(R.id.screen_lock_switch);
+        copyButton = view.findViewById(R.id.copy_button);
+
+        copyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCopyClicked();
+            }
+        });
+
+        View.OnClickListener unitOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDistanceUnitClicked();
+            }
+        };
+        elevationUnitTextView.setOnClickListener(unitOnClickListener);
+        speedUnitTextView.setOnClickListener(unitOnClickListener);
+        accuracyUnitTextView.setOnClickListener(unitOnClickListener);
+
+        screenLockSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onScreenLockClicked();
+            }
+        });
 
         useMetricUnits = sharedPreferences.getBoolean(getString(R.string.settings_metric_units_key), false);
         coordinatesFormat = CoordinatesFormat.valueOf(
@@ -97,12 +128,6 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
         coordinatesViewPager.addOnPageChangeListener(new CoordinatesPageChangeListener());
 
         updateLocationViews(null);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        viewUnbinder.unbind();
     }
 
     @Override
@@ -126,7 +151,6 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
         }
     }
 
-    @OnClick(R.id.copy_button)
     public void onCopyClicked() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         bottomSheetDialog.setCanceledOnTouchOutside(true);
@@ -157,14 +181,12 @@ public class PositionFragment extends LocationAwareFragment implements CompoundB
         bottomSheetDialog.show();
     }
 
-    @OnClick({R.id.elevation_unit_text_view, R.id.speed_unit_text_view, R.id.accuracy_unit_text_view})
     public void onDistanceUnitClicked() {
         useMetricUnits = !useMetricUnits;
         updateLocationViews(location);
         setBooleanPreference(getString(R.string.settings_metric_units_key), useMetricUnits);
     }
 
-    @OnClick(R.id.screen_lock_switch)
     public void onScreenLockClicked() {
         screenLock = !screenLock;
         screenLockSwitch.setSelected(screenLock);

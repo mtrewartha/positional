@@ -3,36 +3,25 @@ package io.trewartha.positional.position;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.trewartha.positional.R;
 
 public class CoordinatesDegreesMinutesSecondsFragment extends CoordinatesFragment {
 
-    @BindView(R.id.degrees_minutes_seconds_latitude_text_view) @Nullable TextView latitudeTextView;
-    @BindView(R.id.degrees_minutes_seconds_longitude_text_view) @Nullable TextView longitudeTextView;
-
-    private Unbinder unbinder;
+    private TextView latitudeTextView;
+    private TextView longitudeTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.coordinates_degrees_minutes_seconds_fragment, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        latitudeTextView = view.findViewById(R.id.degrees_minutes_seconds_latitude_text_view);
+        longitudeTextView = view.findViewById(R.id.degrees_minutes_seconds_longitude_text_view);
         setCoordinates(latitude, longitude);
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override

@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.trewartha.positional.R;
 
 public class CoordinatesDegreesDecimalFragment extends CoordinatesFragment {
@@ -19,23 +16,16 @@ public class CoordinatesDegreesDecimalFragment extends CoordinatesFragment {
     private static final String FORMAT_LONGITUDE = "% 10.5f";
     private static final Locale LOCALE = Locale.getDefault();
 
-    @BindView(R.id.degrees_decimal_latitude_text_view) TextView latitudeTextView;
-    @BindView(R.id.degrees_decimal_longitude_text_view) TextView longitudeTextView;
-
-    private Unbinder unbinder;
+    private TextView latitudeTextView;
+    private TextView longitudeTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.coordinates_degrees_decimal_fragment, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        latitudeTextView = view.findViewById(R.id.degrees_decimal_latitude_text_view);
+        longitudeTextView = view.findViewById(R.id.degrees_decimal_longitude_text_view);
         setCoordinates(latitude, longitude);
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override

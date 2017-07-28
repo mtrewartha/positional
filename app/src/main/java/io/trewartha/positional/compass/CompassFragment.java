@@ -23,9 +23,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.LocationRequest;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.trewartha.positional.R;
 import io.trewartha.positional.common.LocationAwareFragment;
 
@@ -38,13 +35,13 @@ public class CompassFragment extends LocationAwareFragment {
     private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
     private static final long LOCATION_UPDATE_INTERVAL = 30 * 60 * 1000;// 30 mins in ms
 
-    @BindView(R.id.compass_accuracy_accelerometer_text_view) TextView accelerometerAccuracyTextView;
-    @BindView(R.id.compass_background_view) CompassView compassBackgroundView;
-    @BindView(R.id.compass_degrees_text_view) TextView compassDegreesTextView;
-    @BindView(R.id.compass_needle_view) CompassView compassNeedleView;
-    @BindView(R.id.compass_declination_text_view) TextView declinationTextView;
-    @BindView(R.id.compass_accuracy_magnetometer_text_view) TextView magnetometerAccuracyTextView;
-    @BindView(R.id.compass_mode_text_view) TextView modeTextView;
+    private TextView accelerometerAccuracyTextView;
+    private CompassView compassBackgroundView;
+    private TextView compassDegreesTextView;
+    private CompassView compassNeedleView;
+    private TextView declinationTextView;
+    private TextView magnetometerAccuracyTextView;
+    private TextView modeTextView;
 
     private float[] accelerometerReading;
     private Sensor accelerometerSensor;
@@ -58,7 +55,6 @@ public class CompassFragment extends LocationAwareFragment {
     private int screenOrientation;
     private SensorManager sensorManager;
     private SharedPreferences sharedPreferences;
-    private Unbinder viewUnbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -88,7 +84,14 @@ public class CompassFragment extends LocationAwareFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewUnbinder = ButterKnife.bind(this, view);
+
+        accelerometerAccuracyTextView = view.findViewById(R.id.compass_accuracy_accelerometer_text_view);
+        compassBackgroundView = view.findViewById(R.id.compass_background_view);
+        compassDegreesTextView = view.findViewById(R.id.compass_degrees_text_view);
+        compassNeedleView = view.findViewById(R.id.compass_needle_view);
+        declinationTextView = view.findViewById(R.id.compass_declination_text_view);
+        magnetometerAccuracyTextView = view.findViewById(R.id.compass_accuracy_magnetometer_text_view);
+        modeTextView = view.findViewById(R.id.compass_mode_text_view);
 
         if (accelerometerSensor == null) {
             accelerometerAccuracyTextView.setText(getString(R.string.compass_accuracy_accelerometer, getString(R.string.compass_accuracy_no_sensor_found)));
@@ -140,12 +143,6 @@ public class CompassFragment extends LocationAwareFragment {
         sensorManager.unregisterListener(compassSensorsListener, accelerometerSensor);
         sensorManager.unregisterListener(compassSensorsListener, magnetometerSensor);
         compassSensorsListener = null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        viewUnbinder.unbind();
     }
 
     @Override
