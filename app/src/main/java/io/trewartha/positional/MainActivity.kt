@@ -7,8 +7,8 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.MenuItem
-import butterknife.bindView
 import io.trewartha.positional.common.LocationAwareFragment.REQUEST_CODE_GOOGLE_PLAY_SERVICES
+import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,9 +17,6 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
         }
     }
-
-    private val viewPager: ViewPager by bindView(R.id.main_view_pager)
-    private val bottomNavigationView: BottomNavigationView by bindView(R.id.main_bottom_navigation_view)
 
     private lateinit var fragmentPagerAdapter: MainFragmentPagerAdapter
 

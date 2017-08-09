@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <io.trewartha.positional.AutoResizeTextView
-        android:id="@+id/mgrs_text_view"
+        android:id="@+id/coordinatesTextView"
         style="@style/Coordinates"
         android:layout_width="match_parent"
         android:layout_height="0dp"
