@@ -1,9 +1,6 @@
 package io.trewartha.positional.position
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.*
 import android.location.Location
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
@@ -21,6 +18,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.common.LocationAwareFragment
 import kotlinx.android.synthetic.main.position_fragment.*
 import java.util.*
+
 
 class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -52,6 +50,7 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         super.onViewCreated(view, savedInstanceState)
 
         copyButton.setOnClickListener { onCopyClicked() }
+        shareButton.setOnClickListener { onShareClicked() }
 
         val unitOnClickListener = View.OnClickListener { onDistanceUnitClicked() }
         elevationUnitTextView.setOnClickListener(unitOnClickListener)
@@ -178,6 +177,25 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         setBooleanPreference(getString(R.string.settings_screen_lock_key), screenLock)
         val textRes = if (screenLock) R.string.screen_lock_on else R.string.screen_lock_off
         Toast.makeText(context, textRes, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onShareClicked() {
+        val safeLocation = location
+        if (safeLocation == null) {
+            Toast.makeText(context, R.string.shared_coordinates_failure, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val coordinatesText = locationFormatter.getCoordinates(
+                safeLocation.latitude,
+                safeLocation.longitude,
+                coordinatesFormat
+        )
+
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, coordinatesText)
+        sendIntent.type = "text/plain"
+        startActivity(sendIntent)
     }
 
     private fun updateLocationViews(location: Location?) {

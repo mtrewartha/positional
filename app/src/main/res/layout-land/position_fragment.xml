@@ -67,6 +67,21 @@
             android:indeterminateOnly="true"/>
 
         <ImageView
+            android:id="@+id/shareButton"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/copyButton"
+            android:layout_toStartOf="@+id/copyButton"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/settings_share_content_description"
+            android:padding="16dp"
+            android:src="@drawable/ic_share_black_24dp"
+            android:tint="@color/screenLockButtonTint"
+            android:translationZ="1dp"
+            tools:targetApi="lollipop"/>
+
+        <ImageView
             android:id="@+id/copyButton"
             android:layout_width="58dp"
             android:layout_height="58dp"

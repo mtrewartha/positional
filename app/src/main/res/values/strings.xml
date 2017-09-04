@@ -41,6 +41,7 @@
     <string name="provider">Provider</string>
     <string name="screen_lock_off">Screen lock disabled</string>
     <string name="screen_lock_on">Screen lock enabled</string>
+    <string name="shared_coordinates_failure">Hold tight, still trying to get your coordinates…</string>
     <string name="speed">Speed</string>
     <string name="unit_degrees">°</string>
     <string name="unit_feet">ft</string>
