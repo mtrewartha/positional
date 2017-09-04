@@ -11,7 +11,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.UnitConverter
 import java.util.*
 
-internal class LocationFormatter(private val context: Context) {
+class LocationFormatter(private val context: Context) {
 
     companion object {
         private const val FORMAT_ACCURACY = "%d"
