@@ -2,33 +2,37 @@
 <LinearLayout
     style="@style/CoordinatesFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <io.trewartha.positional.AutoResizeTextView
+    <TextView
         android:id="@+id/zoneTextView"
         style="@style/Coordinates"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="bottom|center_horizontal"
+        app:autoSizeTextType="uniform"
         tools:text="10N"/>
 
-    <io.trewartha.positional.AutoResizeTextView
+    <TextView
         android:id="@+id/eastingTextView"
         style="@style/Coordinates"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        app:autoSizeTextType="uniform"
         tools:text="1234567m E"/>
 
-    <io.trewartha.positional.AutoResizeTextView
+    <TextView
         android:id="@+id/northingTextView"
         style="@style/Coordinates"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top|center_horizontal"
+        app:autoSizeTextType="uniform"
         tools:text="1234567m N"/>
 
     <TextView
