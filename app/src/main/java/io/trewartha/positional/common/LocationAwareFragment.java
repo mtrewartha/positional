@@ -38,7 +38,7 @@ public abstract class LocationAwareFragment extends Fragment implements Location
     private int locationUpdatePriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     @Override
-    public abstract void onLocationChanged(Location location);
+    public abstract void onLocationChanged(@Nullable Location location);
 
     @Override
     public void onAttach(Context context) {

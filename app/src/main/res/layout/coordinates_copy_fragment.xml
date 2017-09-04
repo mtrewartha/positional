@@ -9,22 +9,22 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <TextView
-        android:id="@+id/coordinates_copy_title_text_view"
+        android:id="@+id/coordinatesCopyTitleTextView"
         style="@style/BottomSheetTitle"
         android:text="@string/settings_copy_coordinates_title"/>
 
     <TextView
-        android:id="@+id/coordinates_copy_both_text_view"
+        android:id="@+id/coordinatesCopyBothTextView"
         style="@style/BottomSheetListItem"
         android:text="@string/settings_copy_coordinates_both"/>
 
     <TextView
-        android:id="@+id/coordinates_copy_latitude_text_view"
+        android:id="@+id/coordinatesCopyLatitudeTextView"
         style="@style/BottomSheetListItem"
         android:text="@string/settings_copy_coordinates_latitude"/>
 
     <TextView
-        android:id="@+id/coordinates_copy_longitude_text_view"
+        android:id="@+id/coordinatesCopyLongitudeTextView"
         style="@style/BottomSheetListItem"
         android:text="@string/settings_copy_coordinates_longitude"/>
 
