@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 def keystorePropertiesFile = rootProject.file("upload_keystore.properties")
 def keystoreProperties = new Properties()
@@ -36,14 +37,22 @@ android {
 }
 
 dependencies {
+    def androidArchitectureComponentsVersion = "1.0.0-alpha9"
+    def androidSupportLibraryVersion = "26.0.2"
+    def googlePlayServicesVersion = "11.2.0"
+
+    kapt "android.arch.lifecycle:compiler:$androidArchitectureComponentsVersion"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.0.2'
-    implementation 'com.android.support:design:26.0.2'
-    implementation 'com.android.support:support-v4:26.0.2'
+    implementation "android.arch.lifecycle:runtime:$androidArchitectureComponentsVersion"
+    implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVersion"
+    implementation "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
+    implementation "com.android.support:design:$androidSupportLibraryVersion"
+    implementation "com.android.support:support-v4:$androidSupportLibraryVersion"
     implementation 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
     implementation 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.2'
-    implementation 'com.google.android.gms:play-services-location:11.2.0'
-    implementation 'com.google.firebase:firebase-crash:11.2.0'
+    implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
+    implementation "com.google.firebase:firebase-crash:$googlePlayServicesVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     testImplementation('com.squareup.assertj:assertj-android:1.1.1') {
