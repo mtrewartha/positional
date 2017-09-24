@@ -51,14 +51,14 @@ public class CompassFragment extends LocationAwareFragment {
     private float[] magnetometerReading;
     private Sensor magnetometerSensor;
     private Mode mode;
-    private float[] mR = new float[9];
-    private float[] orientation = new float[3];
+    private final float[] mR = new float[9];
+    private final float[] orientation = new float[3];
     private int screenOrientation;
     private SensorManager sensorManager;
     private SharedPreferences sharedPreferences;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         accelerometerReading = new float[3];
         magnetometerReading = new float[3];

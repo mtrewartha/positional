@@ -56,10 +56,6 @@
         <item name="android:textColor">@color/compassDegrees</item>
     </style>
 
-    <style name="CompassPin">
-        <item name="android:tint">@color/compassPin</item>
-    </style>
-
     <!-- Coordinates -->
 
     <style name="Coordinates">

@@ -15,12 +15,7 @@
     <color name="colorPrimary">@color/gray1</color>
     <color name="colorPrimaryDark">@color/black</color>
 
-    <!-- Generic UI Components -->
-    <color name="backgroundActivity">@color/white</color>
-    <color name="backgroundFragment">@color/white</color>
-
     <!-- Bottom Sheets -->
-    <color name="bottomSheetBackground">@color/white</color>
     <color name="bottomSheetListItem">#DE000000</color>
     <color name="bottomSheetTitle">#8A000000</color>
 
@@ -29,7 +24,6 @@
     <color name="compassAttributeValueColor">@color/gray1</color>
     <color name="compassBackground">@color/gray1</color>
     <color name="compassDegrees">@color/gray1</color>
-    <color name="compassPin">@color/gray1</color>
 
     <!-- Navigation Bar -->
     <color name="navigationBarBackground">@color/white</color>
