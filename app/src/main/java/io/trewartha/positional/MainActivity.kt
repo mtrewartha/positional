@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.MenuItem
-import io.trewartha.positional.common.LocationAwareFragment.REQUEST_CODE_GOOGLE_PLAY_SERVICES
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
@@ -33,16 +32,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_GOOGLE_PLAY_SERVICES) {
-            fragmentPagerAdapter.notifyDataSetChanged()
-        }
+        fragmentPagerAdapter.notifyDataSetChanged()
     }
 
     private inner class NavigationItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
-                R.id.main_bottom_navigation_position_menu_item -> viewPager.currentItem = 0
-                R.id.main_bottom_navigation_compass_menu_item -> viewPager.currentItem = 1
+                R.id.positionNavMenuItem -> viewPager.currentItem = 0
+                R.id.compassNavMenuItem -> viewPager.currentItem = 1
             }
             return true
         }
@@ -54,16 +51,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPageSelected(position: Int) {
-            val menu = bottomNavigationView.menu
-            val positionMenuItem = menu.getItem(0)
-            val compassMenuItem = menu.getItem(1)
-
-            if (position == 0) {
-                positionMenuItem.isChecked = true
-                compassMenuItem.isChecked = false
-            } else {
-                positionMenuItem.isChecked = false
-                compassMenuItem.isChecked = true
+            for (i in 0 until bottomNavigationView.menu.size()) {
+                val checked = i == position
+                bottomNavigationView.menu.getItem(i).isChecked = checked
             }
         }
 

@@ -74,17 +74,18 @@
 
     <!-- Settings -->
     <string name="settings_compass_mode">compassMode</string>
-    <string name="settings_filename">Positional</string>
-    <string name="settings_elevation_unit_default">feet</string>
-    <string name="settings_metric_units_key">metricUnits</string>
     <string name="settings_coordinates_format_key">coordsFormat</string>
-    <string name="settings_screen_lock_default">true</string>
-    <string name="settings_screen_lock_key">screenLock</string>
-    <string name="settings_screen_lock_content_description">lock screen</string>
     <string name="settings_copy_coordinates_both">Latitude and longitude</string>
     <string name="settings_copy_coordinates_content_description">copy coordinates</string>
     <string name="settings_copy_coordinates_latitude">Latitude only</string>
     <string name="settings_copy_coordinates_longitude">Longitude only</string>
     <string name="settings_copy_coordinates_title">Which coordinates would you like to copy?</string>
+    <string name="settings_elevation_unit_default">feet</string>
+    <string name="settings_filename">Positional</string>
+    <string name="settings_metric_units_key">metricUnits</string>
+    <string name="settings_screen_lock_default">true</string>
+    <string name="settings_screen_lock_key">screenLock</string>
+    <string name="settings_screen_lock_content_description">lock screen</string>
+    <string name="settings_share_content_description">share coordinates</string>
 
 </resources>

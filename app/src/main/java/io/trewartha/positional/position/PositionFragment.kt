@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.CompoundButton
 import android.widget.Toast
+import com.google.android.gms.location.LocationRequest
 import io.trewartha.positional.CoordinatesFormat
 import io.trewartha.positional.Log
 import io.trewartha.positional.R
@@ -23,7 +24,10 @@ import java.util.*
 class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChangeListener {
 
     companion object {
-        private val TAG = "Position"
+        private val TAG = "PositionFragment"
+        private val LOCATION_UPDATE_INTERVAL = 5000L // ms
+        private val LOCATION_UPDATE_MAX_WAIT_TIME = 10000L // ms
+        private val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
     private var coordinatesFragments: MutableList<CoordinatesFragment> = LinkedList()
@@ -94,6 +98,18 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
             }
             updateLocationViews(location)
         }
+    }
+
+    override fun getLocationUpdateInterval(): Long {
+        return LOCATION_UPDATE_INTERVAL
+    }
+
+    override fun getLocationUpdateMaxWaitTime(): Long {
+        return LOCATION_UPDATE_MAX_WAIT_TIME
+    }
+
+    override fun getLocationUpdatePriority(): Int {
+        return LOCATION_UPDATE_PRIORITY
     }
 
     override fun onCheckedChanged(compoundButton: CompoundButton, checked: Boolean) {

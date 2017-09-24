@@ -33,7 +33,8 @@ public class CompassFragment extends LocationAwareFragment {
     }
 
     private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
-    private static final long LOCATION_UPDATE_INTERVAL = 30 * 60 * 1000;// 30 mins in ms
+    private static final long LOCATION_UPDATE_INTERVAL = 30 * 60 * 1000; // 30 mins in ms
+    private static final long LOCATION_UPDATE_MAX_WAIT_TIME = 10000; // ms
 
     private TextView accelerometerAccuracyTextView;
     private CompassView compassBackgroundView;
@@ -70,9 +71,6 @@ public class CompassFragment extends LocationAwareFragment {
         screenOrientation = display.getRotation();
 
         sharedPreferences = context.getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
-
-        setLocationUpdateInterval(LOCATION_UPDATE_INTERVAL);
-        setLocationUpdatePriority(LocationRequest.PRIORITY_LOW_POWER);
     }
 
     @Nullable
@@ -156,6 +154,21 @@ public class CompassFragment extends LocationAwareFragment {
             declinationText = String.valueOf(declination);
         }
         declinationTextView.setText(getString(R.string.compass_declination, declinationText));
+    }
+
+    @Override
+    public long getLocationUpdateInterval() {
+        return LOCATION_UPDATE_INTERVAL;
+    }
+
+    @Override
+    public long getLocationUpdateMaxWaitTime() {
+        return LOCATION_UPDATE_MAX_WAIT_TIME;
+    }
+
+    @Override
+    public int getLocationUpdatePriority() {
+        return LocationRequest.PRIORITY_LOW_POWER;
     }
 
     private float getDeclination(Location location) {
