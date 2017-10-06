@@ -2,12 +2,12 @@ package io.trewartha.positional.common
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
 import android.support.v4.content.PermissionChecker.checkSelfPermission
 import android.support.v7.app.AlertDialog
@@ -17,7 +17,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.position.LocationLiveData
 import io.trewartha.positional.position.LocationViewModel
 
-abstract class LocationAwareFragment : LifecycleFragment(), LocationListener {
+abstract class LocationAwareFragment : Fragment(), LocationListener {
 
     companion object {
         private const val REQUEST_CODE_LOCATION_PERMISSIONS = 1
@@ -36,7 +36,6 @@ abstract class LocationAwareFragment : LifecycleFragment(), LocationListener {
         locationLiveData = ViewModelProviders.of(this)
                 .get(LocationViewModel::class.java)
                 .getLocation()
-        locationLiveData.activity = activity
         locationLiveData.updatePriority = getLocationUpdatePriority()
         locationLiveData.updateInterval = getLocationUpdateInterval()
         locationLiveData.updateMaxWaitTime = getLocationUpdateMaxWaitTime()
