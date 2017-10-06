@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -58,6 +59,7 @@ dependencies {
     implementation 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.4'
     implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-crash:$googlePlayServicesVersion"
+    implementation "com.google.firebase:firebase-perf:$googlePlayServicesVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     testImplementation('com.squareup.assertj:assertj-android:1.1.1') {
