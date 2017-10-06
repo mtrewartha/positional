@@ -44,7 +44,7 @@ repositories {
 dependencies {
     def androidArchitectureComponentsVersion = "1.0.0-alpha9-1"
     def androidSupportLibraryVersion = "26.1.0"
-    def googlePlayServicesVersion = "11.4.0"
+    def googlePlayServicesVersion = "11.4.2"
 
     kapt "android.arch.lifecycle:compiler:$androidArchitectureComponentsVersion"
 
