@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:mapbox_cameraTargetLat="39.7392"
+        app:mapbox_cameraTargetLng="-104.9903"
+        app:mapbox_cameraZoom="11"
+        app:mapbox_myLocation="true"
+        app:mapbox_styleUrl="mapbox://styles/mapbox/outdoors-v10"
+        app:mapbox_uiAttributionTintColor="@color/map_attribution_tint"
+        app:mapbox_uiCompass="true"
+        app:mapbox_uiDoubleTapGestures="true"
+        app:mapbox_uiRotateGestures="true"
+        app:mapbox_uiScrollGestures="true"
+        app:mapbox_uiTiltGestures="true"
+        app:mapbox_uiZoomGestures="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/myLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/my_location_content_description"
+        android:src="@drawable/ic_my_location_black_24dp"
+        android:tint="@color/blue"
+        app:backgroundTint="@color/white"
+        app:fabSize="normal"
+        app:layout_anchor="@id/mapView"
+        app:layout_anchorGravity="bottom|end|right"
+        app:useCompatPadding="true"/>
+
+</android.support.design.widget.CoordinatorLayout>

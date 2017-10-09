@@ -38,8 +38,9 @@ class MainActivity : AppCompatActivity() {
     private inner class NavigationItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
-                R.id.positionNavMenuItem -> viewPager.currentItem = 0
-                R.id.compassNavMenuItem -> viewPager.currentItem = 1
+                R.id.mapNavMenuItem -> viewPager.currentItem = 0
+                R.id.positionNavMenuItem -> viewPager.currentItem = 1
+                R.id.compassNavMenuItem -> viewPager.currentItem = 2
             }
             return true
         }

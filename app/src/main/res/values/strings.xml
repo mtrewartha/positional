@@ -16,7 +16,13 @@
 
     <!-- Bottom Navigation -->
     <string name="compass">Compass</string>
+    <string name="map">Map</string>
     <string name="position">Position</string>
+
+    <!-- Map -->
+    <string name="mapbox_key">pk.eyJ1IjoibXRyZXdhcnRoYSIsImEiOiJjajhrajVoY2wwZTZ6MnFxaWxtM2N6Yzl6In0.2_egPCd-hJQbUdUx3FUV7w</string>
+    <string name="my_location_content_description">My Location</string>
+    <string name="my_location_failure">Hold tight, still trying to get your location…</string>
 
     <!-- Position -->
     <string name="accuracy">Accuracy</string>

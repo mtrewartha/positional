@@ -21,7 +21,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "io.trewartha.positional"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 14
         versionName "2.7.1"
@@ -60,13 +60,10 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-crash:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-perf:$googlePlayServicesVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
-    testImplementation('com.squareup.assertj:assertj-android:1.1.1') {
-        exclude group: 'com.android.support', module: 'support-annotations'
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.4@aar') {
+        transitive=true
     }
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.8.47'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'

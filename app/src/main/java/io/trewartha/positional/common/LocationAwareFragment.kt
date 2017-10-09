@@ -24,6 +24,8 @@ abstract class LocationAwareFragment : Fragment(), LocationListener {
         private const val TAG = "LocationAwareFragment"
     }
 
+    protected var lastLocation: Location? = null
+
     private lateinit var locationLiveData: LocationLiveData
 
     abstract override fun onLocationChanged(location: Location?)
@@ -82,6 +84,7 @@ abstract class LocationAwareFragment : Fragment(), LocationListener {
 
     private fun observeLocationChanges() {
         locationLiveData.observe(this, Observer<Location> {
+            lastLocation = it
             onLocationChanged(it)
         })
     }

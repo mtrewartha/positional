@@ -92,7 +92,6 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         if (location == null) {
             progressBar.visibility = View.VISIBLE
         } else {
-            logLocation(location)
             if (progressBar.visibility == View.VISIBLE) {
                 progressBar.visibility = View.INVISIBLE
             }
@@ -134,16 +133,6 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         } else {
             activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
-    }
-
-    private fun logLocation(location: Location) {
-        Log.debug(TAG, "Location received:")
-        Log.debug(TAG, "       Latitude: " + location.latitude)
-        Log.debug(TAG, "      Longitude: " + location.longitude)
-        Log.debug(TAG, "       Accuracy: " + if (location.hasAccuracy()) location.accuracy.toString() + " m" else "none")
-        Log.debug(TAG, "        Bearing: " + if (location.hasBearing()) location.bearing.toString() + "°" else "none")
-        Log.debug(TAG, "      Elevation: " + if (location.hasAltitude()) location.altitude.toString() + " m/s" else "none")
-        Log.debug(TAG, "          Speed: " + if (location.hasSpeed()) location.speed.toString() + " m/s" else "none")
     }
 
     private fun onCopyClicked() {

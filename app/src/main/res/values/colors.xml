@@ -25,6 +25,9 @@
     <color name="compassBackground">@color/gray1</color>
     <color name="compassDegrees">@color/gray1</color>
 
+    <!-- Map -->
+    <color name="map_attribution_tint">#40000000</color>
+
     <!-- Navigation Bar -->
     <color name="navigationBarBackground">@color/white</color>
     <color name="navigationBarIconTint">@color/gray1</color>
