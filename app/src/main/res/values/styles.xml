@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -6,6 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.Main" parent="AppTheme">
+    </style>
+
+    <style name="AppTheme.Profile" parent="AppTheme">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementReturnTransition">@android:transition/move</item>
     </style>
 
     <!-- Bottom Sheets -->
@@ -14,10 +28,8 @@
         <item name="android:gravity">center_vertical|left|start</item>
         <item name="android:layout_height">@dimen/bottom_sheet_title_height</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingLeft">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingRight">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingEnd">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingStart">@dimen/bottom_sheet_padding_horizontal</item>
         <item name="android:textColor">@color/bottomSheetTitle</item>
         <item name="android:textSize">@dimen/bottom_sheet_title_text_size</item>
     </style>
@@ -27,10 +39,8 @@
         <item name="android:gravity">center_vertical|left|start</item>
         <item name="android:layout_height">@dimen/bottom_sheet_list_item_height</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:paddingEnd" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingLeft">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingRight">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingStart" tools:targetApi="jelly_bean_mr1">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingEnd">@dimen/bottom_sheet_padding_horizontal</item>
+        <item name="android:paddingStart">@dimen/bottom_sheet_padding_horizontal</item>
         <item name="android:textColor">@color/bottomSheetListItem</item>
         <item name="android:textSize">@dimen/bottom_sheet_list_item_text_size</item>
     </style>
@@ -88,10 +98,10 @@
     <style name="PositionStatIcon">
         <item name="android:layout_height">@dimen/stat_image_size</item>
         <item name="android:layout_width">@dimen/stat_image_size</item>
-        <item name="android:layout_marginEnd" tools:ignore="NewApi">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
         <item name="android:layout_marginRight">20dp</item>
         <item name="android:tint">@color/positionStatIconTint</item>
-        <item name="android:tintMode" tools:ignore="NewApi">src_in</item>
+        <item name="android:tintMode">src_in</item>
     </style>
 
     <style name="PositionStatIconLarge" parent="PositionStatIcon">
@@ -132,11 +142,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">.2</item>
         <item name="android:minHeight">64dp</item>
-        <item name="android:paddingEnd" tools:ignore="NewApi">@dimen/activity_horizontal_margin
-        </item>
-        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingStart" tools:ignore="NewApi">@dimen/activity_horizontal_margin
+        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingStart">@dimen/activity_horizontal_margin
         </item>
     </style>
 
@@ -145,10 +152,8 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:paddingEnd" tools:ignore="NewApi">20dp</item>
-        <item name="android:paddingLeft">20dp</item>
-        <item name="android:paddingRight">20dp</item>
-        <item name="android:paddingStart" tools:ignore="NewApi">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingStart">20dp</item>
     </style>
 
     <style name="PositionStatRowLarge" parent="PositionStatRow">
@@ -178,8 +183,7 @@
     <style name="PositionStatValue">
         <item name="android:gravity">end|right</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd" tools:ignore="NewApi">6dp</item>
-        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginEnd">6dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textColor">@color/positionStatTextColor</item>

@@ -21,7 +21,8 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "io.trewartha.positional"
-        minSdkVersion 15
+        minSdkVersion 21
+        resConfigs "auto"
         targetSdkVersion 26
         versionCode 14
         versionName "2.7.1"
@@ -45,9 +46,11 @@ repositories {
 dependencies {
     def androidArchitectureComponentsVersion = "1.0.0-alpha9-1"
     def androidSupportLibraryVersion = "26.1.0"
+    def glideVersion = "4.2.0"
     def googlePlayServicesVersion = "11.4.2"
 
     kapt "android.arch.lifecycle:compiler:$androidArchitectureComponentsVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "android.arch.lifecycle:runtime:$androidArchitectureComponentsVersion"
@@ -55,13 +58,18 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
     implementation "com.android.support:design:$androidSupportLibraryVersion"
     implementation "com.android.support:support-v4:$androidSupportLibraryVersion"
-    implementation 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
-    implementation 'com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.4'
+    implementation "com.firebaseui:firebase-ui-auth:3.0.0"
+    implementation "com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.4"
+    implementation "com.google.android.gms:play-services-auth:$googlePlayServicesVersion"
     implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
+    implementation "com.google.firebase:firebase-auth:$googlePlayServicesVersion"
+    implementation "com.google.firebase:firebase-core:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-crash:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-perf:$googlePlayServicesVersion"
     implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.4@aar') {
-        transitive=true
+        transitive = true
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }

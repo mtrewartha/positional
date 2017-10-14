@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <ImageView
+        android:id="@+id/mountainImageView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="@null"
+        android:elevation="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_terrain_black_24dp"/>
+
+    <TextView
+        android:id="@+id/welcomeTitleTextView"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mountainImageView"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/sign_in_title"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/welcomeMessageTextView"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcomeTitleTextView"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="36dp"
+        android:gravity="center"
+        android:text="@string/sign_in_message"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleSignInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcomeMessageTextView"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        android:id="@+id/whyTextView"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center"
+        android:text="@string/sign_in_why"
+        android:textColor="@color/gray3"
+        android:textSize="12sp"/>
+
+</RelativeLayout>

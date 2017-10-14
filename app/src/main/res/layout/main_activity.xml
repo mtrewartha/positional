@@ -30,4 +30,17 @@
         android:elevation="0dp"
         tools:targetApi="lollipop"/>
 
+    <ImageView
+        android:id="@+id/userPhotoImageView"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:contentDescription="@string/user_thumbnail_content_description"
+        android:transitionName="@string/transition_user_photo"
+        tools:targetApi="lollipop"/>
+
 </RelativeLayout>
