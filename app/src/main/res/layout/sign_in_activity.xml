@@ -39,8 +39,7 @@
         android:layout_marginBottom="36dp"
         android:gravity="center"
         android:text="@string/sign_in_message"
-        android:textSize="14sp"
-        android:textStyle="bold"/>
+        android:textSize="14sp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"

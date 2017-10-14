@@ -92,9 +92,10 @@
     <string name="sign_in_why">Why do I need an account?</string>
     <string name="sign_in_why_title">Why do I need an account?</string>
     <string name="sign_in_why_message">Positional uses your account to store your personal preferences and sync them across all devices that have Positional installed.</string>
-    <string name="sign_out">Sign Out</string>
+    <string name="sign_out">Sign out</string>
+    <string name="signing_out">Signing out…</string>
     <string name="sign_out_failed">Hmm… that\'s odd, signing out failed for some reason. Please try again.</string>
-    <string name="user_photo_content_description">Profile Photo</string>
+    <string name="user_photo_content_description">Profile photo</string>
     <string name="user_thumbnail_content_description">Profile</string>
 
     <!-- Transition Names -->

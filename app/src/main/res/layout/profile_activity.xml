@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/profileLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profileLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:text="John Doe"/>
 
@@ -49,7 +49,7 @@
         android:id="@+id/emailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         tools:text="email@example.com"/>
 
     <Button

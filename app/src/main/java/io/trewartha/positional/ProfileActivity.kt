@@ -50,6 +50,7 @@ class ProfileActivity : FragmentActivity() {
 
     private fun onSignOutClick() {
         signOutButton.isEnabled = false
+        signOutButton.text = getString(R.string.signing_out)
         progressBar.visibility = View.VISIBLE
         AuthUI.getInstance()
                 .signOut(this)
@@ -60,6 +61,7 @@ class ProfileActivity : FragmentActivity() {
                     finish()
                 }
                 .addOnFailureListener {
+                    signOutButton.text = getString(R.string.sign_out)
                     signOutButton.isEnabled = true
                     Snackbar.make(profileLayout, R.string.sign_out_failed, Snackbar.LENGTH_LONG)
                 }
