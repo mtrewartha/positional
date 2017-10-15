@@ -26,9 +26,23 @@
         android:id="@+id/myLocationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="12dp"
         android:contentDescription="@string/my_location_content_description"
         android:src="@drawable/ic_my_location_black_24dp"
         android:tint="@color/blue"
+        app:backgroundTint="@color/white"
+        app:fabSize="normal"
+        app:layout_anchor="@id/recordTrackButton"
+        app:layout_anchorGravity="top|end|right"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/recordTrackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/my_location_content_description"
+        android:src="@drawable/ic_fiber_manual_record_black_24dp"
+        android:tint="@color/map_record_button"
         app:backgroundTint="@color/white"
         app:fabSize="normal"
         app:layout_anchor="@id/mapView"

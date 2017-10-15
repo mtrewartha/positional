@@ -1,10 +1,14 @@
 package io.trewartha.positional.map
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.res.ColorStateList
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +24,9 @@ import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_AP
 import io.trewartha.positional.Log
 import io.trewartha.positional.R
 import io.trewartha.positional.common.LocationAwareFragment
+import io.trewartha.positional.map.tracking.Track
+import io.trewartha.positional.map.tracking.TrackPoint
+import io.trewartha.positional.map.tracking.TrackingService
 import kotlinx.android.synthetic.main.map_fragment.*
 
 class MapFragment : LocationAwareFragment() {
@@ -33,8 +40,12 @@ class MapFragment : LocationAwareFragment() {
         private const val TAG = "MapFragment"
     }
 
+    private val trackingListener = TrackingListener()
+
     private var followingUserLocation = true
     private var map: MapboxMap? = null
+    private var trackingService: TrackingService? = null
+    private var trackingServiceConnection: TrackingServiceConnection? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,6 +67,7 @@ class MapFragment : LocationAwareFragment() {
         }
 
         myLocationButton.setOnClickListener { onMyLocationClick() }
+        recordTrackButton.setOnClickListener { onRecordTrackClick() }
     }
 
     override fun onStart() {
@@ -91,6 +103,11 @@ class MapFragment : LocationAwareFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         mapView.onDestroy()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activity.unbindService(trackingServiceConnection)
     }
 
     override fun onLocationChanged(location: Location?) {
@@ -131,6 +148,35 @@ class MapFragment : LocationAwareFragment() {
         }
     }
 
+    private fun onRecordTrackClick() {
+        when {
+            trackingServiceConnection == null -> startTracking()
+            trackingServiceConnection?.connected == true -> stopTracking()
+            else -> Log.info(TAG, "Already connecting to the tracking service, hold tight...")
+        }
+
+        // TODO: Animate the record button to reflect its new status
+    }
+
+    private fun startTracking() {
+        trackingServiceConnection = TrackingServiceConnection()
+
+        val intent = Intent(context, TrackingService::class.java)
+        context.startService(intent)
+        context.bindService(intent, trackingServiceConnection, 0)
+
+        Log.info(TAG, "Tracking started")
+    }
+
+    private fun stopTracking() {
+        trackingService?.stopTracking()
+        trackingService?.stopSelf()
+        trackingService = null
+        trackingServiceConnection = null
+
+        Log.info(TAG, "Tracking stopped")
+    }
+
     private fun zoomToLocation(location: Location, zoomLevel: Double = MAP_ZOOM_LEVEL_DEFAULT) {
         val latLng = LatLng(location.latitude, location.longitude)
         val cameraPosition = CameraPosition.Builder().target(latLng).zoom(zoomLevel).build()
@@ -152,6 +198,60 @@ class MapFragment : LocationAwareFragment() {
                     )
                 }
                 Log.info(TAG, "Stopped following the user's location")
+            }
+        }
+    }
+
+    private inner class TrackingListener : io.trewartha.positional.map.tracking.TrackingListener {
+
+        override fun onTrackingUnavailable() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onTrackingStarted(track: Track) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onTrackPointAdded(track: Track, point: TrackPoint) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onTrackingTemporarilyUnavailable() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onTrackingResumed() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onTrackingStopped(track: Track) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onLocationDisabled() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+    }
+
+    private inner class TrackingServiceConnection : ServiceConnection {
+
+        var connected = false
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            Log.info(TAG, "Connected to tracking service")
+            connected = true
+            val trackingService = (service as TrackingService.TrackingBinder).service
+            this@MapFragment.trackingService = trackingService
+
+            trackingService.startTracking()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            Log.info(TAG, "Disconnected from tracking service")
+            connected = false
+            trackingService?.apply {
+                removeListener(this@MapFragment.trackingListener)
+                stopTracking()
             }
         }
     }

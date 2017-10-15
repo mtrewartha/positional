@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.main_activity.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
+        const val ACTION_SHOW_TRACK = "showTrack"
+
         private const val REQUEST_CODE_SIGN_IN = 1
 
         init {

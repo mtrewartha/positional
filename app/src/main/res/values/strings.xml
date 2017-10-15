@@ -69,6 +69,10 @@
     <string name="compass_sensor_missing_message">Hmm… Your device is missing an accelerometer or magnetometer, but the compass needs both of them. The compass will be disabled, but the rest of the app will function normally.</string>
     <string name="compass_sensor_missing_title">Missing Required Sensor</string>
 
+    <!-- Notifications -->
+    <string name="notification_channel_id_tracking">Tracking</string>
+    <string name="notification_channel_name_tracking">Tracking</string>
+
     <!-- Settings -->
     <string name="settings_compass_mode">compassMode</string>
     <string name="settings_coordinates_format_key">coordsFormat</string>
@@ -97,6 +101,14 @@
     <string name="sign_out_failed">Hmm… that\'s odd, signing out failed for some reason. Please try again.</string>
     <string name="user_photo_content_description">Profile photo</string>
     <string name="user_thumbnail_content_description">Profile</string>
+
+    <!-- Tracking Notification -->
+    <string name="tracking_started_title">Currently Tracking</string>
+    <string name="tracking_stopped_title">Ready to Start Tracking</string>
+    <string name="tracking_notification_status_idle">Ready to Track</string>
+    <string name="tracking_notification_status_waiting">Finding your location…</string>
+    <string name="tracking_notification_status_tracking">@string/tracking_started_title</string>
+    <string name="tracking_notification_status_no_permission">Uh oh… You didn\'t give location permission to Positional.</string>
 
     <!-- Transition Names -->
     <string name="transition_user_photo">userPhoto</string>

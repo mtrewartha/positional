@@ -8,6 +8,7 @@
     <color name="gray2">#666666</color>
     <color name="gray3">#AAAAAA</color>
     <color name="gray4">#EEEEEE</color>
+    <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
 
     <!-- Material Theme Colors -->
@@ -27,6 +28,7 @@
 
     <!-- Map -->
     <color name="map_attribution_tint">#40000000</color>
+    <color name="map_record_button">@color/red</color>
 
     <!-- Navigation Bar -->
     <color name="navigationBarBackground">@color/white</color>

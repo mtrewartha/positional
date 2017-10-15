@@ -2,6 +2,7 @@ package io.trewartha.positional
 
 import com.google.firebase.crash.FirebaseCrash
 import com.google.firebase.perf.FirebasePerformance
+import com.jakewharton.threetenabp.AndroidThreeTen
 
 class Application : android.app.Application() {
 
@@ -16,5 +17,7 @@ class Application : android.app.Application() {
         Log.debug(TAG, "Firebase ${if (enableFirebase) "enabled" else "disabled"}")
         FirebaseCrash.setCrashCollectionEnabled(enableFirebase)
         FirebasePerformance.getInstance().isPerformanceCollectionEnabled = enableFirebase
+
+        AndroidThreeTen.init(this)
     }
 }
