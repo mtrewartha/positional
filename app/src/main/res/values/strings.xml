@@ -23,6 +23,7 @@
     <string name="mapbox_key">pk.eyJ1IjoibXRyZXdhcnRoYSIsImEiOiJjajhrajVoY2wwZTZ6MnFxaWxtM2N6Yzl6In0.2_egPCd-hJQbUdUx3FUV7w</string>
     <string name="my_location_content_description">My Location</string>
     <string name="my_location_failure">Hold tight, still trying to get your location…</string>
+    <string name="tracking_service_connecting">The tracker is still starting, try again in a second.</string>
 
     <!-- Position -->
     <string name="accuracy">Accuracy</string>
@@ -103,12 +104,10 @@
     <string name="user_thumbnail_content_description">Profile</string>
 
     <!-- Tracking Notification -->
-    <string name="tracking_started_title">Currently Tracking</string>
-    <string name="tracking_stopped_title">Ready to Start Tracking</string>
-    <string name="tracking_notification_status_idle">Ready to Track</string>
-    <string name="tracking_notification_status_waiting">Finding your location…</string>
-    <string name="tracking_notification_status_tracking">@string/tracking_started_title</string>
-    <string name="tracking_notification_status_no_permission">Uh oh… You didn\'t give location permission to Positional.</string>
+    <string name="tracking_notification_text_waiting">Trying to find your location…</string>
+    <string name="tracking_notification_text_in_progress">%1$02d:%2$02d:%3$02d</string>
+    <string name="tracking_notification_title_waiting">@string/tracking_notification_title_in_progress</string>
+    <string name="tracking_notification_title_in_progress">Tracking in progress</string>
 
     <!-- Transition Names -->
     <string name="transition_user_photo">userPhoto</string>

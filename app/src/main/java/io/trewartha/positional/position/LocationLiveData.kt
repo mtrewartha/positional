@@ -37,12 +37,12 @@ class LocationLiveData(private val context: Context) : LiveData<Location>() {
             firstLocationUpdateTrace?.start()
         }
 
-        Log.info(TAG, "Requesting location updates...")
         FusedLocationProviderClient(context).removeLocationUpdates(locationCallback)
         val locationRequest = LocationRequest.create()
                 .setPriority(updatePriority)
                 .setMaxWaitTime(updateMaxWaitTime)
                 .setInterval(updateInterval)
+        Log.info(TAG, "Requesting location updates: $locationRequest")
         try {
             locationClient.requestLocationUpdates(
                     locationRequest,

@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
-import android.widget.RemoteViews
 import com.google.android.gms.location.LocationRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -22,33 +21,34 @@ import io.trewartha.positional.Log
 import io.trewartha.positional.MainActivity
 import io.trewartha.positional.R
 import io.trewartha.positional.position.LocationLiveData
+import org.threeten.bp.Duration
+import org.threeten.bp.Instant
+import java.util.*
 
 class TrackingService : LifecycleService() {
 
     companion object {
-        private const val LOCATION_UPDATE_INTERVAL = 1000L
-        private const val LOCATION_UPDATE_MAX_WAIT_TIME = 10000L
+        private const val LOCATION_UPDATE_INTERVAL = 5000L
+        private const val LOCATION_UPDATE_MAX_WAIT_TIME = 5000L
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
         private const val NOTIFICATION_ID = 1
-        private const val NOTIFICATION_CHANNEL_ID = "tracking"
         private const val TAG = "TrackingService"
     }
 
-    private val listeners = mutableListOf<TrackingListener>()
+    private val listeners = mutableSetOf<TrackingListener>()
 
     private lateinit var locationLiveData: LocationLiveData
     private lateinit var mainActivityPendingIntent: PendingIntent
     private lateinit var notificationManager: NotificationManager
     private lateinit var notificationManagerCompat: NotificationManagerCompat
-    private lateinit var notificationView: RemoteViews
 
     private var lastLocation: Location? = null
+    private var timer: Timer? = null
     private var track: Track? = null
     private var user: FirebaseUser? = null
 
-    override fun onBind(intent: Intent?): IBinder {
+    override fun onBind(intent: Intent?): IBinder? {
         super.onBind(intent)
-        Log.info(TAG, "Bound to the tracking service")
         return TrackingBinder()
     }
 
@@ -71,15 +71,13 @@ class TrackingService : LifecycleService() {
         )
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManagerCompat = NotificationManagerCompat.from(this)
-        notificationView = RemoteViews(packageName, R.layout.tracking_notification)
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val trackingChannel = NotificationChannel(
-                    getString(R.string.notification_channel_id_tracking),
-                    getString(R.string.notification_channel_name_tracking),
-                    NotificationManager.IMPORTANCE_MAX
-            )
+            val channelId = getString(R.string.notification_channel_id_tracking)
+            val channelName = getString(R.string.notification_channel_name_tracking)
+            val trackingChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW)
+
+            notificationManager.deleteNotificationChannel(channelId)
             notificationManager.createNotificationChannel(trackingChannel)
         }
     }
@@ -91,6 +89,9 @@ class TrackingService : LifecycleService() {
 
     fun addListener(listener: TrackingListener) {
         listeners.add(listener)
+        if (isTracking()) {
+            listener.onTrackingResumed(track!!)
+        }
     }
 
     fun isTracking(): Boolean {
@@ -102,10 +103,29 @@ class TrackingService : LifecycleService() {
     }
 
     fun startTracking() {
-        updateNotificationWithWaitingStatus()
+        val channelId = getString(R.string.notification_channel_id_tracking)
+        val title = getString(R.string.tracking_notification_title_waiting)
+        val text = getString(R.string.tracking_notification_text_waiting)
+        val intent = Intent(this, MainActivity::class.java)
+        val notification = NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_terrain_black_24dp)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
+                .build()
+        startForeground(NOTIFICATION_ID, notification)
 
         if (track == null) {
-            track = Track()
+            track = Track(Instant.now())
+        }
+
+        val notificationUpdateTask = object : TimerTask() {
+            override fun run() {
+                updateNotification()
+            }
+        }
+        timer = Timer(true).apply {
+            scheduleAtFixedRate(notificationUpdateTask, 0, 1000L)
         }
 
         locationLiveData.apply {
@@ -119,11 +139,25 @@ class TrackingService : LifecycleService() {
     }
 
     fun stopTracking() {
+        timer?.cancel()
         locationLiveData.removeObservers(this)
-        track = null
-        notificationManagerCompat.cancel(NOTIFICATION_ID)
         listeners.forEach { it.onTrackingStopped(track!!) }
+        notificationManagerCompat.cancel(NOTIFICATION_ID)
+        track = null
+
+        stopForeground(true)
+
         Log.info(TAG, "Tracking stopped")
+    }
+
+    private fun getElapsedTimeString(start: Instant): String {
+        val durationSeconds = Duration.between(start, Instant.now()).seconds
+        val durationMinutes = durationSeconds / 60
+        val seconds = durationSeconds % 60
+        val minutes = (durationMinutes) % 60
+        val hours = durationMinutes / 60
+
+        return getString(R.string.tracking_notification_text_in_progress, hours, minutes, seconds)
     }
 
     private fun onLocationChanged(location: Location?) {
@@ -138,7 +172,6 @@ class TrackingService : LifecycleService() {
             val point = TrackPoint(location)
             track!!.addPoint(point)
 
-            updateNotificationWithPoint(track!!, point)
             listeners.forEach { it.onTrackPointAdded(track!!, point) }
 
             Log.info(TAG, "Added a new track point at (${point.latitude}, ${point.longitude})")
@@ -146,51 +179,15 @@ class TrackingService : LifecycleService() {
         lastLocation = location
     }
 
-    private fun updateNotificationWithWaitingStatus() {
-        val status = getString(R.string.tracking_notification_status_waiting)
-        val coordinates = ""
-        val speed = ""
-        val altitude = ""
-        val distance = ""
-        val duration = ""
-
-        notificationView.setTextViewText(R.id.trackingStatusTextView, status)
-        notificationView.setTextViewText(R.id.trackingCoordinatesTextView, coordinates)
-        notificationView.setTextViewText(R.id.trackingSpeedTextView, speed)
-        notificationView.setTextViewText(R.id.trackingAltitudeTextView, altitude)
-        notificationView.setTextViewText(R.id.trackingDistanceTextView, distance)
-        notificationView.setTextViewText(R.id.trackingDurationTextView, duration)
-        updateNotification(notificationView)
-    }
-
-    private fun updateNotificationWithPoint(track: Track, point: TrackPoint) {
-        val status = getString(R.string.tracking_notification_status_tracking)
-        val coordinates = "TODO: ${point.latitude}, ${point.longitude}"
-        val speed = "TODO: ${point.speed}"
-        val altitude = "TODO: ${point.altitude}"
-        val distance = "TODO: ${track.distance}"
-        val duration = "TODO"
-
-        notificationView.setTextViewText(R.id.trackingStatusTextView, status)
-        notificationView.setTextViewText(R.id.trackingCoordinatesTextView, coordinates)
-        notificationView.setTextViewText(R.id.trackingSpeedTextView, speed)
-        notificationView.setTextViewText(R.id.trackingAltitudeTextView, altitude)
-        notificationView.setTextViewText(R.id.trackingDistanceTextView, distance)
-        notificationView.setTextViewText(R.id.trackingDurationTextView, duration)
-        updateNotification(notificationView)
-    }
-
-    private fun updateNotification(notificationView: RemoteViews) {
-        val notification = NotificationCompat.Builder(this, getString(R.string.notification_channel_id_tracking))
+    private fun updateNotification() {
+        val channelId = getString(R.string.notification_channel_id_tracking)
+        val title = getString(R.string.tracking_notification_title_in_progress)
+        val text = getElapsedTimeString(track!!.start)
+        val notification = NotificationCompat.Builder(this@TrackingService, channelId)
                 .setSmallIcon(R.drawable.ic_terrain_black_24dp)
-                .setContentTitle("Hi!")
-                .setContentText("Some text")
-//                .setContent(notificationView)
-                .setContentIntent(mainActivityPendingIntent)
-//                .setStyle(NotificationCompat.BigTextStyle().bigText("Title"))
-//                .setCustomBigContentView(notificationView)
+                .setContentTitle(title)
+                .setContentText(text)
                 .build()
-
         notificationManagerCompat.notify(NOTIFICATION_ID, notification)
     }
 

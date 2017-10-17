@@ -1,6 +1,8 @@
 package io.trewartha.positional.map.tracking
 
-class Track {
+import org.threeten.bp.Instant
+
+class Track(val start: Instant) {
 
     var distance: Float = 0.0f
         get() = segments.map { it.distance }.sum()
