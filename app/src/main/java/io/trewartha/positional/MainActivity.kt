@@ -1,6 +1,5 @@
 package io.trewartha.positional
 
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
@@ -55,19 +54,16 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_CODE_SIGN_IN -> if (resultCode != Activity.RESULT_OK) finish()
+            REQUEST_CODE_SIGN_IN -> loadUserPhoto()
             else -> fragmentPagerAdapter.notifyDataSetChanged()
         }
     }
 
     private fun loadUserPhoto() {
         val url = firebaseAuth.currentUser?.photoUrl
-        val unknownDrawable = TextDrawable(
-                this,
-                "?",
-                ContextCompat.getColor(this, R.color.gray3),
-                ContextCompat.getColor(this, R.color.white)
-        )
+        val textColor = ContextCompat.getColor(this, R.color.gray3)
+        val backgroundColor = ContextCompat.getColor(this, R.color.white)
+        val unknownDrawable = TextDrawable(this, "?", textColor, backgroundColor)
         GlideApp.with(this)
                 .load(url)
                 .placeholder(unknownDrawable)
