@@ -3,8 +3,8 @@ package io.trewartha.positional
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
-import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -38,12 +38,14 @@ class SignInActivity : Activity() {
             setResult(Activity.RESULT_OK)
             finish()
         } else {
-            val toastText = when (response?.errorCode) {
+            googleSignInButton.isEnabled = true
+            val errorText = when (response?.errorCode) {
                 ErrorCodes.NO_NETWORK -> R.string.sign_in_failed_no_network
+                ErrorCodes.UNKNOWN_ERROR -> R.string.sign_in_cancelled
                 null -> R.string.sign_in_cancelled
                 else -> R.string.sign_in_failed_unknown
             }
-            Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+            Snackbar.make(signInLayout, errorText, Snackbar.LENGTH_LONG).show()
         }
     }
 
