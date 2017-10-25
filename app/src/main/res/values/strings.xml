@@ -24,6 +24,13 @@
     <string name="my_location_content_description">My Location</string>
     <string name="my_location_failure">Hold tight, still trying to get your location…</string>
     <string name="tracking_service_connecting">The tracker is still starting, try again in a second.</string>
+    <string name="tracking_toolbar_stop_content_description">Stop Tracking</string>
+    <string name="tracking_toolbar_status">Tracking</string>
+    <string name="tracking_toolbar_duration_content_description">Duration</string>
+    <string name="tracking_toolbar_duration">%1$02d:%2$02d:%3$02d</string>
+    <string name="tracking_toolbar_distance_content_description">Duration</string>
+    <string name="tracking_toolbar_distance_mi">%.1f mi</string>
+    <string name="tracking_toolbar_distance_km">%.1f km</string>
 
     <!-- Position -->
     <string name="accuracy">Accuracy</string>
@@ -105,9 +112,10 @@
 
     <!-- Tracking Notification -->
     <string name="tracking_notification_text_waiting">Trying to find your location…</string>
-    <string name="tracking_notification_text_in_progress">%1$02d:%2$02d:%3$02d</string>
+    <string name="tracking_notification_text_in_progress_mi">%1$02d:%2$02d:%3$02d • %4$.1f mi</string>
+    <string name="tracking_notification_text_in_progress_km">%1$02d:%2$02d:%3$02d • %4$.1f km</string>
     <string name="tracking_notification_title_waiting">@string/tracking_notification_title_in_progress</string>
-    <string name="tracking_notification_title_in_progress">Tracking in progress</string>
+    <string name="tracking_notification_title_in_progress">Tracking</string>
 
     <!-- Transition Names -->
     <string name="transition_user_photo">userPhoto</string>

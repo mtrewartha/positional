@@ -62,6 +62,7 @@ dependencies {
     implementation "com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.4"
+    implementation "com.github.rubensousa:floatingtoolbar:1.5.1"
     implementation "com.google.android.gms:play-services-auth:$googlePlayServicesVersion"
     implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-auth:$googlePlayServicesVersion"

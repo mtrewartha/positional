@@ -1,14 +1,9 @@
 package io.trewartha.positional.map
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.res.ColorStateList
 import android.location.Location
-import android.os.Build
-import android.os.Bundle
-import android.os.IBinder
+import android.os.*
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -25,10 +20,15 @@ import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_AP
 import io.trewartha.positional.Log
 import io.trewartha.positional.R
 import io.trewartha.positional.common.LocationAwareFragment
+import io.trewartha.positional.common.distanceInKilometers
+import io.trewartha.positional.common.distanceInMiles
 import io.trewartha.positional.map.tracking.Track
 import io.trewartha.positional.map.tracking.TrackPoint
+import io.trewartha.positional.map.tracking.TrackingListener
 import io.trewartha.positional.map.tracking.TrackingService
 import kotlinx.android.synthetic.main.map_fragment.*
+import kotlinx.android.synthetic.main.track_toolbar.*
+import java.util.*
 
 class MapFragment : LocationAwareFragment() {
 
@@ -41,16 +41,21 @@ class MapFragment : LocationAwareFragment() {
         private const val TAG = "MapFragment"
     }
 
-    private val trackingListener = TrackingListener()
+    private val trackingListener = MapTrackingListener()
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
 
     private var followingUserLocation = true
     private var map: MapboxMap? = null
     private var trackingService: TrackingService? = null
     private var trackingServiceConnection: TrackingServiceConnection? = null
+    private var useMetricUnits = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Mapbox.getInstance(context, context.getString(R.string.mapbox_key))
+        attachToSharedPreferences()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +83,13 @@ class MapFragment : LocationAwareFragment() {
             zoomToLocation(lastLocation ?: return@gotMap)
         }
 
+        updateTrackDistance(null)
+        updateTrackDuration(0, 0, 0)
+        trackToolbar.attachFab(recordTrackButton)
+
         myLocationButton.setOnClickListener { onMyLocationClick() }
         recordTrackButton.setOnClickListener { onRecordTrackClick() }
+        stopTrackButton.setOnClickListener { onStopTrackClick() }
     }
 
     override fun onStart() {
@@ -115,6 +125,8 @@ class MapFragment : LocationAwareFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         mapView.onDestroy()
+        trackingService?.removeListener(trackingListener)
+        trackingListener.timer?.cancel()
     }
 
     override fun onDestroy() {
@@ -124,6 +136,11 @@ class MapFragment : LocationAwareFragment() {
         }
         trackingServiceConnection = null
         trackingService = null
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        detachFromSharedPreferences()
     }
 
     override fun onLocationChanged(location: Location?) {
@@ -146,6 +163,21 @@ class MapFragment : LocationAwareFragment() {
         return LOCATION_UPDATE_PRIORITY
     }
 
+    private fun attachToSharedPreferences() {
+        sharedPreferences = context.getSharedPreferences(
+                getString(R.string.settings_filename),
+                Context.MODE_PRIVATE
+        )
+        onSharedPreferenceChangeListener = OnSharedPreferenceChangeListener(context)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
+
+        useMetricUnits = sharedPreferences.getBoolean(getString(R.string.settings_metric_units_key), false)
+    }
+
+    private fun detachFromSharedPreferences() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
+    }
+
     private fun onMyLocationClick() {
         // Start following the user location again.
         followingUserLocation = true
@@ -166,7 +198,6 @@ class MapFragment : LocationAwareFragment() {
 
     private fun onRecordTrackClick() {
         when {
-            trackingService?.isTracking() == true -> stopTracking()
             trackingService?.isTracking() == false -> startTracking()
             else -> Snackbar.make(
                     coordinatorLayout,
@@ -176,12 +207,43 @@ class MapFragment : LocationAwareFragment() {
         }
     }
 
+    private fun onStopTrackClick() {
+        stopTracking()
+    }
+
     private fun startTracking() {
         trackingService?.startTracking()
+        if (!trackToolbar.isShowing) trackToolbar.show()
     }
 
     private fun stopTracking() {
         trackingService?.stopTracking()
+        if (trackToolbar.isShowing) trackToolbar.hide()
+    }
+
+    private fun updateTrackDistance(track: Track?) {
+        val distance = if (useMetricUnits)
+            distanceInKilometers(track?.distance ?: 0f)
+        else
+            distanceInMiles(track?.distance ?: 0f)
+
+        val format = if (useMetricUnits)
+            R.string.tracking_toolbar_distance_km
+        else
+            R.string.tracking_toolbar_distance_mi
+
+        distanceTextView.text = getString(format, distance)
+    }
+
+    private fun updateTrackDuration(hours: Int, minutes: Int, seconds: Int) {
+        if (isDetached) return
+
+        durationTextView?.text = getString(
+                R.string.tracking_toolbar_duration,
+                hours,
+                minutes,
+                seconds
+        )
     }
 
     private fun zoomToLocation(location: Location, zoomLevel: Double = MAP_ZOOM_LEVEL_DEFAULT) {
@@ -209,41 +271,80 @@ class MapFragment : LocationAwareFragment() {
         }
     }
 
-    private inner class TrackingListener : io.trewartha.positional.map.tracking.TrackingListener {
+    private inner class OnSharedPreferenceChangeListener(
+            context: Context
+    ) : SharedPreferences.OnSharedPreferenceChangeListener {
+
+        val keyMetricUnits: String = context.getString(R.string.settings_metric_units_key)
+
+        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+            when (key) {
+                keyMetricUnits -> {
+                    useMetricUnits = sharedPreferences.getBoolean(keyMetricUnits, false)
+                    updateTrackDistance(trackingListener.track ?: return)
+                }
+            }
+        }
+    }
+
+    private inner class MapTrackingListener : TrackingListener {
+
+        var track: Track? = null
+            private set
+        var timer: Timer? = null
+            private set
+
+        private var updateTrackTimerTask: UpdateTrackTimerTask? = null
 
         override fun onTrackingStarted(track: Track) {
             Log.info(TAG, "Tracking started")
-        }
-
-        override fun onTrackingResumed(track: Track) {
-            Log.info(TAG, "Tracking resumed")
+            this.track = track
+            updateTrackTimerTask = UpdateTrackTimerTask(track)
+            timer = Timer(false).apply { scheduleAtFixedRate(updateTrackTimerTask, 0, 1000L) }
+            updateTrackDistance(track)
         }
 
         override fun onTrackPointAdded(track: Track, point: TrackPoint) {
             Log.info(TAG, "Track point added at ${point.latitude}, ${point.longitude}")
+            updateTrackDistance(track)
         }
 
         override fun onTrackingStopped(track: Track) {
             Log.info(TAG, "Tracking stopped")
+            timer?.cancel()
+            if (trackToolbar.isShowing) {
+                trackToolbar.hide()
+            }
         }
     }
 
     private inner class TrackingServiceConnection : ServiceConnection {
 
-        var connected = false
-
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             Log.info(TAG, "Connected to tracking service")
-            connected = true
             trackingService = (service as TrackingService.TrackingBinder).service.apply {
                 addListener(this@MapFragment.trackingListener)
+                if (isTracking() && !trackToolbar.isShowing) {
+                    trackToolbar.show()
+                } else if (!isTracking() && trackToolbar.isShowing) {
+                    trackToolbar.hide()
+                }
             }
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
             Log.info(TAG, "Disconnected from tracking service")
-            connected = false
             trackingService = null
+        }
+    }
+
+    private inner class UpdateTrackTimerTask(val track: Track) : TimerTask() {
+
+        override fun run() {
+            Handler(Looper.getMainLooper()).post {
+                val duration = track.duration
+                updateTrackDuration(duration.hours, duration.minutes, duration.seconds)
+            }
         }
     }
 }

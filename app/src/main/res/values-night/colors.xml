@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Material Theme Colors -->
-    <color name="colorAccent">@color/blue</color>
+    <color name="colorAccent">@color/red</color>
     <color name="colorPrimary">@color/gray1</color>
     <color name="colorPrimaryDark">@color/black</color>
 

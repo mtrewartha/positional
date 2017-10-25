@@ -12,7 +12,7 @@
     <color name="white">#FFFFFF</color>
 
     <!-- Material Theme Colors -->
-    <color name="colorAccent">@color/blue</color>
+    <color name="colorAccent">@color/red</color>
     <color name="colorPrimary">@color/gray1</color>
     <color name="colorPrimaryDark">@color/black</color>
 
@@ -27,8 +27,8 @@
     <color name="compassDegrees">@color/gray1</color>
 
     <!-- Map -->
-    <color name="map_attribution_tint">#40000000</color>
-    <color name="map_record_button">@color/red</color>
+    <color name="mapAttributionTint">#40000000</color>
+    <color name="mapRecordIcon">@color/white</color>
 
     <!-- Navigation Bar -->
     <color name="navigationBarBackground">@color/white</color>

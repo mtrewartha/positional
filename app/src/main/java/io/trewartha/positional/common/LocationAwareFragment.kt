@@ -11,13 +11,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
 import android.support.v4.content.PermissionChecker.checkSelfPermission
 import android.support.v7.app.AlertDialog
-import com.google.android.gms.location.LocationListener
 import io.trewartha.positional.Log
 import io.trewartha.positional.R
 import io.trewartha.positional.position.LocationLiveData
 import io.trewartha.positional.position.LocationViewModel
 
-abstract class LocationAwareFragment : Fragment(), LocationListener {
+abstract class LocationAwareFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_LOCATION_PERMISSIONS = 1
@@ -28,7 +27,7 @@ abstract class LocationAwareFragment : Fragment(), LocationListener {
 
     private lateinit var locationLiveData: LocationLiveData
 
-    abstract override fun onLocationChanged(location: Location?)
+    abstract fun onLocationChanged(location: Location?)
     abstract fun getLocationUpdateInterval(): Long
     abstract fun getLocationUpdateMaxWaitTime(): Long
     abstract fun getLocationUpdatePriority(): Int
