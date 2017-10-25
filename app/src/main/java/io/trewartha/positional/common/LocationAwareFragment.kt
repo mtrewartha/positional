@@ -42,8 +42,8 @@ abstract class LocationAwareFragment : Fragment() {
         locationLiveData.updateMaxWaitTime = getLocationUpdateMaxWaitTime()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         if (haveLocationPermissions()) {
             observeLocationChanges()
         } else {
