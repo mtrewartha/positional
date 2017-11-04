@@ -44,16 +44,15 @@ repositories {
 }
 
 dependencies {
-    def androidArchitectureComponentsVersion = "1.0.0-alpha9-1"
+    def androidArchitectureComponentsVersion = "1.0.0-rc1"
     def androidSupportLibraryVersion = "26.1.0"
-    def glideVersion = "4.2.0"
+    def glideVersion = "4.3.0"
     def googlePlayServicesVersion = "11.4.2"
 
     kapt "android.arch.lifecycle:compiler:$androidArchitectureComponentsVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "android.arch.lifecycle:runtime:$androidArchitectureComponentsVersion"
     implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVersion"
     implementation "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
     implementation "com.android.support:design:$androidSupportLibraryVersion"
@@ -70,7 +69,7 @@ dependencies {
     implementation "com.google.firebase:firebase-crash:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-perf:$googlePlayServicesVersion"
     implementation "com.jakewharton.threetenabp:threetenabp:1.0.5"
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.4@aar') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.0-beta.3@aar') {
         transitive = true
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
