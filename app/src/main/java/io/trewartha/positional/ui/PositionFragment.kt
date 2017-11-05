@@ -13,9 +13,9 @@ import android.view.WindowManager
 import android.widget.CompoundButton
 import android.widget.Toast
 import com.google.android.gms.location.LocationRequest
-import io.trewartha.positional.location.CoordinatesFormat
 import io.trewartha.positional.Log
 import io.trewartha.positional.R
+import io.trewartha.positional.location.CoordinatesFormat
 import io.trewartha.positional.location.LocationFormatter
 import kotlinx.android.synthetic.main.position_fragment.*
 import java.util.*
