@@ -126,6 +126,7 @@ class MapFragment : LocationAwareFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        map = null
         mapView.onDestroy()
         trackingService?.removeListener(trackingListener)
         trackingListener.timer?.cancel()
