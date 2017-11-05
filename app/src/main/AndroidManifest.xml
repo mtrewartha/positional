@@ -22,7 +22,7 @@
         <!-- Activities -->
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.Main">
 
             <intent-filter>
@@ -50,16 +50,16 @@
         </activity>
 
         <activity
-            android:name=".ProfileActivity"
+            android:name=".ui.ProfileActivity"
             android:theme="@style/AppTheme.Profile"/>
 
         <activity
-            android:name=".SignInActivity"/>
+            android:name=".ui.SignInActivity"/>
 
         <!-- Services -->
 
         <service
-            android:name=".map.tracking.TrackingService"
+            android:name=".tracks.TrackingService"
             android:exported="false"/>
 
     </application>

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -21,7 +21,7 @@
         app:menu="@menu/main_bottom_navigation"
         tools:targetApi="lollipop"/>
 
-    <io.trewartha.positional.UndraggableViewPager
+    <io.trewartha.positional.ui.UndraggableViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -17,7 +17,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <io.trewartha.positional.compass.CompassView
+        <io.trewartha.positional.ui.CompassView
             android:id="@+id/compass_background_view"
             style="@style/CompassBackground"
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:src="@drawable/ic_compass_background"
             tools:ignore="ContentDescription"/>
 
-        <io.trewartha.positional.compass.CompassView
+        <io.trewartha.positional.ui.CompassView
             android:id="@+id/compass_needle_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

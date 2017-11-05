@@ -18,6 +18,7 @@
     <string name="compass">Compass</string>
     <string name="map">Map</string>
     <string name="position">Position</string>
+    <string name="tracks">Tracks</string>
 
     <!-- Map -->
     <string name="mapbox_key">pk.eyJ1IjoibXRyZXdhcnRoYSIsImEiOiJjajhrajVoY2wwZTZ6MnFxaWxtM2N6Yzl6In0.2_egPCd-hJQbUdUx3FUV7w</string>
