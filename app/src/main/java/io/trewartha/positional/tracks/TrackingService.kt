@@ -21,7 +21,6 @@ import io.trewartha.positional.location.DistanceUtils.distanceInKilometers
 import io.trewartha.positional.location.DistanceUtils.distanceInMiles
 import io.trewartha.positional.location.LocationLiveData
 import io.trewartha.positional.ui.MainActivity
-import org.threeten.bp.Instant
 import java.util.*
 
 class TrackingService : LifecycleService() {
@@ -110,7 +109,7 @@ class TrackingService : LifecycleService() {
         startForeground(NOTIFICATION_ID, notification)
 
         if (track == null) {
-            track = Track(Instant.now())
+            track = Track().apply { start() }
         }
 
         val trackTimerTask = object : TimerTask() {
@@ -136,7 +135,10 @@ class TrackingService : LifecycleService() {
     fun stopTracking() {
         timer?.cancel()
         locationLiveData.removeObservers(this)
-        track?.let { stoppedTrack -> listeners.forEach { it.onTrackingStopped(stoppedTrack) } }
+        track?.let { stoppedTrack ->
+            stoppedTrack.stop()
+            listeners.forEach { it.onTrackingStopped(stoppedTrack) }
+        }
         notificationManagerCompat.cancel(NOTIFICATION_ID)
         track = null
 
