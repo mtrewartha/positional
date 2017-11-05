@@ -169,13 +169,6 @@ class TrackingService : LifecycleService() {
         val currentTrack = track ?: return
 
         if (location != null) {
-            // If this is the first location or some locations came through as null, make sure we
-            // start adding points in a new segment.
-            if (lastLocation == null) {
-                currentTrack.startNewSegment()
-                Log.info(TAG, "Started a new segment")
-            }
-
             val point = TrackPoint(location)
             currentTrack.addPoint(point)
 

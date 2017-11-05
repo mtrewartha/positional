@@ -11,6 +11,6 @@ class TrackPoint(val location: Location) {
     val latitude = location.latitude
     val longitude = location.longitude
     val speed = location.speed
-    val time = Instant.ofEpochMilli(location.time)
+    val time: Instant = Instant.ofEpochMilli(location.time)
 
 }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.github.rubensousa.floatingtoolbar.FloatingToolbar
 import com.google.android.gms.location.LocationRequest
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -28,6 +29,7 @@ import io.trewartha.positional.map.tracking.TrackingListener
 import io.trewartha.positional.map.tracking.TrackingService
 import kotlinx.android.synthetic.main.map_fragment.*
 import kotlinx.android.synthetic.main.track_toolbar.*
+import kotlinx.android.synthetic.main.track_toolbar.view.*
 import java.util.*
 
 class MapFragment : LocationAwareFragment() {
@@ -38,6 +40,7 @@ class MapFragment : LocationAwareFragment() {
         private const val LOCATION_UPDATE_MAX_WAIT_TIME = 1000L
         private const val MAP_ANIMATION_DURATION_MS = 2000
         private const val MAP_ZOOM_LEVEL_DEFAULT = 17.0
+        private const val TRACK_TOOLBAR_HIDE_DELAY = 3000L
         private const val TAG = "MapFragment"
     }
 
@@ -78,8 +81,7 @@ class MapFragment : LocationAwareFragment() {
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync gotMap@ {
-            map = it
-            it.setOnCameraMoveStartedListener(OnCameraMoveStartedListener())
+            map = it.apply { addOnCameraMoveStartedListener(OnCameraMoveStartedListener()) }
             zoomToLocation(lastLocation ?: return@gotMap)
         }
 
@@ -213,12 +215,10 @@ class MapFragment : LocationAwareFragment() {
 
     private fun startTracking() {
         trackingService?.startTracking()
-        if (!trackToolbar.isShowing) trackToolbar.show()
     }
 
     private fun stopTracking() {
         trackingService?.stopTracking()
-        if (trackToolbar.isShowing) trackToolbar.hide()
     }
 
     private fun updateTrackDistance(track: Track?) {
@@ -247,10 +247,12 @@ class MapFragment : LocationAwareFragment() {
     }
 
     private fun zoomToLocation(location: Location, zoomLevel: Double = MAP_ZOOM_LEVEL_DEFAULT) {
-        val latLng = LatLng(location.latitude, location.longitude)
-        val cameraPosition = CameraPosition.Builder().target(latLng).zoom(zoomLevel).build()
-        val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
-        map?.animateCamera(cameraUpdate, MAP_ANIMATION_DURATION_MS)
+        map?.apply {
+            val latLng = LatLng(location.latitude, location.longitude)
+            val cameraPosition = CameraPosition.Builder().target(latLng).zoom(zoomLevel).build()
+            val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
+            animateCamera(cameraUpdate, MAP_ANIMATION_DURATION_MS)
+        }
     }
 
     private inner class OnCameraMoveStartedListener : MapboxMap.OnCameraMoveStartedListener {
@@ -299,6 +301,7 @@ class MapFragment : LocationAwareFragment() {
         override fun onTrackingStarted(track: Track) {
             Log.info(TAG, "Tracking started")
             this.track = track
+            if (!trackToolbar.isShowing) trackToolbar.show()
             updateTrackTimerTask = UpdateTrackTimerTask(track)
             timer = Timer(false).apply { scheduleAtFixedRate(updateTrackTimerTask, 0, 1000L) }
             updateTrackDistance(track)
@@ -313,8 +316,28 @@ class MapFragment : LocationAwareFragment() {
             Log.info(TAG, "Tracking stopped")
             timer?.cancel()
             if (trackToolbar.isShowing) {
-                trackToolbar.hide()
+                trackToolbar.viewSwitcher.showNext()
+                trackToolbar.postDelayed({
+                    trackToolbar.addMorphListener(TrackToolbarMorphListener())
+                    trackToolbar.hide()
+                }, TRACK_TOOLBAR_HIDE_DELAY)
             }
+        }
+    }
+
+    private inner class TrackToolbarMorphListener : FloatingToolbar.MorphListener {
+        override fun onMorphStart() {
+        }
+
+        override fun onMorphEnd() {
+        }
+
+        override fun onUnmorphStart() {
+        }
+
+        override fun onUnmorphEnd() {
+            trackToolbar.removeMorphListener(this)
+            trackToolbar.viewSwitcher.showNext()
         }
     }
 

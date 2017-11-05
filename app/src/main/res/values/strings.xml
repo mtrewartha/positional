@@ -24,6 +24,7 @@
     <string name="my_location_content_description">My Location</string>
     <string name="my_location_failure">Hold tight, still trying to get your location…</string>
     <string name="tracking_service_connecting">The tracker is still starting, try again in a second.</string>
+    <string name="tracking_stopped_and_saved">Track stopped and saved</string>
     <string name="tracking_toolbar_stop_content_description">Stop Tracking</string>
     <string name="tracking_toolbar_status">Tracking</string>
     <string name="tracking_toolbar_duration_content_description">Duration</string>
