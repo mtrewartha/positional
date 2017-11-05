@@ -109,7 +109,8 @@ class TrackingService : LifecycleService() {
         startForeground(NOTIFICATION_ID, notification)
 
         if (track == null) {
-            track = Track().apply { start() }
+            val defaultName = getString(R.string.track_default_name)
+            track = Track(defaultName).apply { start() }
         }
 
         val trackTimerTask = object : TimerTask() {

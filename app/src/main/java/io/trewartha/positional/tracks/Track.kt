@@ -3,7 +3,7 @@ package io.trewartha.positional.tracks
 import io.trewartha.positional.time.Duration
 import org.threeten.bp.Instant
 
-class Track {
+class Track(val name: String) {
 
     /**
      * The distance (in meters) that this [Track] covers. This distance is the sum of all the

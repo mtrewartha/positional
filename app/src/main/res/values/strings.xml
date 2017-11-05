@@ -34,6 +34,9 @@
     <string name="tracking_toolbar_distance_mi">%.1f mi</string>
     <string name="tracking_toolbar_distance_km">%.1f km</string>
 
+    <!-- Tracks-->
+    <string name="track_default_name">Unnamed Track</string>
+
     <!-- Position -->
     <string name="accuracy">Accuracy</string>
     <string name="bearing">Bearing</string>
