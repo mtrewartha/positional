@@ -240,10 +240,12 @@ class MapFragment : LocationAwareFragment() {
     }
 
     private fun syncTrackToolbarState() {
-        if (trackingService?.isTracking() == true && !trackToolbar.isShowing) {
-            trackToolbar.show()
-        } else if (trackingService?.isTracking() != true && trackToolbar.isShowing) {
-            trackToolbar.hide()
+        trackingService?.let {
+            if (it.isTracking() && !trackToolbar.isShowing) {
+                trackToolbar.show()
+            } else if (!it.isTracking() && trackToolbar.isShowing) {
+                trackToolbar.hide()
+            }
         }
     }
 
