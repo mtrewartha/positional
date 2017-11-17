@@ -1,14 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" tools:override="true">Positional</string>
 
-    <!-- Common Dialog Button Text -->
+    <!-- Common Text -->
     <string name="ok">OK</string>
-    <string name="exit">Exit</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
     <string name="try_again">Try Again</string>
-
-    <!-- Google Play Services -->
-    <string name="google_play_services_connection_failed_title">Connection Failed</string>
-    <string name="google_play_services_connection_failed_message">Something is wrong with your Google Play Services. Please send an email about this to mike@trewartha.io.</string>
 
     <!-- Permissions -->
     <string name="access_fine_location_permission_explanation_title">Location Permission Required</string>
@@ -19,6 +16,12 @@
     <string name="map">Map</string>
     <string name="position">Position</string>
     <string name="tracks">Tracks</string>
+
+    <!-- Storage Paths -->
+    <string name="user_track_snapshot">/users/%s/track_snapshots/%s</string>
+
+    <!-- Database Paths -->
+    <!-- TODO: Fill these out and use them! -->
 
     <!-- Map -->
     <string name="mapbox_key">pk.eyJ1IjoibXRyZXdhcnRoYSIsImEiOiJjajhrajVoY2wwZTZ6MnFxaWxtM2N6Yzl6In0.2_egPCd-hJQbUdUx3FUV7w</string>
@@ -35,7 +38,33 @@
     <string name="tracking_toolbar_distance_km">%.1f km</string>
 
     <!-- Tracks-->
+    <string name="track_card_map_snapshot_content_description">Map Snapshot</string>
+    <string name="track_card_duration_currently_tracking">Currently tracking…</string>
+    <string name="track_card_duration_format_hours">%s, %s, %s</string>
+    <string name="track_card_duration_format_minutes">%s, %s</string>
+    <string name="track_card_duration_format_seconds">%s</string>
+    <plurals name="track_card_duration_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="track_card_duration_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="track_card_duration_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+
+    <string name="track_card_start_end_format">%s %s - %s %s</string>
+    <string name="track_card_delete">@string/delete</string>
+    <string name="track_card_edit">@string/edit</string>
+    <string name="track_card_time_content_description">Date and Time</string>
+    <string name="track_delete_success_snackbar">Deleted</string>
+    <string name="track_delete_failure_snackbar">Unable to delete track</string>
     <string name="track_default_name">Unnamed Track</string>
+    <string name="tracks_empty_title">No Recorded Tracks</string>
+    <string name="tracks_empty_subtitle">Check out the Map screen to record one!</string>
 
     <!-- Position -->
     <string name="accuracy">Accuracy</string>

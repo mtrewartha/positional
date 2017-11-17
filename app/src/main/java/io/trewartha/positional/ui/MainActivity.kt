@@ -12,6 +12,8 @@ import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import io.trewartha.positional.R
 import io.trewartha.positional.common.GlideApp
+import io.trewartha.positional.ui.auth.SignInActivity
+import io.trewartha.positional.ui.profile.ProfileActivity
 import kotlinx.android.synthetic.main.main_activity.*
 
 

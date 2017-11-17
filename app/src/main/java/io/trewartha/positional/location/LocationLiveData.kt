@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.metrics.Trace
-import io.trewartha.positional.Log
+import io.trewartha.positional.common.Log
 
 class LocationLiveData(private val context: Context) : LiveData<Location>() {
 

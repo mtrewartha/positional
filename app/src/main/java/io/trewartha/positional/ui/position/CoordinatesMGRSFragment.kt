@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui
+package io.trewartha.positional.ui.position
 
 import android.content.Context
 import android.os.Bundle
@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import io.trewartha.positional.R
 import io.trewartha.positional.location.LocationFormatter
-import kotlinx.android.synthetic.main.coordinates_degrees_minutes_seconds_fragment.*
+import kotlinx.android.synthetic.main.coordinates_mgrs_fragment.*
 
-class CoordinatesDegreesMinutesSecondsFragment : CoordinatesFragment() {
+class CoordinatesMGRSFragment : CoordinatesFragment() {
 
     private lateinit var locationFormatter: LocationFormatter
 
@@ -19,7 +19,7 @@ class CoordinatesDegreesMinutesSecondsFragment : CoordinatesFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.coordinates_degrees_minutes_seconds_fragment, container, false)
+        return inflater.inflate(R.layout.coordinates_mgrs_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,7 +28,6 @@ class CoordinatesDegreesMinutesSecondsFragment : CoordinatesFragment() {
     }
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
-        latitudeTextView?.text = locationFormatter.getDmsLatitude(latitude)
-        longitudeTextView?.text = locationFormatter.getDmsLongitude(longitude)
+        coordinatesTextView?.text = locationFormatter.getMgrsCoordinates(latitude, longitude)
     }
 }

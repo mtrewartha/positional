@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui
+package io.trewartha.positional.ui.position
 
 import android.content.*
 import android.location.Location
@@ -13,10 +13,11 @@ import android.view.WindowManager
 import android.widget.CompoundButton
 import android.widget.Toast
 import com.google.android.gms.location.LocationRequest
-import io.trewartha.positional.Log
 import io.trewartha.positional.R
+import io.trewartha.positional.common.Log
 import io.trewartha.positional.location.CoordinatesFormat
 import io.trewartha.positional.location.LocationFormatter
+import io.trewartha.positional.ui.LocationAwareFragment
 import kotlinx.android.synthetic.main.position_fragment.*
 import java.util.*
 

@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui
+package io.trewartha.positional.ui.position
 
 import android.content.Context
 import android.os.Bundle

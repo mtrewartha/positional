@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/mapSnapshotImageView"
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:contentDescription="@string/track_card_map_snapshot_content_description"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mapSnapshotImageView"
+            tools:text="Track 1"/>
+
+        <ImageView
+            android:id="@+id/startTimeImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:contentDescription="@string/track_card_time_content_description"
+            android:src="@drawable/ic_date_range_black_24dp"
+            android:tint="?attr/colorControlNormal"
+            app:layout_constraintStart_toStartOf="@id/nameTextView"
+            app:layout_constraintTop_toBottomOf="@id/nameTextView"/>
+
+        <TextView
+            android:id="@+id/startEndTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="12dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/startTimeImageView"
+            app:layout_constraintStart_toEndOf="@id/startTimeImageView"
+            app:layout_constraintTop_toTopOf="@id/startTimeImageView"
+            tools:text="12/31/17 11:00 AM - 12/31/17 12:00 PM"/>
+
+        <ImageView
+            android:id="@+id/durationImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:contentDescription="@string/track_card_time_content_description"
+            android:src="@drawable/ic_timer_black_24dp"
+            android:tint="?attr/colorControlNormal"
+            app:layout_constraintStart_toStartOf="@id/nameTextView"
+            app:layout_constraintTop_toBottomOf="@id/startEndTextView"/>
+
+        <TextView
+            android:id="@+id/durationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="12dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/durationImageView"
+            app:layout_constraintStart_toEndOf="@id/startTimeImageView"
+            app:layout_constraintTop_toTopOf="@id/durationImageView"
+            tools:text="12 hours, 39 minutes, 23 seconds"/>
+
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/track_card_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/durationTextView"/>
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/track_card_delete"
+            app:layout_constraintStart_toEndOf="@id/editButton"
+            app:layout_constraintTop_toBottomOf="@id/durationTextView"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

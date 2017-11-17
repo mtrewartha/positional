@@ -1,6 +1,7 @@
-package io.trewartha.positional
+package io.trewartha.positional.common
 
 import com.google.firebase.crash.FirebaseCrash
+import io.trewartha.positional.BuildConfig
 
 object Log {
 

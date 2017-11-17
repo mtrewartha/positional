@@ -50,11 +50,11 @@
         </activity>
 
         <activity
-            android:name=".ui.ProfileActivity"
+            android:name=".ui.profile.ProfileActivity"
             android:theme="@style/AppTheme.Profile"/>
 
         <activity
-            android:name=".ui.SignInActivity"/>
+            android:name=".ui.auth.SignInActivity"/>
 
         <!-- Services -->
 

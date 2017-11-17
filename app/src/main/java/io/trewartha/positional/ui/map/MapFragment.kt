@@ -1,9 +1,12 @@
-package io.trewartha.positional.ui
+package io.trewartha.positional.ui.map
 
 import android.content.*
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
 import android.location.Location
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.IBinder
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -12,24 +15,29 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar
 import com.google.android.gms.location.LocationRequest
+import com.google.firebase.auth.FirebaseAuth
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE
-import io.trewartha.positional.Log
 import io.trewartha.positional.R
+import io.trewartha.positional.common.Log
 import io.trewartha.positional.location.DistanceUtils.distanceInKilometers
 import io.trewartha.positional.location.DistanceUtils.distanceInMiles
+import io.trewartha.positional.time.Duration
 import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.tracks.TrackPoint
 import io.trewartha.positional.tracks.TrackingListener
 import io.trewartha.positional.tracks.TrackingService
+import io.trewartha.positional.ui.LocationAwareFragment
 import kotlinx.android.synthetic.main.map_fragment.*
 import kotlinx.android.synthetic.main.track_toolbar.*
-import kotlinx.android.synthetic.main.track_toolbar.view.*
-import java.util.*
+import org.jetbrains.anko.doAsync
+import org.threeten.bp.Instant
+import java.io.File
+import java.io.FileOutputStream
 
 class MapFragment : LocationAwareFragment() {
 
@@ -38,8 +46,8 @@ class MapFragment : LocationAwareFragment() {
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
         private const val LOCATION_UPDATE_MAX_WAIT_TIME = 1000L
         private const val MAP_ANIMATION_DURATION_MS = 2000
+        private const val MAP_SNAPSHOT_JPEG_QUALITY = 80
         private const val MAP_ZOOM_LEVEL_DEFAULT = 17.0
-        private const val TRACK_TOOLBAR_HIDE_DELAY = 3000L
         private const val TAG = "MapFragment"
     }
 
@@ -88,6 +96,9 @@ class MapFragment : LocationAwareFragment() {
         updateTrackDuration(0, 0, 0)
         trackToolbar.attachFab(recordTrackButton)
 
+        syncTrackToolbarState()
+        trackingService?.addListener(trackingListener)
+
         myLocationButton.setOnClickListener { onMyLocationClick() }
         recordTrackButton.setOnClickListener { onRecordTrackClick() }
         stopTrackButton.setOnClickListener { onStopTrackClick() }
@@ -127,8 +138,8 @@ class MapFragment : LocationAwareFragment() {
         super.onDestroyView()
         map = null
         mapView.onDestroy()
+        trackToolbar.hide()
         trackingService?.removeListener(trackingListener)
-        trackingListener.timer?.cancel()
     }
 
     override fun onDestroy() {
@@ -153,17 +164,11 @@ class MapFragment : LocationAwareFragment() {
         }
     }
 
-    override fun getLocationUpdateInterval(): Long {
-        return LOCATION_UPDATE_INTERVAL
-    }
+    override fun getLocationUpdateInterval() = LOCATION_UPDATE_INTERVAL
 
-    override fun getLocationUpdateMaxWaitTime(): Long {
-        return LOCATION_UPDATE_MAX_WAIT_TIME
-    }
+    override fun getLocationUpdateMaxWaitTime() = LOCATION_UPDATE_MAX_WAIT_TIME
 
-    override fun getLocationUpdatePriority(): Int {
-        return LOCATION_UPDATE_PRIORITY
-    }
+    override fun getLocationUpdatePriority() = LOCATION_UPDATE_PRIORITY
 
     private fun attachToSharedPreferences() {
         sharedPreferences = context.getSharedPreferences(
@@ -199,13 +204,14 @@ class MapFragment : LocationAwareFragment() {
     }
 
     private fun onRecordTrackClick() {
-        when {
-            trackingService?.isTracking() == false -> startTracking()
-            else -> Snackbar.make(
+        if (trackingService?.isTracking() == false) {
+            startTracking()
+        } else {
+            Snackbar.make(
                     coordinatorLayout,
                     R.string.tracking_service_connecting,
-                    Snackbar.LENGTH_SHORT
-            )
+                    Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -214,18 +220,37 @@ class MapFragment : LocationAwareFragment() {
     }
 
     private fun startTracking() {
+        map?.snapshot { doAsync { addTrackSnapshot(it) } }
         trackingService?.startTracking()
+    }
+
+    private fun addTrackSnapshot(trackSnapshotBitmap: Bitmap) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val snapshotFile = File(context.cacheDir, "track-snapshot-$userId-${Instant.now()}.jpg")
+        trackSnapshotBitmap.compress(
+                Bitmap.CompressFormat.JPEG,
+                MAP_SNAPSHOT_JPEG_QUALITY,
+                FileOutputStream(snapshotFile)
+        )
+        trackingService?.addTrackSnapshot(snapshotFile)
     }
 
     private fun stopTracking() {
         trackingService?.stopTracking()
     }
 
+    private fun syncTrackToolbarState() {
+        if (trackingService?.isTracking() == true && !trackToolbar.isShowing) {
+            trackToolbar.show()
+        } else if (trackingService?.isTracking() != true && trackToolbar.isShowing) {
+            trackToolbar.hide()
+        }
+    }
+
     private fun updateTrackDistance(track: Track?) {
-        val distance = if (useMetricUnits)
-            distanceInKilometers(track?.distance ?: 0f)
-        else
-            distanceInMiles(track?.distance ?: 0f)
+        val distance = (track?.distance ?: 0f).let {
+            if (useMetricUnits) distanceInKilometers(it) else distanceInMiles(it)
+        }
 
         val format = if (useMetricUnits)
             R.string.tracking_toolbar_distance_km
@@ -293,17 +318,11 @@ class MapFragment : LocationAwareFragment() {
 
         var track: Track? = null
             private set
-        var timer: Timer? = null
-            private set
-
-        private var updateTrackTimerTask: UpdateTrackTimerTask? = null
 
         override fun onTrackingStarted(track: Track) {
             Log.info(TAG, "Tracking started")
             this.track = track
-            if (!trackToolbar.isShowing) trackToolbar.show()
-            updateTrackTimerTask = UpdateTrackTimerTask(track)
-            timer = Timer(false).apply { scheduleAtFixedRate(updateTrackTimerTask, 0, 1000L) }
+            syncTrackToolbarState()
             updateTrackDistance(track)
         }
 
@@ -312,15 +331,15 @@ class MapFragment : LocationAwareFragment() {
             updateTrackDistance(track)
         }
 
+        override fun onTrackDurationChanged(track: Track, duration: Duration) {
+            updateTrackDuration(duration.hours, duration.minutes, duration.seconds)
+        }
+
         override fun onTrackingStopped(track: Track) {
             Log.info(TAG, "Tracking stopped")
-            timer?.cancel()
             if (trackToolbar.isShowing) {
-                trackToolbar.viewSwitcher.showNext()
-                trackToolbar.postDelayed({
-                    trackToolbar.addMorphListener(TrackToolbarMorphListener())
-                    trackToolbar.hide()
-                }, TRACK_TOOLBAR_HIDE_DELAY)
+                trackToolbar.addMorphListener(TrackToolbarMorphListener())
+                trackToolbar?.hide()
             }
         }
     }
@@ -336,8 +355,12 @@ class MapFragment : LocationAwareFragment() {
         }
 
         override fun onUnmorphEnd() {
-            trackToolbar.removeMorphListener(this)
-            trackToolbar.viewSwitcher.showNext()
+            trackToolbar?.removeMorphListener(this)
+            Snackbar.make(
+                    coordinatorLayout,
+                    R.string.tracking_stopped_and_saved,
+                    Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -347,27 +370,14 @@ class MapFragment : LocationAwareFragment() {
             Log.info(TAG, "Connected to tracking service")
             trackingService = (service as TrackingService.TrackingBinder).service.apply {
                 addListener(this@MapFragment.trackingListener)
-                if (isTracking() && !trackToolbar.isShowing) {
-                    trackToolbar.show()
-                } else if (!isTracking() && trackToolbar.isShowing) {
-                    trackToolbar.hide()
-                }
             }
+            syncTrackToolbarState()
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
             Log.info(TAG, "Disconnected from tracking service")
             trackingService = null
-        }
-    }
-
-    private inner class UpdateTrackTimerTask(val track: Track) : TimerTask() {
-
-        override fun run() {
-            Handler(Looper.getMainLooper()).post {
-                val duration = track.duration
-                updateTrackDuration(duration.hours, duration.minutes, duration.seconds)
-            }
+            syncTrackToolbarState()
         }
     }
 }

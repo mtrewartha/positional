@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui
+package io.trewartha.positional.ui.auth
 
 import android.app.Activity
 import android.content.Intent

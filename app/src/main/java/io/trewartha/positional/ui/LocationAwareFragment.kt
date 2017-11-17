@@ -10,9 +10,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
 import android.support.v4.content.PermissionChecker.checkSelfPermission
 import android.support.v7.app.AlertDialog
-import io.trewartha.positional.Log
 import io.trewartha.positional.R
+import io.trewartha.positional.common.Log
 import io.trewartha.positional.location.LocationLiveData
+import io.trewartha.positional.ui.position.LocationViewModel
 
 abstract class LocationAwareFragment : Fragment() {
 

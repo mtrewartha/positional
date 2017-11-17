@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui
+package io.trewartha.positional.ui.profile
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,8 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import io.trewartha.positional.R
 import io.trewartha.positional.common.GlideApp
+import io.trewartha.positional.ui.MainActivity
+import io.trewartha.positional.ui.TextDrawable
 import kotlinx.android.synthetic.main.profile_activity.*
 
 

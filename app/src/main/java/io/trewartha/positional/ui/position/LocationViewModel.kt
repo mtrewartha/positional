@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui
+package io.trewartha.positional.ui.position
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

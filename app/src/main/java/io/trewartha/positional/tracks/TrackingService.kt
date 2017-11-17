@@ -15,12 +15,22 @@ import android.support.v4.app.NotificationManagerCompat
 import com.google.android.gms.location.LocationRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import io.trewartha.positional.Log
 import io.trewartha.positional.R
+import io.trewartha.positional.common.Log
+import io.trewartha.positional.location.DistanceUtils
 import io.trewartha.positional.location.DistanceUtils.distanceInKilometers
 import io.trewartha.positional.location.DistanceUtils.distanceInMiles
 import io.trewartha.positional.location.LocationLiveData
+import io.trewartha.positional.storage.FileStorage
+import io.trewartha.positional.storage.FirebaseFileStorage
+import io.trewartha.positional.storage.FirebaseTrackStorage
+import io.trewartha.positional.storage.TrackStorage
+import io.trewartha.positional.time.Duration
 import io.trewartha.positional.ui.MainActivity
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.runOnUiThread
+import org.threeten.bp.Instant
+import java.io.File
 import java.util.*
 
 class TrackingService : LifecycleService() {
@@ -34,7 +44,9 @@ class TrackingService : LifecycleService() {
         private const val TAG = "TrackingService"
     }
 
+    private val fileStorage: FileStorage = FirebaseFileStorage()
     private val listeners = mutableSetOf<TrackingListener>()
+    private val trackStorage: TrackStorage = FirebaseTrackStorage()
 
     private lateinit var locationLiveData: LocationLiveData
     private lateinit var notificationManager: NotificationManager
@@ -44,6 +56,7 @@ class TrackingService : LifecycleService() {
     private var lastLocation: Location? = null
     private var timer: Timer? = null
     private var track: Track? = null
+    private var trackPoints: MutableList<TrackPoint>? = null
     private var user: FirebaseUser? = null
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -88,18 +101,26 @@ class TrackingService : LifecycleService() {
     }
 
     fun addListener(listener: TrackingListener) {
+        if (listeners.contains(listener)) return
+
         listeners.add(listener)
         if (isTracking()) {
             track?.let { listener.onTrackingStarted(it) }
         }
     }
 
-    fun isTracking(): Boolean {
-        return track != null
-    }
+    fun isTracking() = track != null
 
     fun removeListener(listener: TrackingListener) {
         listeners.remove(listener)
+    }
+
+    fun addTrackSnapshot(snapshot: File) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+                ?: throw IllegalStateException("No one is signed in")
+        val filename = "track_snapshot_${userId}_${Instant.now()}"
+        val path = getString(R.string.user_track_snapshot, userId, filename)
+        track?.snapshot = fileStorage.upload(snapshot, path)
     }
 
     fun startTracking() {
@@ -109,18 +130,14 @@ class TrackingService : LifecycleService() {
         startForeground(NOTIFICATION_ID, notification)
 
         if (track == null) {
-            val defaultName = getString(R.string.track_default_name)
-            track = Track(defaultName).apply { start() }
-        }
-
-        val trackTimerTask = object : TimerTask() {
-            override fun run() {
-                updateNotification()
+            track = Track().let {
+                it.start()
+                doAsync { trackStorage.createTrack(it) }
+                it
             }
         }
-        timer = Timer(true).apply {
-            scheduleAtFixedRate(trackTimerTask, 0, 1000L)
-        }
+
+        timer = Timer(true).apply { scheduleAtFixedRate(TrackTimerTask(), 0, 1000L) }
 
         locationLiveData.apply {
             updateInterval = LOCATION_UPDATE_INTERVAL
@@ -138,6 +155,7 @@ class TrackingService : LifecycleService() {
         locationLiveData.removeObservers(this)
         track?.let { stoppedTrack ->
             stoppedTrack.stop()
+            doAsync { trackStorage.saveTrack(stoppedTrack) }
             listeners.forEach { it.onTrackingStopped(stoppedTrack) }
         }
         notificationManagerCompat.cancel(NOTIFICATION_ID)
@@ -170,43 +188,53 @@ class TrackingService : LifecycleService() {
 
     private fun onLocationChanged(location: Location?) {
         val currentTrack = track ?: return
-
-        if (location != null) {
-            val point = TrackPoint(location)
-            currentTrack.addPoint(point)
-
-            listeners.forEach { it.onTrackPointAdded(currentTrack, point) }
-
-            Log.info(TAG, "Added a new track point at (${point.latitude}, ${point.longitude})")
+        val trackPoint = if (location == null) TrackPoint() else TrackPoint(location)
+        val lastTrackPoint = if (trackPoints?.isEmpty() == true) null else trackPoints?.last()
+        if (lastTrackPoint != null) {
+            track?.distance = (track?.distance ?: 0.0f) + DistanceUtils.distanceBetween(
+                    lastTrackPoint,
+                    trackPoint
+            )
         }
+        trackPoints?.add(trackPoint)
+
+        doAsync { trackStorage.saveTrackPoint(currentTrack, trackPoint) }
+        listeners.forEach { it.onTrackPointAdded(currentTrack, trackPoint) }
+        Log.info(TAG, "Added a new track point at (${trackPoint.latitude}, ${trackPoint.longitude})")
         lastLocation = location
-    }
-
-    private fun updateNotification() {
-        val duration = track?.duration ?: return
-        val distanceInMeters = track?.distance ?: return
-        val title = getString(R.string.tracking_notification_title_in_progress)
-        val useMetricUnits = sharedPreferences.getBoolean(
-                getString(R.string.settings_metric_units_key),
-                false
-        )
-
-        val distance = if (useMetricUnits)
-            distanceInKilometers(distanceInMeters)
-        else
-            distanceInMiles(distanceInMeters)
-
-        val format = if (useMetricUnits)
-            R.string.tracking_notification_text_in_progress_km
-        else
-            R.string.tracking_notification_text_in_progress_mi
-
-        val text = getString(format, duration.hours, duration.minutes, duration.seconds, distance)
-        val notification = buildNotification(title, text)
-        notificationManagerCompat.notify(NOTIFICATION_ID, notification)
     }
 
     inner class TrackingBinder : Binder() {
         val service = this@TrackingService
+    }
+
+    private inner class TrackTimerTask : TimerTask() {
+
+        override fun run() {
+            val currentTrack = track ?: return
+
+            // Update the notification first
+            val title = getString(R.string.tracking_notification_title_in_progress)
+            val useMetricUnits = sharedPreferences.getBoolean(
+                    getString(R.string.settings_metric_units_key),
+                    false
+            )
+            val duration = Duration.between(currentTrack.start ?: return, Instant.now())
+            val distance = (currentTrack.distance).let {
+                if (useMetricUnits) distanceInKilometers(it) else distanceInMiles(it)
+            }
+            val format = if (useMetricUnits)
+                R.string.tracking_notification_text_in_progress_km
+            else
+                R.string.tracking_notification_text_in_progress_mi
+            val text = getString(format, duration.hours, duration.minutes, duration.seconds, distance)
+            val notification = buildNotification(title, text)
+            notificationManagerCompat.notify(NOTIFICATION_ID, notification)
+
+            // Then update all of the listeners
+            runOnUiThread {
+                listeners.forEach { it.onTrackDurationChanged(currentTrack, duration) }
+            }
+        }
     }
 }

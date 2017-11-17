@@ -3,6 +3,7 @@ package io.trewartha.positional
 import com.google.firebase.crash.FirebaseCrash
 import com.google.firebase.perf.FirebasePerformance
 import com.jakewharton.threetenabp.AndroidThreeTen
+import io.trewartha.positional.common.Log
 
 class Application : android.app.Application() {
 

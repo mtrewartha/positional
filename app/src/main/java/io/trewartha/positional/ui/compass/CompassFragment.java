@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui;
+package io.trewartha.positional.ui.compass;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.google.android.gms.location.LocationRequest;
 
 import io.trewartha.positional.R;
+import io.trewartha.positional.ui.LocationAwareFragment;
 
 public class CompassFragment extends LocationAwareFragment {
 

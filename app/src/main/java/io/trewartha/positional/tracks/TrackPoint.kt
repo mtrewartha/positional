@@ -3,14 +3,23 @@ package io.trewartha.positional.tracks
 import android.location.Location
 import org.threeten.bp.Instant
 
-class TrackPoint(val location: Location) {
+class TrackPoint() {
 
-    val accuracy = location.accuracy
-    val bearing = location.bearing
-    val altitude = location.altitude
-    val latitude = location.latitude
-    val longitude = location.longitude
-    val speed = location.speed
-    val time: Instant = Instant.ofEpochMilli(location.time)
+    var accuracy = 0.0f
+    var bearing = 0.0f
+    var altitude = 0.0
+    var latitude = 0.0
+    var longitude = 0.0
+    var speed = 0.0f
+    var time: Instant = Instant.now()
 
+    constructor(location: Location) : this() {
+        accuracy = location.accuracy
+        bearing = location.bearing
+        altitude = location.altitude
+        latitude = location.latitude
+        longitude = location.longitude
+        speed = location.speed
+        time = Instant.ofEpochMilli(location.time)
+    }
 }
