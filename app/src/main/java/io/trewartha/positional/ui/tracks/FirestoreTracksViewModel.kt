@@ -24,13 +24,11 @@ class FirestoreTracksViewModel : TracksViewModel() {
     private val tracksLiveData by lazy { TracksLiveData() }
     private val userTracksRef = firestore.collection("users").document(userId).collection("tracks")
 
-    private val pendingDeletes = HashSet<String>()
 
     override fun getTracks(): LiveData<List<Track>> = tracksLiveData
 
     override fun deleteTrack(track: Track): Task<Void> {
         val trackId = track.start.toString()
-        pendingDeletes.add(trackId)
         val trackRef = userTracksRef.document(trackId)
         return trackRef.deleteCollection("points", BATCH_SIZE_TRACK_POINT_DELETE)
                 .continueWithTask {
@@ -52,10 +50,7 @@ class FirestoreTracksViewModel : TracksViewModel() {
                     return@listener
                 }
 
-                value = querySnapshot.documents.map { Track().reify(it) }.filter {
-                    val userDeleted = pendingDeletes.remove(it.start.toString())
-                    !userDeleted && it.end != null
-                }
+                value = querySnapshot.documents.map { Track().reify(it) }.filter { it.end != null }
             }
         }
 
