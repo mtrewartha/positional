@@ -19,11 +19,7 @@ class MainFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentPager
         )
     }
 
-    override fun getItem(position: Int): Fragment {
-        return FRAGMENTS[position]
-    }
+    override fun getItem(position: Int): Fragment = FRAGMENTS[position]
 
-    override fun getCount(): Int {
-        return FRAGMENTS.size
-    }
+    override fun getCount(): Int = FRAGMENTS.size
 }
