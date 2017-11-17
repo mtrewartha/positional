@@ -116,7 +116,7 @@ class MapFragment : LocationAwareFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
+        mapView?.onSaveInstanceState(outState)
     }
 
     override fun onPause() {
@@ -131,15 +131,16 @@ class MapFragment : LocationAwareFragment() {
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        mapView?.onLowMemory()
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         map = null
         mapView.onDestroy()
         trackToolbar.hide()
         trackingService?.removeListener(trackingListener)
+
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
@@ -263,8 +264,6 @@ class MapFragment : LocationAwareFragment() {
     }
 
     private fun updateTrackDuration(hours: Int, minutes: Int, seconds: Int) {
-        if (isDetached) return
-
         durationTextView?.text = getString(
                 R.string.tracking_toolbar_duration,
                 hours,
@@ -341,7 +340,7 @@ class MapFragment : LocationAwareFragment() {
             Log.info(TAG, "Tracking stopped")
             if (trackToolbar.isShowing) {
                 trackToolbar.addMorphListener(TrackToolbarMorphListener())
-                trackToolbar?.hide()
+                trackToolbar.hide()
             }
         }
     }
