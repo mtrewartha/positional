@@ -53,8 +53,8 @@ class FirestoreTracksViewModel : TracksViewModel() {
                 }
 
                 value = querySnapshot.documents.map { Track().reify(it) }.filter {
-                    // Don't report changes to any that were already deleted from the view
-                    !pendingDeletes.remove(it.start.toString()) && it.end != null
+                    val userDeleted = pendingDeletes.remove(it.start.toString())
+                    !userDeleted && it.end != null
                 }
             }
         }

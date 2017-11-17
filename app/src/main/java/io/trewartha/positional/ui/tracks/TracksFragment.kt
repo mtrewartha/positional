@@ -8,6 +8,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -60,6 +61,63 @@ class TracksFragment : Fragment() {
         viewModel.getTracks().observe(this, TracksObserver())
     }
 
+    private fun checkEmptyView() {
+        if (adapter.itemCount == 0) {
+            showEmptyView()
+        } else {
+            hideEmptyView()
+        }
+    }
+
+    private fun deleteTrack(position: Int, track: Track) {
+        adapter.tracks.removeAt(position)
+        adapter.notifyItemRemoved(position)
+        checkEmptyView()
+
+        viewModel.deleteTrack(track).addOnCompleteListener(activity) {
+            if (!it.isSuccessful) {
+                showDeleteResultSnackbar(track, false)
+                adapter.tracks.add(position, track)
+                adapter.notifyItemInserted(position)
+                checkEmptyView()
+            }
+
+            it.exception?.let {
+                Log.warn(TAG, "Failed to delete track at position #$position", it)
+                FirebaseCrash.report(it)
+            }
+        }
+        showDeleteResultSnackbar(track, true)
+    }
+
+    private fun hideEmptyView() {
+        emptyView.clearAnimation()
+        recyclerView.clearAnimation()
+
+        val emptyViewAnimator = emptyView.animate()
+                .alpha(0.0f)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        animation.removeListener(this)
+                    }
+                })
+
+        val recyclerViewAnimator = recyclerView.animate()
+                .alpha(1.0f)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationStart(animation: Animator) {
+                        recyclerView.visibility = View.VISIBLE
+                    }
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        animation.removeListener(this)
+                    }
+                })
+
+        emptyViewAnimator.start()
+        recyclerViewAnimator.start()
+    }
+
     private fun onTrackClick(position: Int, track: Track) {
         Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show()
     }
@@ -69,32 +127,49 @@ class TracksFragment : Fragment() {
     }
 
     private fun onTrackDeleteClick(position: Int, track: Track) {
-        adapter.tracks.removeAt(position)
-        adapter.notifyItemRemoved(position)
-
-        viewModel.deleteTrack(track).addOnCompleteListener(activity) {
-            if (it.isSuccessful) {
-                showDeleteResultSnackbar(true)
-            } else {
-                showDeleteResultSnackbar(false)
-                adapter.tracks.add(position, track)
-                adapter.notifyItemInserted(position)
-            }
-
-            it.exception?.let {
-                Log.warn(TAG, "Failed to delete track at position #$position", it)
-                FirebaseCrash.report(it)
-            }
-        }
+        val trackName = track.name ?: getString(R.string.track_default_name)
+        AlertDialog.Builder(context)
+                .setTitle(getString(R.string.tracks_delete_dialog_title, trackName))
+                .setMessage(R.string.tracks_delete_dialog_message)
+                .setPositiveButton(R.string.delete, { _, _ ->
+                    deleteTrack(position, track)
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
-    private fun showDeleteResultSnackbar(deleteSuccessful: Boolean) {
+    private fun showDeleteResultSnackbar(track: Track, deleteSuccessful: Boolean) {
+        val trackName = track.name ?: getString(R.string.track_default_name)
         val snackbarText = if (deleteSuccessful) {
-            R.string.track_delete_success_snackbar
+            getString(R.string.track_delete_success_snackbar, trackName)
         } else {
-            R.string.track_delete_failure_snackbar
+            getString(R.string.track_delete_failure_snackbar, trackName)
         }
         Snackbar.make(coordinatorLayout, snackbarText, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun showEmptyView() {
+        emptyView.clearAnimation()
+        recyclerView.clearAnimation()
+
+        val emptyViewAnimator = emptyView.animate()
+                .alpha(1.0f)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        animation.removeListener(this)
+                    }
+                })
+        val recyclerViewAnimator = recyclerView.animate()
+                .alpha(0.0f)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        animation.removeListener(this)
+                        recyclerView.visibility = View.GONE
+                    }
+                })
+
+        emptyViewAnimator.start()
+        recyclerViewAnimator.start()
     }
 
     private inner class TracksObserver : Observer<List<Track>> {
@@ -105,63 +180,7 @@ class TracksFragment : Fragment() {
             adapter.tracks = tracks.toMutableList()
             adapter.notifyDataSetChanged()
 
-            if (adapter.itemCount == 0) {
-                showEmptyView()
-            } else {
-                hideEmptyView()
-            }
-        }
-
-        private fun showEmptyView() {
-            emptyView.clearAnimation()
-            recyclerView.clearAnimation()
-
-            val emptyViewAnimator = emptyView.animate()
-                    .alpha(1.0f)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            animation.removeListener(this)
-                        }
-                    })
-            val recyclerViewAnimator = recyclerView.animate()
-                    .alpha(0.0f)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            animation.removeListener(this)
-                            recyclerView.visibility = View.GONE
-                        }
-                    })
-
-            emptyViewAnimator.start()
-            recyclerViewAnimator.start()
-        }
-
-        private fun hideEmptyView() {
-            emptyView.clearAnimation()
-            recyclerView.clearAnimation()
-
-            val emptyViewAnimator = emptyView.animate()
-                    .alpha(0.0f)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            animation.removeListener(this)
-                        }
-                    })
-
-            val recyclerViewAnimator = recyclerView.animate()
-                    .alpha(1.0f)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationStart(animation: Animator) {
-                            recyclerView.visibility = View.VISIBLE
-                        }
-
-                        override fun onAnimationEnd(animation: Animator) {
-                            animation.removeListener(this)
-                        }
-                    })
-
-            emptyViewAnimator.start()
-            recyclerViewAnimator.start()
+            checkEmptyView()
         }
     }
 }
