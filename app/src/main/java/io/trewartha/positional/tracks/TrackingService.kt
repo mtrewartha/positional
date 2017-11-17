@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Location
+import android.net.Uri
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -120,7 +121,8 @@ class TrackingService : LifecycleService() {
                 ?: throw IllegalStateException("No one is signed in")
         val filename = "track_snapshot_${userId}_${Instant.now()}"
         val path = getString(R.string.user_track_snapshot, userId, filename)
-        track?.snapshot = fileStorage.upload(snapshot, path)
+        track?.snapshotLocal = Uri.fromFile(snapshot)
+        track?.snapshotRemote = fileStorage.upload(snapshot, path)
     }
 
     fun startTracking() {

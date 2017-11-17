@@ -7,7 +7,8 @@ import org.threeten.bp.Instant
 
 fun Track.toMap(): Map<String, Any> {
     return HashMap<String, Any>(5).apply {
-        snapshot?.let { put("snapshot", it.toString()) }
+        snapshotLocal?.let { put("snapshotLocal", it.toString()) }
+        snapshotRemote?.let { put("snapshotRemote", it.toString()) }
         name?.let { put("name", it) }
         start?.let { put("start", it.toString()) }
         end?.let { put("end", it.toString()) }
@@ -17,7 +18,8 @@ fun Track.toMap(): Map<String, Any> {
 
 fun Track.reify(documentSnapshot: DocumentSnapshot): Track {
     return Track().apply {
-        snapshot = (documentSnapshot["snapshot"] as String?)?.let { Uri.parse(it) }
+        snapshotLocal = (documentSnapshot["snapshotLocal"] as String?)?.let { Uri.parse(it) }
+        snapshotRemote = (documentSnapshot["snapshotRemote"] as String?)?.let { Uri.parse(it) }
         name = documentSnapshot["name"] as String?
         start = (documentSnapshot["start"] as String?)?.let { Instant.parse(it) }
         end = (documentSnapshot["end"] as String?)?.let { Instant.parse(it) }

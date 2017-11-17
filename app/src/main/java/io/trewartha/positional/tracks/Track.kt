@@ -7,7 +7,8 @@ class Track {
 
     var name: String? = null
     var end: Instant? = null
-    var snapshot: Uri? = null
+    var snapshotRemote: Uri? = null
+    var snapshotLocal: Uri? = null
     var start: Instant? = null
     var distance: Float = 0.0f
 

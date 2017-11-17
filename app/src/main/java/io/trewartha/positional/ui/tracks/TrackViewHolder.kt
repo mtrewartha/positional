@@ -12,6 +12,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
+import java.io.File
 
 
 class TrackViewHolder(
@@ -36,7 +37,14 @@ class TrackViewHolder(
     private val deleteButton: TextView = itemView.findViewById(R.id.deleteButton)
 
     fun bind(track: Track) {
-        GlideApp.with(context).load(track.snapshot).centerCrop().into(mapSnapshotImageView)
+        val localSnapshotFile = File(track.snapshotLocal?.path)
+        val glide = GlideApp.with(context)
+        val glideRequest = if (localSnapshotFile.exists()) {
+            glide.load(track.snapshotLocal)
+        } else {
+            glide.load(track.snapshotRemote)
+        }
+        glideRequest.centerCrop().into(mapSnapshotImageView)
 
         itemView.setOnClickListener { onTrackClickListener(adapterPosition, track) }
         editButton.setOnClickListener { onTrackEditListener(adapterPosition, track) }
