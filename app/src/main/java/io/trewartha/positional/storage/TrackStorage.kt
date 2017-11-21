@@ -1,17 +1,44 @@
 package io.trewartha.positional.storage
 
-import android.support.annotation.WorkerThread
+import android.arch.lifecycle.LiveData
 import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.tracks.TrackPoint
 
 interface TrackStorage {
 
-    @WorkerThread
-    fun createTrack(track: Track): Boolean
+    /**
+     * Deletes a [Track] from the storage medium that the implementer of this interface uses
+     *
+     * @param track The [Track] that you want to delete from storage
+     *
+     * @return True if [track] was deleted from storage, false otherwise
+     */
+    fun deleteTrack(track: Track): Boolean
 
-    @WorkerThread
+    /**
+     * Gets a [LiveData] that represents the current [Track]s in storage
+     *
+     * @return A [LiveData] that you can observe to get continual updates to [Track]s in storage
+     */
+    fun getLiveTracks(): LiveData<List<Track>>
+
+    /**
+     * Saves a [Track] to the storage medium that the implementer of this interface uses
+     *
+     * @param track The [Track] that you want to save to storage
+     *
+     * @return True if [track] was saved to storage, false otherwise
+     */
     fun saveTrack(track: Track): Boolean
 
-    @WorkerThread
+    /**
+     * Saves a [TrackPoint] for a [Track] to the storage medium that the implementer of this
+     * interface uses
+     *
+     * @param track The [Track] that [point] belongs to
+     * @param point The [TrackPoint] that you want to save to storage
+     *
+     * @return True if [point] was saved to storage, false otherwise
+     */
     fun saveTrackPoint(track: Track, point: TrackPoint): Boolean
 }

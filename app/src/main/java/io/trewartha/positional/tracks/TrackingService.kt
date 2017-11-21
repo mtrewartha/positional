@@ -24,7 +24,7 @@ import io.trewartha.positional.location.DistanceUtils.distanceInMiles
 import io.trewartha.positional.location.LocationLiveData
 import io.trewartha.positional.storage.FileStorage
 import io.trewartha.positional.storage.FirebaseFileStorage
-import io.trewartha.positional.storage.FirebaseTrackStorage
+import io.trewartha.positional.storage.FirestoreTrackStorage
 import io.trewartha.positional.storage.TrackStorage
 import io.trewartha.positional.time.Duration
 import io.trewartha.positional.ui.MainActivity
@@ -47,7 +47,7 @@ class TrackingService : LifecycleService() {
 
     private val fileStorage: FileStorage = FirebaseFileStorage()
     private val listeners = mutableSetOf<TrackingListener>()
-    private val trackStorage: TrackStorage = FirebaseTrackStorage()
+    private val trackStorage: TrackStorage = FirestoreTrackStorage()
 
     private lateinit var locationLiveData: LocationLiveData
     private lateinit var notificationManager: NotificationManager
@@ -134,7 +134,7 @@ class TrackingService : LifecycleService() {
         if (track == null) {
             track = Track().let {
                 it.start()
-                doAsync { trackStorage.createTrack(it) }
+                doAsync { trackStorage.saveTrack(it) }
                 it
             }
         }

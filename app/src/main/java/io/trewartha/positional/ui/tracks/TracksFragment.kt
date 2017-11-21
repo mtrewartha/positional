@@ -58,7 +58,7 @@ class TracksFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getTracks().observe(this, TracksObserver())
+        viewModel.getLiveTracks().observe(this, TracksObserver())
     }
 
     private fun checkEmptyView() {
@@ -76,8 +76,8 @@ class TracksFragment : Fragment() {
 
         viewModel.deleteTrack(track).addOnCompleteListener(activity) {
             if (!it.isSuccessful) {
-                showDeleteResultSnackbar(track, false)
-                adapter.tracks.add(position, track)
+                showDeleteResultSnackbar(it.result, false)
+                adapter.tracks.add(position, it.result)
                 adapter.notifyItemInserted(position)
                 checkEmptyView()
             }
