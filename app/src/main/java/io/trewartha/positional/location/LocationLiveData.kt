@@ -42,6 +42,7 @@ class LocationLiveData(private val context: Context) : LiveData<Location>() {
                 .setPriority(updatePriority)
                 .setMaxWaitTime(updateMaxWaitTime)
                 .setInterval(updateInterval)
+                .setFastestInterval(updateInterval)
         Log.info(TAG, "Requesting location updates: $locationRequest")
         try {
             locationClient.requestLocationUpdates(
