@@ -68,6 +68,7 @@
     <string name="track_default_name">Unnamed Track</string>
     <string name="tracks_empty_title">No Recorded Tracks</string>
     <string name="tracks_empty_subtitle">Check out the Map screen to record one!</string>
+    <string name="track_edit_name_hint">Track name</string>
 
     <!-- Position -->
     <string name="accuracy">Accuracy</string>

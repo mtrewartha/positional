@@ -1,10 +1,12 @@
 package io.trewartha.positional.storage
 
 import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.Dao
 import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.tracks.TrackPoint
 
-interface TrackStorage {
+@Dao
+interface TrackDao {
 
     /**
      * Deletes a [Track] from the storage medium that the implementer of this interface uses
@@ -14,6 +16,14 @@ interface TrackStorage {
      * @return True if [track] was deleted from storage, false otherwise
      */
     fun deleteTrack(track: Track): Boolean
+
+    /**
+     * Gets a [LiveData] that represents a the [Track] with ID [id] from storage
+     *
+     * @return A [LiveData] that you can observe to get continual updates to the [Track] with ID
+     * [id]
+     */
+    fun getLiveTrack(id: String): LiveData<Track>
 
     /**
      * Gets a [LiveData] that represents the current [Track]s in storage

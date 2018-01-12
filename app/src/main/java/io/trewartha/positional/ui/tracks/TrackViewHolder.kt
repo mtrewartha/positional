@@ -30,7 +30,7 @@ class TrackViewHolder(
     private val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
 
     private val mapSnapshotImageView: ImageView = itemView.findViewById(R.id.mapSnapshotImageView)
-    private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
+    private val nameTextView: TextView = itemView.findViewById(R.id.nameTextInputLayout)
     private val startEndTextView: TextView = itemView.findViewById(R.id.startEndTextView)
     private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
     private val editButton: TextView = itemView.findViewById(R.id.editButton)

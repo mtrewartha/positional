@@ -24,8 +24,8 @@ import io.trewartha.positional.location.DistanceUtils.distanceInMiles
 import io.trewartha.positional.location.LocationLiveData
 import io.trewartha.positional.storage.FileStorage
 import io.trewartha.positional.storage.FirebaseFileStorage
-import io.trewartha.positional.storage.FirestoreTrackStorage
-import io.trewartha.positional.storage.TrackStorage
+import io.trewartha.positional.storage.FirestoreTrackDao
+import io.trewartha.positional.storage.TrackDao
 import io.trewartha.positional.time.Duration
 import io.trewartha.positional.ui.MainActivity
 import org.jetbrains.anko.doAsync
@@ -47,7 +47,7 @@ class TrackingService : LifecycleService() {
 
     private val fileStorage: FileStorage = FirebaseFileStorage()
     private val listeners = mutableSetOf<TrackingListener>()
-    private val trackStorage: TrackStorage = FirestoreTrackStorage()
+    private val trackDao: TrackDao = FirestoreTrackDao()
 
     private lateinit var locationLiveData: LocationLiveData
     private lateinit var notificationManager: NotificationManager
@@ -134,7 +134,7 @@ class TrackingService : LifecycleService() {
         if (track == null) {
             track = Track().let {
                 it.start()
-                doAsync { trackStorage.saveTrack(it) }
+                doAsync { trackDao.saveTrack(it) }
                 it
             }
         }
@@ -157,7 +157,7 @@ class TrackingService : LifecycleService() {
         locationLiveData.removeObservers(this)
         track?.let { stoppedTrack ->
             stoppedTrack.stop()
-            doAsync { trackStorage.saveTrack(stoppedTrack) }
+            doAsync { trackDao.saveTrack(stoppedTrack) }
             listeners.forEach { it.onTrackingStopped(stoppedTrack) }
         }
         notificationManagerCompat.cancel(NOTIFICATION_ID)
@@ -200,7 +200,7 @@ class TrackingService : LifecycleService() {
         }
         trackPoints?.add(trackPoint)
 
-        doAsync { trackStorage.saveTrackPoint(currentTrack, trackPoint) }
+        doAsync { trackDao.saveTrackPoint(currentTrack, trackPoint) }
         listeners.forEach { it.onTrackPointAdded(currentTrack, trackPoint) }
         Log.info(TAG, "Added a new track point at (${trackPoint.latitude}, ${trackPoint.longitude})")
         lastLocation = location

@@ -37,7 +37,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/nameTextView"
+        android:id="@+id/nameTextInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"

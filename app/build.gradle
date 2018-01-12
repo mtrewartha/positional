@@ -48,13 +48,15 @@ dependencies {
     def androidSupportLibraryVersion = "26.1.0"
     def ankoVersion = "0.10.2"
     def glideVersion = "4.3.0"
-    def googlePlayServicesVersion = "11.6.0"
+    def googlePlayServicesVersion = "11.8.0"
 
     kapt "android.arch.lifecycle:compiler:$androidArchitectureComponentsVersion"
+    kapt "android.arch.persistence.room:compiler:$androidArchitectureComponentsVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVersion"
+    implementation "android.arch.persistence.room:runtime:$androidArchitectureComponentsVersion"
     implementation "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
     implementation "com.android.support:design:$androidSupportLibraryVersion"
     implementation "com.android.support:support-v4:$androidSupportLibraryVersion"
@@ -68,11 +70,10 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-core:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-crash:$googlePlayServicesVersion"
-    implementation "com.google.firebase:firebase-firestore:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-perf:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-storage:$googlePlayServicesVersion"
     implementation "com.jakewharton.threetenabp:threetenabp:1.0.5"
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.0-beta.3@aar') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.1@aar') {
         transitive = true
     }
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"

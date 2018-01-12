@@ -11,7 +11,7 @@ import io.trewartha.positional.common.Log
 import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.tracks.TrackPoint
 
-class FirestoreTrackStorage : TrackStorage {
+class FirestoreTrackDao : TrackDao {
 
     companion object {
         const val BATCH_SIZE_TRACK_POINT_DELETE = 100
@@ -22,7 +22,6 @@ class FirestoreTrackStorage : TrackStorage {
     private val auth = FirebaseAuth.getInstance()
     private val userId = auth.currentUser?.uid
             ?: throw IllegalStateException("No one is signed in")
-    private val tracksLiveData by lazy { TracksLiveData() }
     private val userTracksRef = firestore.collection("users").document(userId).collection("tracks")
 
     @WorkerThread
@@ -37,7 +36,9 @@ class FirestoreTrackStorage : TrackStorage {
         return deleteTask.isSuccessful
     }
 
-    override fun getLiveTracks(): LiveData<List<Track>> = tracksLiveData
+    override fun getLiveTrack(id: String): LiveData<Track> = TrackLiveData(id)
+
+    override fun getLiveTracks(): LiveData<List<Track>> = TracksLiveData()
 
     @WorkerThread
     override fun saveTrack(track: Track): Boolean {
@@ -58,6 +59,28 @@ class FirestoreTrackStorage : TrackStorage {
     private fun getTrackPointRef(track: Track, point: TrackPoint) = getTrackRef(track)
             .collection("points")
             .document(point.time.toString())
+
+    private inner class TrackLiveData(id: String) : LiveData<Track>() {
+
+        private val userTrackRef = userTracksRef.document(id)
+
+        private var queryListener: ListenerRegistration? = null
+
+        override fun onActive() {
+            queryListener = userTrackRef.addSnapshotListener listener@ { documentSnapshot, exception ->
+                if (exception != null) {
+                    Log.warn(TAG, "Something went wrong while listening to the track snapshot", exception)
+                    return@listener
+                }
+
+                value = Track().reify(documentSnapshot)
+            }
+        }
+
+        override fun onInactive() {
+            queryListener?.remove()
+        }
+    }
 
     private inner class TracksLiveData : LiveData<List<Track>>() {
 

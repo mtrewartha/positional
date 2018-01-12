@@ -31,7 +31,7 @@ class ProfileActivity : FragmentActivity() {
     }
 
     private fun loadUserInfo() {
-        nameTextView.text = user?.displayName
+        nameTextInputLayout.text = user?.displayName
         emailTextView.text = user?.email
     }
 

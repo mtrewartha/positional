@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -24,6 +25,7 @@ class TracksFragment : Fragment() {
 
     companion object {
         private const val TAG = "TracksFragment"
+        private const val REQUEST_CODE_EDIT_TRACK = 1
     }
 
     private val adapter = TracksAdapter(
@@ -123,7 +125,10 @@ class TracksFragment : Fragment() {
     }
 
     private fun onTrackEditClick(position: Int, track: Track) {
-        Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show()
+        val intent = Intent(context, TrackEditActivity::class.java).apply {
+            putExtra(TrackEditActivity.EXTRA_TRACK_ID, track.start.toString())
+        }
+        startActivityForResult(intent, REQUEST_CODE_EDIT_TRACK)
     }
 
     private fun onTrackDeleteClick(position: Int, track: Track) {
