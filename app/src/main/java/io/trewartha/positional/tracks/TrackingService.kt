@@ -1,5 +1,6 @@
 package io.trewartha.positional.tracks
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.arch.lifecycle.LifecycleService
 import android.arch.lifecycle.Observer
@@ -84,10 +85,15 @@ class TrackingService : LifecycleService() {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManagerCompat = NotificationManagerCompat.from(this)
 
+        @SuppressLint("NewApi")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelId = getString(R.string.notification_channel_id_tracking)
             val channelName = getString(R.string.notification_channel_name_tracking)
-            val trackingChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW)
+            val trackingChannel = NotificationChannel(
+                    channelId,
+                    channelName,
+                    NotificationManager.IMPORTANCE_LOW
+            )
 
             notificationManager.deleteNotificationChannel(channelId)
             notificationManager.createNotificationChannel(trackingChannel)
@@ -170,7 +176,7 @@ class TrackingService : LifecycleService() {
         track?.let { stoppedTrack ->
             stoppedTrack.stop()
             doAsync {
-                val updatedTrack = trackDao.updateTracks(stoppedTrack) >= 1
+                trackDao.updateTracks(stoppedTrack) >= 1
             }
             listeners.forEach { it.onTrackingStopped(stoppedTrack) }
         }
