@@ -19,7 +19,7 @@ interface TrackDao {
     fun getTrack(id: UUID): Flowable<Track>
 
     @Query("SELECT * FROM tracks WHERE end IS NOT NULL ORDER BY :orderBy")
-    fun getTracks(orderBy: String): DataSource.Factory<Integer, Track>
+    fun getTracks(orderBy: String): DataSource.Factory<Int, Track>
 
     @Update
     fun updateTracks(vararg tracks: Track): Int

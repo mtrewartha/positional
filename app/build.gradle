@@ -72,6 +72,7 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "android.arch.lifecycle:common-java8:$androidArchitectureComponentsVersion"
     implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVersion"
     implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
     implementation "android.arch.persistence.room:runtime:$androidArchitectureComponentsVersion"

@@ -1,10 +1,7 @@
 package io.trewartha.positional.tracks
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.*
 import android.arch.persistence.room.ForeignKey.CASCADE
-import android.arch.persistence.room.PrimaryKey
 import android.location.Location
 import org.threeten.bp.Instant
 import java.util.*
@@ -18,6 +15,9 @@ import java.util.*
                         childColumns = arrayOf("track_id"),
                         onDelete = CASCADE
                 )
+        ),
+        indices = arrayOf(
+                Index("track_id")
         )
 )
 class TrackPoint() {

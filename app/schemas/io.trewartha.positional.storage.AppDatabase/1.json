@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e2157c3eae129a312591cb09ce2f2373",
+    "identityHash": "dfae882de5a69afbe8194e031f0f5d4c",
     "entities": [
       {
         "tableName": "tracks",
@@ -125,7 +125,16 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_track_points_track_id",
+            "unique": false,
+            "columnNames": [
+              "track_id"
+            ],
+            "createSql": "CREATE  INDEX `index_track_points_track_id` ON `${TABLE_NAME}` (`track_id`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "tracks",
@@ -143,7 +152,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e2157c3eae129a312591cb09ce2f2373\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"dfae882de5a69afbe8194e031f0f5d4c\")"
     ]
   }
 }
