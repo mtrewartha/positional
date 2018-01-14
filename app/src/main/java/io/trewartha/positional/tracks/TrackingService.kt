@@ -24,8 +24,8 @@ import io.trewartha.positional.location.DistanceUtils.distanceInMiles
 import io.trewartha.positional.location.LocationLiveData
 import io.trewartha.positional.storage.FileStorage
 import io.trewartha.positional.storage.FirebaseFileStorage
-import io.trewartha.positional.storage.FirestoreTrackDao
 import io.trewartha.positional.storage.TrackDao
+import io.trewartha.positional.storage.ViewModelFactory
 import io.trewartha.positional.time.Duration
 import io.trewartha.positional.ui.MainActivity
 import org.jetbrains.anko.doAsync
@@ -45,9 +45,11 @@ class TrackingService : LifecycleService() {
         private const val TAG = "TrackingService"
     }
 
+    // TODO: Inject these using Dagger 2
     private val fileStorage: FileStorage = FirebaseFileStorage()
+    private lateinit var trackDao: TrackDao
+
     private val listeners = mutableSetOf<TrackingListener>()
-    private val trackDao: TrackDao = FirestoreTrackDao()
 
     private lateinit var locationLiveData: LocationLiveData
     private lateinit var notificationManager: NotificationManager
@@ -67,6 +69,8 @@ class TrackingService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
+
+        trackDao = ViewModelFactory.trackDao
 
         user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
@@ -134,7 +138,11 @@ class TrackingService : LifecycleService() {
         if (track == null) {
             track = Track().let {
                 it.start()
-                doAsync { trackDao.saveTrack(it) }
+                doAsync {
+                    Log.debug(TAG, "Creating track in database: #${it.id}")
+                    trackDao.createTrack(it)
+                    Log.debug(TAG, "Created track in database: #${it.id}")
+                }
                 it
             }
         }
@@ -157,7 +165,11 @@ class TrackingService : LifecycleService() {
         locationLiveData.removeObservers(this)
         track?.let { stoppedTrack ->
             stoppedTrack.stop()
-            doAsync { trackDao.saveTrack(stoppedTrack) }
+            doAsync {
+                Log.debug(TAG, "Updating track in database: #${stoppedTrack.id}")
+                val updatedTrack = trackDao.updateTracks(stoppedTrack) >= 1
+                Log.debug(TAG, "Updated track in database: $updatedTrack")
+            }
             listeners.forEach { it.onTrackingStopped(stoppedTrack) }
         }
         notificationManagerCompat.cancel(NOTIFICATION_ID)
@@ -190,7 +202,9 @@ class TrackingService : LifecycleService() {
 
     private fun onLocationChanged(location: Location?) {
         val currentTrack = track ?: return
-        val trackPoint = if (location == null) TrackPoint() else TrackPoint(location)
+        val trackPoint = (if (location == null) TrackPoint() else TrackPoint(location)).apply {
+            trackId = currentTrack.id
+        }
         val lastTrackPoint = if (trackPoints?.isEmpty() == true) null else trackPoints?.last()
         if (lastTrackPoint != null) {
             track?.distance = (track?.distance ?: 0.0f) + DistanceUtils.distanceBetween(
@@ -200,7 +214,7 @@ class TrackingService : LifecycleService() {
         }
         trackPoints?.add(trackPoint)
 
-        doAsync { trackDao.saveTrackPoint(currentTrack, trackPoint) }
+        doAsync { trackDao.createTrackPoint(trackPoint) }
         listeners.forEach { it.onTrackPointAdded(currentTrack, trackPoint) }
         Log.info(TAG, "Added a new track point at (${trackPoint.latitude}, ${trackPoint.longitude})")
         lastLocation = location

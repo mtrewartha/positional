@@ -1,7 +1,8 @@
 package io.trewartha.positional.ui.tracks
 
+import android.arch.paging.PagedListAdapter
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import android.support.v7.recyclerview.extensions.DiffCallback
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.trewartha.positional.R
@@ -11,14 +12,11 @@ class TracksAdapter(
         private val onTrackClickListener: (Int, Track) -> Unit,
         private val onTrackEditListener: (Int, Track) -> Unit,
         private val onTrackDeleteListener: (Int, Track) -> Unit
-) : RecyclerView.Adapter<TrackViewHolder>() {
-
-    var tracks = mutableListOf<Track>()
-
-    override fun getItemCount() = tracks.size
+) : PagedListAdapter<Track, TrackViewHolder>(TrackDiffCallback()) {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position])
+        val track = currentList?.get(position) ?: return
+        holder.bind(track)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -31,5 +29,11 @@ class TracksAdapter(
                 onTrackEditListener,
                 onTrackDeleteListener
         )
+    }
+
+    private class TrackDiffCallback : DiffCallback<Track>() {
+        override fun areItemsTheSame(oldItem: Track, newItem: Track) = oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Track, newItem: Track) = oldItem == newItem
     }
 }

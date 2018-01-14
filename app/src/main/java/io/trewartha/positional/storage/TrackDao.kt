@@ -1,54 +1,35 @@
 package io.trewartha.positional.storage
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
+import android.arch.paging.DataSource
+import android.arch.persistence.room.*
+import io.reactivex.Flowable
 import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.tracks.TrackPoint
+import java.util.*
 
 @Dao
 interface TrackDao {
 
-    /**
-     * Deletes a [Track] from the storage medium that the implementer of this interface uses
-     *
-     * @param track The [Track] that you want to delete from storage
-     *
-     * @return True if [track] was deleted from storage, false otherwise
-     */
-    fun deleteTrack(track: Track): Boolean
+    // Tracks
 
-    /**
-     * Gets a [LiveData] that represents a the [Track] with ID [id] from storage
-     *
-     * @return A [LiveData] that you can observe to get continual updates to the [Track] with ID
-     * [id]
-     */
-    fun getLiveTrack(id: String): LiveData<Track>
+    @Insert
+    fun createTrack(vararg tracks: Track)
 
-    /**
-     * Gets a [LiveData] that represents the current [Track]s in storage
-     *
-     * @return A [LiveData] that you can observe to get continual updates to [Track]s in storage
-     */
-    fun getLiveTracks(): LiveData<List<Track>>
+    @Query("SELECT * FROM tracks WHERE id = :id LIMIT 1")
+    fun getTrack(id: UUID): Flowable<Track>
 
-    /**
-     * Saves a [Track] to the storage medium that the implementer of this interface uses
-     *
-     * @param track The [Track] that you want to save to storage
-     *
-     * @return True if [track] was saved to storage, false otherwise
-     */
-    fun saveTrack(track: Track): Boolean
+    @Query("SELECT * FROM tracks ORDER BY end DESC")
+    fun getTracks(): DataSource.Factory<Integer, Track>
 
-    /**
-     * Saves a [TrackPoint] for a [Track] to the storage medium that the implementer of this
-     * interface uses
-     *
-     * @param track The [Track] that [point] belongs to
-     * @param point The [TrackPoint] that you want to save to storage
-     *
-     * @return True if [point] was saved to storage, false otherwise
-     */
-    fun saveTrackPoint(track: Track, point: TrackPoint): Boolean
+    @Update
+    fun updateTracks(vararg tracks: Track): Int
+
+    @Delete
+    fun deleteTracks(vararg tracks: Track): Int
+
+    // Track Points
+
+    @Insert
+    fun createTrackPoint(vararg trackPoints: TrackPoint)
+
 }

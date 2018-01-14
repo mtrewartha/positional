@@ -1,16 +1,53 @@
 package io.trewartha.positional.tracks
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.ForeignKey.CASCADE
+import android.arch.persistence.room.PrimaryKey
 import android.location.Location
 import org.threeten.bp.Instant
+import java.util.*
 
+@Entity(
+        tableName = "track_points",
+        foreignKeys = arrayOf(
+                ForeignKey(
+                        entity = Track::class,
+                        parentColumns = arrayOf("id"),
+                        childColumns = arrayOf("track_id"),
+                        onDelete = CASCADE
+                )
+        )
+)
 class TrackPoint() {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    var id: UUID = UUID.randomUUID()
+
+    @ColumnInfo(name = "track_id")
+    var trackId: UUID = UUID.randomUUID()
+
+    @ColumnInfo(name = "accuracy")
     var accuracy = 0.0f
+
+    @ColumnInfo(name = "bearing")
     var bearing = 0.0f
+
+    @ColumnInfo(name = "altitude")
     var altitude = 0.0
+
+    @ColumnInfo(name = "latitude")
     var latitude = 0.0
+
+    @ColumnInfo(name = "longitude")
     var longitude = 0.0
+
+    @ColumnInfo(name = "speed")
     var speed = 0.0f
+
+    @ColumnInfo(name = "time")
     var time: Instant = Instant.now()
 
     constructor(location: Location) : this() {

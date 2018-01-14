@@ -28,8 +28,17 @@ android {
         versionName "2.7.1"
     }
     buildTypes {
-        release {
+        debug {
+            debuggable true
             minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -49,6 +58,8 @@ dependencies {
     def ankoVersion = "0.10.2"
     def glideVersion = "4.3.0"
     def googlePlayServicesVersion = "11.8.0"
+    def rxAndroidVersion = "2.0.1"
+    def rxJavaVersion = "2.1.7"
 
     kapt "android.arch.lifecycle:compiler:$androidArchitectureComponentsVersion"
     kapt "android.arch.persistence.room:compiler:$androidArchitectureComponentsVersion"
@@ -56,7 +67,9 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVersion"
+    implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
     implementation "android.arch.persistence.room:runtime:$androidArchitectureComponentsVersion"
+    implementation "android.arch.persistence.room:rxjava2:$androidArchitectureComponentsVersion"
     implementation "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
     implementation "com.android.support:design:$androidSupportLibraryVersion"
     implementation "com.android.support:support-v4:$androidSupportLibraryVersion"
@@ -76,6 +89,8 @@ dependencies {
     implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.1@aar') {
         transitive = true
     }
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }

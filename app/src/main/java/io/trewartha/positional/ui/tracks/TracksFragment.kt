@@ -15,32 +15,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.firebase.crash.FirebaseCrash
 import io.trewartha.positional.R
-import io.trewartha.positional.common.Log
+import io.trewartha.positional.storage.ViewModelFactory
 import io.trewartha.positional.tracks.Track
+import io.trewartha.positional.ui.track.TrackEditActivity
 import kotlinx.android.synthetic.main.tracks_fragment.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class TracksFragment : Fragment() {
 
     companion object {
-        private const val TAG = "TracksFragment"
         private const val REQUEST_CODE_EDIT_TRACK = 1
+        private const val TAG = "TracksFragment"
     }
 
     private val adapter = TracksAdapter(
-            { position, track -> onTrackClick(position, track) },
-            { position, track -> onTrackEditClick(position, track) },
-            { position, track -> onTrackDeleteClick(position, track) }
-    ).apply {
-        setHasStableIds(true)
-    }
+            { _, track -> onTrackClick(track) },
+            { _, track -> onTrackEditClick(track) },
+            { _, track -> onTrackDeleteClick(track) }
+    )
 
-    private lateinit var viewModel: FirestoreTracksViewModel
+    private lateinit var tracksViewModel: TracksViewModel
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        viewModel = ViewModelProviders.of(this).get(FirestoreTracksViewModel::class.java)
+        tracksViewModel = ViewModelProviders.of(
+                this,
+                ViewModelFactory()).get(TracksViewModel::class.java
+        )
     }
 
     override fun onCreateView(
@@ -54,42 +57,25 @@ class TracksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tracksViewModel.tracks.observe(this, Observer {
+            adapter.setList(it)
+            if (it?.size ?: 0 <= 0) {
+                showEmptyView()
+            } else {
+                hideEmptyView()
+            }
+        })
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.getLiveTracks().observe(this, TracksObserver())
-    }
-
-    private fun checkEmptyView() {
-        if (adapter.itemCount == 0) {
-            showEmptyView()
-        } else {
-            hideEmptyView()
-        }
-    }
-
-    private fun deleteTrack(position: Int, track: Track) {
-        adapter.tracks.removeAt(position)
-        adapter.notifyItemRemoved(position)
-        checkEmptyView()
-
-        viewModel.deleteTrack(track).addOnCompleteListener(activity) {
-            if (!it.isSuccessful) {
-                showDeleteResultSnackbar(it.result, false)
-                adapter.tracks.add(position, it.result)
-                adapter.notifyItemInserted(position)
-                checkEmptyView()
-            }
-
-            it.exception?.let {
-                Log.warn(TAG, "Failed to delete track at position #$position", it)
-                FirebaseCrash.report(it)
+    private fun deleteTrack(track: Track) {
+        doAsync {
+            val deleted = tracksViewModel.deleteTrack(track) >= 1
+            uiThread {
+                showDeleteResultSnackbar(track, deleted)
             }
         }
-        showDeleteResultSnackbar(track, true)
     }
 
     private fun hideEmptyView() {
@@ -120,24 +106,24 @@ class TracksFragment : Fragment() {
         recyclerViewAnimator.start()
     }
 
-    private fun onTrackClick(position: Int, track: Track) {
+    private fun onTrackClick(track: Track) {
         Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show()
     }
 
-    private fun onTrackEditClick(position: Int, track: Track) {
+    private fun onTrackEditClick(track: Track) {
         val intent = Intent(context, TrackEditActivity::class.java).apply {
             putExtra(TrackEditActivity.EXTRA_TRACK_ID, track.start.toString())
         }
         startActivityForResult(intent, REQUEST_CODE_EDIT_TRACK)
     }
 
-    private fun onTrackDeleteClick(position: Int, track: Track) {
+    private fun onTrackDeleteClick(track: Track) {
         val trackName = track.name ?: getString(R.string.track_default_name)
         AlertDialog.Builder(context)
                 .setTitle(getString(R.string.tracks_delete_dialog_title, trackName))
                 .setMessage(R.string.tracks_delete_dialog_message)
                 .setPositiveButton(R.string.delete, { _, _ ->
-                    deleteTrack(position, track)
+                    deleteTrack(track)
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -175,17 +161,5 @@ class TracksFragment : Fragment() {
 
         emptyViewAnimator.start()
         recyclerViewAnimator.start()
-    }
-
-    private inner class TracksObserver : Observer<List<Track>> {
-
-        override fun onChanged(tracks: List<Track>?) {
-            if (tracks == null) return
-
-            adapter.tracks = tracks.toMutableList()
-            adapter.notifyDataSetChanged()
-
-            checkEmptyView()
-        }
     }
 }

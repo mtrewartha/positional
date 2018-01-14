@@ -70,6 +70,11 @@
     <string name="tracks_empty_subtitle">Check out the Map screen to record one!</string>
     <string name="track_edit_name_hint">Track name</string>
 
+    <!-- Track Edit -->
+    <string name="track_edit_load_failed_title">Unable to Load Track</string>
+    <string name="track_edit_load_failed_message">Something went wrong, so the developer has been notified.</string>
+    <string name="track_edit_load_failed_button_positive">OK</string>
+
     <!-- Position -->
     <string name="accuracy">Accuracy</string>
     <string name="bearing">Bearing</string>

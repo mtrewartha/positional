@@ -33,13 +33,11 @@ class SignInActivity : Activity() {
     }
 
     private fun onSignInResult(resultCode: Int, data: Intent) {
-        val response = IdpResponse.fromResultIntent(data)
-
         if (resultCode == Activity.RESULT_OK) {
             setResult(Activity.RESULT_OK)
             finish()
         } else {
-            googleSignInButton.isEnabled = true
+            val response = IdpResponse.fromResultIntent(data)
             val errorText = when (response?.errorCode) {
                 ErrorCodes.NO_NETWORK -> R.string.sign_in_failed_no_network
                 ErrorCodes.UNKNOWN_ERROR -> R.string.sign_in_cancelled
@@ -47,16 +45,17 @@ class SignInActivity : Activity() {
                 else -> R.string.sign_in_failed_unknown
             }
             Snackbar.make(signInLayout, errorText, Snackbar.LENGTH_LONG).show()
+            googleSignInButton.isEnabled = true
         }
     }
 
     private fun onGoogleSignInClick() {
         googleSignInButton.isEnabled = false
-        val signInIntent = AuthUI.getInstance().createSignInIntentBuilder()
+        val signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
                 .setAvailableProviders(listOf(
                         AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
                 ))
-                .setIsSmartLockEnabled(true)
                 .build()
         startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
     }

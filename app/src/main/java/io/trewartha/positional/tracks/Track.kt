@@ -32,16 +32,10 @@ class Track {
     @ColumnInfo(name = "distance")
     var distance: Float = 0.0f
 
-    /**
-     * Starts this [Track], settings its [start] to the current [Instant]
-     */
     fun start() {
         start = Instant.now()
     }
 
-    /**
-     * Stops this [Track], settings its [end] to the current [Instant]
-     */
     fun stop() {
         end = Instant.now()
     }

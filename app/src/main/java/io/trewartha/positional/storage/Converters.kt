@@ -1,11 +1,12 @@
 package io.trewartha.positional.storage
 
 import android.arch.persistence.room.TypeConverter
+import android.net.Uri
 import org.threeten.bp.Instant
 import java.util.*
 
 
-object Converters {
+class Converters {
 
     @TypeConverter
     fun toInstant(value: String?): Instant? {
@@ -25,5 +26,15 @@ object Converters {
     @TypeConverter
     fun fromUUID(uuid: UUID?): String? {
         return uuid?.toString()
+    }
+
+    @TypeConverter
+    fun toUri(value: String?): Uri? {
+        return if (value == null) null else Uri.parse(value)
+    }
+
+    @TypeConverter
+    fun fromUri(uri: Uri?): String? {
+        return uri.toString()
     }
 }

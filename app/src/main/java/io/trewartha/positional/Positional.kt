@@ -4,11 +4,12 @@ import com.google.firebase.crash.FirebaseCrash
 import com.google.firebase.perf.FirebasePerformance
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.trewartha.positional.common.Log
+import io.trewartha.positional.storage.ViewModelFactory
 
-class Application : android.app.Application() {
+class Positional : android.app.Application() {
 
     companion object {
-        private const val TAG = "Application"
+        private const val TAG = "Positional"
     }
 
     override fun onCreate() {
@@ -20,5 +21,7 @@ class Application : android.app.Application() {
         FirebasePerformance.getInstance().isPerformanceCollectionEnabled = enableFirebase
 
         AndroidThreeTen.init(this)
+
+        ViewModelFactory.initialize(this)
     }
 }

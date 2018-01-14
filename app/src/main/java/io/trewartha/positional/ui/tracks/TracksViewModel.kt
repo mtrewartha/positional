@@ -2,24 +2,21 @@ package io.trewartha.positional.ui.tracks
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import com.google.android.gms.tasks.Task
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
+import io.trewartha.positional.storage.TrackDao
 import io.trewartha.positional.tracks.Track
 
-abstract class TracksViewModel : ViewModel() {
+class TracksViewModel(private val trackDao: TrackDao) : ViewModel() {
 
-    /**
-     * Gets a [LiveData] of [Track]s that the view can observe
-     *
-     * @return A [LiveData] of [Track]s that the view can observe
-     */
-    abstract fun getLiveTracks(): LiveData<List<Track>>
+    companion object {
+        private const val PAGE_SIZE = 20
+    }
 
-    /**
-     * Deletes [track] from whatever underlying storage is used by this view model
-     *
-     * @param track The [Track] to delete
-     *
-     * @return The deleted [Track]
-     */
-    abstract fun deleteTrack(track: Track): Task<Track>
+    val tracks: LiveData<PagedList<Track>> = LivePagedListBuilder(
+            trackDao.getTracks(),
+            PAGE_SIZE
+    ).build()
+
+    fun deleteTrack(track: Track) = trackDao.deleteTracks(track)
 }
