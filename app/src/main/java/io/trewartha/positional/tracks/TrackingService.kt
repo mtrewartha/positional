@@ -105,6 +105,11 @@ class TrackingService : LifecycleService() {
         return Service.START_STICKY
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        stopTracking()
+    }
+
     fun addListener(listener: TrackingListener) {
         if (listeners.contains(listener)) return
 
@@ -139,9 +144,7 @@ class TrackingService : LifecycleService() {
             track = Track().let {
                 it.start()
                 doAsync {
-                    Log.debug(TAG, "Creating track in database: #${it.id}")
                     trackDao.createTrack(it)
-                    Log.debug(TAG, "Created track in database: #${it.id}")
                 }
                 it
             }
@@ -157,6 +160,7 @@ class TrackingService : LifecycleService() {
         }
 
         track?.let { startedTrack -> listeners.forEach { it.onTrackingStarted(startedTrack) } }
+
         Log.info(TAG, "Tracking started")
     }
 
@@ -166,9 +170,7 @@ class TrackingService : LifecycleService() {
         track?.let { stoppedTrack ->
             stoppedTrack.stop()
             doAsync {
-                Log.debug(TAG, "Updating track in database: #${stoppedTrack.id}")
                 val updatedTrack = trackDao.updateTracks(stoppedTrack) >= 1
-                Log.debug(TAG, "Updated track in database: $updatedTrack")
             }
             listeners.forEach { it.onTrackingStopped(stoppedTrack) }
         }
