@@ -14,7 +14,7 @@ class TracksViewModel(private val trackDao: TrackDao) : ViewModel() {
     }
 
     val tracks: LiveData<PagedList<Track>> = LivePagedListBuilder(
-            trackDao.getTracks(),
+            trackDao.getTracks("end DESC"),
             PAGE_SIZE
     ).build()
 
