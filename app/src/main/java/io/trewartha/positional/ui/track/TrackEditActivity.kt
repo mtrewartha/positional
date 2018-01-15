@@ -2,8 +2,11 @@ package io.trewartha.positional.ui.track
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.trewartha.positional.R
 import io.trewartha.positional.common.GlideApp
 import io.trewartha.positional.common.Log
@@ -19,8 +22,7 @@ import java.util.*
 class TrackEditActivity : BaseActivity() {
 
     companion object {
-        const val EXTRA_TRACK_ID = "trackId"
-
+        private const val EXTRA_TRACK_ID = "trackId"
         private const val TAG = "TrackEdit"
     }
 
@@ -42,6 +44,7 @@ class TrackEditActivity : BaseActivity() {
         super.onStart()
         trackViewModel
                 .getTrack(trackId)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(::onTrackLoaded, ::onTrackLoadFailed)
                 .attach()
     }
@@ -68,5 +71,17 @@ class TrackEditActivity : BaseActivity() {
                 .setMessage(R.string.track_edit_load_failed_message)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .show()
+    }
+
+    class IntentBuilder(context: Context) {
+
+        private val intent = Intent(context, TrackEditActivity::class.java)
+
+        fun withTrackId(trackId: UUID): IntentBuilder {
+            intent.putExtra(EXTRA_TRACK_ID, trackId.toString())
+            return this
+        }
+
+        fun build() = intent
     }
 }
