@@ -9,4 +9,6 @@ import java.util.*
 class TrackViewModel(private val trackDao: TrackDao) : ViewModel() {
 
     fun getTrack(id: UUID): Flowable<Track> = trackDao.getTrack(id)
+
+    fun updateTrack(track: Track) = trackDao.updateTracks(track)
 }

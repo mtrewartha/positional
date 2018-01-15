@@ -6,6 +6,8 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="ok">OK</string>
+    <string name="save">Save</string>
+    <string name="saving">Saving…</string>
     <string name="try_again">Try Again</string>
 
     <!-- Permissions -->
@@ -71,6 +73,7 @@
     <string name="track_edit_name_hint">Track name</string>
 
     <!-- Track Edit -->
+    <string name="track_edit_title">Edit track</string>
     <string name="track_edit_load_failed_title">Unable to Load Track</string>
     <string name="track_edit_load_failed_message">Something went wrong, so the developer has been notified.</string>
     <string name="track_edit_load_failed_button_positive">OK</string>
