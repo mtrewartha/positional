@@ -1,5 +1,7 @@
 package io.trewartha.positional.ui.tracks
 
+import android.annotation.SuppressLint
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
@@ -12,7 +14,6 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
-import java.io.File
 
 
 class TrackViewHolder(
@@ -32,15 +33,17 @@ class TrackViewHolder(
     private val startTextView: TextView = itemView.findViewById(R.id.startTextView)
     private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
 
+    @SuppressLint("CheckResult")
     fun bind(track: Track) {
-        val localSnapshotFile = File(track.snapshotLocal?.path)
-        val glide = GlideApp.with(context)
-        val glideRequest = if (localSnapshotFile.exists()) {
-            glide.load(track.snapshotLocal)
-        } else {
-            glide.load(track.snapshotRemote)
+        val snapshotUri = track.imageLocal ?: track.imageRemote
+        val errorDrawable = context.getDrawable(R.drawable.ic_terrain_black_24dp).apply {
+            setTint(ContextCompat.getColor(context, R.color.gray4))
         }
-        glideRequest.centerCrop().into(snapshotImageView)
+        GlideApp.with(context)
+                .load(snapshotUri)
+                .error(errorDrawable)
+                .centerCrop()
+                .into(snapshotImageView)
 
         itemView.setOnClickListener { onTrackClickListener(adapterPosition, track) }
 

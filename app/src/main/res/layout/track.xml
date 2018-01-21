@@ -13,6 +13,7 @@
         android:id="@+id/snapshotImageView"
         android:layout_width="match_parent"
         android:layout_height="192dp"
+        android:background="@color/gray5"
         android:contentDescription="@string/track_card_map_snapshot_content_description" />
 
     <TextView

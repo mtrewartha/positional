@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
@@ -22,7 +23,6 @@ import io.trewartha.positional.ui.BaseActivity
 import kotlinx.android.synthetic.main.track_edit_activity.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import java.io.File
 import java.util.*
 
 
@@ -117,15 +117,15 @@ class TrackEditActivity : BaseActivity() {
     @SuppressLint("CheckResult")
     private fun onTrackLoaded(track: Track) {
         this.track = track
-
-        val localSnapshotFile = File(track.snapshotLocal?.path)
-        val glide = GlideApp.with(this)
-        val glideRequest = if (localSnapshotFile.exists()) {
-            glide.load(track.snapshotLocal)
-        } else {
-            glide.load(track.snapshotRemote)
+        val snapshotUri = track.imageLocal ?: track.imageRemote
+        val errorDrawable = getDrawable(R.drawable.ic_terrain_black_24dp).apply {
+            setTint(ContextCompat.getColor(this@TrackEditActivity, R.color.gray4))
         }
-        glideRequest.centerCrop().into(snapshotImageView)
+        GlideApp.with(this)
+                .load(snapshotUri)
+                .error(errorDrawable)
+                .centerCrop()
+                .into(snapshotImageView)
 
         nameTextInputEditText.setText(track.name)
     }

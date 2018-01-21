@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Location
-import android.net.Uri
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -23,8 +22,6 @@ import io.trewartha.positional.location.DistanceUtils
 import io.trewartha.positional.location.DistanceUtils.distanceInKilometers
 import io.trewartha.positional.location.DistanceUtils.distanceInMiles
 import io.trewartha.positional.location.LocationLiveData
-import io.trewartha.positional.storage.FileStorage
-import io.trewartha.positional.storage.FirebaseFileStorage
 import io.trewartha.positional.storage.TrackDao
 import io.trewartha.positional.storage.ViewModelFactory
 import io.trewartha.positional.time.Duration
@@ -32,7 +29,6 @@ import io.trewartha.positional.ui.MainActivity
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.runOnUiThread
 import org.threeten.bp.Instant
-import java.io.File
 import java.util.*
 
 class TrackingService : LifecycleService() {
@@ -47,7 +43,6 @@ class TrackingService : LifecycleService() {
     }
 
     // TODO: Inject these using Dagger 2
-    private val fileStorage: FileStorage = FirebaseFileStorage()
     private lateinit var trackDao: TrackDao
 
     private val listeners = mutableSetOf<TrackingListener>()
@@ -129,15 +124,6 @@ class TrackingService : LifecycleService() {
 
     fun removeListener(listener: TrackingListener) {
         listeners.remove(listener)
-    }
-
-    fun addTrackSnapshot(snapshot: File) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-                ?: throw IllegalStateException("No one is signed in")
-        val filename = "track_snapshot_${userId}_${Instant.now()}"
-        val path = getString(R.string.user_track_snapshot, userId, filename)
-        track?.snapshotLocal = Uri.fromFile(snapshot)
-        track?.snapshotRemote = fileStorage.upload(snapshot, path)
     }
 
     fun startTracking() {

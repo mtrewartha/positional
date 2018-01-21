@@ -2,7 +2,6 @@ package io.trewartha.positional.ui.map
 
 import android.content.*
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar
 import com.google.android.gms.location.LocationRequest
-import com.google.firebase.auth.FirebaseAuth
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
@@ -34,10 +32,6 @@ import io.trewartha.positional.tracks.TrackingService
 import io.trewartha.positional.ui.LocationAwareFragment
 import kotlinx.android.synthetic.main.map_fragment.*
 import kotlinx.android.synthetic.main.track_toolbar.*
-import org.jetbrains.anko.doAsync
-import org.threeten.bp.Instant
-import java.io.File
-import java.io.FileOutputStream
 
 class MapFragment : LocationAwareFragment() {
 
@@ -46,7 +40,6 @@ class MapFragment : LocationAwareFragment() {
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
         private const val LOCATION_UPDATE_MAX_WAIT_TIME = 1000L
         private const val MAP_ANIMATION_DURATION_MS = 2000
-        private const val MAP_SNAPSHOT_JPEG_QUALITY = 80
         private const val MAP_ZOOM_LEVEL_DEFAULT = 17.0
         private const val TAG = "MapFragment"
     }
@@ -221,19 +214,7 @@ class MapFragment : LocationAwareFragment() {
     }
 
     private fun startTracking() {
-        map?.snapshot { doAsync { addTrackSnapshot(it) } }
         trackingService?.startTracking()
-    }
-
-    private fun addTrackSnapshot(trackSnapshotBitmap: Bitmap) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        val snapshotFile = File(context.cacheDir, "track-snapshot-$userId-${Instant.now()}.jpg")
-        trackSnapshotBitmap.compress(
-                Bitmap.CompressFormat.JPEG,
-                MAP_SNAPSHOT_JPEG_QUALITY,
-                FileOutputStream(snapshotFile)
-        )
-        trackingService?.addTrackSnapshot(snapshotFile)
     }
 
     private fun stopTracking() {

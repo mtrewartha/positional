@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "dfae882de5a69afbe8194e031f0f5d4c",
+    "identityHash": "73a0551c0ed1cb8fbf328671535c7a54",
     "entities": [
       {
         "tableName": "tracks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `end` TEXT, `snapshot_remote` TEXT, `snapshot_local` TEXT, `start` TEXT, `distance` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `end` TEXT, `image_remote` TEXT, `image_local` TEXT, `start` TEXT, `distance` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -27,14 +27,14 @@
             "notNull": false
           },
           {
-            "fieldPath": "snapshotRemote",
-            "columnName": "snapshot_remote",
+            "fieldPath": "imageRemote",
+            "columnName": "image_remote",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "snapshotLocal",
-            "columnName": "snapshot_local",
+            "fieldPath": "imageLocal",
+            "columnName": "image_local",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -152,7 +152,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"dfae882de5a69afbe8194e031f0f5d4c\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"73a0551c0ed1cb8fbf328671535c7a54\")"
     ]
   }
 }

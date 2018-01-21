@@ -8,8 +8,8 @@
     <!-- Generic UI Components -->
 
     <!-- Compass -->
-    <color name="compassAttributeTitleColor">@color/gray4</color>
-    <color name="compassAttributeValueColor">@color/gray4</color>
+    <color name="compassAttributeTitleColor">@color/gray5</color>
+    <color name="compassAttributeValueColor">@color/gray5</color>
     <color name="compassBackground">@color/white</color>
     <color name="compassDegrees">@color/white</color>
 

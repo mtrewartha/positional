@@ -20,11 +20,11 @@ class Track {
     @ColumnInfo(name = "end")
     var end: Instant? = null
 
-    @ColumnInfo(name = "snapshot_remote")
-    var snapshotRemote: Uri? = null
+    @ColumnInfo(name = "image_remote")
+    var imageRemote: Uri? = null
 
-    @ColumnInfo(name = "snapshot_local")
-    var snapshotLocal: Uri? = null
+    @ColumnInfo(name = "image_local")
+    var imageLocal: Uri? = null
 
     @ColumnInfo(name = "start")
     var start: Instant? = null

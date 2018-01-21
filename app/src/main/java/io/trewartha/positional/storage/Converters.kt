@@ -35,6 +35,6 @@ class Converters {
 
     @TypeConverter
     fun fromUri(uri: Uri?): String? {
-        return uri.toString()
+        return uri?.toString()
     }
 }

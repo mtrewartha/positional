@@ -7,7 +7,8 @@
     <color name="gray1">#333333</color>
     <color name="gray2">#666666</color>
     <color name="gray3">#AAAAAA</color>
-    <color name="gray4">#EEEEEE</color>
+    <color name="gray4">#DDDDDD</color>
+    <color name="gray5">#EEEEEE</color>
     <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
 
@@ -37,7 +38,7 @@
     <color name="navigationBarTextColor">@color/gray1</color>
 
     <!-- Position Stats -->
-    <color name="positionStatDivider">@color/gray4</color>
+    <color name="positionStatDivider">@color/gray5</color>
     <color name="positionStatTextColor">@color/gray1</color>
     <color name="positionStatIconTint">@color/gray1</color>
 
