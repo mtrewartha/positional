@@ -1,6 +1,7 @@
 package io.trewartha.positional.ui.track
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,11 @@ import java.util.*
 class TrackEditActivity : BaseActivity() {
 
     companion object {
+        const val RESULT_DELETE_FAILED = Activity.RESULT_FIRST_USER
+        const val RESULT_DELETE_SUCCESSFUL = Activity.RESULT_FIRST_USER + 1
+        const val RESULT_SAVE_FAILED = Activity.RESULT_FIRST_USER + 2
+        const val RESULT_SAVE_SUCCESSFUL = Activity.RESULT_FIRST_USER + 3
+
         private const val EXTRA_TRACK_ID = "trackId"
         private const val TAG = "TrackEdit"
     }
@@ -76,9 +82,36 @@ class TrackEditActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> onTrackSaveClick(item)
+            R.id.delete -> onTrackDeleteClick(item)
             android.R.id.home -> finish()
         }
         return true
+    }
+
+    private fun deleteTrack(deleteMenuItem: MenuItem, track: Track) {
+        deleteMenuItem.isEnabled = false
+        deleteMenuItem.title = getString(R.string.deleting)
+
+        doAsync {
+            val success = trackViewModel.deleteTrack(track) > 0
+
+            uiThread {
+                setResult(if (success) RESULT_DELETE_SUCCESSFUL else RESULT_DELETE_FAILED)
+                finish()
+            }
+        }
+    }
+
+    private fun onTrackDeleteClick(deleteMenuItem: MenuItem) {
+        val trackName = track?.name ?: getString(R.string.track_default_name)
+        AlertDialog.Builder(this)
+                .setTitle(getString(R.string.track_delete_dialog_title, trackName))
+                .setMessage(R.string.track_delete_dialog_message)
+                .setPositiveButton(R.string.delete, { _, _ ->
+                    deleteTrack(deleteMenuItem, track!!)
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
     @SuppressLint("CheckResult")
@@ -107,17 +140,20 @@ class TrackEditActivity : BaseActivity() {
                 .show()
     }
 
-    private fun onTrackSaveClick(item: MenuItem) {
-        item.isEnabled = false
-        item.title = getString(R.string.saving)
+    private fun onTrackSaveClick(saveMenuItem: MenuItem) {
+        saveMenuItem.isEnabled = false
+        saveMenuItem.title = getString(R.string.saving)
 
         doAsync {
-            track?.let {
+            val success = track?.let {
                 it.name = nameTextInputEditText.text.toString()
-                trackViewModel.updateTrack(it)
-            }
+                trackViewModel.updateTrack(it) > 0
+            } ?: false
 
-            uiThread { finish() }
+            uiThread {
+                setResult(if (success) RESULT_SAVE_SUCCESSFUL else RESULT_SAVE_FAILED)
+                finish()
+            }
         }
     }
 

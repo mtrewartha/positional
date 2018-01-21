@@ -7,7 +7,7 @@ import android.arch.paging.PagedList
 import io.trewartha.positional.storage.TrackDao
 import io.trewartha.positional.tracks.Track
 
-class TracksViewModel(private val trackDao: TrackDao) : ViewModel() {
+class TracksViewModel(trackDao: TrackDao) : ViewModel() {
 
     companion object {
         private const val PAGE_SIZE = 20
@@ -17,6 +17,4 @@ class TracksViewModel(private val trackDao: TrackDao) : ViewModel() {
             trackDao.getTracks("end DESC"),
             PAGE_SIZE
     ).build()
-
-    fun deleteTrack(track: Track) = trackDao.deleteTracks(track)
 }

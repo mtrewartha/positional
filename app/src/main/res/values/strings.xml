@@ -4,6 +4,7 @@
     <!-- Common Text -->
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="deleting">Deleting…</string>
     <string name="edit">Edit</string>
     <string name="ok">OK</string>
     <string name="save">Save</string>
@@ -62,11 +63,13 @@
     <string name="track_card_delete">@string/delete</string>
     <string name="track_card_edit">@string/edit</string>
     <string name="track_card_time_content_description">Date and Time</string>
-    <string name="track_delete_success_snackbar">Deleted %s</string>
-    <string name="track_delete_failure_snackbar">Unable to delete %s</string>
-    <string name="tracks_delete_dialog_title">Delete %s?</string>
-    <string name="tracks_delete_dialog_message">This is permanent and cannot be undone.</string>
+    <string name="track_delete_dialog_title">Delete %s?</string>
+    <string name="track_delete_dialog_message">This is permanent and cannot be undone.</string>
+    <string name="track_delete_success_snackbar">Deleted</string>
+    <string name="track_delete_failure_snackbar">Unable to delete</string>
     <string name="track_default_name">Unnamed Track</string>
+    <string name="track_save_success_snackbar">Saved</string>
+    <string name="track_save_failure_snackbar">Unable to save</string>
     <string name="tracks_empty_title">No Recorded Tracks</string>
     <string name="tracks_empty_subtitle">Check out the Map screen to record one!</string>
     <string name="track_edit_name_hint">Track name</string>

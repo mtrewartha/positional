@@ -5,22 +5,19 @@ import android.animation.AnimatorListenerAdapter
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import io.trewartha.positional.R
 import io.trewartha.positional.storage.ViewModelFactory
 import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.ui.track.TrackEditActivity
 import kotlinx.android.synthetic.main.tracks_fragment.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class TracksFragment : Fragment() {
 
@@ -63,11 +60,13 @@ class TracksFragment : Fragment() {
         recyclerView.adapter = adapter
     }
 
-    private fun deleteTrack(track: Track) {
-        doAsync {
-            val deleted = tracksViewModel.deleteTrack(track) >= 1
-            uiThread {
-                showDeleteResultSnackbar(track, deleted)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_CODE_EDIT_TRACK -> when (resultCode) {
+                TrackEditActivity.RESULT_DELETE_FAILED -> showDeleteResultSnackbar(false)
+                TrackEditActivity.RESULT_DELETE_SUCCESSFUL -> showDeleteResultSnackbar(true)
+                TrackEditActivity.RESULT_SAVE_FAILED -> showSaveResultSnackbar(false)
+                TrackEditActivity.RESULT_SAVE_SUCCESSFUL -> showSaveResultSnackbar(true)
             }
         }
     }
@@ -101,35 +100,29 @@ class TracksFragment : Fragment() {
     }
 
     private fun onTrackClick(track: Track) {
-        Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun onTrackEditClick(track: Track) {
         val intent = TrackEditActivity.IntentBuilder(context)
                 .withTrackId(track.id)
                 .build()
         startActivityForResult(intent, REQUEST_CODE_EDIT_TRACK)
     }
 
-    private fun onTrackDeleteClick(track: Track) {
-        val trackName = track.name ?: getString(R.string.track_default_name)
-        AlertDialog.Builder(context)
-                .setTitle(getString(R.string.tracks_delete_dialog_title, trackName))
-                .setMessage(R.string.tracks_delete_dialog_message)
-                .setPositiveButton(R.string.delete, { _, _ ->
-                    deleteTrack(track)
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show()
+    private fun showDeleteResultSnackbar(deleteSuccessful: Boolean) {
+        val snackbarText = getString(
+                if (deleteSuccessful)
+                    R.string.track_delete_success_snackbar
+                else
+                    R.string.track_delete_failure_snackbar
+        )
+        Snackbar.make(coordinatorLayout, snackbarText, Snackbar.LENGTH_LONG).show()
     }
 
-    private fun showDeleteResultSnackbar(track: Track, deleteSuccessful: Boolean) {
-        val trackName = track.name ?: getString(R.string.track_default_name)
-        val snackbarText = if (deleteSuccessful) {
-            getString(R.string.track_delete_success_snackbar, trackName)
-        } else {
-            getString(R.string.track_delete_failure_snackbar, trackName)
-        }
+    private fun showSaveResultSnackbar(saveSuccessful: Boolean) {
+        val snackbarText = getString(
+                if (saveSuccessful)
+                    R.string.track_save_success_snackbar
+                else
+                    R.string.track_save_failure_snackbar
+        )
         Snackbar.make(coordinatorLayout, snackbarText, Snackbar.LENGTH_LONG).show()
     }
 
