@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/save"
-        android:title="@string/save"
+        android:id="@+id/edit"
+        android:title="@string/edit"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete"
+        app:showAsAction="never" />
 
 </menu>

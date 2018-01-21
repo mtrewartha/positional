@@ -39,7 +39,7 @@ class ProfileActivity : FragmentActivity() {
         val unknownDrawable = TextDrawable(
                 this,
                 "?",
-                ContextCompat.getColor(this, R.color.gray3),
+                ContextCompat.getColor(this, R.color.gray4),
                 ContextCompat.getColor(this, R.color.white)
         )
         GlideApp.with(this)

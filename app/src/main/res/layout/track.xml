@@ -10,10 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <ImageView
-        android:id="@+id/snapshotImageView"
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="192dp"
-        android:background="@color/gray5"
+        android:background="@color/gray6"
         android:contentDescription="@string/track_card_map_snapshot_content_description" />
 
     <TextView

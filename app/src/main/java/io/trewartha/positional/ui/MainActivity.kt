@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         private const val REQUEST_CODE_SIGN_IN = 1
 
         init {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadUserPhoto() {
         val url = firebaseAuth.currentUser?.photoUrl
-        val textColor = ContextCompat.getColor(this, R.color.gray3)
+        val textColor = ContextCompat.getColor(this, R.color.gray4)
         val backgroundColor = ContextCompat.getColor(this, R.color.white)
         val unknownDrawable = TextDrawable(this, "?", textColor, backgroundColor)
         GlideApp.with(this)

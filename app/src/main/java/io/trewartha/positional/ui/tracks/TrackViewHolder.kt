@@ -10,6 +10,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.common.GlideApp
 import io.trewartha.positional.time.Duration
 import io.trewartha.positional.tracks.Track
+import io.trewartha.positional.ui.DayNightThemeUtils
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
@@ -36,9 +37,21 @@ class TrackViewHolder(
     @SuppressLint("CheckResult")
     fun bind(track: Track) {
         val snapshotUri = track.imageLocal ?: track.imageRemote
+
+        val inDayMode = DayNightThemeUtils(context).inDayMode()
         val errorDrawable = context.getDrawable(R.drawable.ic_terrain_black_24dp).apply {
-            setTint(ContextCompat.getColor(context, R.color.gray4))
+            val tintColor = if (inDayMode)
+                R.color.trackImageForegroundDay
+            else
+                R.color.trackImageForegroundNight
+            setTint(ContextCompat.getColor(context, tintColor))
         }
+        val imageBackgroundColor = if (inDayMode)
+            R.color.trackImageBackgroundDay
+        else
+            R.color.trackImageBackgroundNight
+        imageView.setBackgroundResource(imageBackgroundColor)
+
         GlideApp.with(context)
                 .load(snapshotUri)
                 .error(errorDrawable)

@@ -57,7 +57,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center"
         android:text="@string/sign_in_why"
-        android:textColor="@color/gray3"
+        android:textColor="@color/gray4"
         android:textSize="12sp"/>
 
 </RelativeLayout>

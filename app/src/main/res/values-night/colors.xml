@@ -8,8 +8,8 @@
     <!-- Generic UI Components -->
 
     <!-- Compass -->
-    <color name="compassAttributeTitleColor">@color/gray5</color>
-    <color name="compassAttributeValueColor">@color/gray5</color>
+    <color name="compassAttributeTitleColor">@color/gray6</color>
+    <color name="compassAttributeValueColor">@color/gray6</color>
     <color name="compassBackground">@color/white</color>
     <color name="compassDegrees">@color/white</color>
 
@@ -25,6 +25,6 @@
     <color name="positionStatIconTint">@color/white</color>
 
     <!-- View Pagers -->
-    <color name="viewPagerTabDotSelected">@color/gray2</color>
+    <color name="viewPagerTabDotSelected">@color/gray3</color>
     <color name="viewPagerTabDotUnselected">@color/gray1</color>
 </resources>

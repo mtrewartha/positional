@@ -5,10 +5,11 @@
     <color name="black">#000000</color>
     <color name="blue">#00a9e7</color>
     <color name="gray1">#333333</color>
-    <color name="gray2">#666666</color>
-    <color name="gray3">#AAAAAA</color>
-    <color name="gray4">#DDDDDD</color>
-    <color name="gray5">#EEEEEE</color>
+    <color name="gray2">#444444</color>
+    <color name="gray3">#666666</color>
+    <color name="gray4">#AAAAAA</color>
+    <color name="gray5">#DDDDDD</color>
+    <color name="gray6">#EEEEEE</color>
     <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
 
@@ -38,7 +39,7 @@
     <color name="navigationBarTextColor">@color/gray1</color>
 
     <!-- Position Stats -->
-    <color name="positionStatDivider">@color/gray5</color>
+    <color name="positionStatDivider">@color/gray6</color>
     <color name="positionStatTextColor">@color/gray1</color>
     <color name="positionStatIconTint">@color/gray1</color>
 
@@ -46,7 +47,13 @@
     <color name="screenLockButtonTint">@color/positionStatIconTint</color>
 
     <!-- View Pagers -->
-    <color name="viewPagerTabDotSelected">@color/gray2</color>
-    <color name="viewPagerTabDotUnselected">@color/gray3</color>
+    <color name="viewPagerTabDotSelected">@color/gray3</color>
+    <color name="viewPagerTabDotUnselected">@color/gray4</color>
+
+    <!-- Tracks -->
+    <color name="trackImageBackgroundDay">@color/gray6</color>
+    <color name="trackImageBackgroundNight">@color/gray2</color>
+    <color name="trackImageForegroundDay">@color/white</color>
+    <color name="trackImageForegroundNight">@color/gray1</color>
 
 </resources>

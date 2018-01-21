@@ -16,13 +16,13 @@ import android.view.ViewGroup
 import io.trewartha.positional.R
 import io.trewartha.positional.storage.ViewModelFactory
 import io.trewartha.positional.tracks.Track
-import io.trewartha.positional.ui.track.TrackEditActivity
+import io.trewartha.positional.ui.track.TrackActivity
 import kotlinx.android.synthetic.main.tracks_fragment.*
 
 class TracksFragment : Fragment() {
 
     companion object {
-        private const val REQUEST_CODE_EDIT_TRACK = 1
+        private const val REQUEST_CODE_VIEW_TRACK = 1
     }
 
     private val adapter = TracksAdapter({ _, track -> onTrackClick(track) })
@@ -62,11 +62,9 @@ class TracksFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_CODE_EDIT_TRACK -> when (resultCode) {
-                TrackEditActivity.RESULT_DELETE_FAILED -> showDeleteResultSnackbar(false)
-                TrackEditActivity.RESULT_DELETE_SUCCESSFUL -> showDeleteResultSnackbar(true)
-                TrackEditActivity.RESULT_SAVE_FAILED -> showSaveResultSnackbar(false)
-                TrackEditActivity.RESULT_SAVE_SUCCESSFUL -> showSaveResultSnackbar(true)
+            REQUEST_CODE_VIEW_TRACK -> when (resultCode) {
+                TrackActivity.RESULT_DELETE_FAILED -> showDeleteResultSnackbar(false)
+                TrackActivity.RESULT_DELETE_SUCCESSFUL -> showDeleteResultSnackbar(true)
             }
         }
     }
@@ -100,10 +98,10 @@ class TracksFragment : Fragment() {
     }
 
     private fun onTrackClick(track: Track) {
-        val intent = TrackEditActivity.IntentBuilder(context)
+        val intent = TrackActivity.IntentBuilder(context)
                 .withTrackId(track.id)
                 .build()
-        startActivityForResult(intent, REQUEST_CODE_EDIT_TRACK)
+        startActivityForResult(intent, REQUEST_CODE_VIEW_TRACK)
     }
 
     private fun showDeleteResultSnackbar(deleteSuccessful: Boolean) {
@@ -112,16 +110,6 @@ class TracksFragment : Fragment() {
                     R.string.track_delete_success_snackbar
                 else
                     R.string.track_delete_failure_snackbar
-        )
-        Snackbar.make(coordinatorLayout, snackbarText, Snackbar.LENGTH_LONG).show()
-    }
-
-    private fun showSaveResultSnackbar(saveSuccessful: Boolean) {
-        val snackbarText = getString(
-                if (saveSuccessful)
-                    R.string.track_save_success_snackbar
-                else
-                    R.string.track_save_failure_snackbar
         )
         Snackbar.make(coordinatorLayout, snackbarText, Snackbar.LENGTH_LONG).show()
     }

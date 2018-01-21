@@ -272,7 +272,7 @@ class MapFragment : LocationAwareFragment() {
                 followingUserLocation = false
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     myLocationButton.imageTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(context, R.color.gray2)
+                            ContextCompat.getColor(context, R.color.gray3)
                     )
                 }
                 Log.info(TAG, "Stopped following the user's location")
