@@ -16,8 +16,21 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@drawable/gray_gradient"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/track_edit_title" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/imageFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:contentDescription="@string/track_card_map_snapshot_content_description"
+        android:src="@drawable/ic_photo_camera_black_24dp"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintEnd_toEndOf="@id/imageView" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/nameTextInputLayout"

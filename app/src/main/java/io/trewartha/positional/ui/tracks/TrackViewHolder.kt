@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.trewartha.positional.R
 import io.trewartha.positional.common.GlideApp
 import io.trewartha.positional.time.Duration
@@ -36,8 +37,6 @@ class TrackViewHolder(
 
     @SuppressLint("CheckResult")
     fun bind(track: Track) {
-        val snapshotUri = track.imageLocal ?: track.imageRemote
-
         val inDayMode = DayNightThemeUtils(context).inDayMode()
         val errorDrawable = context.getDrawable(R.drawable.ic_terrain_black_24dp).apply {
             val tintColor = if (inDayMode)
@@ -53,7 +52,9 @@ class TrackViewHolder(
         imageView.setBackgroundResource(imageBackgroundColor)
 
         GlideApp.with(context)
-                .load(snapshotUri)
+                .load(track.imageLocal ?: track.imageRemote)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(errorDrawable)
                 .centerCrop()
                 .into(imageView)

@@ -3,8 +3,10 @@
     <!-- Base Colors -->
     <!-- NOTE: ONLY OTHER COLORS SHOULD REFER TO THESE -->
     <color name="black">#000000</color>
+    <color name="black_transparent">#88000000</color>
     <color name="blue">#00a9e7</color>
     <color name="gray1">#333333</color>
+    <color name="gray1_transparent">#88333333</color>
     <color name="gray2">#444444</color>
     <color name="gray3">#666666</color>
     <color name="gray4">#AAAAAA</color>
@@ -51,6 +53,7 @@
     <color name="viewPagerTabDotUnselected">@color/gray4</color>
 
     <!-- Tracks -->
+    <color name="trackImageUploadIcon">@color/black_transparent</color>
     <color name="trackImageBackgroundDay">@color/gray6</color>
     <color name="trackImageBackgroundNight">@color/gray2</color>
     <color name="trackImageForegroundDay">@color/white</color>

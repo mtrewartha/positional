@@ -9,8 +9,10 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatDelegate
 import android.view.Menu
 import android.view.MenuItem
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.trewartha.positional.R
 import io.trewartha.positional.common.GlideApp
@@ -46,6 +48,7 @@ class TrackActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setContentView(R.layout.track_activity)
         trackId = intent.getUUIDExtra(EXTRA_TRACK_ID)
                 ?: throw IllegalArgumentException("The activity wasn't given a track ID")
@@ -110,7 +113,6 @@ class TrackActivity : BaseActivity() {
     @SuppressLint("CheckResult")
     private fun onTrackLoaded(track: Track) {
         this.track = track
-        val imageUri = track.imageLocal ?: track.imageRemote
 
         val inDayMode = DayNightThemeUtils(this).inDayMode()
         val errorDrawable = getDrawable(R.drawable.ic_terrain_black_24dp).apply {
@@ -127,7 +129,9 @@ class TrackActivity : BaseActivity() {
         imageView.setBackgroundResource(imageBackgroundColor)
 
         GlideApp.with(this)
-                .load(imageUri)
+                .load(track.imageLocal ?: track.imageRemote)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(errorDrawable)
                 .centerCrop()
                 .into(imageView)

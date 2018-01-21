@@ -29,6 +29,7 @@ import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.tracks.TrackPoint
 import io.trewartha.positional.tracks.TrackingListener
 import io.trewartha.positional.tracks.TrackingService
+import io.trewartha.positional.ui.DayNightThemeUtils
 import io.trewartha.positional.ui.LocationAwareFragment
 import kotlinx.android.synthetic.main.map_fragment.*
 import kotlinx.android.synthetic.main.track_toolbar.*
@@ -40,6 +41,8 @@ class MapFragment : LocationAwareFragment() {
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
         private const val LOCATION_UPDATE_MAX_WAIT_TIME = 1000L
         private const val MAP_ANIMATION_DURATION_MS = 2000
+        private const val MAP_BOX_STYLE_URL_DAY = "mapbox://styles/mapbox/outdoors-v10"
+        private const val MAP_BOX_STYLE_URL_NIGHT = "mapbox://styles/mapbox/outdoors-v10"
         private const val MAP_ZOOM_LEVEL_DEFAULT = 17.0
         private const val TAG = "MapFragment"
     }
@@ -78,6 +81,10 @@ class MapFragment : LocationAwareFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val inDayMode = DayNightThemeUtils(context).inDayMode()
+        val styleUrl = if (inDayMode) MAP_BOX_STYLE_URL_DAY else MAP_BOX_STYLE_URL_NIGHT
+        mapView.setStyleUrl(styleUrl)
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync gotMap@ {
