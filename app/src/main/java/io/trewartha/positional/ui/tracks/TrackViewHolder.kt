@@ -28,7 +28,7 @@ class TrackViewHolder(
     private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
     private val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
 
-    private val snapshotImageView: ImageView = itemView.findViewById(R.id.snapshotImageView)
+    private val imageView: ImageView = itemView.findViewById(R.id.imageView)
     private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
     private val startTextView: TextView = itemView.findViewById(R.id.startTextView)
     private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
@@ -43,7 +43,7 @@ class TrackViewHolder(
                 .load(snapshotUri)
                 .error(errorDrawable)
                 .centerCrop()
-                .into(snapshotImageView)
+                .into(imageView)
 
         itemView.setOnClickListener { onTrackClickListener(adapterPosition, track) }
 

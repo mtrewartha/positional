@@ -125,7 +125,7 @@ class TrackEditActivity : BaseActivity() {
                 .load(snapshotUri)
                 .error(errorDrawable)
                 .centerCrop()
-                .into(snapshotImageView)
+                .into(imageView)
 
         nameTextInputEditText.setText(track.name)
     }

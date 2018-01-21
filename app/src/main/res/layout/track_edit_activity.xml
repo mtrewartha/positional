@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/snapshotImageView"
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="256dp"
         android:background="@color/gray5"
@@ -25,7 +25,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:layout_constraintTop_toBottomOf="@id/snapshotImageView">
+        app:layout_constraintTop_toBottomOf="@id/imageView">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/nameTextInputEditText"
