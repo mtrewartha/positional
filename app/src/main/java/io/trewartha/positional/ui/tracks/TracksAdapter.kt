@@ -9,9 +9,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.tracks.Track
 
 class TracksAdapter(
-        private val onTrackClickListener: (Int, Track) -> Unit,
-        private val onTrackEditListener: (Int, Track) -> Unit,
-        private val onTrackDeleteListener: (Int, Track) -> Unit
+        private val onTrackClickListener: (Int, Track) -> Unit
 ) : PagedListAdapter<Track, TrackViewHolder>(TrackDiffCallback()) {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
@@ -22,13 +20,8 @@ class TracksAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val inflater = parent.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val itemView = inflater.inflate(R.layout.track_card, parent, false)
-        return TrackViewHolder(
-                itemView,
-                onTrackClickListener,
-                onTrackEditListener,
-                onTrackDeleteListener
-        )
+        val itemView = inflater.inflate(R.layout.track, parent, false)
+        return TrackViewHolder(itemView, onTrackClickListener)
     }
 
     private class TrackDiffCallback : DiffCallback<Track>() {

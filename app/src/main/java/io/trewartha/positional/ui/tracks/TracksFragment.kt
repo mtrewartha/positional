@@ -28,11 +28,7 @@ class TracksFragment : Fragment() {
         private const val REQUEST_CODE_EDIT_TRACK = 1
     }
 
-    private val adapter = TracksAdapter(
-            { _, track -> onTrackClick(track) },
-            { _, track -> onTrackEditClick(track) },
-            { _, track -> onTrackDeleteClick(track) }
-    )
+    private val adapter = TracksAdapter({ _, track -> onTrackClick(track) })
 
     private lateinit var tracksViewModel: TracksViewModel
 

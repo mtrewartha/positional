@@ -92,7 +92,7 @@ class TrackEditActivity : BaseActivity() {
         } else {
             glide.load(track.snapshotRemote)
         }
-        glideRequest.centerCrop().into(mapSnapshotImageView)
+        glideRequest.centerCrop().into(snapshotImageView)
 
         nameTextInputEditText.setText(track.name)
     }

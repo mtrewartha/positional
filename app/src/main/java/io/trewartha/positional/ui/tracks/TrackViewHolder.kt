@@ -17,9 +17,7 @@ import java.io.File
 
 class TrackViewHolder(
         itemView: View,
-        private val onTrackClickListener: (Int, Track) -> Unit,
-        private val onTrackEditListener: (Int, Track) -> Unit,
-        private val onTrackDeleteListener: (Int, Track) -> Unit
+        private val onTrackClickListener: (Int, Track) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
     private val context = itemView.context
@@ -29,12 +27,10 @@ class TrackViewHolder(
     private val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
     private val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
 
-    private val mapSnapshotImageView: ImageView = itemView.findViewById(R.id.mapSnapshotImageView)
-    private val nameTextView: TextView = itemView.findViewById(R.id.nameTextInputLayout)
-    private val startEndTextView: TextView = itemView.findViewById(R.id.startEndTextView)
+    private val snapshotImageView: ImageView = itemView.findViewById(R.id.snapshotImageView)
+    private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
+    private val startTextView: TextView = itemView.findViewById(R.id.startTextView)
     private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
-    private val editButton: TextView = itemView.findViewById(R.id.editButton)
-    private val deleteButton: TextView = itemView.findViewById(R.id.deleteButton)
 
     fun bind(track: Track) {
         val localSnapshotFile = File(track.snapshotLocal?.path)
@@ -44,14 +40,12 @@ class TrackViewHolder(
         } else {
             glide.load(track.snapshotRemote)
         }
-        glideRequest.centerCrop().into(mapSnapshotImageView)
+        glideRequest.centerCrop().into(snapshotImageView)
 
         itemView.setOnClickListener { onTrackClickListener(adapterPosition, track) }
-        editButton.setOnClickListener { onTrackEditListener(adapterPosition, track) }
-        deleteButton.setOnClickListener { onTrackDeleteListener(adapterPosition, track) }
 
         nameTextView.text = if (track.name.isNullOrBlank()) defaultName else track.name
-        startEndTextView.text = buildStartEndText(track)
+        startTextView.text = buildStartText(track)
         durationTextView.text = buildDurationText(track)
     }
 
@@ -76,30 +70,27 @@ class TrackViewHolder(
             )
             when {
                 it.hours > 0 -> {
-                    context.getString(R.string.track_card_duration_format_hours, hrs, mins, seconds)
+                    context.getString(R.string.track_card_duration_format_two, hrs, mins)
                 }
                 it.minutes > 0 -> {
-                    context.getString(R.string.track_card_duration_format_minutes, mins, seconds)
+                    context.getString(R.string.track_card_duration_format_two, mins, seconds)
                 }
                 else -> {
-                    context.getString(R.string.track_card_duration_format_seconds, seconds)
+                    context.getString(R.string.track_card_duration_format_one, seconds)
                 }
             }
         }
     }
 
-    private fun buildStartEndText(track: Track): String {
+    private fun buildStartText(track: Track): String {
         return if (track.end == null) {
             context.getString(R.string.track_card_duration_currently_tracking)
         } else {
             val start = LocalDateTime.ofInstant(track.start, ZoneId.systemDefault())
-            val end = LocalDateTime.ofInstant(track.end, ZoneId.systemDefault())
             context.getString(
                     R.string.track_card_start_end_format,
                     start.format(dateFormatter),
-                    start.format(timeFormatter),
-                    end.format(dateFormatter),
-                    end.format(timeFormatter)
+                    start.format(timeFormatter)
             )
         }
     }

@@ -43,23 +43,22 @@
     <!-- Tracks-->
     <string name="track_card_map_snapshot_content_description">Map Snapshot</string>
     <string name="track_card_duration_currently_tracking">Currently tracking…</string>
-    <string name="track_card_duration_format_hours">%s, %s, %s</string>
-    <string name="track_card_duration_format_minutes">%s, %s</string>
-    <string name="track_card_duration_format_seconds">%s</string>
+    <string name="track_card_duration_format_one">%s</string>
+    <string name="track_card_duration_format_two">%s, %s</string>
     <plurals name="track_card_duration_hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">%d hours</item>
+        <item quantity="one">%d hr</item>
+        <item quantity="other">%d hrs</item>
     </plurals>
     <plurals name="track_card_duration_minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d mins</item>
     </plurals>
     <plurals name="track_card_duration_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
+        <item quantity="one">%d sec</item>
+        <item quantity="other">%d secs</item>
     </plurals>
 
-    <string name="track_card_start_end_format">%s %s - %s %s</string>
+    <string name="track_card_start_end_format">%s %s</string>
     <string name="track_card_delete">@string/delete</string>
     <string name="track_card_edit">@string/edit</string>
     <string name="track_card_time_content_description">Date and Time</string>
