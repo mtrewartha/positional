@@ -17,13 +17,13 @@ android {
             keyAlias keystoreProperties['keyAlias']
         }
     }
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "io.trewartha.positional"
         minSdkVersion 21
         resConfigs "auto"
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 14
         versionName "2.7.1"
 

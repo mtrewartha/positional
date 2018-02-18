@@ -11,8 +11,7 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Main" parent="AppTheme">
-    </style>
+    <style name="AppTheme.Main" parent="AppTheme" />
 
     <style name="AppTheme.Profile" parent="AppTheme">
         <item name="android:windowTranslucentStatus">true</item>
@@ -35,7 +34,7 @@
     </style>
 
     <style name="BottomSheetListItem">
-        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:gravity">center_vertical|left|start</item>
         <item name="android:layout_height">@dimen/bottom_sheet_list_item_height</item>
         <item name="android:layout_width">match_parent</item>
@@ -69,7 +68,7 @@
     <!-- Coordinates -->
 
     <style name="Coordinates">
-        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:ellipsize">none</item>
         <item name="android:typeface">monospace</item>
         <item name="android:gravity">center</item>
@@ -160,8 +159,7 @@
         <item name="android:layout_height">96dp</item>
     </style>
 
-    <style name="PositionStatRowLargeLandscape" parent="PositionStatRowLandscape">
-    </style>
+    <style name="PositionStatRowLargeLandscape" parent="PositionStatRowLandscape"></style>
 
     <style name="PositionStatUnit">
         <item name="android:textColor">@color/positionStatTextColor</item>

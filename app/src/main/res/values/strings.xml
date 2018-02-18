@@ -5,6 +5,8 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="deleting">Deleting…</string>
+    <string name="distance">Distance</string>
+    <string name="duration">Duration</string>
     <string name="edit">Edit</string>
     <string name="ok">OK</string>
     <string name="save">Save</string>
@@ -35,9 +37,9 @@
     <string name="tracking_stopped_and_saved">Track stopped and saved</string>
     <string name="tracking_toolbar_stop_content_description">Stop Tracking</string>
     <string name="tracking_toolbar_status">Tracking</string>
-    <string name="tracking_toolbar_duration_content_description">Duration</string>
+    <string name="tracking_toolbar_duration_content_description">@string/duration</string>
     <string name="tracking_toolbar_duration">%1$02d:%2$02d:%3$02d</string>
-    <string name="tracking_toolbar_distance_content_description">Duration</string>
+    <string name="tracking_toolbar_distance_content_description">@string/distance</string>
     <string name="tracking_toolbar_distance_mi">%.1f mi</string>
     <string name="tracking_toolbar_distance_km">%.1f km</string>
 
@@ -72,9 +74,15 @@
     <string name="track_save_failure_snackbar">Unable to save</string>
     <string name="tracks_empty_title">No Recorded Tracks</string>
     <string name="tracks_empty_subtitle">Check out the Map screen to record one!</string>
-    <string name="track_edit_name_hint">Track name</string>
+
+    <!-- Track -->
+    <string name="track_duration_image_view_content_description">@string/duration</string>
+    <string name="track_distance_image_view_content_description">@string/distance</string>
+    <string name="track_distance_mi">%.1f mi</string>
+    <string name="track_distance_km">%.1f km</string>
 
     <!-- Track Edit -->
+    <string name="track_edit_name_hint">Track name</string>
     <string name="track_edit_title">Edit track</string>
     <string name="track_edit_load_failed_title">Unable to Load Track</string>
     <string name="track_edit_load_failed_message">Something went wrong, so the developer has been notified.</string>

@@ -21,6 +21,9 @@ interface TrackDao {
     @Query("SELECT * FROM tracks WHERE end IS NOT NULL ORDER BY :orderBy")
     fun getTracks(orderBy: String): DataSource.Factory<Int, Track>
 
+    @Query("SELECT * FROM track_points WHERE track_id = :trackId ORDER BY time")
+    fun getTrackPoints(trackId: UUID): Flowable<List<TrackPoint>>
+
     @Update
     fun updateTracks(vararg tracks: Track): Int
 

@@ -58,7 +58,7 @@
 
         <activity android:name=".ui.track.TrackEditActivity" />
 
-        <activity android:name=".ui.track.TrackActivity" />
+        <activity android:name=".ui.track.TrackInfoActivity" />
 
         <!-- Services -->
 

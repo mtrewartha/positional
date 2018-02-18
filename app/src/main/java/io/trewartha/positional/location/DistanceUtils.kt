@@ -10,18 +10,18 @@ object DistanceUtils {
     private const val KPH_PER_MPS = 3.6f
 
     /**
-     * Calculates the distance between two [TrackPoint]s in meters
+     * Calculates the distance between two [Location]s in meters
      *
-     * @param trackPoint1 The first [TrackPoint] to use in the distance calculation
-     * @param trackPoint2 The second [TrackPoint] to use in the distance calculation
+     * @param location1 The first [Location] to use in the distance calculation
+     * @param location2 The second [Location] to use in the distance calculation
      *
-     * @return The distance between the two given [TrackPoint]s in meters
+     * @return The distance between the two given [Location]s in meters
      */
-    fun distanceBetween(trackPoint1: TrackPoint, trackPoint2: TrackPoint): Float {
+    fun distanceBetween(location1: Location, location2: Location): Float {
         val results = FloatArray(1)
         Location.distanceBetween(
-                trackPoint1.latitude, trackPoint1.longitude,
-                trackPoint2.latitude, trackPoint2.longitude,
+                location1.latitude, location1.longitude,
+                location2.latitude, location2.longitude,
                 results
         )
         return results[0]

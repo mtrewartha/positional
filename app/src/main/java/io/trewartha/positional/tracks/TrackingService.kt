@@ -55,7 +55,6 @@ class TrackingService : LifecycleService() {
     private var lastLocation: Location? = null
     private var timer: Timer? = null
     private var track: Track? = null
-    private var trackPoints: MutableList<TrackPoint>? = null
     private var user: FirebaseUser? = null
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -195,19 +194,18 @@ class TrackingService : LifecycleService() {
     }
 
     private fun onLocationChanged(location: Location?) {
+        if (location == null) return
+
         val currentTrack = track ?: return
-        val trackPoint = (if (location == null) TrackPoint() else TrackPoint(location)).apply {
+
+        lastLocation?.let {
+            currentTrack.distance = currentTrack.distance +
+                    DistanceUtils.distanceBetween(it, location)
+        }
+
+        val trackPoint = TrackPoint(location).apply {
             trackId = currentTrack.id
         }
-        val lastTrackPoint = if (trackPoints?.isEmpty() == true) null else trackPoints?.last()
-        if (lastTrackPoint != null) {
-            track?.distance = (track?.distance ?: 0.0f) + DistanceUtils.distanceBetween(
-                    lastTrackPoint,
-                    trackPoint
-            )
-        }
-        trackPoints?.add(trackPoint)
-
         doAsync { trackDao.createTrackPoint(trackPoint) }
         listeners.forEach { it.onTrackPointAdded(currentTrack, trackPoint) }
         Log.info(TAG, "Added a new track point at (${trackPoint.latitude}, ${trackPoint.longitude})")

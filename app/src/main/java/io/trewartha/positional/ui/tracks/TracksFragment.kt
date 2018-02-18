@@ -16,7 +16,7 @@ import android.view.ViewGroup
 import io.trewartha.positional.R
 import io.trewartha.positional.storage.ViewModelFactory
 import io.trewartha.positional.tracks.Track
-import io.trewartha.positional.ui.track.TrackActivity
+import io.trewartha.positional.ui.track.TrackInfoActivity
 import kotlinx.android.synthetic.main.tracks_fragment.*
 
 class TracksFragment : Fragment() {
@@ -63,8 +63,8 @@ class TracksFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             REQUEST_CODE_VIEW_TRACK -> when (resultCode) {
-                TrackActivity.RESULT_DELETE_FAILED -> showDeleteResultSnackbar(false)
-                TrackActivity.RESULT_DELETE_SUCCESSFUL -> showDeleteResultSnackbar(true)
+                TrackInfoActivity.RESULT_DELETE_FAILED -> showDeleteResultSnackbar(false)
+                TrackInfoActivity.RESULT_DELETE_SUCCESSFUL -> showDeleteResultSnackbar(true)
             }
         }
     }
@@ -98,7 +98,7 @@ class TracksFragment : Fragment() {
     }
 
     private fun onTrackClick(track: Track) {
-        val intent = TrackActivity.IntentBuilder(context)
+        val intent = TrackInfoActivity.IntentBuilder(context)
                 .withTrackId(track.id)
                 .build()
         startActivityForResult(intent, REQUEST_CODE_VIEW_TRACK)

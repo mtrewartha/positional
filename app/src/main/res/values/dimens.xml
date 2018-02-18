@@ -26,6 +26,8 @@
     <dimen name="text_size_medium">36sp</dimen>
     <dimen name="text_size_large">46sp</dimen>
 
+    <dimen name="track_image_height">276dp</dimen>
+
     <dimen name="unit_text_size">@dimen/text_size_small</dimen>
     <dimen name="unit_text_size_landscape">@dimen/text_size_small</dimen>
     <dimen name="unit_text_size_large">@dimen/text_size_medium</dimen>

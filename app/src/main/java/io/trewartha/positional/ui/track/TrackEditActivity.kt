@@ -5,26 +5,21 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatDelegate
 import android.view.Menu
 import android.view.MenuItem
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.trewartha.positional.R
-import io.trewartha.positional.common.GlideApp
 import io.trewartha.positional.common.Log
 import io.trewartha.positional.common.getUUIDExtra
 import io.trewartha.positional.storage.ViewModelFactory
 import io.trewartha.positional.tracks.Track
 import io.trewartha.positional.ui.BaseActivity
-import io.trewartha.positional.ui.DayNightThemeUtils
+import io.trewartha.positional.ui.common.TrackUiHelper
 import kotlinx.android.synthetic.main.track_edit_activity.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -43,7 +38,6 @@ class TrackEditActivity : BaseActivity() {
         private const val TAG = "TrackEdit"
     }
 
-    private var inDayMode: Boolean = true
     private lateinit var trackId: UUID
     private lateinit var trackViewModel: TrackViewModel
 
@@ -51,7 +45,6 @@ class TrackEditActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setContentView(R.layout.track_edit_activity)
         trackId = intent.getUUIDExtra(EXTRA_TRACK_ID)
                 ?: throw IllegalArgumentException("The activity wasn't given a track ID")
@@ -60,13 +53,10 @@ class TrackEditActivity : BaseActivity() {
                 ViewModelFactory()
         ).get(TrackViewModel::class.java)
 
-        inDayMode = DayNightThemeUtils(this).inDayMode()
-
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             val closeDrawable = getDrawable(R.drawable.ic_close_black_24dp).apply {
-                val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-                if (nightMode == Configuration.UI_MODE_NIGHT_YES) setTint(Color.WHITE)
+                setTint(Color.WHITE)
             }
             setHomeAsUpIndicator(closeDrawable)
             setDisplayHomeAsUpEnabled(true)
@@ -129,6 +119,7 @@ class TrackEditActivity : BaseActivity() {
     }
 
     private fun onImageFabClick() {
+        // TODO: Let the user take a picture instead of choosing an image
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_CODE_GET_IMAGE)
     }
@@ -136,7 +127,7 @@ class TrackEditActivity : BaseActivity() {
     @SuppressLint("CheckResult")
     private fun onTrackLoaded(track: Track) {
         this.track = track
-        setImage(track.imageLocal ?: track.imageRemote)
+        TrackUiHelper.setImage(this, track, imageView)
         nameTextInputEditText.setText(track.name)
     }
 
@@ -165,29 +156,6 @@ class TrackEditActivity : BaseActivity() {
                 finish()
             }
         }
-    }
-
-    private fun setImage(image: Uri?) {
-        val errorDrawable = getDrawable(R.drawable.ic_terrain_black_24dp).apply {
-            val tintColor = if (inDayMode)
-                R.color.trackImageForegroundDay
-            else
-                R.color.trackImageForegroundNight
-            setTint(ContextCompat.getColor(this@TrackEditActivity, tintColor))
-        }
-        val imageBackgroundColor = if (inDayMode)
-            R.color.trackImageBackgroundDay
-        else
-            R.color.trackImageBackgroundNight
-        imageView.setBackgroundResource(imageBackgroundColor)
-
-        GlideApp.with(this)
-                .load(image)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .error(errorDrawable)
-                .centerCrop()
-                .into(imageView)
     }
 
     class IntentBuilder(context: Context) {
