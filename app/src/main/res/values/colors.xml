@@ -31,7 +31,7 @@
     <color name="compassDegrees">@color/gray1</color>
 
     <!-- Map -->
-    <color name="mapAttributionTint">#40000000</color>
+    <color name="mapAttributionTint">#20000000</color>
     <color name="mapRecordIcon">@color/white</color>
 
     <!-- Navigation Bar -->

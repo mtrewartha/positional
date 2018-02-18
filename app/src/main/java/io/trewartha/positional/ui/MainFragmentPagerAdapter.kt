@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import io.trewartha.positional.ui.compass.CompassFragment
 import io.trewartha.positional.ui.map.MapFragment
 import io.trewartha.positional.ui.position.PositionFragment
+import io.trewartha.positional.ui.profile.ProfileFragment
 import io.trewartha.positional.ui.tracks.TracksFragment
 
 class MainFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
@@ -15,7 +16,8 @@ class MainFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentPager
                 MapFragment(),
                 TracksFragment(),
                 PositionFragment(),
-                CompassFragment()
+                CompassFragment(),
+                ProfileFragment()
         )
     }
 

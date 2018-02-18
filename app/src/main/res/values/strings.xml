@@ -21,6 +21,7 @@
     <string name="compass">Compass</string>
     <string name="map">Map</string>
     <string name="position">Position</string>
+    <string name="profile">Profile</string>
     <string name="tracks">Tracks</string>
 
     <!-- Storage Paths -->
@@ -172,8 +173,5 @@
     <string name="tracking_notification_text_in_progress_km">%1$02d:%2$02d:%3$02d • %4$.1f km</string>
     <string name="tracking_notification_title_waiting">@string/tracking_notification_title_in_progress</string>
     <string name="tracking_notification_title_in_progress">Tracking</string>
-
-    <!-- Transition Names -->
-    <string name="transition_user_photo">userPhoto</string>
 
 </resources>

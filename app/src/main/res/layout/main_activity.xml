@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/mainActivityLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivityLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
@@ -19,7 +18,7 @@
         app:itemIconTint="@color/navigationBarIconTint"
         app:itemTextColor="@color/navigationBarTextColor"
         app:menu="@menu/main_bottom_navigation"
-        tools:targetApi="lollipop"/>
+        tools:targetApi="lollipop" />
 
     <io.trewartha.positional.ui.UndraggableViewPager
         android:id="@+id/viewPager"
@@ -28,7 +27,7 @@
         android:layout_above="@id/bottomNavigationView"
         android:layout_alignParentTop="true"
         android:elevation="0dp"
-        tools:targetApi="lollipop"/>
+        tools:targetApi="lollipop" />
 
     <ImageView
         android:id="@+id/userPhotoImageView"
@@ -40,7 +39,6 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:contentDescription="@string/user_thumbnail_content_description"
-        android:transitionName="@string/transition_user_photo"
-        tools:targetApi="lollipop"/>
+        tools:targetApi="lollipop" />
 
 </RelativeLayout>

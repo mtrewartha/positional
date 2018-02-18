@@ -15,7 +15,7 @@
     <dimen name="label_text_size_large_landscape">@dimen/text_size_medium</dimen>
 
     <dimen name="profile_photo_image_view_size">120dp</dimen>
-    <dimen name="profile_photo_progress_bar_size">180dp</dimen>
+    <dimen name="profile_photo_progress_bar_size">156dp</dimen>
 
     <dimen name="stat_image_size">@dimen/text_size_small</dimen>
     <dimen name="stat_image_size_landscape">@dimen/text_size_small</dimen>

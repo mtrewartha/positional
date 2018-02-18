@@ -50,10 +50,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.profile.ProfileActivity"
-            android:theme="@style/AppTheme.Profile" />
-
         <activity android:name=".ui.auth.SignInActivity" />
 
         <activity android:name=".ui.track.TrackEditActivity" />

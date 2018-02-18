@@ -1,29 +1,35 @@
 package io.trewartha.positional.ui.profile
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.FragmentActivity
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import io.trewartha.positional.R
 import io.trewartha.positional.common.GlideApp
 import io.trewartha.positional.ui.MainActivity
 import io.trewartha.positional.ui.TextDrawable
-import kotlinx.android.synthetic.main.profile_activity.*
+import kotlinx.android.synthetic.main.profile_fragment.*
 
 
-class ProfileActivity : FragmentActivity() {
+class ProfileFragment : Fragment() {
 
-    private val user = FirebaseAuth.getInstance().currentUser
+    private val user by lazy { FirebaseAuth.getInstance().currentUser }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.profile_activity)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.profile_fragment, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         loadUserPhoto()
         loadUserInfo()
 
@@ -37,10 +43,10 @@ class ProfileActivity : FragmentActivity() {
 
     private fun loadUserPhoto() {
         val unknownDrawable = TextDrawable(
-                this,
+                context,
                 "?",
-                ContextCompat.getColor(this, R.color.gray4),
-                ContextCompat.getColor(this, R.color.white)
+                ContextCompat.getColor(context, R.color.gray4),
+                ContextCompat.getColor(context, R.color.white)
         )
         GlideApp.with(this)
                 .load(user?.photoUrl)
@@ -55,26 +61,21 @@ class ProfileActivity : FragmentActivity() {
         signOutButton.text = getString(R.string.signing_out)
         progressBar.visibility = View.VISIBLE
         AuthUI.getInstance()
-                .signOut(this)
+                .signOut(activity)
                 .addOnCompleteListener {
-                    startActivity(Intent(this, MainActivity::class.java).apply {
+                    startActivity(Intent(context, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     })
-                    finish()
+                    activity.finish()
                 }
                 .addOnFailureListener {
                     signOutButton.text = getString(R.string.sign_out)
                     signOutButton.isEnabled = true
-                    Snackbar.make(profileLayout, R.string.sign_out_failed, Snackbar.LENGTH_LONG)
+                    Snackbar.make(
+                            profileLayout,
+                            R.string.sign_out_failed,
+                            Snackbar.LENGTH_LONG
+                    ).show()
                 }
-    }
-
-    class IntentBuilder(val context: Context) {
-
-        private var intent = Intent(context, ProfileActivity::class.java)
-
-        fun build(): Intent {
-            return intent
-        }
     }
 }
