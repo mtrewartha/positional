@@ -24,9 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
+        android:backgroundTint="@color/red"
         app:floatingCustomView="@layout/track_toolbar"
         app:floatingHandleFabClick="false"
-        app:floatingItemBackground="@color/white" />
+        app:floatingItemBackground="@color/red" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/myLocationButton"
@@ -50,8 +51,9 @@
         android:layout_marginBottom="18dp"
         android:layout_marginEnd="12dp"
         android:contentDescription="@string/my_location_content_description"
-        android:src="@drawable/ic_fiber_manual_record_black_24dp"
+        android:src="@drawable/ic_record_black_24dp"
         android:tint="@color/white"
+        app:backgroundTint="@color/red"
         app:fabSize="normal" />
 
 </android.support.design.widget.CoordinatorLayout>

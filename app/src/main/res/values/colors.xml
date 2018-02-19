@@ -16,7 +16,7 @@
     <color name="white">#FFFFFF</color>
 
     <!-- Material Theme Colors -->
-    <color name="colorAccent">@color/red</color>
+    <color name="colorAccent">@color/blue</color>
     <color name="colorPrimary">@color/gray1</color>
     <color name="colorPrimaryDark">@color/black</color>
 
