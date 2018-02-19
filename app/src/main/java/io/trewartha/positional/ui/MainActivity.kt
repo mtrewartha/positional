@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         private const val REQUEST_CODE_SIGN_IN = 1
 
         init {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
         }
     }
 }
