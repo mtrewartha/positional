@@ -59,24 +59,25 @@ repositories {
 }
 
 dependencies {
-    def androidArchitectureComponentsVersion = "1.0.0"
-    def androidSupportLibraryVersion = "26.1.0"
+    def architectureComponentsLifecycleVersion = "1.1.0"
+    def architectureComponentsRoomVersion = "1.0.0"
+    def androidSupportLibraryVersion = "27.0.2"
     def ankoVersion = "0.10.2"
     def glideVersion = "4.3.0"
     def googlePlayServicesVersion = "11.8.0"
     def rxAndroidVersion = "2.0.1"
     def rxJavaVersion = "2.1.7"
 
-    kapt "android.arch.lifecycle:compiler:$androidArchitectureComponentsVersion"
-    kapt "android.arch.persistence.room:compiler:$androidArchitectureComponentsVersion"
+    kapt "android.arch.lifecycle:compiler:$architectureComponentsLifecycleVersion"
+    kapt "android.arch.persistence.room:compiler:$architectureComponentsRoomVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "android.arch.lifecycle:common-java8:$androidArchitectureComponentsVersion"
-    implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVersion"
+    implementation "android.arch.lifecycle:common-java8:$architectureComponentsLifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$architectureComponentsLifecycleVersion"
     implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
-    implementation "android.arch.persistence.room:runtime:$androidArchitectureComponentsVersion"
-    implementation "android.arch.persistence.room:rxjava2:$androidArchitectureComponentsVersion"
+    implementation "android.arch.persistence.room:runtime:$architectureComponentsRoomVersion"
+    implementation "android.arch.persistence.room:rxjava2:$architectureComponentsRoomVersion"
     implementation "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
     implementation "com.android.support:design:$androidSupportLibraryVersion"
     implementation "com.android.support:support-v4:$androidSupportLibraryVersion"

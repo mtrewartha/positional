@@ -51,7 +51,7 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         return inflater.inflate(R.layout.position_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         copyButton.setOnClickListener { onCopyClicked() }
@@ -126,15 +126,17 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
 
     private fun lockScreen(lock: Boolean) {
         if (lock) {
-            activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
 
     private fun onCopyClicked() {
-        val safeLocation = location
-        if (safeLocation == null) {
+        val context = context ?: return
+        val location = location
+
+        if (location == null) {
             Toast.makeText(context, R.string.copied_coordinates_failure, Toast.LENGTH_SHORT).show()
             return
         }
@@ -146,11 +148,9 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
             setContentView(R.layout.coordinates_copy_fragment)
         }
 
-        val coordinatesCopier = CoordinatesCopier(context, safeLocation, object : OnCoordinatesCopiedListener {
-            override fun onCopy() {
-                bottomSheetDialog.dismiss()
-            }
-        })
+        val coordinatesCopier = CoordinatesCopier(context, location) {
+            bottomSheetDialog.dismiss()
+        }
 
         val bothTextView = bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyBothTextView)
         val latitudeTextView = bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyLatitudeTextView)
@@ -260,7 +260,11 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         }
     }
 
-    private class CoordinatesCopier(val context: Context, val location: Location, val onCoordinatesCopiedListener: OnCoordinatesCopiedListener?) : View.OnClickListener {
+    private class CoordinatesCopier(
+            val context: Context,
+            val location: Location,
+            val onCoordinatesCopied: () -> Unit
+    ) : View.OnClickListener {
 
         override fun onClick(v: View) {
             val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -287,11 +291,7 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
 
             Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
 
-            onCoordinatesCopiedListener?.onCopy()
+            onCoordinatesCopied()
         }
-    }
-
-    private interface OnCoordinatesCopiedListener {
-        fun onCopy()
     }
 }

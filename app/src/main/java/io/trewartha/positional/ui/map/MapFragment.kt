@@ -61,11 +61,7 @@ class MapFragment : LocationAwareFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Mapbox.getInstance(context, context.getString(R.string.mapbox_key))
-        attachToSharedPreferences()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        attachToSharedPreferences(context)
 
         trackingServiceConnection = TrackingServiceConnection()
 
@@ -79,12 +75,14 @@ class MapFragment : LocationAwareFragment() {
         return layoutInflater.inflate(R.layout.map_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val inDayMode = DayNightThemeUtils(context).inDayMode()
-        val styleUrl = if (inDayMode) MAP_BOX_STYLE_URL_DAY else MAP_BOX_STYLE_URL_NIGHT
-        mapView.setStyleUrl(styleUrl)
+        context?.let {
+            val inDayMode = DayNightThemeUtils(it).inDayMode()
+            val styleUrl = if (inDayMode) MAP_BOX_STYLE_URL_DAY else MAP_BOX_STYLE_URL_NIGHT
+            mapView.setStyleUrl(styleUrl)
+        }
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync gotMap@ {
@@ -146,7 +144,7 @@ class MapFragment : LocationAwareFragment() {
     override fun onDestroy() {
         super.onDestroy()
         trackingServiceConnection?.let {
-            activity.unbindService(it)
+            activity?.unbindService(it)
         }
         trackingServiceConnection = null
         trackingService = null
@@ -171,7 +169,7 @@ class MapFragment : LocationAwareFragment() {
 
     override fun getLocationUpdatePriority() = LOCATION_UPDATE_PRIORITY
 
-    private fun attachToSharedPreferences() {
+    private fun attachToSharedPreferences(context: Context) {
         sharedPreferences = context.getSharedPreferences(
                 getString(R.string.settings_filename),
                 Context.MODE_PRIVATE
@@ -187,6 +185,8 @@ class MapFragment : LocationAwareFragment() {
     }
 
     private fun onMyLocationClick() {
+        val context = context ?: return
+
         // Start following the user location again.
         followingUserLocation = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -272,6 +272,7 @@ class MapFragment : LocationAwareFragment() {
     private inner class OnCameraMoveStartedListener : MapboxMap.OnCameraMoveStartedListener {
 
         override fun onCameraMoveStarted(reason: Int) {
+            val context = context ?: return
             if (followingUserLocation && reason == REASON_API_GESTURE) {
                 // The user probably doesn't want the map snapping to their location every time it
                 // gets updated now, so hold off on following it until they tap the "my location"

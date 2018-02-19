@@ -94,6 +94,7 @@ class TracksFragment : Fragment() {
     }
 
     private fun onTrackClick(track: Track) {
+        val context = context ?: return
         val intent = TrackInfoActivity.IntentBuilder(context)
                 .withTrackId(track.id)
                 .build()

@@ -65,7 +65,7 @@ abstract class LocationAwareFragment : Fragment() {
             observeLocationChanges()
         } else if (grantResults.isNotEmpty()) {
             Log.info(TAG, "Location permissions request cancelled")
-            AlertDialog.Builder(context)
+            AlertDialog.Builder(context ?: return)
                     .setTitle(R.string.access_fine_location_permission_explanation_title)
                     .setMessage(R.string.access_fine_location_permission_explanation_message)
                     .setCancelable(false)
@@ -75,6 +75,7 @@ abstract class LocationAwareFragment : Fragment() {
     }
 
     private fun haveLocationPermissions(): Boolean {
+        val context = context ?: return false
         val coarsePermission = checkSelfPermission(context, ACCESS_COARSE_LOCATION)
         val finePermission = checkSelfPermission(context, ACCESS_FINE_LOCATION)
         return coarsePermission == PERMISSION_GRANTED && finePermission == PERMISSION_GRANTED

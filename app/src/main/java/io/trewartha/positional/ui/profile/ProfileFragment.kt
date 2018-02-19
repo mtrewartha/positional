@@ -42,6 +42,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadUserPhoto() {
+        val context = context ?: return
+
         val unknownDrawable = TextDrawable(
                 context,
                 "?",
@@ -57,6 +59,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onSignOutClick() {
+        val activity = activity ?: return
+
         signOutButton.isEnabled = false
         signOutButton.text = getString(R.string.signing_out)
         progressBar.visibility = View.VISIBLE
