@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Material Theme Colors -->
-    <color name="colorAccent">@color/blue</color>
+    <color name="colorAccent">@color/green</color>
     <color name="colorPrimary">@color/gray1</color>
     <color name="colorPrimaryDark">@color/black</color>
 
     <!-- Generic UI Components -->
 
     <!-- Compass -->
-    <color name="compassAttributeTitleColor">@color/gray6</color>
-    <color name="compassAttributeValueColor">@color/gray6</color>
+    <color name="compassAttributeTitleColor">@color/gray5</color>
+    <color name="compassAttributeValueColor">@color/gray5</color>
     <color name="compassBackground">@color/white</color>
     <color name="compassDegrees">@color/white</color>
 

@@ -8,7 +8,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="256dp"
-        android:background="@color/gray6"
+        android:background="@color/gray5"
         android:contentDescription="@string/track_card_map_snapshot_content_description"
         app:layout_constraintTop_toTopOf="parent" />
 

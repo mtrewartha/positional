@@ -24,9 +24,6 @@
     <string name="profile">Profile</string>
     <string name="tracks">Tracks</string>
 
-    <!-- Storage Paths -->
-    <string name="user_track_snapshot">/users/%s/track_snapshots/%s</string>
-
     <!-- Database Paths -->
     <!-- TODO: Fill these out and use them! -->
 
@@ -63,9 +60,6 @@
     </plurals>
 
     <string name="track_card_start_end_format">%s %s</string>
-    <string name="track_card_delete">@string/delete</string>
-    <string name="track_card_edit">@string/edit</string>
-    <string name="track_card_time_content_description">Date and Time</string>
     <string name="track_delete_dialog_title">Delete %s?</string>
     <string name="track_delete_dialog_message">This is permanent and cannot be undone.</string>
     <string name="track_delete_success_snackbar">Deleted</string>
@@ -77,8 +71,6 @@
     <string name="tracks_empty_subtitle">Check out the Map screen to record one!</string>
 
     <!-- Track -->
-    <string name="track_duration_image_view_content_description">@string/duration</string>
-    <string name="track_distance_image_view_content_description">@string/distance</string>
     <string name="track_distance_mi">%.1f mi</string>
     <string name="track_distance_km">%.1f km</string>
 
@@ -87,7 +79,6 @@
     <string name="track_edit_title">Edit track</string>
     <string name="track_edit_load_failed_title">Unable to Load Track</string>
     <string name="track_edit_load_failed_message">Something went wrong, so the developer has been notified.</string>
-    <string name="track_edit_load_failed_button_positive">OK</string>
 
     <!-- Position -->
     <string name="accuracy">Accuracy</string>
