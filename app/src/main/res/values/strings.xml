@@ -8,14 +8,15 @@
     <string name="distance">Distance</string>
     <string name="duration">Duration</string>
     <string name="edit">Edit</string>
+    <string name="got_it">Got It</string>
     <string name="ok">OK</string>
     <string name="save">Save</string>
     <string name="saving">Saving…</string>
-    <string name="try_again">Try Again</string>
 
     <!-- Permissions -->
-    <string name="access_fine_location_permission_explanation_title">Location Permission Required</string>
-    <string name="access_fine_location_permission_explanation_message">In order to show your elevation, location and other statistics, we need access to your device\'s location.</string>
+    <string name="location_permission_explanation_title">Location Permission Needed</string>
+    <string name="location_permission_explanation_message">Positional shows you a bunch of useful information about your location, but it needs your permission before getting access to it. On the next screen, you can grant access.</string>
+    <string name="location_permission_explanation_positive">@string/got_it</string>
 
     <!-- Bottom Navigation -->
     <string name="compass">Compass</string>

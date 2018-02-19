@@ -1,5 +1,6 @@
 package io.trewartha.positional.ui.map
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.content.res.ColorStateList
 import android.location.Location
@@ -20,6 +21,9 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE
+import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode
+import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin
+import com.mapbox.services.android.telemetry.location.GoogleLocationEngine
 import io.trewartha.positional.R
 import io.trewartha.positional.common.Log
 import io.trewartha.positional.location.DistanceUtils.distanceInKilometers
@@ -33,6 +37,7 @@ import io.trewartha.positional.ui.DayNightThemeUtils
 import io.trewartha.positional.ui.LocationAwareFragment
 import kotlinx.android.synthetic.main.map_fragment.*
 import kotlinx.android.synthetic.main.track_toolbar.*
+
 
 class MapFragment : LocationAwareFragment() {
 
@@ -53,6 +58,7 @@ class MapFragment : LocationAwareFragment() {
     private lateinit var onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
 
     private var followingUserLocation = true
+    private var locationLayerPlugin: LocationLayerPlugin? = null
     private var map: MapboxMap? = null
     private var trackingService: TrackingService? = null
     private var trackingServiceConnection: TrackingServiceConnection? = null
@@ -107,9 +113,24 @@ class MapFragment : LocationAwareFragment() {
         mapView.onStart()
     }
 
+    @SuppressLint("MissingPermission")
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+
+        if (haveLocationPermissions()) {
+            mapView.getMapAsync {
+                if (locationLayerPlugin == null) {
+                    locationLayerPlugin = LocationLayerPlugin(
+                            mapView, it, GoogleLocationEngine(context).apply { activate() }
+                    ).apply {
+                        lifecycle.addObserver(this)
+                        applyStyle(R.style.MapLocationLayer)
+                    }
+                }
+                locationLayerPlugin?.setLocationLayerEnabled(LocationLayerMode.TRACKING)
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -9,7 +9,6 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:mapbox_myLocation="true"
         app:mapbox_styleUrl="mapbox://styles/mapbox/outdoors-v10"
         app:mapbox_uiAttributionTintColor="@color/mapAttributionTint"
         app:mapbox_uiCompass="true"

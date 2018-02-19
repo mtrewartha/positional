@@ -94,9 +94,8 @@ dependencies {
     implementation "com.google.firebase:firebase-perf:$googlePlayServicesVersion"
     implementation "com.google.firebase:firebase-storage:$googlePlayServicesVersion"
     implementation "com.jakewharton.threetenabp:threetenabp:1.0.5"
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.1@aar') {
-        transitive = true
-    }
+    implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:5.4.1"
+    implementation "com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.3.0"
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"

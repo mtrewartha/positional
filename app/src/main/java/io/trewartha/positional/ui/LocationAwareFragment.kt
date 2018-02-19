@@ -46,7 +46,14 @@ abstract class LocationAwareFragment : Fragment() {
         if (haveLocationPermissions()) {
             observeLocationChanges()
         } else {
-            requestLocationPermissions()
+            AlertDialog.Builder(context ?: return)
+                    .setTitle(R.string.location_permission_explanation_title)
+                    .setMessage(R.string.location_permission_explanation_message)
+                    .setPositiveButton(
+                            R.string.location_permission_explanation_positive,
+                            { _, _ -> requestLocationPermissions() }
+                    )
+                    .show()
         }
     }
 
@@ -55,26 +62,7 @@ abstract class LocationAwareFragment : Fragment() {
         locationLiveData.removeObservers(this)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode != REQUEST_CODE_LOCATION_PERMISSIONS) return
-        if (permissions.isEmpty() || grantResults.isEmpty()) return
-
-        if (grantResults[0] == PERMISSION_GRANTED && grantResults[1] == PERMISSION_GRANTED) {
-            Log.info(TAG, "Location permissions granted")
-            observeLocationChanges()
-        } else if (grantResults.isNotEmpty()) {
-            Log.info(TAG, "Location permissions request cancelled")
-            AlertDialog.Builder(context ?: return)
-                    .setTitle(R.string.access_fine_location_permission_explanation_title)
-                    .setMessage(R.string.access_fine_location_permission_explanation_message)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.try_again) { _, _ -> requestLocationPermissions() }
-                    .show()
-        }
-    }
-
-    private fun haveLocationPermissions(): Boolean {
+    protected fun haveLocationPermissions(): Boolean {
         val context = context ?: return false
         val coarsePermission = checkSelfPermission(context, ACCESS_COARSE_LOCATION)
         val finePermission = checkSelfPermission(context, ACCESS_FINE_LOCATION)
@@ -90,6 +78,9 @@ abstract class LocationAwareFragment : Fragment() {
 
     private fun requestLocationPermissions() {
         Log.info(TAG, "Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION")
-        requestPermissions(arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION_PERMISSIONS)
+        requestPermissions(
+                arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
+                REQUEST_CODE_LOCATION_PERMISSIONS
+        )
     }
 }

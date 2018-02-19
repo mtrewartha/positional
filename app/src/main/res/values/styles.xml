@@ -84,6 +84,17 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!-- Map -->
+
+    <style name="MapLocationLayer" parent="LocationLayer">
+        <item name="foregroundDrawable">@drawable/mapbox_user_dot_icon</item>
+        <item name="backgroundDrawable">@drawable/mapbox_user_stroke_icon</item>
+        <item name="bearingDrawable">@drawable/mapbox_user_bearing_icon</item>
+        <item name="navigationDrawable">@drawable/mapbox_user_puck_icon</item>
+        <item name="accuracyAlpha">0.15</item>
+        <item name="accuracyColor">@color/green</item>
+    </style>
+
     <!-- Position Stats -->
 
     <style name="PositionStatIcon">
