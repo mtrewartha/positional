@@ -8,10 +8,7 @@ import io.trewartha.positional.tracks.TrackPoint
 
 
 @Database(
-        entities = arrayOf(
-                Track::class,
-                TrackPoint::class
-        ),
+        entities = [Track::class, TrackPoint::class],
         version = 1
 )
 @TypeConverters(

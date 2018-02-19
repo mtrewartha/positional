@@ -46,6 +46,6 @@ class TextDrawable(private val context: Context, val text: String, private val t
     }
 
     companion object {
-        private val TEXT_SIZE_DP = 24f
+        private const val TEXT_SIZE_DP = 24f
     }
 }

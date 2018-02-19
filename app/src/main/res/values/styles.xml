@@ -151,7 +151,7 @@
         <item name="android:layout_height">96dp</item>
     </style>
 
-    <style name="PositionStatRowLargeLandscape" parent="PositionStatRowLandscape"></style>
+    <style name="PositionStatRowLargeLandscape" parent="PositionStatRowLandscape" />
 
     <style name="PositionStatUnit">
         <item name="android:textColor">@color/positionStatTextColor</item>

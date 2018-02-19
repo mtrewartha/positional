@@ -8,17 +8,13 @@ import java.util.*
 
 @Entity(
         tableName = "track_points",
-        foreignKeys = arrayOf(
-                ForeignKey(
-                        entity = Track::class,
-                        parentColumns = arrayOf("id"),
-                        childColumns = arrayOf("track_id"),
-                        onDelete = CASCADE
-                )
-        ),
-        indices = arrayOf(
-                Index("track_id")
-        )
+        foreignKeys = [ForeignKey(
+                entity = Track::class,
+                parentColumns = arrayOf("id"),
+                childColumns = arrayOf("track_id"),
+                onDelete = CASCADE
+        )],
+        indices = [Index("track_id")]
 )
 class TrackPoint() {
 

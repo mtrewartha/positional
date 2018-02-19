@@ -1,7 +1,6 @@
 package io.trewartha.positional.location
 
 import android.location.Location
-import io.trewartha.positional.tracks.TrackPoint
 
 object DistanceUtils {
 
