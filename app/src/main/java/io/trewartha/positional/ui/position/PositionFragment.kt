@@ -25,10 +25,10 @@ import java.util.*
 class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChangeListener {
 
     companion object {
-        private val TAG = "PositionFragment"
-        private val LOCATION_UPDATE_INTERVAL = 5000L // ms
-        private val LOCATION_UPDATE_MAX_WAIT_TIME = 10000L // ms
-        private val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
+        private const val TAG = "PositionFragment"
+        private const val LOCATION_UPDATE_INTERVAL = 5000L // ms
+        private const val LOCATION_UPDATE_MAX_WAIT_TIME = 10000L // ms
+        private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
     private var coordinatesFragments: MutableList<CoordinatesFragment> = LinkedList()
@@ -74,10 +74,12 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         val coordinatesPagerAdapter = CoordinatesFragmentPagerAdapter(
                 childFragmentManager
         )
-        coordinatesViewPager.adapter = coordinatesPagerAdapter
-        coordinatesViewPager.offscreenPageLimit = coordinatesPagerAdapter.count
-        coordinatesViewPager.setCurrentItem(getCoordinatesFragmentIndex(coordinatesFormat), true)
-        coordinatesViewPager.addOnPageChangeListener(CoordinatesPageChangeListener())
+        coordinatesViewPager.apply {
+            adapter = coordinatesPagerAdapter
+            offscreenPageLimit = coordinatesPagerAdapter.count
+            setCurrentItem(getCoordinatesFragmentIndex(coordinatesFormat), true)
+            addOnPageChangeListener(CoordinatesPageChangeListener())
+        }
 
         updateLocationViews(null)
     }
@@ -100,17 +102,11 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         }
     }
 
-    override fun getLocationUpdateInterval(): Long {
-        return LOCATION_UPDATE_INTERVAL
-    }
+    override fun getLocationUpdateInterval(): Long = LOCATION_UPDATE_INTERVAL
 
-    override fun getLocationUpdateMaxWaitTime(): Long {
-        return LOCATION_UPDATE_MAX_WAIT_TIME
-    }
+    override fun getLocationUpdateMaxWaitTime(): Long = LOCATION_UPDATE_MAX_WAIT_TIME
 
-    override fun getLocationUpdatePriority(): Int {
-        return LOCATION_UPDATE_PRIORITY
-    }
+    override fun getLocationUpdatePriority(): Int = LOCATION_UPDATE_PRIORITY
 
     override fun onCheckedChanged(compoundButton: CompoundButton, checked: Boolean) {
         if (compoundButton.id == R.id.screenLockSwitch) {
@@ -143,11 +139,12 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
             return
         }
 
-        val bottomSheetDialog = BottomSheetDialog(context)
-        bottomSheetDialog.setCanceledOnTouchOutside(true)
-        bottomSheetDialog.setCancelable(true)
-        bottomSheetDialog.setTitle(R.string.settings_copy_coordinates_title)
-        bottomSheetDialog.setContentView(R.layout.coordinates_copy_fragment)
+        val bottomSheetDialog = BottomSheetDialog(context).apply {
+            setCanceledOnTouchOutside(true)
+            setCancelable(true)
+            setTitle(R.string.settings_copy_coordinates_title)
+            setContentView(R.layout.coordinates_copy_fragment)
+        }
 
         val coordinatesCopier = CoordinatesCopier(context, safeLocation, object : OnCoordinatesCopiedListener {
             override fun onCopy() {
@@ -198,9 +195,10 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
                 coordinatesFormat
         )
 
-        val sendIntent = Intent(Intent.ACTION_SEND)
-        sendIntent.putExtra(Intent.EXTRA_TEXT, coordinatesText)
-        sendIntent.type = "text/plain"
+        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, coordinatesText)
+            type = "text/plain"
+        }
         startActivity(sendIntent)
     }
 
