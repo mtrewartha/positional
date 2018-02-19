@@ -21,10 +21,6 @@ import kotlinx.android.synthetic.main.tracks_fragment.*
 
 class TracksFragment : Fragment() {
 
-    companion object {
-        private const val REQUEST_CODE_VIEW_TRACK = 1
-    }
-
     private val adapter = TracksAdapter({ _, track -> onTrackClick(track) })
 
     private lateinit var tracksViewModel: TracksViewModel
@@ -136,5 +132,9 @@ class TracksFragment : Fragment() {
 
         emptyViewAnimator.start()
         recyclerViewAnimator.start()
+    }
+
+    companion object {
+        private const val REQUEST_CODE_VIEW_TRACK = 1
     }
 }

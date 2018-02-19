@@ -93,6 +93,7 @@ class TrackInfoActivity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_CODE_EDIT -> when (resultCode) {
                 TrackEditActivity.RESULT_SAVE_FAILED -> showSaveResultSnackbar(false)
