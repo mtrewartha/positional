@@ -1,135 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <io.trewartha.positional.ui.compass.CompassView
-            android:id="@+id/compass_background_view"
-            style="@style/CompassBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_compass_background"
-            tools:ignore="ContentDescription"/>
-
-        <io.trewartha.positional.ui.compass.CompassView
-            android:id="@+id/compass_needle_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_compass_needle"
-            tools:ignore="ContentDescription"/>
-
-        <ImageView
-            android:id="@+id/compass_pin_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_compass_pin"
-            tools:ignore="ContentDescription"/>
-
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/compass_degrees_text_view"
-        style="@style/CompassDegrees"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:textSize="160sp"
-        tools:text="360°"/>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <io.trewartha.positional.ui.compass.CompassView
+                android:id="@+id/compass_background_view"
+                style="@style/CompassBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_compass_background"
+                tools:ignore="ContentDescription" />
+
+            <io.trewartha.positional.ui.compass.CompassView
+                android:id="@+id/compass_needle_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_compass_needle"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/compass_pin_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_compass_pin"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/compass_degrees_text_view"
+            style="@style/CompassDegrees"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:textSize="160sp"
+            tools:text="360°" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/compass_accuracy_title_text_view"
-                style="@style/CompassAttributeTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/compass_accuracy_title"
-                android:textSize="24sp"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/compass_accuracy_accelerometer_text_view"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/compass_accuracy_title_text_view"
+                    style="@style/CompassAttributeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/compass_accuracy_title"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/compass_accuracy_accelerometer_text_view"
+                    style="@style/CompassAttributeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/compass_accuracy_accelerometer"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/compass_accuracy_magnetometer_text_view"
+                    style="@style/CompassAttributeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/compass_accuracy_magnetometer"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/compass_accuracy_accelerometer"
-                android:textSize="24sp"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/compass_accuracy_magnetometer_text_view"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/compass_accuracy_magnetometer"
-                android:textSize="24sp"/>
+                <TextView
+                    android:id="@+id/compass_mode_title_text_view"
+                    style="@style/CompassAttributeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/compass_mode_title"
+                    android:textSize="24sp" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/compass_mode_text_view"
+                    style="@style/CompassAttributeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textSize="24sp"
+                    tools:text="@string/compass_mode_magnetic_north" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+                <TextView
+                    android:id="@+id/compass_declination_text_view"
+                    style="@style/CompassAttributeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/compass_declination"
+                    android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/compass_mode_title_text_view"
-                style="@style/CompassAttributeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/compass_mode_title"
-                android:textSize="24sp"/>
-
-            <TextView
-                android:id="@+id/compass_mode_text_view"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:textSize="24sp"
-                tools:text="@string/compass_mode_magnetic_north"/>
-
-            <TextView
-                android:id="@+id/compass_declination_text_view"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/compass_declination"
-                android:textSize="24sp"/>
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

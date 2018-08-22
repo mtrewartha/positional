@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-def keystorePropertiesFile = rootProject.file("upload_keystore.properties")
+def keystorePropertiesFile = rootProject.file('upload_keystore.properties')
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
@@ -17,27 +17,26 @@ android {
             keyAlias keystoreProperties['keyAlias']
         }
     }
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
     defaultConfig {
-        applicationId "io.trewartha.positional"
+        applicationId 'io.trewartha.positional'
         minSdkVersion 21
-        resConfigs "auto"
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 14
-        versionName "2.7.1"
+        versionName '2.7.1'
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments = ['room.schemaLocation': "$projectDir/schemas".toString()]
             }
         }
     }
     buildTypes {
         debug {
             debuggable true
-            minifyEnabled true
-            useProguard true
+            minifyEnabled false
+            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -51,55 +50,37 @@ android {
     }
     productFlavors {
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
+    google()
     mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
-    def architectureComponentsLifecycleVersion = "1.1.0"
-    def architectureComponentsRoomVersion = "1.0.0"
-    def androidSupportLibraryVersion = "27.0.2"
-    def ankoVersion = "0.10.2"
-    def glideVersion = "4.3.0"
-    def googlePlayServicesVersion = "11.8.0"
-    def rxAndroidVersion = "2.0.1"
-    def rxJavaVersion = "2.1.7"
-
-    kapt "android.arch.lifecycle:compiler:$architectureComponentsLifecycleVersion"
-    kapt "android.arch.persistence.room:compiler:$architectureComponentsRoomVersion"
-    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0-rc01'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "android.arch.lifecycle:common-java8:$architectureComponentsLifecycleVersion"
-    implementation "android.arch.lifecycle:extensions:$architectureComponentsLifecycleVersion"
-    implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
-    implementation "android.arch.persistence.room:runtime:$architectureComponentsRoomVersion"
-    implementation "android.arch.persistence.room:rxjava2:$architectureComponentsRoomVersion"
-    implementation "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
-    implementation "com.android.support:design:$androidSupportLibraryVersion"
-    implementation "com.android.support:support-v4:$androidSupportLibraryVersion"
-    implementation "com.firebaseui:firebase-ui-auth:3.0.0"
-    implementation "com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e"
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    implementation "com.github.ronaldsmartin:Material-ViewPagerIndicator:1.0.4"
-    implementation "com.github.rubensousa:floatingtoolbar:1.5.1"
-    implementation "com.google.android.gms:play-services-auth:$googlePlayServicesVersion"
-    implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
-    implementation "com.google.firebase:firebase-auth:$googlePlayServicesVersion"
-    implementation "com.google.firebase:firebase-core:$googlePlayServicesVersion"
-    implementation "com.google.firebase:firebase-crash:$googlePlayServicesVersion"
-    implementation "com.google.firebase:firebase-perf:$googlePlayServicesVersion"
-    implementation "com.google.firebase:firebase-storage:$googlePlayServicesVersion"
-    implementation "com.jakewharton.threetenabp:threetenabp:1.0.5"
-    implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:5.4.1"
-    implementation "com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.3.0"
-    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.fragment:fragment-ktx:1.0.0-rc01'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
+    implementation "androidx.preference:preference:1.0.0-rc01"
+    implementation 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-crash:16.0.1'
+    implementation 'com.google.firebase:firebase-perf:16.1.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.1'
+    implementation 'org.jetbrains.anko:anko-commons:0.10.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'

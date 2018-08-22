@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    style="@style/CoordinatesFragment"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CoordinatesFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
@@ -12,9 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="bottom|center_horizontal"
+        android:gravity="bottom|center"
+        android:maxLines="1"
         app:autoSizeTextType="uniform"
-        tools:text="10N"/>
+        tools:text="10N" />
 
     <TextView
         android:id="@+id/eastingTextView"
@@ -22,8 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
         app:autoSizeTextType="uniform"
-        tools:text="1234567m E"/>
+        tools:text="1234567m E" />
 
     <TextView
         android:id="@+id/northingTextView"
@@ -31,12 +35,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="top|center_horizontal"
+        android:gravity="top|center"
+        android:maxLines="1"
         app:autoSizeTextType="uniform"
-        tools:text="1234567m N"/>
+        tools:text="1234567m N" />
 
     <TextView
+        android:id="@+id/formatLabelTextView"
         style="@style/CoordinatesFormatLabel"
-        android:text="@string/coordinate_format_label_utm"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/coordinate_format_label_utm" />
 
 </LinearLayout>

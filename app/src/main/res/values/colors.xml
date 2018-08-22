@@ -1,60 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base Colors -->
-    <!-- NOTE: ONLY OTHER COLORS SHOULD REFER TO THESE -->
-    <color name="black">#000000</color>
-    <color name="blue">#00A9E7</color>
-    <color name="gray1">#333333</color>
-    <color name="gray1_transparent">#88333333</color>
-    <color name="gray2">#444444</color>
-    <color name="gray3">#666666</color>
-    <color name="gray4">#AAAAAA</color>
-    <color name="gray5">#EEEEEE</color>
-    <color name="green">#87CE1D</color>
-    <color name="red">#FF0000</color>
-    <color name="white">#FFFFFF</color>
 
-    <!-- Material Theme Colors -->
-    <color name="colorAccent">@color/green</color>
-    <color name="colorPrimary">@color/gray1</color>
-    <color name="colorPrimaryDark">@color/black</color>
+    <color name="primary">#eeeeee</color>
+    <color name="primaryDarkVariant">#dddddd</color>
+    <color name="primaryLightVariant">#ffffff</color>
 
-    <!-- Bottom Sheets -->
-    <color name="bottomSheetListItem">#DE000000</color>
-    <color name="bottomSheetTitle">#8A000000</color>
+    <color name="onPrimary">#ffffff</color>
+    <color name="onPrimaryDarkVariant">#ffffff</color>
+    <color name="onPrimaryLightVariant">#ffffff</color>
 
-    <!-- Compass -->
-    <color name="compassAttributeTitleColor">@color/gray1</color>
-    <color name="compassAttributeValueColor">@color/gray1</color>
-    <color name="compassBackground">@color/gray1</color>
-    <color name="compassDegrees">@color/gray1</color>
+    <color name="secondary">#03a9f4</color>
+    <color name="secondaryDarkVariant">#007ac1</color>
+    <color name="secondaryLightVariant">#67daff</color>
+    <color name="onSecondary">@color/onPrimary</color>
+    <color name="onSecondaryDarkVariant">@color/onPrimaryDarkVariant</color>
+    <color name="onSecondaryLightVariant">@color/onPrimaryLightVariant</color>
 
-    <!-- Map -->
-    <color name="mapAttributionTint">#20000000</color>
-    <color name="mapRecordIcon">@color/white</color>
+    <color name="background">#f9f9f9</color>
+    <color name="onBackground">#000000</color>
 
-    <!-- Navigation Bar -->
-    <color name="navigationBarBackground">@color/white</color>
-    <color name="navigationBarIconTint">@color/gray1</color>
-    <color name="navigationBarItemBackground">@color/white</color>
-    <color name="navigationBarTextColor">@color/gray1</color>
+    <color name="error">#f44336</color>
+    <color name="onError">#ffffff</color>
 
-    <!-- Position Stats -->
-    <color name="positionStatDivider">@color/gray5</color>
-    <color name="positionStatTextColor">@color/gray1</color>
-    <color name="positionStatIconTint">@color/gray1</color>
+    <color name="safe">#8bc34a</color>
+    <color name="onSafe">#ffffff</color>
 
-    <!-- Screen Lock -->
-    <color name="screenLockButtonTint">@color/screen_lock_selector</color>
+    <color name="warning">#f9a825</color>
+    <color name="onWarning">#ffffff</color>
 
-    <!-- View Pagers -->
-    <color name="viewPagerTabDotSelected">@color/gray3</color>
-    <color name="viewPagerTabDotUnselected">@color/gray4</color>
-
-    <!-- Tracks -->
-    <color name="trackImageBackgroundDay">@color/gray5</color>
-    <color name="trackImageBackgroundNight">@color/gray2</color>
-    <color name="trackImageForegroundDay">@color/white</color>
-    <color name="trackImageForegroundNight">@color/gray1</color>
+    <color name="surface">#ffffff</color>
+    <color name="surfaceDarkVariant">#e8e8e8</color>
+    <color name="surfaceLightVariant">#ffffff</color>
+    <color name="surfaceVeryDarkVariant">#444444</color>
+    <color name="onSurface">#de000000</color>
+    <color name="onSurfaceLightVariant">#99000000</color>
+    <color name="onSurfaceVeryLightVariant">#61000000</color>
 
 </resources>

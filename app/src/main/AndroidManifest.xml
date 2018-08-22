@@ -8,12 +8,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".Positional"
+        android:name=".PositionalApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Positional"
         tools:replace="android:allowBackup">
 
         <meta-data
@@ -22,9 +22,7 @@
 
         <!-- Activities -->
 
-        <activity
-            android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme.Main">
+        <activity android:name=".ui.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,16 +49,6 @@
         </activity>
 
         <activity android:name=".ui.auth.SignInActivity" />
-
-        <activity android:name=".ui.track.TrackEditActivity" />
-
-        <activity android:name=".ui.track.TrackInfoActivity" />
-
-        <!-- Services -->
-
-        <service
-            android:name=".tracks.TrackingService"
-            android:exported="false" />
 
     </application>
 

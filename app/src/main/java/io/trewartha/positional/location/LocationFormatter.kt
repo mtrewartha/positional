@@ -20,7 +20,6 @@ class LocationFormatter(private val context: Context) {
         private const val FORMAT_SPEED = "%.0f"
         private const val FORMAT_UTM = "%7.0f"
         private const val HEMISPHERE_NORTH = "gov.nasa.worldwind.avkey.North"
-        private val LOCALE = Locale.getDefault()
     }
 
     fun getAccuracy(location: Location?, metric: Boolean): String {
@@ -29,12 +28,12 @@ class LocationFormatter(private val context: Context) {
             metric -> location.accuracy.toInt()
             else -> DistanceUtils.metersToFeet(location.accuracy).toInt()
         }
-        return String.format(LOCALE, FORMAT_ACCURACY, accuracy)
+        return String.format(Locale.getDefault(), FORMAT_ACCURACY, accuracy)
     }
 
     fun getBearing(location: Location?): String {
         val bearing = location?.bearing?.toInt() ?: 0
-        return String.format(LOCALE, FORMAT_BEARING, bearing)
+        return String.format(Locale.getDefault(), FORMAT_BEARING, bearing)
     }
 
     fun getElevation(location: Location?, metric: Boolean): String {
@@ -43,12 +42,12 @@ class LocationFormatter(private val context: Context) {
             metric -> location.altitude.toInt()
             else -> DistanceUtils.metersToFeet(location.altitude.toFloat()).toInt()
         }
-        return String.format(LOCALE, FORMAT_ELEVATION, elevation)
+        return String.format(Locale.getDefault(), FORMAT_ELEVATION, elevation)
     }
 
-    fun getDecimalLatitude(latitude: Double) = String.format(LOCALE, FORMAT_LAT, latitude)
+    fun getDecimalLatitude(latitude: Double) = String.format(Locale.getDefault(), FORMAT_LAT, latitude)
 
-    fun getDecimalLongitude(longitude: Double) = String.format(LOCALE, FORMAT_LON, longitude)
+    fun getDecimalLongitude(longitude: Double) = String.format(Locale.getDefault(), FORMAT_LON, longitude)
 
     fun getDmsLatitude(latitude: Double): String {
         var latitudeDMS = Location.convert(latitude, Location.FORMAT_SECONDS)
@@ -86,12 +85,12 @@ class LocationFormatter(private val context: Context) {
 
     fun getUtmEasting(latitude: Double, longitude: Double): String {
         val utmCoordinate = getUtmCoordinate(latitude, longitude)
-        return "${String.format(LOCALE, FORMAT_UTM, utmCoordinate.easting)}m E"
+        return "${String.format(Locale.getDefault(), FORMAT_UTM, utmCoordinate.easting)}m E"
     }
 
     fun getUtmNorthing(latitude: Double, longitude: Double): String {
         val utmCoordinate = getUtmCoordinate(latitude, longitude)
-        return "${String.format(LOCALE, FORMAT_UTM, utmCoordinate.northing)}m N"
+        return "${String.format(Locale.getDefault(), FORMAT_UTM, utmCoordinate.northing)}m N"
     }
 
     private fun getUtmCoordinate(latitude: Double, longitude: Double): UTMCoord {
@@ -127,11 +126,11 @@ class LocationFormatter(private val context: Context) {
 
     fun getSpeed(location: Location?, metric: Boolean): String {
         val speed = when {
-            location == null -> 0.0f
+            location == null -> 0f
             metric -> DistanceUtils.metersPerSecondToKilometersPerHour(location.speed)
             else -> DistanceUtils.metersPerSecondToMilesPerHour(location.speed)
         }
-        return String.format(LOCALE, FORMAT_SPEED, speed)
+        return String.format(Locale.getDefault(), FORMAT_SPEED, speed)
     }
 
     fun getDistanceUnit(metric: Boolean): String {

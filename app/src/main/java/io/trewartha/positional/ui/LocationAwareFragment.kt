@@ -2,14 +2,13 @@ package io.trewartha.positional.ui
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.location.Location
-import android.support.v4.app.Fragment
-import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
-import android.support.v4.content.PermissionChecker.checkSelfPermission
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.PermissionChecker
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.trewartha.positional.R
 import io.trewartha.positional.common.Log
 import io.trewartha.positional.location.LocationLiveData
@@ -49,10 +48,7 @@ abstract class LocationAwareFragment : Fragment() {
             AlertDialog.Builder(context ?: return)
                     .setTitle(R.string.location_permission_explanation_title)
                     .setMessage(R.string.location_permission_explanation_message)
-                    .setPositiveButton(
-                            R.string.location_permission_explanation_positive,
-                            { _, _ -> requestLocationPermissions() }
-                    )
+                    .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ -> requestLocationPermissions() }
                     .show()
         }
     }
@@ -64,9 +60,12 @@ abstract class LocationAwareFragment : Fragment() {
 
     protected fun haveLocationPermissions(): Boolean {
         val context = context ?: return false
-        val coarsePermission = checkSelfPermission(context, ACCESS_COARSE_LOCATION)
-        val finePermission = checkSelfPermission(context, ACCESS_FINE_LOCATION)
-        return coarsePermission == PERMISSION_GRANTED && finePermission == PERMISSION_GRANTED
+        val coarsePermission = PermissionChecker
+                .checkSelfPermission(context, ACCESS_COARSE_LOCATION)
+        val finePermission = PermissionChecker
+                .checkSelfPermission(context, ACCESS_FINE_LOCATION)
+        return coarsePermission == PermissionChecker.PERMISSION_GRANTED
+                && finePermission == PermissionChecker.PERMISSION_GRANTED
     }
 
     private fun observeLocationChanges() {

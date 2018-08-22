@@ -18,9 +18,11 @@ class CoordinatesDegreesDecimalFragment : CoordinatesFragment() {
         locationFormatter = LocationFormatter(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.coordinates_degrees_decimal_fragment, container, false)
-    }
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.coordinates_degrees_decimal_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,7 +30,7 @@ class CoordinatesDegreesDecimalFragment : CoordinatesFragment() {
     }
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
-        latitudeTextView?.text = locationFormatter.getDecimalLatitude(latitude)
-        longitudeTextView?.text = locationFormatter.getDecimalLongitude(longitude)
+        latitudeTextView.text = locationFormatter.getDecimalLatitude(latitude)
+        longitudeTextView.text = locationFormatter.getDecimalLongitude(longitude)
     }
 }

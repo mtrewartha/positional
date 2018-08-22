@@ -9,10 +9,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -22,15 +18,16 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import io.trewartha.positional.R;
 import io.trewartha.positional.ui.LocationAwareFragment;
 
 public class CompassFragment extends LocationAwareFragment {
-
-    private enum Mode {
-        TRUE_NORTH, MAGNETIC_NORTH
-    }
 
     private static final float ALPHA = 0.10f; // if ALPHA = 1 OR 0, no filter applies
     private static final long LOCATION_UPDATE_INTERVAL = 30 * 60 * 1000; // 30 mins in ms
@@ -50,27 +47,35 @@ public class CompassFragment extends LocationAwareFragment {
     private CompassSensorsListener compassSensorsListener;
     private float[] magnetometerReading;
     private Sensor magnetometerSensor;
-    private Mode mode;
     private final float[] mR = new float[9];
     private final float[] orientation = new float[3];
     private int screenOrientation;
     private SensorManager sensorManager;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferencesChangeListener;
+    private String sharedPreferencesKeyCompassMode;
+    private boolean useMagneticNorth;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         accelerometerReading = new float[3];
         magnetometerReading = new float[3];
-        sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         screenOrientation = display.getRotation();
 
+        sharedPreferencesKeyCompassMode = getString(R.string.settings_compass_mode_key);
         sharedPreferences = context.getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE);
+        sharedPreferencesChangeListener = (sharedPreferences, key) -> {
+            if (key.equals(sharedPreferencesKeyCompassMode))
+                useMagneticNorth(shouldUseMagneticNorth());
+        };
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener);
     }
 
     @Nullable
@@ -100,7 +105,7 @@ public class CompassFragment extends LocationAwareFragment {
             magnetometerAccuracyTextView.setText(getString(R.string.compass_accuracy_magnetometer, getString(R.string.compass_accuracy_no_sensor_found)));
         }
         if (accelerometerSensor == null || magnetometerSensor == null) {
-            new AlertDialog.Builder(getContext())
+            new AlertDialog.Builder(requireContext())
                     .setTitle(R.string.compass_sensor_missing_title)
                     .setMessage(R.string.compass_sensor_missing_message)
                     .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
@@ -110,17 +115,8 @@ public class CompassFragment extends LocationAwareFragment {
             magnetometerAccuracyTextView.setText(getString(R.string.compass_accuracy_magnetometer, getString(R.string.compass_accuracy_unknown)));
         }
 
-        Mode restoredMode = Mode.valueOf(sharedPreferences.getString(
-                getString(R.string.settings_compass_mode),
-                Mode.TRUE_NORTH.name())
-        );
-        setMode(restoredMode);
-        modeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleMode();
-            }
-        });
+        useMagneticNorth(shouldUseMagneticNorth());
+        modeTextView.setOnClickListener(v -> onModeClick());
 
         declinationTextView.setText(R.string.unknown);
     }
@@ -141,6 +137,12 @@ public class CompassFragment extends LocationAwareFragment {
         sensorManager.unregisterListener(compassSensorsListener, accelerometerSensor);
         sensorManager.unregisterListener(compassSensorsListener, magnetometerSensor);
         compassSensorsListener = null;
+    }
+
+    @Override
+    public void onDetach() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesChangeListener);
+        super.onDetach();
     }
 
     @Override
@@ -180,21 +182,36 @@ public class CompassFragment extends LocationAwareFragment {
         ).getDeclination();
     }
 
-    private void setMode(@NonNull Mode mode) {
-        this.mode = mode;
+    private void useMagneticNorth(boolean useMagneticNorth) {
+        this.useMagneticNorth = useMagneticNorth;
 
+        String preferenceValue;
+        if (useMagneticNorth)
+            preferenceValue = getString(R.string.settings_compass_mode_magnetic_value);
+        else
+            preferenceValue = getString(R.string.settings_compass_mode_true_value);
         sharedPreferences.edit()
-                .putString(getString(R.string.settings_compass_mode), mode.name())
+                .putString(getString(R.string.settings_compass_mode_key), preferenceValue)
                 .apply();
 
-        int modeName = mode == Mode.TRUE_NORTH ?
-                R.string.compass_mode_true_north :
-                R.string.compass_mode_magnetic_north;
+        int modeName = useMagneticNorth ?
+                R.string.compass_mode_magnetic_north :
+                R.string.compass_mode_true_north;
         modeTextView.setText(modeName);
     }
 
-    private void toggleMode() {
-        setMode(mode == Mode.TRUE_NORTH ? Mode.MAGNETIC_NORTH : Mode.TRUE_NORTH);
+    private boolean shouldUseMagneticNorth() {
+        return sharedPreferences
+                .getString(sharedPreferencesKeyCompassMode, getString(R.string.settings_compass_mode_true_value))
+                .equals(getString(R.string.settings_compass_mode_magnetic_value));
+    }
+
+    private void onModeClick() {
+        Snackbar.make(
+                getView().findViewById(R.id.coordinatorLayout),
+                R.string.compass_mode_change_snackbar,
+                Snackbar.LENGTH_LONG
+        ).show();
     }
 
     private class CompassSensorsListener implements SensorEventListener {
@@ -276,7 +293,7 @@ public class CompassFragment extends LocationAwareFragment {
 
         private void updateCompassDegrees(float degrees) {
             if (isAdded()) {
-                int declination = mode == Mode.TRUE_NORTH ? CompassFragment.this.declination : 0;
+                int declination = useMagneticNorth ? 0 : CompassFragment.this.declination;
                 compassDegreesTextView.setText(getString(R.string.compass_degrees, (int) degrees - declination));
                 float newDegrees = 360f - degrees + declination;
                 compassBackgroundView.rotationUpdate(newDegrees, true);

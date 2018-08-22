@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_root_title">
+
+    <ListPreference
+        android:defaultValue="@string/settings_units_metric_value"
+        android:dialogTitle="@string/settings_units_dialog_title"
+        android:entries="@array/settings_units_labels"
+        android:entryValues="@array/settings_units_values"
+        android:icon="@drawable/ic_twotone_straighten_24px"
+        android:key="@string/settings_units_key"
+        android:summary="%s"
+        android:title="@string/settings_units_title" />
+
+    <ListPreference
+        android:defaultValue="@string/settings_compass_mode_true_value"
+        android:dialogTitle="@string/settings_compass_mode_dialog_title"
+        android:entries="@array/settings_compass_mode_labels"
+        android:entryValues="@array/settings_compass_mode_values"
+        android:icon="@drawable/ic_twotone_explore_24px"
+        android:key="@string/settings_compass_mode_key"
+        android:summary="%s"
+        android:title="@string/settings_compass_mode_title" />
+
+</PreferenceScreen>

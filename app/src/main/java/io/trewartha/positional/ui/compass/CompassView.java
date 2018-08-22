@@ -6,9 +6,11 @@ import android.util.AttributeSet;
 
 import java.util.Date;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 // Pulled from this Stack Overflow answer: http://stackoverflow.com/a/22738030/1253644
 
-public class CompassView extends android.support.v7.widget.AppCompatImageView {
+public class CompassView extends AppCompatImageView {
 
     private static final float TIME_DELTA_THRESHOLD = 0.15f; // maximum time difference between iterations, s
     private static final float ANGLE_DELTA_THRESHOLD = 0.1f; // minimum rotation change to be redrawn, deg

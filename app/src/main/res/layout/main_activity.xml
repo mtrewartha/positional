@@ -1,44 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainActivityLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.MainActivity">
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/navigationBarBackground"
-        android:elevation="24dp"
-        app:itemBackground="@color/navigationBarItemBackground"
-        app:itemIconTint="@color/navigationBarIconTint"
-        app:itemTextColor="@color/navigationBarTextColor"
-        app:menu="@menu/main_bottom_navigation"
-        tools:targetApi="lollipop" />
 
     <io.trewartha.positional.ui.UndraggableViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottomNavigationView"
-        android:layout_alignParentTop="true"
-        android:elevation="0dp"
-        tools:targetApi="lollipop" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:elevation="0dp" />
 
-    <ImageView
-        android:id="@+id/userPhotoImageView"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:contentDescription="@string/user_thumbnail_content_description"
-        tools:targetApi="lollipop" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        style="@style/Widget.MaterialComponents.BottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="24dp"
+        app:itemIconTint="@color/bottom_navigation_icon_tint"
+        app:itemTextColor="@color/bottom_navigation_text_color"
+        app:menu="@menu/main_bottom_navigation" />
 
-</RelativeLayout>
+</LinearLayout>
