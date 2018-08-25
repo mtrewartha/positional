@@ -17,12 +17,10 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        style="@style/Widget.MaterialComponents.BottomNavigationView"
+        style="@style/BottomNavigationViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="24dp"
-        app:itemIconTint="@color/bottom_navigation_icon_tint"
-        app:itemTextColor="@color/bottom_navigation_text_color"
         app:menu="@menu/main_bottom_navigation" />
 
 </LinearLayout>

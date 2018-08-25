@@ -1,9 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Positional" parent="Theme.MaterialComponents.Light.NoActionBar">
-
-        <!-- Customize your theme here. -->
+    <style name="Positional.Day" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorAccent">@color/secondary</item>
         <item name="colorError">@color/error</item>
         <item name="colorPrimary">@color/primary</item>
@@ -21,7 +20,33 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="Positional.Night" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorAccent">@color/secondary</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDarkVariant</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:textColor">@color/onSurface</item>
+        <item name="android:textColorPrimary">@color/onSurface</item>
+        <item name="android:textColorSecondary">@color/onSurfaceLightVariant</item>
+        <item name="snackbarStyle">@style/SnackbarStyle</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Positional.DayNight" parent="Positional.Day" />
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView" />
+
     <!-- Bottom Sheets -->
+
+    <style name="BottomSheet">
+        <item name="android:background">@color/surfaceLightVariant</item>
+    </style>
 
     <style name="BottomSheetTitle">
         <item name="android:gravity">center_vertical|left|start</item>

@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:textSize="180sp"
+                android:textSize="172sp"
                 tools:text="360°" />
 
             <LinearLayout

@@ -64,6 +64,7 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
 
         copyButton.setOnClickListener { onCopyClicked() }
         shareButton.setOnClickListener { onShareClicked() }
+        invertColorsButton.setOnClickListener { onInvertColorsClicked() }
 
         val unitOnClickListener = View.OnClickListener { onDistanceUnitClicked() }
         elevationUnitTextView.setOnClickListener(unitOnClickListener)
@@ -179,6 +180,10 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
 
     private fun onDistanceUnitClicked() {
         Snackbar.make(coordinatorLayout, R.string.unit_change_snackbar, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun onInvertColorsClicked() {
+        // TODO: Implement overriding the theme
     }
 
     private fun onScreenLockClicked() {

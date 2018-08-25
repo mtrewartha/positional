@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:textSize="160sp"
+            android:textSize="120sp"
             tools:text="360°" />
 
         <LinearLayout

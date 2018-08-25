@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">#eeeeee</color>
-    <color name="primaryDarkVariant">#dddddd</color>
-    <color name="primaryLightVariant">#ffffff</color>
+    <color name="primary">#03a9f4</color>
+    <color name="primaryDarkVariant">#007ac1</color>
+    <color name="primaryLightVariant">#67daff</color>
 
-    <color name="onPrimary">#ffffff</color>
-    <color name="onPrimaryDarkVariant">#ffffff</color>
-    <color name="onPrimaryLightVariant">#ffffff</color>
+    <color name="onPrimary">#deffffff</color>
+    <color name="onPrimaryDarkVariant">#99ffffff</color>
+    <color name="onPrimaryLightVariant">#61ffffff</color>
 
     <color name="secondary">#03a9f4</color>
     <color name="secondaryDarkVariant">#007ac1</color>
     <color name="secondaryLightVariant">#67daff</color>
+
     <color name="onSecondary">@color/onPrimary</color>
     <color name="onSecondaryDarkVariant">@color/onPrimaryDarkVariant</color>
     <color name="onSecondaryLightVariant">@color/onPrimaryLightVariant</color>

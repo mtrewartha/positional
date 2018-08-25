@@ -62,21 +62,9 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/share_content_description"
                 android:src="@drawable/ic_twotone_share_24px"
-                app:layout_constraintBottom_toBottomOf="@id/screenLockSwitch"
-                app:layout_constraintEnd_toStartOf="@id/screenLockSwitch"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/screenLockSwitch" />
-
-            <ImageButton
-                android:id="@+id/screenLockSwitch"
-                style="@style/ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/settings_screen_lock_content_description"
-                android:src="@drawable/ic_twotone_screen_lock_portrait_24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/copyButton"
-                app:layout_constraintStart_toEndOf="@id/shareButton"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/progressBar" />
 
             <ImageButton
@@ -86,10 +74,35 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/copy_coordinates_content_description"
                 android:src="@drawable/ic_twotone_file_copy_24px"
-                app:layout_constraintBottom_toBottomOf="@id/screenLockSwitch"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/invertColorsButton"
+                app:layout_constraintStart_toEndOf="@id/shareButton"
+                app:layout_constraintTop_toBottomOf="@id/progressBar" />
+
+            <ImageButton
+                android:id="@+id/invertColorsButton"
+                style="@style/ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/invert_colors_content_description"
+                android:src="@drawable/ic_twotone_invert_colors_24px"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/screenLockSwitch"
+                app:layout_constraintStart_toEndOf="@id/copyButton"
+                app:layout_constraintTop_toBottomOf="@id/progressBar" />
+
+            <ImageButton
+                android:id="@+id/screenLockSwitch"
+                style="@style/ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/settings_screen_lock_content_description"
+                android:src="@drawable/ic_twotone_screen_lock_portrait_24px"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/screenLockSwitch"
-                app:layout_constraintTop_toTopOf="@id/screenLockSwitch" />
+                app:layout_constraintStart_toEndOf="@id/invertColorsButton"
+                app:layout_constraintTop_toBottomOf="@id/progressBar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

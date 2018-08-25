@@ -33,6 +33,7 @@
     <string name="copy_coordinates_longitude">Longitude only</string>
     <string name="copy_coordinates_title">Which coordinates would you like to copy?</string>
     <string name="elevation">Elevation</string>
+    <string name="invert_colors_content_description">invert colors</string>
     <string name="screen_lock_off">Screen lock disabled</string>
     <string name="screen_lock_on">Screen lock enabled</string>
     <string name="share_content_description">share coordinates</string>

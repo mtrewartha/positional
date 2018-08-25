@@ -22,9 +22,9 @@
     <dimen name="stat_image_size_large">@dimen/text_size_medium</dimen>
     <dimen name="stat_image_size_large_landscape">@dimen/text_size_large</dimen>
 
-    <dimen name="text_size_small">25sp</dimen>
-    <dimen name="text_size_medium">36sp</dimen>
-    <dimen name="text_size_large">46sp</dimen>
+    <dimen name="text_size_small">24sp</dimen>
+    <dimen name="text_size_medium">34sp</dimen>
+    <dimen name="text_size_large">42sp</dimen>
 
     <dimen name="track_image_height">276dp</dimen>
 

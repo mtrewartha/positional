@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Positional.DayNight" parent="Positional.Night" />
+
+    <style name="CompassBackground">
+        <item name="android:tint">@color/onSurface</item>
+    </style>
+
+    <style name="SnackbarStyle" parent="Widget.MaterialComponents.Snackbar" />
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:backgroundTint">@color/surface</item>
+    </style>
+
+</resources>

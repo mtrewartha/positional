@@ -13,7 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Positional"
+        android:theme="@style/Positional.DayNight"
         tools:replace="android:allowBackup">
 
         <meta-data
@@ -47,9 +47,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.auth.SignInActivity" />
-
     </application>
 
 </manifest>

@@ -11,15 +11,13 @@ class MainFragmentPagerAdapter(
         fragmentManager: FragmentManager
 ) : FragmentPagerAdapter(fragmentManager) {
 
-    companion object {
-        private val FRAGMENTS = arrayOf(
-                PositionFragment(),
-                CompassFragment(),
-                SettingsFragment()
-        )
-    }
+    private val fragments = arrayOf(
+            PositionFragment(),
+            CompassFragment(),
+            SettingsFragment()
+    )
 
-    override fun getItem(position: Int): Fragment = FRAGMENTS[position]
+    override fun getItem(position: Int): Fragment = fragments[position]
 
-    override fun getCount(): Int = FRAGMENTS.size
+    override fun getCount(): Int = fragments.size
 }
