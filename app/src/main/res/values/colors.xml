@@ -13,9 +13,9 @@
     <color name="secondaryDarkVariant">#007ac1</color>
     <color name="secondaryLightVariant">#67daff</color>
 
-    <color name="onSecondary">@color/onPrimary</color>
-    <color name="onSecondaryDarkVariant">@color/onPrimaryDarkVariant</color>
-    <color name="onSecondaryLightVariant">@color/onPrimaryLightVariant</color>
+    <color name="onSecondary">#deffffff</color>
+    <color name="onSecondaryDarkVariant">#99ffffff</color>
+    <color name="onSecondaryLightVariant">#61ffffff</color>
 
     <color name="background">#f9f9f9</color>
     <color name="onBackground">#000000</color>
@@ -33,6 +33,7 @@
     <color name="surfaceDarkVariant">#e8e8e8</color>
     <color name="surfaceLightVariant">#ffffff</color>
     <color name="surfaceVeryDarkVariant">#444444</color>
+
     <color name="onSurface">#de000000</color>
     <color name="onSurfaceLightVariant">#99000000</color>
     <color name="onSurfaceVeryLightVariant">#61000000</color>

@@ -20,27 +20,13 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Positional.Night" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorAccent">@color/secondary</item>
-        <item name="colorError">@color/error</item>
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDarkVariant</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="android:colorBackground">@color/background</item>
-        <item name="android:textColor">@color/onSurface</item>
-        <item name="android:textColorPrimary">@color/onSurface</item>
-        <item name="android:textColorSecondary">@color/onSurfaceLightVariant</item>
-        <item name="snackbarStyle">@style/SnackbarStyle</item>
-
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:statusBarColor">@color/background</item>
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
-
     <style name="Positional.DayNight" parent="Positional.Day" />
 
-    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView" />
+    <style name="BottomNavigationViewStyle">
+        <item name="android:background">@color/surface</item>
+        <item name="itemIconTint">@color/bottom_navigation_icon_tint</item>
+        <item name="itemTextColor">@color/bottom_navigation_text_color</item>
+    </style>
 
     <!-- Bottom Sheets -->
 
