@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.location.LocationRequest
@@ -22,7 +21,7 @@ import kotlinx.android.synthetic.main.position_fragment.*
 import java.util.*
 
 
-class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChangeListener {
+class PositionFragment : LocationAwareFragment() {
 
     companion object {
         private const val TAG = "PositionFragment"
@@ -79,6 +78,7 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
         )
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false)
         screenLockSwitch.isSelected = screenLock
+        lockScreen(screenLock)
 
         coordinatesViewPager.apply {
             val coordinatesPagerAdapter = CoordinatesFragmentPagerAdapter(childFragmentManager)
@@ -119,13 +119,6 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
     override fun getLocationUpdateMaxWaitTime(): Long = LOCATION_UPDATE_MAX_WAIT_TIME
 
     override fun getLocationUpdatePriority(): Int = LOCATION_UPDATE_PRIORITY
-
-    override fun onCheckedChanged(compoundButton: CompoundButton, checked: Boolean) {
-        if (compoundButton.id == R.id.screenLockSwitch) {
-            setBooleanPreference(getString(R.string.settings_screen_lock_key), checked)
-            lockScreen(checked)
-        }
-    }
 
     private fun getCoordinatesFragmentIndex(coordinatesFormat: CoordinatesFormat): Int {
         return when (coordinatesFormat) {
@@ -189,6 +182,7 @@ class PositionFragment : LocationAwareFragment(), CompoundButton.OnCheckedChange
     private fun onScreenLockClicked() {
         screenLock = !screenLock
         screenLockSwitch.isSelected = screenLock
+        lockScreen(screenLock)
         setBooleanPreference(getString(R.string.settings_screen_lock_key), screenLock)
         val textRes = if (screenLock) R.string.screen_lock_on else R.string.screen_lock_off
         Snackbar.make(coordinatorLayout, textRes, Snackbar.LENGTH_LONG).show()
