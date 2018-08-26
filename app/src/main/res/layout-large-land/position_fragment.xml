@@ -167,7 +167,7 @@
                 <ImageView
                     style="@style/PositionStatIconLargeLandscape"
                     android:contentDescription="@string/speed"
-                    android:src="@drawable/speedometer" />
+                    android:src="@drawable/ic_speedometer_24px" />
 
                 <TextView
                     android:id="@+id/speedLabelTextView"

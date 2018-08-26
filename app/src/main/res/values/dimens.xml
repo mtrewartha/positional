@@ -14,9 +14,6 @@
     <dimen name="label_text_size_large">@dimen/text_size_medium</dimen>
     <dimen name="label_text_size_large_landscape">@dimen/text_size_medium</dimen>
 
-    <dimen name="profile_photo_image_view_size">120dp</dimen>
-    <dimen name="profile_photo_progress_bar_size">156dp</dimen>
-
     <dimen name="stat_image_size">@dimen/text_size_small</dimen>
     <dimen name="stat_image_size_landscape">@dimen/text_size_small</dimen>
     <dimen name="stat_image_size_large">@dimen/text_size_medium</dimen>
@@ -25,8 +22,6 @@
     <dimen name="text_size_small">24sp</dimen>
     <dimen name="text_size_medium">34sp</dimen>
     <dimen name="text_size_large">42sp</dimen>
-
-    <dimen name="track_image_height">276dp</dimen>
 
     <dimen name="unit_text_size">@dimen/text_size_small</dimen>
     <dimen name="unit_text_size_landscape">@dimen/text_size_small</dimen>
