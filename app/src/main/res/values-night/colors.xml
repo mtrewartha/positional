@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">#f44336</color>
-    <color name="primaryDarkVariant">#ba000d</color>
-    <color name="primaryLightVariant">#ff7961</color>
+    <color name="primary">#000000</color>
+    <color name="primaryDarkVariant">#000000</color>
+    <color name="primaryLightVariant">#2c2c2c</color>
 
     <color name="onPrimary">#deffffff</color>
     <color name="onPrimaryDarkVariant">#99ffffff</color>
     <color name="onPrimaryLightVariant">#61ffffff</color>
 
-    <color name="secondary">#f44336</color>
-    <color name="secondaryDarkVariant">#ba000d</color>
-    <color name="secondaryLightVariant">#ff7961</color>
+    <color name="secondary">#ff9800</color>
+    <color name="secondaryDarkVariant">#c66900</color>
+    <color name="secondaryLightVariant">#ffc947</color>
 
     <color name="onSecondary">#deffffff</color>
     <color name="onSecondaryDarkVariant">#99ffffff</color>
@@ -33,8 +33,8 @@
     <color name="surfaceDarkVariant">#000000</color>
     <color name="surfaceLightVariant">#333333</color>
     <color name="surfaceVeryDarkVariant">#000000</color>
-    <color name="onSurface">#deffffff</color>
-    <color name="onSurfaceLightVariant">#99ffffff</color>
-    <color name="onSurfaceVeryLightVariant">#61ffffff</color>
+    <color name="onSurface">#def44336</color>
+    <color name="onSurfaceLightVariant">#99f44336</color>
+    <color name="onSurfaceVeryLightVariant">#61f44336</color>
 
 </resources>
