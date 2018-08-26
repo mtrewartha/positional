@@ -13,18 +13,17 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import io.trewartha.positional.R
-import io.trewartha.positional.common.Log
 import io.trewartha.positional.location.CoordinatesFormat
 import io.trewartha.positional.location.LocationFormatter
 import io.trewartha.positional.ui.LocationAwareFragment
 import kotlinx.android.synthetic.main.position_fragment.*
+import timber.log.Timber
 import java.util.*
 
 
 class PositionFragment : LocationAwareFragment() {
 
     companion object {
-        private const val TAG = "PositionFragment"
         private const val LOCATION_UPDATE_INTERVAL = 5000L // ms
         private const val LOCATION_UPDATE_MAX_WAIT_TIME = 10000L // ms
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -220,12 +219,12 @@ class PositionFragment : LocationAwareFragment() {
     }
 
     private fun setBooleanPreference(key: String, value: Boolean) {
-        Log.info(TAG, "Saving $key preference as $value")
+        Timber.i("Saving $key preference as $value")
         sharedPreferences.edit().putBoolean(key, value).apply()
     }
 
     private fun setStringPreference(key: String, value: String?) {
-        Log.info(TAG, "Saving $key preference as $value")
+        Timber.i("Saving $key preference as $value")
         sharedPreferences.edit().putString(key, value).apply()
     }
 

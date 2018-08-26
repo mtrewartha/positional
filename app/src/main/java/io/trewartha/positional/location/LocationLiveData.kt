@@ -9,18 +9,10 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.metrics.Trace
-import io.trewartha.positional.common.Log
+import timber.log.Timber
+
 
 class LocationLiveData(private val context: Context) : LiveData<Location>() {
-
-    companion object {
-        private const val COUNTER_ACCURACY_VERY_HIGH = "accuracy_very_high"
-        private const val COUNTER_ACCURACY_HIGH = "accuracy_high"
-        private const val COUNTER_ACCURACY_MEDIUM = "accuracy_medium"
-        private const val COUNTER_ACCURACY_LOW = "accuracy_low"
-        private const val COUNTER_ACCURACY_VERY_LOW = "accuracy_very_low"
-        private const val TAG = "LocationLiveData"
-    }
 
     private val locationClient = FusedLocationProviderClient(context)
     private val locationCallback = LocationCallback()
@@ -43,7 +35,7 @@ class LocationLiveData(private val context: Context) : LiveData<Location>() {
                 .setMaxWaitTime(updateMaxWaitTime)
                 .setInterval(updateInterval)
                 .setFastestInterval(updateInterval)
-        Log.info(TAG, "Requesting location updates: $locationRequest")
+        Timber.i("Requesting location updates: $locationRequest")
         try {
             locationClient.requestLocationUpdates(
                     locationRequest,
@@ -51,12 +43,12 @@ class LocationLiveData(private val context: Context) : LiveData<Location>() {
                     Looper.getMainLooper()
             )
         } catch (e: SecurityException) {
-            Log.warn(TAG, "Don't have location permissions, no location updates will be received")
+            Timber.i("Don't have location permissions, no location updates will be received")
         }
     }
 
     override fun onInactive() {
-        Log.info(TAG, "Suspending location updates")
+        Timber.i("Suspending location updates")
         locationClient.removeLocationUpdates(locationCallback)
     }
 
@@ -69,7 +61,7 @@ class LocationLiveData(private val context: Context) : LiveData<Location>() {
 
             if (location != null && firstLocationUpdateTrace != null) {
                 val accuracyCounter = getAccuracyLevelCounter(location.accuracy)
-                firstLocationUpdateTrace?.incrementCounter(accuracyCounter)
+                firstLocationUpdateTrace?.incrementMetric(accuracyCounter, 1L)
                 firstLocationUpdateTrace?.stop()
                 firstLocationUpdateTrace = null
             }
@@ -84,5 +76,13 @@ class LocationLiveData(private val context: Context) : LiveData<Location>() {
                 else -> COUNTER_ACCURACY_VERY_LOW
             }
         }
+    }
+
+    companion object {
+        private const val COUNTER_ACCURACY_VERY_HIGH = "accuracy_very_high"
+        private const val COUNTER_ACCURACY_HIGH = "accuracy_high"
+        private const val COUNTER_ACCURACY_MEDIUM = "accuracy_medium"
+        private const val COUNTER_ACCURACY_LOW = "accuracy_low"
+        private const val COUNTER_ACCURACY_VERY_LOW = "accuracy_very_low"
     }
 }

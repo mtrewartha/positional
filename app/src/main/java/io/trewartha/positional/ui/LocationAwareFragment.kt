@@ -10,15 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.trewartha.positional.R
-import io.trewartha.positional.common.Log
 import io.trewartha.positional.location.LocationLiveData
 import io.trewartha.positional.ui.position.LocationViewModel
+import timber.log.Timber
 
 abstract class LocationAwareFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_LOCATION_PERMISSIONS = 1
-        private const val TAG = "LocationAwareFragment"
     }
 
     protected var lastLocation: Location? = null
@@ -76,7 +75,7 @@ abstract class LocationAwareFragment : Fragment() {
     }
 
     private fun requestLocationPermissions() {
-        Log.info(TAG, "Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION")
+        Timber.i("Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION")
         requestPermissions(
                 arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
                 REQUEST_CODE_LOCATION_PERMISSIONS

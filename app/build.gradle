@@ -3,6 +3,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 def keystorePropertiesFile = rootProject.file('upload_keystore.properties')
 def keystoreProperties = new Properties()
@@ -36,14 +37,12 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         release {
             debuggable false
-            minifyEnabled true
-            useProguard true
+            minifyEnabled false // TODO: Re-enable this once lifecycle-extensions reaches 2.0.0-rc02
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -71,13 +70,14 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.0.0-rc01'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
     implementation "androidx.preference:preference:1.0.0-rc01"
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
     implementation 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.android.material:material:1.0.0-rc01'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.google.firebase:firebase-crash:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-perf:16.1.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.romandanylyk:pageindicatorview:1.0.1'
     implementation 'org.jetbrains.anko:anko-commons:0.10.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

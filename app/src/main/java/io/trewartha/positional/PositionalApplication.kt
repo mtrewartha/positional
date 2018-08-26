@@ -1,25 +1,30 @@
 package io.trewartha.positional
 
 import android.app.Application
-import com.google.firebase.crash.FirebaseCrash
+import com.crashlytics.android.Crashlytics
+import com.google.firebase.FirebaseApp
 import com.google.firebase.perf.FirebasePerformance
 import com.jakewharton.threetenabp.AndroidThreeTen
-import io.trewartha.positional.common.Log
+import io.fabric.sdk.android.Fabric
+import io.trewartha.positional.utils.CrashlyticsTree
+import timber.log.Timber
+
 
 class PositionalApplication : Application() {
-
-    companion object {
-        private const val TAG = "Positional"
-    }
 
     override fun onCreate() {
         super.onCreate()
 
-        val enableFirebase = !BuildConfig.DEBUG
-        Log.debug(TAG, "Firebase ${if (enableFirebase) "enabled" else "disabled"}")
-        FirebaseCrash.setCrashCollectionEnabled(enableFirebase)
-        FirebasePerformance.getInstance().isPerformanceCollectionEnabled = enableFirebase
-
+        FirebaseApp.initializeApp(this)
+        FirebasePerformance.getInstance().isPerformanceCollectionEnabled = !BuildConfig.DEBUG
         AndroidThreeTen.init(this)
+        Timber.plant(if (BuildConfig.DEBUG) Timber.DebugTree() else CrashlyticsTree())
+
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(Fabric.Builder(this)
+                    .kits(Crashlytics())
+                    .debuggable(true)
+                    .build())
+        }
     }
 }
