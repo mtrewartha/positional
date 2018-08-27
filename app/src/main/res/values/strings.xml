@@ -85,7 +85,7 @@
     <string name="settings_units_dialog_title">Units of Measurement</string>
     <string name="settings_units_imperial_label">Imperial</string>
     <string name="settings_units_imperial_value">imperial</string>
-    <string name="settings_units_key">metricUnits</string>
+    <string name="settings_units_key">useMetricUnits</string>
     <string name="settings_units_metric_label">Metric</string>
     <string name="settings_units_metric_value">metric</string>
     <string name="settings_units_title">Units of Measurement</string>
