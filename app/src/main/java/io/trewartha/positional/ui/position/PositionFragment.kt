@@ -71,9 +71,16 @@ class PositionFragment : LocationAwareFragment() {
 
         screenLockSwitch.setOnClickListener { onScreenLockClicked() }
 
-        useMetricUnits = sharedPreferences.getString(sharedPreferencesUnitsKey, sharedPreferencesUnitsMetric) == sharedPreferencesUnitsMetric
+        useMetricUnits = try {
+            sharedPreferences.getString(sharedPreferencesUnitsKey, sharedPreferencesUnitsMetric) == sharedPreferencesUnitsMetric
+        } catch (e: ClassCastException) {
+            sharedPreferences.getBoolean(sharedPreferencesUnitsKey, false)
+        }
         coordinatesFormat = CoordinatesFormat.valueOf(
-                sharedPreferences.getString(getString(R.string.settings_coordinates_format_key), CoordinatesFormat.DMS.name)
+                sharedPreferences.getString(
+                        getString(R.string.settings_coordinates_format_key),
+                        CoordinatesFormat.DMS.name
+                ) ?: CoordinatesFormat.DMS.name
         )
         screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false)
         screenLockSwitch.isSelected = screenLock
