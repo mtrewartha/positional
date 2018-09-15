@@ -136,10 +136,11 @@ class PositionFragment : LocationAwareFragment() {
     }
 
     private fun lockScreen(lock: Boolean) {
-        if (lock) {
-            activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        } else {
-            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        activity?.window?.apply {
+            if (lock)
+                addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            else
+                clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
 

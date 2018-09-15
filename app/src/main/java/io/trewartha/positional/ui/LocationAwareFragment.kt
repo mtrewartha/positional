@@ -4,21 +4,14 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
 import android.location.Location
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import io.trewartha.positional.R
 import io.trewartha.positional.location.LocationLiveData
 import io.trewartha.positional.ui.position.LocationViewModel
-import timber.log.Timber
 
 abstract class LocationAwareFragment : Fragment() {
-
-    companion object {
-        private const val REQUEST_CODE_LOCATION_PERMISSIONS = 1
-    }
 
     protected var lastLocation: Location? = null
 
@@ -42,13 +35,10 @@ abstract class LocationAwareFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (haveLocationPermissions()) {
-            observeLocationChanges()
-        } else {
-            AlertDialog.Builder(context ?: return)
-                    .setTitle(R.string.location_permission_explanation_title)
-                    .setMessage(R.string.location_permission_explanation_message)
-                    .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ -> requestLocationPermissions() }
-                    .show()
+            locationLiveData.observe(this, Observer<Location> {
+                lastLocation = it
+                onLocationChanged(it)
+            })
         }
     }
 
@@ -57,28 +47,11 @@ abstract class LocationAwareFragment : Fragment() {
         locationLiveData.removeObservers(this)
     }
 
-    protected fun haveLocationPermissions(): Boolean {
+    private fun haveLocationPermissions(): Boolean {
         val context = context ?: return false
-        val coarsePermission = PermissionChecker
-                .checkSelfPermission(context, ACCESS_COARSE_LOCATION)
-        val finePermission = PermissionChecker
-                .checkSelfPermission(context, ACCESS_FINE_LOCATION)
-        return coarsePermission == PermissionChecker.PERMISSION_GRANTED
-                && finePermission == PermissionChecker.PERMISSION_GRANTED
-    }
-
-    private fun observeLocationChanges() {
-        locationLiveData.observe(this, Observer<Location> {
-            lastLocation = it
-            onLocationChanged(it)
-        })
-    }
-
-    private fun requestLocationPermissions() {
-        Timber.i("Requesting permission for ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION")
-        requestPermissions(
-                arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
-                REQUEST_CODE_LOCATION_PERMISSIONS
-        )
+        return arrayOf(
+                PermissionChecker.checkSelfPermission(context, ACCESS_COARSE_LOCATION),
+                PermissionChecker.checkSelfPermission(context, ACCESS_FINE_LOCATION)
+        ).all { it == PermissionChecker.PERMISSION_GRANTED }
     }
 }

@@ -2,13 +2,14 @@
     <string name="app_name" tools:override="true">Positional</string>
 
     <!-- Common Text -->
-    <string name="got_it">Got It</string>
+    <string name="exit">Exit</string>
     <string name="ok">OK</string>
 
     <!-- Permissions -->
     <string name="location_permission_explanation_title">Location Permission Needed</string>
-    <string name="location_permission_explanation_message">Positional shows you a bunch of useful information about your location, but it needs your permission before getting access to it. On the next screen, you can grant access.</string>
-    <string name="location_permission_explanation_positive">@string/got_it</string>
+    <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through the Settings app before using this app.</string>
+    <string name="location_permission_explanation_positive">Go to Settings</string>
+    <string name="location_permission_explanation_negative">@string/exit</string>
 
     <!-- Bottom Navigation -->
     <string name="compass">Compass</string>

@@ -26,12 +26,6 @@ android {
         targetSdkVersion 28
         versionCode 17
         versionName '2.8.2'
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ['room.schemaLocation': "$projectDir/schemas".toString()]
-            }
-        }
     }
     buildTypes {
         debug {
@@ -67,13 +61,13 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    implementation 'androidx.fragment:fragment-ktx:1.0.0-rc01'
+    implementation 'androidx.fragment:fragment-ktx:1.0.0-rc02'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
-    implementation "androidx.preference:preference:1.0.0-rc01"
+    implementation "androidx.preference:preference:1.0.0-rc02"
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
     implementation 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'com.google.android.material:material:1.0.0-rc02'
     implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-perf:16.1.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
