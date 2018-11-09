@@ -47,15 +47,20 @@ class PositionFragment : LocationAwareFragment() {
         super.onAttach(context)
         locationFormatter = LocationFormatter(context)
         preferenceChangeListener = PreferenceChangeListener()
-        sharedPreferences = context.getSharedPreferences(getString(R.string.settings_filename), Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(
+            getString(R.string.settings_filename),
+            Context.MODE_PRIVATE
+        )
         sharedPreferencesUnitsKey = context.getString(R.string.settings_units_key)
         sharedPreferencesUnitsImperial = context.getString(R.string.settings_units_imperial_value)
         sharedPreferencesUnitsMetric = context.getString(R.string.settings_units_metric_value)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.position_fragment, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.position_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,17 +77,21 @@ class PositionFragment : LocationAwareFragment() {
         screenLockSwitch.setOnClickListener { onScreenLockClicked() }
 
         useMetricUnits = try {
-            sharedPreferences.getString(sharedPreferencesUnitsKey, sharedPreferencesUnitsMetric) == sharedPreferencesUnitsMetric
+            sharedPreferences.getString(
+                sharedPreferencesUnitsKey,
+                sharedPreferencesUnitsMetric
+            ) == sharedPreferencesUnitsMetric
         } catch (e: ClassCastException) {
             sharedPreferences.getBoolean(sharedPreferencesUnitsKey, false)
         }
         coordinatesFormat = CoordinatesFormat.valueOf(
-                sharedPreferences.getString(
-                        getString(R.string.settings_coordinates_format_key),
-                        CoordinatesFormat.DMS.name
-                ) ?: CoordinatesFormat.DMS.name
+            sharedPreferences.getString(
+                getString(R.string.settings_coordinates_format_key),
+                CoordinatesFormat.DMS.name
+            ) ?: CoordinatesFormat.DMS.name
         )
-        screenLock = sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false)
+        screenLock =
+                sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false)
         screenLockSwitch.isSelected = screenLock
         lockScreen(screenLock)
 
@@ -97,9 +106,10 @@ class PositionFragment : LocationAwareFragment() {
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
     }
 
-    override fun onAttachFragment(fragment: Fragment?) {
-        if (fragment is CoordinatesFragment) {
-            coordinatesFragments.add(fragment)
+    override fun onAttachFragment(childFragment: Fragment) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is CoordinatesFragment) {
+            coordinatesFragments.add(childFragment)
         }
     }
 
@@ -149,7 +159,11 @@ class PositionFragment : LocationAwareFragment() {
         val location = location
 
         if (location == null) {
-            Snackbar.make(coordinatorLayout, R.string.copied_coordinates_failure, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                coordinatorLayout,
+                R.string.copied_coordinates_failure,
+                Snackbar.LENGTH_LONG
+            ).show()
             return
         }
 
@@ -163,11 +177,17 @@ class PositionFragment : LocationAwareFragment() {
         val coordinatesCopier = CoordinatesCopier(location) { bottomSheetDialog.dismiss() }
 
         val bothTextView = bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyBothTextView)
-        val latitudeTextView = bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyLatitudeTextView)
-        val longitudeTextView = bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyLongitudeTextView)
+        val latitudeTextView =
+            bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyLatitudeTextView)
+        val longitudeTextView =
+            bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyLongitudeTextView)
 
         if (bothTextView == null || latitudeTextView == null || longitudeTextView == null) {
-            Snackbar.make(coordinatorLayout, R.string.copied_coordinates_failure, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                coordinatorLayout,
+                R.string.copied_coordinates_failure,
+                Snackbar.LENGTH_LONG
+            ).show()
             return
         }
 
@@ -203,9 +223,9 @@ class PositionFragment : LocationAwareFragment() {
         }
 
         val coordinatesText = locationFormatter.getCoordinates(
-                safeLocation.latitude,
-                safeLocation.longitude,
-                coordinatesFormat
+            safeLocation.latitude,
+            safeLocation.longitude,
+            coordinatesFormat
         )
 
         val sendIntent = Intent(Intent.ACTION_SEND).apply {
@@ -253,7 +273,11 @@ class PositionFragment : LocationAwareFragment() {
 
     private inner class CoordinatesPageChangeListener : ViewPager.OnPageChangeListener {
 
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
             // Don't do anything here
         }
 
@@ -265,7 +289,10 @@ class PositionFragment : LocationAwareFragment() {
                 3 -> CoordinatesFormat.MGRS
                 else -> CoordinatesFormat.DECIMAL
             }
-            setStringPreference(getString(R.string.settings_coordinates_format_key), coordinatesFormat.name)
+            setStringPreference(
+                getString(R.string.settings_coordinates_format_key),
+                coordinatesFormat.name
+            )
         }
 
         override fun onPageScrollStateChanged(state: Int) {
@@ -274,28 +301,37 @@ class PositionFragment : LocationAwareFragment() {
     }
 
     private inner class CoordinatesCopier(
-            val location: Location,
-            val onCoordinatesCopied: () -> Unit
+        val location: Location,
+        val onCoordinatesCopied: () -> Unit
     ) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipboardManager =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clipDataLabel = requireContext().getString(R.string.copied_coordinates_label)
             var clipDataText = ""
             var snackbarText = ""
 
             when (v.id) {
                 R.id.coordinatesCopyBothTextView -> {
-                    clipDataText = String.format(Locale.US, "%f, %f", location.latitude, location.longitude)
-                    snackbarText = requireContext().getString(R.string.copied_coordinates_both_success)
+                    clipDataText = String.format(
+                        Locale.US,
+                        "%f, %f",
+                        location.latitude,
+                        location.longitude
+                    )
+                    snackbarText =
+                            requireContext().getString(R.string.copied_coordinates_both_success)
                 }
                 R.id.coordinatesCopyLatitudeTextView -> {
                     clipDataText = String.format(Locale.US, "%f", location.latitude)
-                    snackbarText = requireContext().getString(R.string.copied_coordinates_latitude_success)
+                    snackbarText =
+                            requireContext().getString(R.string.copied_coordinates_latitude_success)
                 }
                 R.id.coordinatesCopyLongitudeTextView -> {
                     clipDataText = String.format(Locale.US, "%f", location.longitude)
-                    snackbarText = requireContext().getString(R.string.copied_coordinates_longitude_success)
+                    snackbarText =
+                            requireContext().getString(R.string.copied_coordinates_longitude_success)
                 }
             }
 
@@ -307,11 +343,15 @@ class PositionFragment : LocationAwareFragment() {
         }
     }
 
-    private inner class PreferenceChangeListener : SharedPreferences.OnSharedPreferenceChangeListener {
+    private inner class PreferenceChangeListener :
+        SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
             when (key) {
                 sharedPreferencesUnitsKey -> {
-                    useMetricUnits = sharedPreferences.getString(sharedPreferencesUnitsKey, sharedPreferencesUnitsMetric) == sharedPreferencesUnitsMetric
+                    useMetricUnits = sharedPreferences.getString(
+                        sharedPreferencesUnitsKey,
+                        sharedPreferencesUnitsMetric
+                    ) == sharedPreferencesUnitsMetric
                     updateLocationViews(location)
                 }
             }

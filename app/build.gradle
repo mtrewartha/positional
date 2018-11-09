@@ -19,7 +19,7 @@ android {
         }
     }
     compileSdkVersion 28
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId 'io.trewartha.positional'
         minSdkVersion 21
@@ -36,7 +36,7 @@ android {
 
         release {
             debuggable false
-            minifyEnabled false // TODO: Re-enable this once lifecycle-extensions reaches 2.0.0-rc02
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -51,29 +51,35 @@ android {
 
 repositories {
     google()
+    jcenter()
     mavenCentral()
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url 'https://jitpack.io' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
+ext {
+    // Dependency Versions
+    lifecycleVersion = '2.0.0'
+}
+
 dependencies {
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0-rc01'
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    implementation 'androidx.fragment:fragment-ktx:1.0.0-rc02'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
-    implementation "androidx.preference:preference:1.0.0-rc02"
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+    implementation 'androidx.fragment:fragment-ktx:1.1.0-alpha01'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation 'androidx.preference:preference:1.1.0-alpha01'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
     implementation 'com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:360781e'
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.android.material:material:1.0.0-rc02'
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-perf:16.1.0'
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha01'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation 'com.google.firebase:firebase-perf:16.2.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.romandanylyk:pageindicatorview:1.0.1'
-    implementation 'org.jetbrains.anko:anko-commons:0.10.4'
+    implementation 'org.jetbrains.anko:anko-commons:0.10.7'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 

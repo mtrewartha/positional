@@ -22,4 +22,14 @@
         android:summary="%s"
         android:title="@string/settings_compass_mode_title" />
 
+    <ListPreference
+        android:defaultValue="@string/settings_theme_mode_auto_value"
+        android:dialogTitle="@string/settings_theme_mode_title"
+        android:entries="@array/settings_theme_mode_labels"
+        android:entryValues="@array/settings_theme_mode_values"
+        android:icon="@drawable/ic_twotone_invert_colors_24px"
+        android:key="@string/settings_theme_mode_key"
+        android:summary="%s"
+        android:title="@string/settings_theme_mode_title" />
+
 </PreferenceScreen>

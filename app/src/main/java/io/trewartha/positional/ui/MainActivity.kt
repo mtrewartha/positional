@@ -10,32 +10,25 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO
+import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker
+import androidx.lifecycle.Observer
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.trewartha.positional.R
 import kotlinx.android.synthetic.main.main_activity.*
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<MainViewModel>() {
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO)
-
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (currentNightMode == UI_MODE_NIGHT_YES) window.decorView.systemUiVisibility =
-                SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                SYSTEM_UI_FLAG_FULLSCREEN or
-                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        viewModel = getViewModel()
+        viewModel.themeMode.observe(this, ThemeModeObserver())
 
         setContentView(R.layout.main_activity)
 
@@ -77,6 +70,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun adjustSystemFlags() {
+        val currentUIMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (currentUIMode == UI_MODE_NIGHT_YES) window.decorView.systemUiVisibility =
+                SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                SYSTEM_UI_FLAG_FULLSCREEN or
+                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+    }
+
     private fun exit() {
         finishAndRemoveTask()
     }
@@ -113,6 +117,18 @@ class MainActivity : AppCompatActivity() {
                 R.id.settingsNavMenuItem -> viewPager.currentItem = 2
             }
             return true
+        }
+    }
+
+    private inner class ThemeModeObserver : Observer<ThemeMode> {
+
+        override fun onChanged(themeMode: ThemeMode?) {
+            delegate.setLocalNightMode(when (themeMode) {
+                ThemeMode.DAY -> MODE_NIGHT_NO
+                ThemeMode.NIGHT -> MODE_NIGHT_YES
+                else -> MODE_NIGHT_AUTO
+            })
+            adjustSystemFlags()
         }
     }
 
