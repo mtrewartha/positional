@@ -2,29 +2,28 @@
 <resources>
 
     <style name="Positional.Night" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorAccent">@color/secondary</item>
-        <item name="colorError">@color/error</item>
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDarkVariant</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="android:colorBackground">@color/background</item>
-        <item name="android:textColor">@color/onSurface</item>
-        <item name="android:textColorPrimary">@color/onSurface</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textColorPrimary">@color/colorOnSurface</item>
         <item name="android:textColorSecondary">@color/onSurfaceLightVariant</item>
-        <item name="snackbarStyle">@style/SnackbarStyle</item>
 
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Positional.DayNight" parent="Positional.Night" />
 
     <style name="CompassBackground">
-        <item name="android:tint">@color/onSurface</item>
+        <item name="android:tint">@color/colorOnSurface</item>
     </style>
-
-    <style name="SnackbarStyle" parent="Widget.MaterialComponents.Snackbar" />
 
 </resources>

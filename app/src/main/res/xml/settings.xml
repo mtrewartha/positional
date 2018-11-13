@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:title="@string/settings_root_title">
 
     <ListPreference
@@ -27,14 +28,16 @@
         android:dialogTitle="@string/settings_theme_mode_title"
         android:entries="@array/settings_theme_mode_labels"
         android:entryValues="@array/settings_theme_mode_values"
-        android:icon="@drawable/ic_twotone_invert_colors_24px"
+        android:icon="@drawable/ic_twotone_color_lens_24px"
         android:key="@string/settings_theme_mode_key"
         android:summary="%s"
         android:title="@string/settings_theme_mode_title" />
 
     <Preference
         android:key="@string/settings_privacy_policy_key"
+        android:iconSpaceReserved="true"
         android:summary="@string/settings_privacy_policy_summary"
-        android:title="@string/settings_privacy_policy_title" />
+        android:title="@string/settings_privacy_policy_title"
+        tools:targetApi="o" />
 
 </PreferenceScreen>

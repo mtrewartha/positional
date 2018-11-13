@@ -67,14 +67,13 @@ class PositionFragment : LocationAwareFragment() {
 
         copyButton.setOnClickListener { onCopyClicked() }
         shareButton.setOnClickListener { onShareClicked() }
-        invertColorsButton.setOnClickListener { onInvertColorsClicked() }
 
         val unitOnClickListener = View.OnClickListener { onDistanceUnitClicked() }
         elevationUnitTextView.setOnClickListener(unitOnClickListener)
         speedUnitTextView.setOnClickListener(unitOnClickListener)
         accuracyUnitTextView.setOnClickListener(unitOnClickListener)
 
-        screenLockSwitch.setOnClickListener { onScreenLockClicked() }
+        screenLockButton.setOnClickListener { onScreenLockClicked() }
 
         useMetricUnits = try {
             sharedPreferences.getString(
@@ -92,7 +91,7 @@ class PositionFragment : LocationAwareFragment() {
         )
         screenLock =
                 sharedPreferences.getBoolean(getString(R.string.settings_screen_lock_key), false)
-        screenLockSwitch.isSelected = screenLock
+        screenLockButton.isSelected = screenLock
         lockScreen(screenLock)
 
         coordinatesViewPager.apply {
@@ -202,13 +201,13 @@ class PositionFragment : LocationAwareFragment() {
         Snackbar.make(coordinatorLayout, R.string.unit_change_snackbar, Snackbar.LENGTH_LONG).show()
     }
 
-    private fun onInvertColorsClicked() {
-        // TODO: Implement overriding the theme
-    }
-
     private fun onScreenLockClicked() {
         screenLock = !screenLock
-        screenLockSwitch.isSelected = screenLock
+        screenLockButton.setIconResource(if (screenLock)
+            R.drawable.ic_twotone_smartphone_24px
+        else
+            R.drawable.ic_twotone_screen_lock_portrait_24px
+        )
         lockScreen(screenLock)
         setBooleanPreference(getString(R.string.settings_screen_lock_key), screenLock)
         val textRes = if (screenLock) R.string.screen_lock_on else R.string.screen_lock_off

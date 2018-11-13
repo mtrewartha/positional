@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/secondary" android:state_checked="true" />
-    <item android:color="@color/secondary" android:state_selected="true" />
-    <item android:color="@color/onSurface" />
+    <item android:color="@color/colorSecondary" android:state_checked="true" />
+    <item android:color="@color/colorSecondary" android:state_selected="true" />
+    <item android:color="@color/colorOnSurface" />
 </selector>

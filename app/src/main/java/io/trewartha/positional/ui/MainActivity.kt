@@ -70,17 +70,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
         }
     }
 
-    private fun adjustSystemFlags() {
-        val currentUIMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (currentUIMode == UI_MODE_NIGHT_YES) window.decorView.systemUiVisibility =
-                SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                SYSTEM_UI_FLAG_FULLSCREEN or
-                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-    }
-
     private fun exit() {
         finishAndRemoveTask()
     }
@@ -128,7 +117,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 ThemeMode.NIGHT -> MODE_NIGHT_YES
                 else -> MODE_NIGHT_AUTO
             })
-            adjustSystemFlags()
         }
     }
 

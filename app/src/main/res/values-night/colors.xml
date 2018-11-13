@@ -1,39 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">#000000</color>
-    <color name="primaryDarkVariant">#000000</color>
-    <color name="primaryLightVariant">#2c2c2c</color>
+    <color name="colorPrimary">#f44336</color>
+    <color name="colorPrimaryVariant">#ba000d</color>
+    <color name="colorOnPrimary">#de000000</color>
 
-    <color name="onPrimary">#deffffff</color>
-    <color name="onPrimaryDarkVariant">#99ffffff</color>
-    <color name="onPrimaryLightVariant">#61ffffff</color>
+    <color name="colorSecondary">#ff9800</color>
+    <color name="colorSecondaryVariant">#c66900</color>
+    <color name="colorOnSecondary">#de000000</color>
 
-    <color name="secondary">#ff9800</color>
-    <color name="secondaryDarkVariant">#c66900</color>
-    <color name="secondaryLightVariant">#ffc947</color>
+    <color name="colorBackground">#000000</color>
+    <color name="colorOnBackground">#f9f9f9</color>
 
-    <color name="onSecondary">#deffffff</color>
-    <color name="onSecondaryDarkVariant">#99ffffff</color>
-    <color name="onSecondaryLightVariant">#61ffffff</color>
+    <color name="colorSurface">#000000</color>
+    <color name="colorSurfaceVariant">#000000</color>
+    <color name="colorSurfaceLightVariant">#333333</color>
+    <color name="colorOnSurface">#def44336</color>
 
-    <color name="background">#000000</color>
-    <color name="onBackground">#f9f9f9</color>
+    <color name="colorError">#f44336</color>
+    <color name="colorOnError">#000000</color>
 
-    <color name="error">#f44336</color>
-    <color name="onError">#000000</color>
-
-    <color name="safe">#8bc34a</color>
-    <color name="onSafe">#000000</color>
-
-    <color name="warning">#f9a825</color>
-    <color name="onWarning">#000000</color>
-
-    <color name="surface">#000000</color>
-    <color name="surfaceDarkVariant">#000000</color>
-    <color name="surfaceLightVariant">#333333</color>
-    <color name="surfaceVeryDarkVariant">#000000</color>
-    <color name="onSurface">#def44336</color>
     <color name="onSurfaceLightVariant">#99f44336</color>
     <color name="onSurfaceVeryLightVariant">#61f44336</color>
 
