@@ -7,11 +7,11 @@
             android:translateY="9.052631">
         <path
             android:fillAlpha="0.3"
-            android:fillColor="@color/colorOnSurface"
+            android:fillColor="#FF000000"
             android:pathData="M5,15l3.04,0l-1.52,-2.03z"
             android:strokeAlpha="0.3" />
         <path
-            android:fillColor="@color/colorOnSurface"
+            android:fillColor="#FF000000"
             android:pathData="M9.78,10.63l1.25,1.67L14,8.33L19,15h-8.46l-4.01,-5.37L1,17h22L14,5L9.78,10.63zM5,15l1.52,-2.03L8.04,15H5z" />
     </group>
 </vector>
