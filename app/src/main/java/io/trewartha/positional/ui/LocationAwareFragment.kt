@@ -3,8 +3,9 @@ package io.trewartha.positional.ui
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Location
-import androidx.core.content.PermissionChecker
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -26,7 +27,7 @@ abstract class LocationAwareFragment : Fragment() {
         super.onAttach(context)
         locationLiveData = ViewModelProviders.of(this)
                 .get(LocationViewModel::class.java)
-                .getLocation()
+                .location
         locationLiveData.updatePriority = getLocationUpdatePriority()
         locationLiveData.updateInterval = getLocationUpdateInterval()
         locationLiveData.updateMaxWaitTime = getLocationUpdateMaxWaitTime()
@@ -50,8 +51,8 @@ abstract class LocationAwareFragment : Fragment() {
     private fun haveLocationPermissions(): Boolean {
         val context = context ?: return false
         return arrayOf(
-                PermissionChecker.checkSelfPermission(context, ACCESS_COARSE_LOCATION),
-                PermissionChecker.checkSelfPermission(context, ACCESS_FINE_LOCATION)
-        ).all { it == PermissionChecker.PERMISSION_GRANTED }
+                ActivityCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION),
+                ActivityCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION)
+        ).all { it == PackageManager.PERMISSION_GRANTED }
     }
 }

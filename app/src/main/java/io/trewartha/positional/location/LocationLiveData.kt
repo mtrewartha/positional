@@ -12,16 +12,16 @@ import com.google.firebase.perf.metrics.Trace
 import timber.log.Timber
 
 
-class LocationLiveData(private val context: Context) : LiveData<Location>() {
+class LocationLiveData(context: Context) : LiveData<Location>() {
 
-    private val locationClient = FusedLocationProviderClient(context)
     private val locationCallback = LocationCallback()
+    private val locationClient = FusedLocationProviderClient(context)
 
     private var firstLocationUpdateTrace: Trace? = null
 
-    var updateInterval = 10000L
-    var updateMaxWaitTime = 5000L
-    var updatePriority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+    var updateInterval = 5000L
+    var updateMaxWaitTime = 10000L
+    var updatePriority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
     override fun onActive() {
         if (firstLocationUpdateTrace == null) {
@@ -29,21 +29,20 @@ class LocationLiveData(private val context: Context) : LiveData<Location>() {
             firstLocationUpdateTrace?.start()
         }
 
-        FusedLocationProviderClient(context).removeLocationUpdates(locationCallback)
-        val locationRequest = LocationRequest.create()
+        try {
+            val locationRequest = LocationRequest.create()
                 .setPriority(updatePriority)
                 .setMaxWaitTime(updateMaxWaitTime)
                 .setInterval(updateInterval)
                 .setFastestInterval(updateInterval)
-        Timber.i("Requesting location updates: $locationRequest")
-        try {
+            Timber.i("Requesting location updates: $locationRequest")
             locationClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
                     Looper.getMainLooper()
             )
-        } catch (e: SecurityException) {
-            Timber.i("Don't have location permissions, no location updates will be received")
+        } catch (securityException: SecurityException) {
+            Timber.w(securityException, "Don't have location permissions, no location updates will be received")
         }
     }
 

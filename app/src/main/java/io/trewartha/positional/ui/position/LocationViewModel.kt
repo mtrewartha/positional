@@ -6,9 +6,6 @@ import io.trewartha.positional.location.LocationLiveData
 
 class LocationViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val locationLiveData by lazy { LocationLiveData(getApplication()) }
+    val location by lazy { LocationLiveData(getApplication()) }
 
-    fun getLocation(): LocationLiveData {
-        return locationLiveData
-    }
 }
