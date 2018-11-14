@@ -130,14 +130,8 @@
                 <TextView
                     android:id="@+id/elevationValueTextView"
                     style="@style/PositionStatValueLargeLandscape"
-                    tools:text="10000" />
-
-                <TextView
-                    android:id="@+id/elevationUnitTextView"
-                    style="@style/PositionStatUnitLargeLandscape"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="ft" />
+                    android:text="@string/location_value_unknown"
+                    tools:text="10,000 ft" />
 
             </LinearLayout>
 
@@ -169,14 +163,8 @@
                 <TextView
                     android:id="@+id/speedValueTextView"
                     style="@style/PositionStatValueLargeLandscape"
-                    tools:text="100" />
-
-                <TextView
-                    android:id="@+id/speedUnitTextView"
-                    style="@style/PositionStatUnitLargeLandscape"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="mph" />
+                    android:text="@string/location_value_unknown"
+                    tools:text="100 mph" />
 
             </LinearLayout>
 
@@ -208,14 +196,8 @@
                 <TextView
                     android:id="@+id/bearingValueTextView"
                     style="@style/PositionStatValueLargeLandscape"
-                    tools:text="359" />
-
-                <TextView
-                    android:id="@+id/bearingUnitTextView"
-                    style="@style/PositionStatUnitLargeLandscape"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/unit_degrees" />
+                    android:text="@string/location_value_unknown"
+                    tools:text="359°" />
 
             </LinearLayout>
 
@@ -249,14 +231,8 @@
                     style="@style/PositionStatValueLargeLandscape"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="10" />
-
-                <TextView
-                    android:id="@+id/accuracyUnitTextView"
-                    style="@style/PositionStatUnitLargeLandscape"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="ft" />
+                    android:text="@string/location_value_unknown"
+                    tools:text="10 ft" />
 
             </LinearLayout>
 

@@ -68,11 +68,6 @@ class PositionFragment : LocationAwareFragment() {
         copyButton.setOnClickListener { onCopyClicked() }
         shareButton.setOnClickListener { onShareClicked() }
 
-        val unitOnClickListener = View.OnClickListener { onDistanceUnitClicked() }
-        elevationUnitTextView.setOnClickListener(unitOnClickListener)
-        speedUnitTextView.setOnClickListener(unitOnClickListener)
-        accuracyUnitTextView.setOnClickListener(unitOnClickListener)
-
         screenLockButton.setOnClickListener { onScreenLockClicked() }
 
         useMetricUnits = try {
@@ -197,16 +192,13 @@ class PositionFragment : LocationAwareFragment() {
         bottomSheetDialog.show()
     }
 
-    private fun onDistanceUnitClicked() {
-        Snackbar.make(coordinatorLayout, R.string.unit_change_snackbar, Snackbar.LENGTH_LONG).show()
-    }
-
     private fun onScreenLockClicked() {
         screenLock = !screenLock
-        screenLockButton.setIconResource(if (screenLock)
-            R.drawable.ic_twotone_smartphone_24px
-        else
-            R.drawable.ic_twotone_screen_lock_portrait_24px
+        screenLockButton.setIconResource(
+            if (screenLock)
+                R.drawable.ic_twotone_smartphone_24px
+            else
+                R.drawable.ic_twotone_screen_lock_portrait_24px
         )
         lockScreen(screenLock)
         setBooleanPreference(getString(R.string.settings_screen_lock_key), screenLock)
@@ -237,12 +229,9 @@ class PositionFragment : LocationAwareFragment() {
     private fun updateLocationViews(location: Location?) {
         updateCoordinatesFragments(location)
         accuracyValueTextView.text = locationFormatter.getAccuracy(location, useMetricUnits)
-        accuracyUnitTextView.text = locationFormatter.getDistanceUnit(useMetricUnits)
         bearingValueTextView.text = locationFormatter.getBearing(location)
         elevationValueTextView.text = locationFormatter.getElevation(location, useMetricUnits)
-        elevationUnitTextView.text = locationFormatter.getDistanceUnit(useMetricUnits)
         speedValueTextView.text = locationFormatter.getSpeed(location, useMetricUnits)
-        speedUnitTextView.text = locationFormatter.getSpeedUnit(useMetricUnits)
     }
 
     private fun setBooleanPreference(key: String, value: Boolean) {

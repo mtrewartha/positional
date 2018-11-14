@@ -2,8 +2,10 @@
     <string name="app_name" tools:override="true">Positional</string>
 
     <!-- Common Text -->
+    <string name="dash">—</string>
     <string name="exit">Exit</string>
     <string name="ok">OK</string>
+    <string name="unknown">unknown</string>
 
     <!-- Permissions -->
     <string name="location_permission_explanation_title">Location Permission Needed</string>
@@ -35,21 +37,25 @@
     <string name="copy_coordinates_title">Which coordinates would you like to copy?</string>
     <string name="elevation">Elevation</string>
     <string name="invert_colors_content_description">invert colors</string>
+    <string name="location_accuracy_imperial">%d ft</string>
+    <string name="location_accuracy_metric">%d m</string>
+    <string name="location_bearing">%d°</string>
+    <string name="location_coordinate_decimal">% 10.5f</string>
+    <string name="location_coordinate_utm">%7.0f</string>
+    <string name="location_elevation_imperial">%,d ft</string>
+    <string name="location_elevation_metric">%,d m</string>
+    <string name="location_speed_imperial">%.0f mph</string>
+    <string name="location_speed_metric">%.0f km/h</string>
     <string name="screen_lock_off">Screen lock disabled</string>
     <string name="screen_lock_on">Screen lock enabled</string>
     <string name="share_content_description">share coordinates</string>
     <string name="share_failure">Hold tight, still trying to get your coordinates…</string>
     <string name="speed">Speed</string>
-    <string name="unit_degrees">°</string>
-    <string name="unit_feet">ft</string>
-    <string name="unit_meters">m</string>
-    <string name="unit_kmh">km/h</string>
-    <string name="unit_mph">mph</string>
-    <string name="unit_change_snackbar">Units are now changed via the Settings tab</string>
-    <string name="unknown">unknown</string>
+    <string name="location_value_unknown">@string/dash</string>
 
     <!-- Compass -->
     <string name="compass_declination">declination: %s°</string>
+    <string name="compass_declination_unknown">@string/unknown</string>
     <string name="compass_degrees">%d°</string>
     <string name="compass_accuracy_accelerometer">accelerometer: %s</string>
     <string name="compass_accuracy_high">high</string>

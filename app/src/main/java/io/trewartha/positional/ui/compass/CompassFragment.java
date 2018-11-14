@@ -118,7 +118,7 @@ public class CompassFragment extends LocationAwareFragment {
         useMagneticNorth(shouldUseMagneticNorth());
         modeTextView.setOnClickListener(v -> onModeClick());
 
-        declinationTextView.setText(R.string.unknown);
+        declinationTextView.setText(R.string.compass_declination_unknown);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class CompassFragment extends LocationAwareFragment {
         String declinationText;
         if (location == null) {
             declination = 0;
-            declinationText = getString(R.string.unknown);
+            declinationText = getString(R.string.compass_declination_unknown);
         } else {
             declination = (int) getDeclination(location);
             declinationText = String.valueOf(declination);
