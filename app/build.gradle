@@ -19,13 +19,12 @@ android {
         }
     }
     compileSdkVersion 28
-    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId 'io.trewartha.positional'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 19
-        versionName '2.9.0'
+        versionCode 20
+        versionName '2.10.0'
     }
     buildTypes {
         debug {
