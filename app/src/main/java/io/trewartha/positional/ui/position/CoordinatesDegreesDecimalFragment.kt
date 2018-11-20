@@ -19,15 +19,10 @@ class CoordinatesDegreesDecimalFragment : CoordinatesFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.coordinates_degrees_decimal_fragment, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setCoordinates(latitude, longitude)
-    }
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
         latitudeTextView.text = locationFormatter.getDecimalLatitude(latitude)

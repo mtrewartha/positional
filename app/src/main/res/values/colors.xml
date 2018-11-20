@@ -23,4 +23,6 @@
     <color name="onSurfaceLightVariant">#99000000</color>
     <color name="onSurfaceVeryLightVariant">#61000000</color>
 
+    <color name="loaderViewShimmer">@color/colorSurfaceVariant</color>
+
 </resources>

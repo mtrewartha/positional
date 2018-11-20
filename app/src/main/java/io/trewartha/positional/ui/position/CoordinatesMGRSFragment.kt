@@ -18,14 +18,11 @@ class CoordinatesMGRSFragment : CoordinatesFragment() {
         locationFormatter = LocationFormatter(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.coordinates_mgrs_fragment, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setCoordinates(latitude, longitude)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.coordinates_mgrs_fragment, container, false)
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
         coordinatesTextView?.text = locationFormatter.getMgrsCoordinates(latitude, longitude)

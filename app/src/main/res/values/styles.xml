@@ -66,14 +66,9 @@
         <item name="android:tint">@color/colorOnSurface</item>
     </style>
 
-    <style name="CompassDegrees"/>
+    <style name="CompassDegrees" />
 
     <!-- Coordinates -->
-
-    <style name="Coordinates">
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:typeface">monospace</item>
-    </style>
 
     <style name="CoordinatesFragment">
         <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
@@ -82,33 +77,14 @@
     </style>
 
     <style name="CoordinatesFormatLabel">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <!-- Position Stats -->
 
     <style name="PositionStatIcon">
-        <item name="android:layout_height">@dimen/stat_image_size</item>
-        <item name="android:layout_width">@dimen/stat_image_size</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:layout_marginRight">20dp</item>
         <item name="android:tintMode">src_in</item>
         <item name="android:tint">@color/colorOnSurface</item>
-    </style>
-
-    <style name="PositionStatIconLarge" parent="PositionStatIcon">
-        <item name="android:layout_height">@dimen/stat_image_size_large</item>
-        <item name="android:layout_width">@dimen/stat_image_size_large</item>
-    </style>
-
-    <style name="PositionStatIconLandscape" parent="PositionStatIcon">
-        <item name="android:layout_height">@dimen/stat_image_size_landscape</item>
-        <item name="android:layout_width">@dimen/stat_image_size_landscape</item>
-    </style>
-
-    <style name="PositionStatIconLargeLandscape" parent="PositionStatIconLandscape">
-        <item name="android:layout_height">@dimen/stat_image_size_large_landscape</item>
-        <item name="android:layout_width">@dimen/stat_image_size_large_landscape</item>
     </style>
 
     <style name="PositionStatLabel">
@@ -169,10 +145,6 @@
 
     <style name="PositionStatValue">
         <item name="android:gravity">end|right</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd">6dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_width">0dp</item>
         <item name="android:textSize">@dimen/value_text_size</item>
     </style>
 
@@ -186,12 +158,6 @@
 
     <style name="PositionStatValueLargeLandscape" parent="PositionStatValueLandscape">
         <item name="android:textSize">@dimen/value_text_size_large_landscape</item>
-    </style>
-
-    <style name="ImageButton">
-        <!--<item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>-->
-        <item name="android:padding">16dp</item>
-        <!--<item name="android:tint">@color/selectable_control</item>-->
     </style>
 
 </resources>

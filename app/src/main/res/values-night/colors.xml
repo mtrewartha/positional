@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#f44336</color>
-    <color name="colorPrimaryVariant">#ba000d</color>
+    <!--<color name="colorPrimary">#f44336</color>-->
+    <!--<color name="colorPrimaryVariant">#ba000d</color>-->
+    <color name="colorPrimary">#0288d1</color>
+    <color name="colorPrimaryVariant">#005b9f</color>
     <color name="colorOnPrimary">#de000000</color>
 
-    <color name="colorSecondary">#ff9800</color>
-    <color name="colorSecondaryVariant">#c66900</color>
+    <!--<color name="colorSecondary">#ff9800</color>-->
+    <!--<color name="colorSecondaryVariant">#c66900</color>-->
+    <color name="colorSecondary">#558b2f</color>
+    <color name="colorSecondaryVariant">#255d00</color>
     <color name="colorOnSecondary">#de000000</color>
 
     <color name="colorBackground">#000000</color>
@@ -14,13 +18,18 @@
 
     <color name="colorSurface">#000000</color>
     <color name="colorSurfaceVariant">#000000</color>
-    <color name="colorSurfaceLightVariant">#333333</color>
-    <color name="colorOnSurface">#def44336</color>
+    <color name="colorSurfaceLightVariant">#282828</color>
+    <!--<color name="colorOnSurface">#def44336</color>-->
+    <color name="colorOnSurface">#deffffff</color>
 
     <color name="colorError">#f44336</color>
     <color name="colorOnError">#000000</color>
 
-    <color name="onSurfaceLightVariant">#99f44336</color>
-    <color name="onSurfaceVeryLightVariant">#61f44336</color>
+    <!--<color name="onSurfaceLightVariant">#99f44336</color>-->
+    <!--<color name="onSurfaceVeryLightVariant">#61f44336</color>-->
+    <color name="onSurfaceLightVariant">#99ffffff</color>
+    <color name="onSurfaceVeryLightVariant">#61ffffff</color>
+
+    <color name="loaderViewShimmer">@color/colorSurfaceLightVariant</color>
 
 </resources>

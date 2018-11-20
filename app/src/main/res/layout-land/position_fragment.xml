@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -32,7 +31,8 @@
                 android:id="@+id/pageIndicatorView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/shareButton"
+                android:layout_margin="12dp"
+                app:layout_constraintBottom_toTopOf="@id/copyButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/coordinatesViewPager"
@@ -44,18 +44,6 @@
                 app:piv_unselectedColor="@color/onSurfaceVeryLightVariant"
                 app:piv_viewPager="@id/coordinatesViewPager" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:indeterminate="true"
-                app:layout_constraintBottom_toTopOf="@id/screenLockButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/pageIndicatorView" />
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/shareButton"
                 style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
@@ -64,10 +52,10 @@
                 android:contentDescription="@string/share_content_description"
                 app:icon="@drawable/ic_twotone_share_24px"
                 app:iconGravity="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/copyButton"
                 app:layout_constraintEnd_toStartOf="@id/copyButton"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/progressBar" />
+                app:layout_constraintTop_toTopOf="@id/copyButton" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyButton"
@@ -80,7 +68,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/screenLockButton"
                 app:layout_constraintStart_toEndOf="@id/shareButton"
-                app:layout_constraintTop_toBottomOf="@id/progressBar" />
+                app:layout_constraintTop_toBottomOf="@id/pageIndicatorView" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/screenLockButton"
@@ -90,10 +78,10 @@
                 android:contentDescription="@string/settings_screen_lock_content_description"
                 app:icon="@drawable/ic_twotone_screen_lock_portrait_24px"
                 app:iconGravity="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/copyButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/copyButton"
-                app:layout_constraintTop_toBottomOf="@id/progressBar" />
+                app:layout_constraintTop_toTopOf="@id/copyButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,21 +105,29 @@
 
                 <ImageView
                     style="@style/PositionStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
+                    android:layout_marginEnd="20dp"
                     android:contentDescription="@string/elevation"
                     android:src="@drawable/ic_twotone_terrain_24px" />
 
                 <TextView
                     android:id="@+id/elevationLabelTextView"
                     style="@style/PositionStatLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/elevation" />
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/elevationValueTextView"
                     style="@style/PositionStatValue"
-                    android:text="@string/location_value_unknown"
-                    tools:text="10,000 ft" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:minWidth="96dp"
+                    app:corners="4"
+                    app:custom_color="@color/loaderViewShimmer" />
 
             </LinearLayout>
 
@@ -150,21 +146,29 @@
 
                 <ImageView
                     style="@style/PositionStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
+                    android:layout_marginEnd="20dp"
                     android:contentDescription="@string/speed"
                     android:src="@drawable/ic_speedometer_24px" />
 
                 <TextView
                     android:id="@+id/speedLabelTextView"
                     style="@style/PositionStatLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/speed" />
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/speedValueTextView"
                     style="@style/PositionStatValue"
-                    android:text="@string/location_value_unknown"
-                    tools:text="100 mph" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:minWidth="96dp"
+                    app:corners="4"
+                    app:custom_color="@color/loaderViewShimmer" />
 
             </LinearLayout>
 
@@ -183,21 +187,29 @@
 
                 <ImageView
                     style="@style/PositionStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
+                    android:layout_marginEnd="20dp"
                     android:contentDescription="@string/bearing"
                     android:src="@drawable/ic_twotone_explore_24px" />
 
                 <TextView
                     android:id="@+id/bearingLabelTextView"
                     style="@style/PositionStatLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/bearing" />
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/bearingValueTextView"
                     style="@style/PositionStatValue"
-                    android:text="@string/location_value_unknown"
-                    tools:text="359°" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:minWidth="96dp"
+                    app:corners="4"
+                    app:custom_color="@color/loaderViewShimmer" />
 
             </LinearLayout>
 
@@ -216,23 +228,29 @@
 
                 <ImageView
                     style="@style/PositionStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
+                    android:layout_marginEnd="20dp"
                     android:contentDescription="@string/accuracy"
                     android:src="@drawable/ic_twotone_straighten_24px" />
 
                 <TextView
                     android:id="@+id/accuracyLabelTextView"
                     style="@style/PositionStatLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/accuracy" />
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/accuracyValueTextView"
                     style="@style/PositionStatValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/location_value_unknown"
-                    tools:text="10 ft" />
+                    android:layout_marginEnd="6dp"
+                    android:minWidth="96dp"
+                    app:corners="4"
+                    app:custom_color="@color/loaderViewShimmer" />
 
             </LinearLayout>
 

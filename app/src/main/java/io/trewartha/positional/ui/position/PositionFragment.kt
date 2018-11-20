@@ -114,14 +114,7 @@ class PositionFragment : LocationAwareFragment() {
 
     override fun onLocationChanged(location: Location?) {
         this.location = location
-        if (location == null) {
-            progressBar.animate().alpha(1f).start()
-        } else {
-            if (progressBar.alpha != 0f) {
-                progressBar.animate().alpha(0f)
-            }
-            updateLocationViews(location)
-        }
+        if (location != null) updateLocationViews(location)
     }
 
     override fun getLocationUpdateInterval(): Long = LOCATION_UPDATE_INTERVAL

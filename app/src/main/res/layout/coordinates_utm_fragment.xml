@@ -1,51 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/CoordinatesFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
+    <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/zoneTextView"
-        style="@style/Coordinates"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="bottom|center"
-        android:maxLines="1"
-        app:autoSizeTextType="uniform"
-        tools:text="10N" />
-
-    <TextView
-        android:id="@+id/eastingTextView"
-        style="@style/Coordinates"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="72dp"
         android:gravity="center"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
-        tools:text="1234567m E" />
+        app:corners="4"
+        app:custom_color="@color/loaderViewShimmer"
+        app:height_weight="0.8"
+        app:layout_constraintBottom_toTopOf="@id/eastingTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="10N" />
 
-    <TextView
-        android:id="@+id/northingTextView"
-        style="@style/Coordinates"
+    <com.elyeproj.loaderviewlibrary.LoaderTextView
+        android:id="@+id/eastingTextView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="top|center"
+        android:layout_height="72dp"
+        android:gravity="center"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
+        app:corners="4"
+        app:custom_color="@color/loaderViewShimmer"
+        app:height_weight="0.8"
+        app:layout_constraintBottom_toTopOf="@id/northingTextView"
+        app:layout_constraintTop_toBottomOf="@id/zoneTextView"
+        tools:text="1234567m E" />
+
+    <com.elyeproj.loaderviewlibrary.LoaderTextView
+        android:id="@+id/northingTextView"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:gravity="center"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"
+        app:corners="4"
+        app:custom_color="@color/loaderViewShimmer"
+        app:height_weight="0.8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eastingTextView"
         tools:text="1234567m N" />
 
-    <TextView
+    <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/formatLabelTextView"
         style="@style/CoordinatesFormatLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/coordinate_format_label_utm" />
+        android:text="@string/coordinate_format_label_utm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
