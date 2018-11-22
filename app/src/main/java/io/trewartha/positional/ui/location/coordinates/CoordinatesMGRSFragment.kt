@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.location
+package io.trewartha.positional.ui.location.coordinates
 
 import android.content.Context
 import android.os.Bundle
@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import io.trewartha.positional.R
 import io.trewartha.positional.location.LocationFormatter
-import kotlinx.android.synthetic.main.coordinates_utm_fragment.*
+import kotlinx.android.synthetic.main.coordinates_mgrs_fragment.*
 
-class CoordinatesUTMFragment : CoordinatesFragment() {
+class CoordinatesMGRSFragment : CoordinatesFragment() {
 
     private lateinit var locationFormatter: LocationFormatter
 
@@ -22,11 +22,9 @@ class CoordinatesUTMFragment : CoordinatesFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.coordinates_utm_fragment, container, false)
+    ): View = inflater.inflate(R.layout.coordinates_mgrs_fragment, container, false)
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
-        zoneTextView?.text = locationFormatter.getUtmZone(latitude, longitude)
-        eastingTextView?.text = locationFormatter.getUtmEasting(latitude, longitude)
-        northingTextView?.text = locationFormatter.getUtmNorthing(latitude, longitude)
+        coordinatesTextView?.text = locationFormatter.getMgrsCoordinates(latitude, longitude)
     }
 }

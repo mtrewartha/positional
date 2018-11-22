@@ -16,6 +16,8 @@ import io.trewartha.positional.R
 import io.trewartha.positional.location.CoordinatesFormat
 import io.trewartha.positional.location.LocationFormatter
 import io.trewartha.positional.ui.LocationAwareFragment
+import io.trewartha.positional.ui.location.coordinates.CoordinatesFragment
+import io.trewartha.positional.ui.location.coordinates.CoordinatesFragmentPagerAdapter
 import kotlinx.android.synthetic.main.position_fragment.*
 import timber.log.Timber
 import java.util.*
@@ -90,7 +92,10 @@ class LocationFragment : LocationAwareFragment() {
         lockScreen(screenLock)
 
         coordinatesViewPager.apply {
-            val coordinatesPagerAdapter = CoordinatesFragmentPagerAdapter(childFragmentManager)
+            val coordinatesPagerAdapter =
+                CoordinatesFragmentPagerAdapter(
+                    childFragmentManager
+                )
             adapter = coordinatesPagerAdapter
             offscreenPageLimit = coordinatesPagerAdapter.count
             setCurrentItem(getCoordinatesFragmentIndex(coordinatesFormat), true)

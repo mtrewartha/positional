@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.location
+package io.trewartha.positional.ui.location.coordinates
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

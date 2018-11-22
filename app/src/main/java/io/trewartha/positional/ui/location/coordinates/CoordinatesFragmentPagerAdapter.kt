@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.location
+package io.trewartha.positional.ui.location.coordinates
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -9,10 +9,10 @@ class CoordinatesFragmentPagerAdapter(
 ) : FragmentPagerAdapter(fragmentManager) {
 
     private val fragments = arrayOf(
-            CoordinatesDegreesDecimalFragment(),
-            CoordinatesDegreesMinutesSecondsFragment(),
-            CoordinatesUTMFragment(),
-            CoordinatesMGRSFragment()
+        CoordinatesDegreesDecimalFragment(),
+        CoordinatesDegreesMinutesSecondsFragment(),
+        CoordinatesUTMFragment(),
+        CoordinatesMGRSFragment()
     )
 
     override fun getItem(position: Int): Fragment {
