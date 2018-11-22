@@ -1,57 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" tools:override="true">Positional</string>
 
+
     <!-- Common Text -->
     <string name="dash">—</string>
     <string name="exit">Exit</string>
     <string name="ok">OK</string>
     <string name="unknown">unknown</string>
 
-    <!-- Permissions -->
-    <string name="location_permission_explanation_title">Location Permission Needed</string>
-    <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through the Settings app before using this app.</string>
-    <string name="location_permission_explanation_positive">Go to Settings</string>
-    <string name="location_permission_explanation_negative">@string/exit</string>
 
     <!-- Bottom Navigation -->
-    <string name="compass">Compass</string>
-    <string name="position">Position</string>
-    <string name="settings">Settings</string>
+    <string name="bottom_navigation_compass">Compass</string>
+    <string name="bottom_navigation_location">Location</string>
+    <string name="bottom_navigation_settings">Settings</string>
 
-    <!-- Position -->
-    <string name="accuracy">Accuracy</string>
-    <string name="bearing">Bearing</string>
-    <string name="coordinate_format_label_degrees_decimal">Degrees</string>
-    <string name="coordinate_format_label_degrees_minutes_seconds">Degrees, Minutes, Seconds</string>
-    <string name="coordinate_format_label_mgrs">MGRS</string>
-    <string name="coordinate_format_label_utm">UTM</string>
-    <string name="copied_coordinates_label">Position</string>
-    <string name="copied_coordinates_failure">Hold tight, still trying to get your position…</string>
-    <string name="copied_coordinates_both_success">Latitude and longitude copied</string>
-    <string name="copied_coordinates_latitude_success">Latitude copied</string>
-    <string name="copied_coordinates_longitude_success">Longitude copied</string>
-    <string name="copy_coordinates_both">Latitude and longitude</string>
-    <string name="copy_coordinates_content_description">copy coordinates</string>
-    <string name="copy_coordinates_latitude">Latitude only</string>
-    <string name="copy_coordinates_longitude">Longitude only</string>
-    <string name="copy_coordinates_title">Which coordinates would you like to copy?</string>
-    <string name="elevation">Elevation</string>
-    <string name="invert_colors_content_description">invert colors</string>
-    <string name="location_accuracy_imperial">%d ft</string>
-    <string name="location_accuracy_metric">%d m</string>
-    <string name="location_bearing">%d°</string>
-    <string name="location_coordinate_decimal">% 10.5f</string>
-    <string name="location_coordinate_utm">%7.0f</string>
-    <string name="location_elevation_imperial">%,d ft</string>
-    <string name="location_elevation_metric">%,d m</string>
-    <string name="location_speed_imperial">%.0f mph</string>
-    <string name="location_speed_metric">%.0f km/h</string>
-    <string name="screen_lock_off">Screen lock disabled</string>
-    <string name="screen_lock_on">Screen lock enabled</string>
-    <string name="share_content_description">share coordinates</string>
-    <string name="share_failure">Hold tight, still trying to get your coordinates…</string>
-    <string name="speed">Speed</string>
-    <string name="location_value_unknown">@string/dash</string>
 
     <!-- Compass -->
     <string name="compass_declination">declination: %s°</string>
@@ -75,6 +37,46 @@
     <string name="compass_sensor_missing_button_positive">@string/ok</string>
     <string name="compass_sensor_missing_message">Hmm… Your device is missing an accelerometer or magnetometer, but the compass needs both of them. The compass will be disabled, but the rest of the app will function normally.</string>
     <string name="compass_sensor_missing_title">Missing Required Sensor</string>
+
+
+    <!-- Location -->
+    <string name="location_accuracy_imperial">%d ft</string>
+    <string name="location_accuracy_metric">%d m</string>
+    <string name="location_bearing">%d°</string>
+    <string name="location_coordinate_decimal">% 10.5f</string>
+    <string name="location_coordinate_utm">%7.0f</string>
+    <string name="location_coordinate_format_label_degrees_decimal">Degrees</string>
+    <string name="location_coordinate_format_label_degrees_minutes_seconds">Degrees, Minutes, Seconds</string>
+    <string name="location_coordinate_format_label_mgrs">MGRS</string>
+    <string name="location_coordinate_format_label_utm">UTM</string>
+    <string name="location_copied_coordinates_label">Location</string>
+    <string name="location_copied_coordinates_failure">Hold tight, still trying to get your location…</string>
+    <string name="location_copied_coordinates_both_success">Latitude and longitude copied</string>
+    <string name="location_copied_coordinates_latitude_success">Latitude copied</string>
+    <string name="location_copied_coordinates_longitude_success">Longitude copied</string>
+    <string name="location_copy_coordinates_both">Latitude and longitude</string>
+    <string name="location_copy_coordinates_content_description">copy coordinates</string>
+    <string name="location_copy_coordinates_latitude">Latitude only</string>
+    <string name="location_copy_coordinates_longitude">Longitude only</string>
+    <string name="location_copy_coordinates_title">Which coordinates would you like to copy?</string>
+    <string name="location_elevation_imperial">%,d ft</string>
+    <string name="location_elevation_metric">%,d m</string>
+    <string name="location_label_accuracy">Accuracy</string>
+    <string name="location_label_bearing">Bearing</string>
+    <string name="location_label_elevation">Elevation</string>
+    <string name="location_label_speed">Speed</string>
+    <string name="location_permission_explanation_title">Location Permission Needed</string>
+    <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through the Settings app before using this app.</string>
+    <string name="location_permission_explanation_positive">Go to Settings</string>
+    <string name="location_permission_explanation_negative">@string/exit</string>
+    <string name="location_screen_lock_snackbar_off">Screen lock disabled</string>
+    <string name="location_screen_lock_snackbar_on">Screen lock enabled</string>
+    <string name="location_share_button_content_description">share coordinates</string>
+    <string name="location_share_snackbar_failure">Hold tight, still trying to get your coordinates…</string>
+    <string name="location_speed_imperial">%.0f mph</string>
+    <string name="location_speed_metric">%.0f km/h</string>
+    <string name="location_value_unknown">@string/dash</string>
+
 
     <!-- Settings -->
     <string name="settings_compass_mode_dialog_title">Compass Mode</string>

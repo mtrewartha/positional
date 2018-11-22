@@ -48,7 +48,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/share_content_description"
+                android:contentDescription="@string/location_share_button_content_description"
                 app:icon="@drawable/ic_twotone_share_24px"
                 app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="@id/copyButton"
@@ -61,7 +61,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/copy_coordinates_content_description"
+                android:contentDescription="@string/location_copy_coordinates_content_description"
                 app:icon="@drawable/ic_twotone_file_copy_24px"
                 app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -107,7 +107,7 @@
                     android:layout_width="@dimen/stat_image_size_large"
                     android:layout_height="@dimen/stat_image_size_large"
                     android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/elevation"
+                    android:contentDescription="@string/location_label_elevation"
                     android:src="@drawable/ic_twotone_terrain_24px" />
 
                 <TextView
@@ -116,7 +116,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/elevation" />
+                    android:text="@string/location_label_elevation" />
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/elevationValueTextView"
@@ -148,7 +148,7 @@
                     android:layout_width="@dimen/stat_image_size_large"
                     android:layout_height="@dimen/stat_image_size_large"
                     android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/speed"
+                    android:contentDescription="@string/location_label_speed"
                     android:src="@drawable/ic_speedometer_24px" />
 
                 <TextView
@@ -157,7 +157,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/speed" />
+                    android:text="@string/location_label_speed" />
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/speedValueTextView"
@@ -189,7 +189,7 @@
                     android:layout_width="@dimen/stat_image_size_large"
                     android:layout_height="@dimen/stat_image_size_large"
                     android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/bearing"
+                    android:contentDescription="@string/location_label_bearing"
                     android:src="@drawable/ic_twotone_explore_24px" />
 
                 <TextView
@@ -198,7 +198,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/bearing" />
+                    android:text="@string/location_label_bearing" />
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/bearingValueTextView"
@@ -230,7 +230,7 @@
                     android:layout_width="@dimen/stat_image_size_large"
                     android:layout_height="@dimen/stat_image_size_large"
                     android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/accuracy"
+                    android:contentDescription="@string/location_label_accuracy"
                     android:src="@drawable/ic_twotone_straighten_24px" />
 
                 <TextView
@@ -239,7 +239,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/accuracy" />
+                    android:text="@string/location_label_accuracy" />
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/accuracyValueTextView"

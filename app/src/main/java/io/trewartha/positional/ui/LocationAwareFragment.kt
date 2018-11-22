@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.trewartha.positional.location.LocationLiveData
-import io.trewartha.positional.ui.position.LocationViewModel
+import io.trewartha.positional.ui.location.LocationViewModel
 
 abstract class LocationAwareFragment : Fragment() {
 

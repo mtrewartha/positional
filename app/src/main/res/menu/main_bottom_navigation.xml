@@ -6,21 +6,21 @@
         android:id="@+id/positionNavMenuItem"
         android:enabled="true"
         android:icon="@drawable/ic_twotone_my_location_24px"
-        android:title="@string/position"
+        android:title="@string/bottom_navigation_location"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/compassNavMenuItem"
         android:enabled="true"
         android:icon="@drawable/ic_twotone_explore_24px"
-        android:title="@string/compass"
+        android:title="@string/bottom_navigation_compass"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/settingsNavMenuItem"
         android:enabled="true"
         android:icon="@drawable/ic_twotone_settings_24px"
-        android:title="@string/settings"
+        android:title="@string/bottom_navigation_settings"
         app:showAsAction="ifRoom" />
 
 </menu>

@@ -9,21 +9,21 @@
     <TextView
         android:id="@+id/coordinatesCopyTitleTextView"
         style="@style/BottomSheetTitle"
-        android:text="@string/copy_coordinates_title" />
+        android:text="@string/location_copy_coordinates_title" />
 
     <TextView
         android:id="@+id/coordinatesCopyBothTextView"
         style="@style/BottomSheetListItem"
-        android:text="@string/copy_coordinates_both" />
+        android:text="@string/location_copy_coordinates_both" />
 
     <TextView
         android:id="@+id/coordinatesCopyLatitudeTextView"
         style="@style/BottomSheetListItem"
-        android:text="@string/copy_coordinates_latitude" />
+        android:text="@string/location_copy_coordinates_latitude" />
 
     <TextView
         android:id="@+id/coordinatesCopyLongitudeTextView"
         style="@style/BottomSheetListItem"
-        android:text="@string/copy_coordinates_longitude" />
+        android:text="@string/location_copy_coordinates_longitude" />
 
 </LinearLayout>

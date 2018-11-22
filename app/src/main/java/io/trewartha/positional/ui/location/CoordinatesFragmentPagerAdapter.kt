@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.position
+package io.trewartha.positional.ui.location
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

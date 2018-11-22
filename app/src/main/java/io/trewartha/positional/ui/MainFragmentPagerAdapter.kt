@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import io.trewartha.positional.ui.compass.CompassFragment
-import io.trewartha.positional.ui.position.PositionFragment
+import io.trewartha.positional.ui.location.LocationFragment
 import io.trewartha.positional.ui.settings.SettingsFragment
 
 class MainFragmentPagerAdapter(
@@ -12,7 +12,7 @@ class MainFragmentPagerAdapter(
 ) : FragmentPagerAdapter(fragmentManager) {
 
     private val fragments = arrayOf(
-            PositionFragment(),
+            LocationFragment(),
             CompassFragment(),
             SettingsFragment()
     )
