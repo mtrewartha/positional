@@ -3,20 +3,21 @@
 
     <!-- Base application theme. -->
     <style name="Positional.Day" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textColorPrimary">@color/colorOnSurface</item>
+        <item name="android:textColorSecondary">@color/onSurfaceLightVariant</item>
+        <item name="android:statusBarColor">@color/colorBackground</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+
         <item name="colorError">@color/colorError</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:textColorPrimary">@color/colorOnSurface</item>
-        <item name="android:textColorSecondary">@color/onSurfaceLightVariant</item>
-
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:statusBarColor">@color/colorBackground</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="fontFamily">@font/basic</item>
     </style>
 
     <style name="Positional.DayNight" parent="Positional.Day" />
@@ -116,41 +117,23 @@
 
     <style name="TextAppearance.Positional.Caption" parent="@style/TextAppearance.MaterialComponents.Caption" />
 
-    <style name="TextAppearance.Positional.Headline1" parent="@style/TextAppearance.MaterialComponents.Headline1">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Headline1" parent="@style/TextAppearance.MaterialComponents.Headline1" />
 
-    <style name="TextAppearance.Positional.Headline2" parent="@style/TextAppearance.MaterialComponents.Headline2">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Headline2" parent="@style/TextAppearance.MaterialComponents.Headline2" />
 
-    <style name="TextAppearance.Positional.Headline3" parent="@style/TextAppearance.MaterialComponents.Headline3">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Headline3" parent="@style/TextAppearance.MaterialComponents.Headline3" />
 
-    <style name="TextAppearance.Positional.Headline4" parent="@style/TextAppearance.MaterialComponents.Headline4">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Headline4" parent="@style/TextAppearance.MaterialComponents.Headline4" />
 
-    <style name="TextAppearance.Positional.Headline5" parent="@style/TextAppearance.MaterialComponents.Headline5">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Headline5" parent="@style/TextAppearance.MaterialComponents.Headline5" />
 
-    <style name="TextAppearance.Positional.Headline6" parent="@style/TextAppearance.MaterialComponents.Headline6">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Headline6" parent="@style/TextAppearance.MaterialComponents.Headline6" />
 
-    <style name="TextAppearance.Positional.Overline" parent="@style/TextAppearance.MaterialComponents.Overline">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Overline" parent="@style/TextAppearance.MaterialComponents.Overline" />
 
-    <style name="TextAppearance.Positional.Subtitle1" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Subtitle1" parent="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
-    <style name="TextAppearance.Positional.Subtitle2" parent="@style/TextAppearance.MaterialComponents.Subtitle2">
-        <item name="fontFamily">@font/basic</item>
-    </style>
+    <style name="TextAppearance.Positional.Subtitle2" parent="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
     <style name="TextAppearance.Positional.Body1" parent="@style/TextAppearance.MaterialComponents.Body1" />
 
