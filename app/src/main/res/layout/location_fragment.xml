@@ -8,14 +8,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <!-- Coordinates -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/coordinatesLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight=".5"
             android:minHeight="240dp">
 
@@ -46,7 +45,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/shareButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/location_share_button_content_description"
@@ -87,24 +86,24 @@
 
         <include
             layout="@layout/divider"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight=".5"
             android:orientation="vertical">
 
             <!-- Elevation -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
+                    style="@style/LocationStatIcon"
                     android:layout_width="@dimen/stat_image_size"
                     android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
@@ -113,7 +112,7 @@
 
                 <TextView
                     android:id="@+id/elevationLabelTextView"
-                    style="@style/PositionStatLabel"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -121,14 +120,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/elevationValueTextView"
-                    style="@style/PositionStatValue"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="96dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 
@@ -142,11 +139,11 @@
 
             <!-- Speed -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
+                    style="@style/LocationStatIcon"
                     android:layout_width="@dimen/stat_image_size"
                     android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
@@ -155,7 +152,7 @@
 
                 <TextView
                     android:id="@+id/speedLabelTextView"
-                    style="@style/PositionStatLabel"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -163,14 +160,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/speedValueTextView"
-                    style="@style/PositionStatValue"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="96dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 
@@ -184,11 +179,11 @@
 
             <!-- Bearing -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
+                    style="@style/LocationStatIcon"
                     android:layout_width="@dimen/stat_image_size"
                     android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
@@ -197,7 +192,7 @@
 
                 <TextView
                     android:id="@+id/bearingLabelTextView"
-                    style="@style/PositionStatLabel"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -205,14 +200,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/bearingValueTextView"
-                    style="@style/PositionStatValue"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="96dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 
@@ -226,11 +219,11 @@
 
             <!-- Accuracy -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
+                    style="@style/LocationStatIcon"
                     android:layout_width="@dimen/stat_image_size"
                     android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
@@ -239,7 +232,7 @@
 
                 <TextView
                     android:id="@+id/accuracyLabelTextView"
-                    style="@style/PositionStatLabel"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -247,14 +240,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/accuracyValueTextView"
-                    style="@style/PositionStatValue"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="96dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 

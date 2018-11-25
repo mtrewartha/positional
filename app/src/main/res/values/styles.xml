@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="Positional.Day" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -16,10 +16,12 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:statusBarColor">@color/colorBackground</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="Positional.DayNight" parent="Positional.Day" />
+
+    <!-- Bottom Navigation -->
 
     <style name="BottomNavigationViewStyle">
         <item name="android:background">@color/colorSurface</item>
@@ -53,12 +55,9 @@
 
     <!-- Compass -->
 
-    <style name="CompassAttributeTitle">
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="CompassAttributeTitle" parent="TextAppearance.Positional.Headline6" />
 
-    <style name="CompassAttributeValue">
-        <item name="android:textSize">12sp</item>
+    <style name="CompassAttributeValue" parent="TextAppearance.Positional.Body1">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="height_weight">0.8</item>
@@ -68,80 +67,93 @@
         <item name="android:tint">@color/colorOnSurface</item>
     </style>
 
-    <style name="CompassDegrees">
+    <style name="CompassDegrees" parent="TextAppearance.Positional.Headline5">
+        <item name="autoSizeMaxTextSize">128sp</item>
+        <item name="autoSizeTextType">uniform</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="height_weight">0.8</item>
     </style>
 
-    <!-- Coordinates -->
+    <!-- Location -->
 
-    <style name="CoordinatesFragment">
-        <item name="android:paddingStart">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
+    <style name="LocationCoordinate" parent="TextAppearance.Positional.Headline5">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/loaderViewShimmer</item>
+        <item name="height_weight">0.8</item>
+    </style>
+
+    <style name="LocationCoordinatesFragment">
         <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingTop">32dp</item>
     </style>
 
-    <style name="CoordinatesFormatLabel">
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <!-- Position Stats -->
-
-    <style name="PositionStatIcon">
+    <style name="LocationStatIcon">
         <item name="android:tintMode">src_in</item>
         <item name="android:tint">@color/colorOnSurface</item>
     </style>
 
-    <style name="PositionStatLabel">
-        <item name="android:textSize">@dimen/label_text_size</item>
-    </style>
-
-    <style name="PositionStatLabelLandscape" parent="PositionStatLabel">
-        <item name="android:textSize">@dimen/label_text_size_landscape</item>
-    </style>
-
-    <style name="PositionStatLabelLarge" parent="PositionStatLabel">
-        <item name="android:textSize">@dimen/label_text_size_large</item>
-    </style>
-
-    <style name="PositionStatLabelLargeLandscape" parent="PositionStatLabelLandscape">
-        <item name="android:textSize">@dimen/label_text_size_large_landscape</item>
-    </style>
-
-    <style name="PositionStatRow">
+    <style name="LocationStatRow">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">.2</item>
         <item name="android:minHeight">64dp</item>
-        <item name="android:paddingEnd">@dimen/activity_horizontal_margin</item>
-        <item name="android:paddingStart">@dimen/activity_horizontal_margin
-        </item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingStart">32dp</item>
     </style>
 
-    <style name="PositionStatRowLandscape" parent="PositionStatRow">
+    <style name="LocationStatRowLandscape" parent="LocationStatRow">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="PositionStatValue">
-        <item name="android:gravity">end|right</item>
-        <item name="android:textSize">@dimen/value_text_size</item>
+    <!-- Text Appearance -->
+
+    <style name="TextAppearance.Positional.Caption" parent="@style/TextAppearance.MaterialComponents.Caption" />
+
+    <style name="TextAppearance.Positional.Headline1" parent="@style/TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/basic</item>
     </style>
 
-    <style name="PositionStatValueLandscape" parent="PositionStatValue">
-        <item name="android:textSize">@dimen/value_text_size_landscape</item>
+    <style name="TextAppearance.Positional.Headline2" parent="@style/TextAppearance.MaterialComponents.Headline2">
+        <item name="fontFamily">@font/basic</item>
     </style>
 
-    <style name="PositionStatValueLarge" parent="PositionStatValue">
-        <item name="android:textSize">@dimen/value_text_size_large</item>
+    <style name="TextAppearance.Positional.Headline3" parent="@style/TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/basic</item>
     </style>
 
-    <style name="PositionStatValueLargeLandscape" parent="PositionStatValueLandscape">
-        <item name="android:textSize">@dimen/value_text_size_large_landscape</item>
+    <style name="TextAppearance.Positional.Headline4" parent="@style/TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/basic</item>
     </style>
+
+    <style name="TextAppearance.Positional.Headline5" parent="@style/TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/basic</item>
+    </style>
+
+    <style name="TextAppearance.Positional.Headline6" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/basic</item>
+    </style>
+
+    <style name="TextAppearance.Positional.Overline" parent="@style/TextAppearance.MaterialComponents.Overline">
+        <item name="fontFamily">@font/basic</item>
+    </style>
+
+    <style name="TextAppearance.Positional.Subtitle1" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/basic</item>
+    </style>
+
+    <style name="TextAppearance.Positional.Subtitle2" parent="@style/TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/basic</item>
+    </style>
+
+    <style name="TextAppearance.Positional.Body1" parent="@style/TextAppearance.MaterialComponents.Body1" />
+
+    <style name="TextAppearance.Positional.Body2" parent="@style/TextAppearance.MaterialComponents.Body2" />
 
 </resources>

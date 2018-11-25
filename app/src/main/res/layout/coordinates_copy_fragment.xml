@@ -8,22 +8,42 @@
 
     <TextView
         android:id="@+id/coordinatesCopyTitleTextView"
-        style="@style/BottomSheetTitle"
+        style="@style/TextAppearance.Positional.Subtitle1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_title_height"
+        android:gravity="center_vertical|start"
+        android:paddingStart="@dimen/bottom_sheet_padding_horizontal"
+        android:paddingEnd="@dimen/bottom_sheet_padding_horizontal"
         android:text="@string/location_copy_coordinates_title" />
 
     <TextView
         android:id="@+id/coordinatesCopyBothTextView"
-        style="@style/BottomSheetListItem"
+        style="@style/TextAppearance.Positional.Body2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_list_item_height"
+        android:gravity="center_vertical|start"
+        android:paddingStart="@dimen/bottom_sheet_padding_horizontal"
+        android:paddingEnd="@dimen/bottom_sheet_padding_horizontal"
         android:text="@string/location_copy_coordinates_both" />
 
     <TextView
         android:id="@+id/coordinatesCopyLatitudeTextView"
-        style="@style/BottomSheetListItem"
+        style="@style/TextAppearance.Positional.Body2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_list_item_height"
+        android:gravity="center_vertical|start"
+        android:paddingStart="@dimen/bottom_sheet_padding_horizontal"
+        android:paddingEnd="@dimen/bottom_sheet_padding_horizontal"
         android:text="@string/location_copy_coordinates_latitude" />
 
     <TextView
         android:id="@+id/coordinatesCopyLongitudeTextView"
-        style="@style/BottomSheetListItem"
+        style="@style/TextAppearance.Positional.Body2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_list_item_height"
+        android:gravity="center_vertical|start"
+        android:paddingStart="@dimen/bottom_sheet_padding_horizontal"
+        android:paddingEnd="@dimen/bottom_sheet_padding_horizontal"
         android:text="@string/location_copy_coordinates_longitude" />
 
 </LinearLayout>

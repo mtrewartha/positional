@@ -18,7 +18,7 @@ import io.trewartha.positional.location.LocationFormatter
 import io.trewartha.positional.ui.LocationAwareFragment
 import io.trewartha.positional.ui.location.coordinates.CoordinatesFragment
 import io.trewartha.positional.ui.location.coordinates.CoordinatesFragmentPagerAdapter
-import kotlinx.android.synthetic.main.position_fragment.*
+import kotlinx.android.synthetic.main.location_fragment.*
 import timber.log.Timber
 import java.util.*
 
@@ -62,7 +62,7 @@ class LocationFragment : LocationAwareFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.position_fragment, container, false)
+    ): View? = inflater.inflate(R.layout.location_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

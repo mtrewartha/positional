@@ -2,20 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CoordinatesFragment"
+    style="@style/LocationCoordinatesFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/zoneTextView"
+        style="@style/LocationCoordinate"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:gravity="center"
+        android:layout_height="0dp"
+        android:gravity="bottom|center_horizontal"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
-        app:corners="4"
-        app:custom_color="@color/loaderViewShimmer"
-        app:height_weight="0.8"
         app:layout_constraintBottom_toTopOf="@id/eastingTextView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -23,35 +21,32 @@
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/eastingTextView"
+        style="@style/LocationCoordinate"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="0dp"
         android:gravity="center"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
-        app:corners="4"
-        app:custom_color="@color/loaderViewShimmer"
-        app:height_weight="0.8"
         app:layout_constraintBottom_toTopOf="@id/northingTextView"
         app:layout_constraintTop_toBottomOf="@id/zoneTextView"
         tools:text="1234567m E" />
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/northingTextView"
+        style="@style/LocationCoordinate"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:gravity="center"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="top|center_horizontal"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
-        app:corners="4"
-        app:custom_color="@color/loaderViewShimmer"
-        app:height_weight="0.8"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/formatLabelTextView"
         app:layout_constraintTop_toBottomOf="@id/eastingTextView"
         tools:text="1234567m N" />
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/formatLabelTextView"
-        style="@style/CoordinatesFormatLabel"
+        style="@style/TextAppearance.Positional.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location_coordinate_format_label_utm"

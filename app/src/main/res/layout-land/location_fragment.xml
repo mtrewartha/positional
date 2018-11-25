@@ -100,20 +100,20 @@
 
             <!-- Elevation -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
-                    android:layout_width="@dimen/stat_image_size_large_landscape"
-                    android:layout_height="@dimen/stat_image_size_large_landscape"
+                    style="@style/LocationStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
                     android:contentDescription="@string/location_label_elevation"
                     android:src="@drawable/ic_twotone_terrain_24px" />
 
                 <TextView
                     android:id="@+id/elevationLabelTextView"
-                    style="@style/PositionStatLabelLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -121,14 +121,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/elevationValueTextView"
-                    style="@style/PositionStatValueLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="192dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 
@@ -142,20 +140,20 @@
 
             <!-- Speed -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
-                    android:layout_width="@dimen/stat_image_size_large_landscape"
-                    android:layout_height="@dimen/stat_image_size_large_landscape"
+                    style="@style/LocationStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
                     android:contentDescription="@string/location_label_speed"
                     android:src="@drawable/ic_speedometer_24px" />
 
                 <TextView
                     android:id="@+id/speedLabelTextView"
-                    style="@style/PositionStatLabelLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -163,14 +161,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/speedValueTextView"
-                    style="@style/PositionStatValueLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="192dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 
@@ -184,20 +180,20 @@
 
             <!-- Bearing -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
-                    android:layout_width="@dimen/stat_image_size_large_landscape"
-                    android:layout_height="@dimen/stat_image_size_large_landscape"
+                    style="@style/LocationStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
                     android:contentDescription="@string/location_label_bearing"
                     android:src="@drawable/ic_twotone_explore_24px" />
 
                 <TextView
                     android:id="@+id/bearingLabelTextView"
-                    style="@style/PositionStatLabelLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -205,14 +201,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/bearingValueTextView"
-                    style="@style/PositionStatValueLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="192dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 
@@ -226,20 +220,20 @@
 
             <!-- Accuracy -->
             <LinearLayout
-                style="@style/PositionStatRow"
+                style="@style/LocationStatRow"
                 android:orientation="horizontal">
 
                 <ImageView
-                    style="@style/PositionStatIcon"
-                    android:layout_width="@dimen/stat_image_size_large_landscape"
-                    android:layout_height="@dimen/stat_image_size_large_landscape"
+                    style="@style/LocationStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
                     android:contentDescription="@string/location_label_accuracy"
                     android:src="@drawable/ic_twotone_straighten_24px" />
 
                 <TextView
                     android:id="@+id/accuracyLabelTextView"
-                    style="@style/PositionStatLabelLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -247,14 +241,12 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/accuracyValueTextView"
-                    style="@style/PositionStatValueLargeLandscape"
+                    style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
-                    android:minWidth="192dp"
-                    app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer"
-                    app:height_weight="0.8" />
+                    android:gravity="end"
+                    android:minWidth="96dp" />
 
             </LinearLayout>
 

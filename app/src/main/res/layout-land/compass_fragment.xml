@@ -20,8 +20,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toStartOf="@id/degreesTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".50">
+            app:layout_constraintStart_toStartOf="parent">
 
             <io.trewartha.positional.ui.compass.CompassView
                 android:id="@+id/backgroundCompassView"
@@ -55,21 +54,20 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            app:autoSizeTextType="uniform"
+            android:layout_marginBottom="8dp"
+            android:gravity="bottom|center_horizontal"
             app:layout_constraintBottom_toTopOf="@id/detailsLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent=".50"
+            app:layout_constraintHeight_max="192dp"
             app:layout_constraintStart_toEndOf="@id/compassFrameLayout"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".50" />
+            tools:text="100°" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detailsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/compassFrameLayout"
@@ -81,7 +79,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/compass_accuracy_title"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toTopOf="@id/accelerometerAccuracyLabelTextView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -90,12 +87,12 @@
 
             <TextView
                 android:id="@+id/accelerometerAccuracyLabelTextView"
+                style="@style/CompassAttributeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:labelFor="@id/accelerometerAccuracyTextView"
                 android:text="@string/compass_accuracy_accelerometer_label"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toTopOf="@id/magnetometerAccuracyLabelTextView"
                 app:layout_constraintEnd_toStartOf="@id/accelerometerAccuracyTextView"
                 app:layout_constraintHorizontal_bias="0"
@@ -109,7 +106,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="@dimen/compass_details_accuracy_min_width"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toBottomOf="@id/accelerometerAccuracyLabelTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/accelerometerAccuracyLabelTextView"
@@ -118,6 +114,7 @@
 
             <TextView
                 android:id="@+id/magnetometerAccuracyLabelTextView"
+                style="@style/CompassAttributeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
@@ -125,7 +122,6 @@
                 android:gravity="end"
                 android:labelFor="@id/magnetometerAccuracyTextView"
                 android:text="@string/compass_accuracy_magnetometer_label"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toTopOf="@id/modeTitleTextView"
                 app:layout_constraintEnd_toStartOf="@id/magnetometerAccuracyTextView"
                 app:layout_constraintHorizontal_bias="0"
@@ -139,7 +135,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="@dimen/compass_details_accuracy_min_width"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toBottomOf="@id/magnetometerAccuracyLabelTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/magnetometerAccuracyLabelTextView"
@@ -153,7 +148,6 @@
                 android:layout_height="wrap_content"
                 android:labelFor="@id/modeTextView"
                 android:text="@string/compass_mode_title"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toTopOf="@id/modeTextView"
                 app:layout_constraintStart_toStartOf="@id/magnetometerAccuracyLabelTextView"
                 app:layout_constraintTop_toBottomOf="@id/magnetometerAccuracyLabelTextView" />
@@ -164,7 +158,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="@dimen/compass_details_mode_min_width"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toTopOf="@id/declinationLabelTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
@@ -174,12 +167,12 @@
 
             <TextView
                 android:id="@+id/declinationLabelTextView"
+                style="@style/CompassAttributeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:labelFor="@id/declinationTextView"
                 android:text="@string/compass_declination_label"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/declinationTextView"
                 app:layout_constraintHorizontal_bias="0"
@@ -193,7 +186,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="@dimen/compass_details_accuracy_min_width"
-                android:textSize="@dimen/compass_details_text_size"
                 app:layout_constraintBottom_toBottomOf="@id/declinationLabelTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/declinationLabelTextView"

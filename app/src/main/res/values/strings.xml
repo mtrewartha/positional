@@ -26,10 +26,10 @@
     <string name="compass_accuracy_magnetometer_label">Magnetometer:</string>
     <string name="compass_accuracy_medium">Medium</string>
     <string name="compass_accuracy_no_contact">Unusable</string>
-    <string name="compass_accuracy_title">ACCURACY </string>
+    <string name="compass_accuracy_title">Accuracy </string>
     <string name="compass_accuracy_unknown">@string/dash</string>
     <string name="compass_accuracy_unreliable">Unreliable</string>
-    <string name="compass_mode_title">MODE</string>
+    <string name="compass_mode_title">Mode</string>
     <string name="compass_mode_magnetic_north">Magnetic North</string>
     <string name="compass_mode_true_north">True North</string>
     <string name="compass_sensor_missing_button_positive">@string/ok</string>

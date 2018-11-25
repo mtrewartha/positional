@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CoordinatesFragment"
+    style="@style/LocationCoordinatesFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,33 +15,32 @@
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/latitudeTextView"
+        style="@style/LocationCoordinate"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:gravity="center"
+        android:layout_height="0dp"
+        android:gravity="bottom|center_horizontal"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
-        app:corners="4"
-        app:custom_color="@color/loaderViewShimmer"
-        app:height_weight="0.8"
         app:layout_constraintBottom_toTopOf="@id/centerGuideline"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="-100° 60' 60&quot;" />
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/longitudeTextView"
+        style="@style/LocationCoordinate"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:gravity="center"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="top|center_horizontal"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
-        app:corners="4"
-        app:custom_color="@color/loaderViewShimmer"
-        app:height_weight="0.8"
+        app:layout_constraintBottom_toTopOf="@id/formatLabelTextView"
         app:layout_constraintTop_toBottomOf="@id/centerGuideline"
         tools:text="-100° 60' 60&quot;" />
 
     <TextView
         android:id="@+id/formatLabelTextView"
-        style="@style/CoordinatesFormatLabel"
+        style="@style/TextAppearance.Positional.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location_coordinate_format_label_degrees_minutes_seconds"
