@@ -37,12 +37,15 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
                 .setFastestInterval(updateInterval)
             Timber.i("Requesting location updates: $locationRequest")
             locationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.getMainLooper()
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
             )
         } catch (securityException: SecurityException) {
-            Timber.w(securityException, "Don't have location permissions, no location updates will be received")
+            Timber.w(
+                securityException,
+                "Don't have location permissions, no location updates will be received"
+            )
         }
     }
 

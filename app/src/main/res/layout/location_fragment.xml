@@ -97,6 +97,86 @@
             android:layout_weight=".5"
             android:orientation="vertical">
 
+            <!-- Accuracy -->
+            <LinearLayout
+                style="@style/LocationStatRow"
+                android:orientation="horizontal">
+
+                <ImageView
+                    style="@style/LocationStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
+                    android:layout_marginEnd="20dp"
+                    android:contentDescription="@string/location_label_accuracy"
+                    android:src="@drawable/ic_twotone_straighten_24px" />
+
+                <TextView
+                    android:id="@+id/accuracyLabelTextView"
+                    style="@style/TextAppearance.Positional.Headline5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/location_label_accuracy" />
+
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
+                    android:id="@+id/accuracyValueTextView"
+                    style="@style/TextAppearance.Positional.Headline5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:gravity="end"
+                    android:minWidth="96dp" />
+
+            </LinearLayout>
+
+            <include
+                layout="@layout/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/activity_horizontal_margin" />
+
+            <!-- Bearing -->
+            <LinearLayout
+                style="@style/LocationStatRow"
+                android:orientation="horizontal">
+
+                <ImageView
+                    style="@style/LocationStatIcon"
+                    android:layout_width="@dimen/stat_image_size"
+                    android:layout_height="@dimen/stat_image_size"
+                    android:layout_marginEnd="20dp"
+                    android:contentDescription="@string/location_label_bearing"
+                    android:src="@drawable/ic_twotone_explore_24px" />
+
+                <TextView
+                    android:id="@+id/bearingLabelTextView"
+                    style="@style/TextAppearance.Positional.Headline5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/location_label_bearing" />
+
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
+                    android:id="@+id/bearingValueTextView"
+                    style="@style/TextAppearance.Positional.Headline5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:gravity="end"
+                    android:minWidth="96dp" />
+
+            </LinearLayout>
+
+            <include
+                layout="@layout/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/activity_horizontal_margin" />
+
             <!-- Elevation -->
             <LinearLayout
                 style="@style/LocationStatRow"
@@ -177,7 +257,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:padding="@dimen/activity_horizontal_margin" />
 
-            <!-- Bearing -->
+            <!-- Timestamp -->
             <LinearLayout
                 style="@style/LocationStatRow"
                 android:orientation="horizontal">
@@ -187,59 +267,19 @@
                     android:layout_width="@dimen/stat_image_size"
                     android:layout_height="@dimen/stat_image_size"
                     android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/location_label_bearing"
-                    android:src="@drawable/ic_twotone_explore_24px" />
+                    android:contentDescription="@string/location_label_timestamp"
+                    android:src="@drawable/ic_twotone_access_time_24px" />
 
                 <TextView
-                    android:id="@+id/bearingLabelTextView"
+                    android:id="@+id/timestampLabelTextView"
                     style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/location_label_bearing" />
+                    android:text="@string/location_label_timestamp" />
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
-                    android:id="@+id/bearingValueTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:gravity="end"
-                    android:minWidth="96dp" />
-
-            </LinearLayout>
-
-            <include
-                layout="@layout/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:padding="@dimen/activity_horizontal_margin" />
-
-            <!-- Accuracy -->
-            <LinearLayout
-                style="@style/LocationStatRow"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/LocationStatIcon"
-                    android:layout_width="@dimen/stat_image_size"
-                    android:layout_height="@dimen/stat_image_size"
-                    android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/location_label_accuracy"
-                    android:src="@drawable/ic_twotone_straighten_24px" />
-
-                <TextView
-                    android:id="@+id/accuracyLabelTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/location_label_accuracy" />
-
-                <com.elyeproj.loaderviewlibrary.LoaderTextView
-                    android:id="@+id/accuracyValueTextView"
+                    android:id="@+id/timestampValueTextView"
                     style="@style/TextAppearance.Positional.Headline5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

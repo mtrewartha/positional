@@ -237,6 +237,7 @@ class LocationFragment : LocationAwareFragment() {
         bearingValueTextView.text = locationFormatter.getBearing(location)
         elevationValueTextView.text = locationFormatter.getElevation(location, useMetricUnits)
         speedValueTextView.text = locationFormatter.getSpeed(location, useMetricUnits)
+        timestampValueTextView.text = locationFormatter.getTimestamp(location)
     }
 
     private fun setBooleanPreference(key: String, value: Boolean) {
