@@ -6,7 +6,6 @@
     <string name="dash">—</string>
     <string name="exit">Exit</string>
     <string name="ok">OK</string>
-    <string name="unknown">unknown</string>
 
 
     <!-- Bottom Navigation -->
@@ -16,27 +15,26 @@
 
 
     <!-- Compass -->
-    <string name="compass_declination">declination: %s°</string>
-    <string name="compass_declination_unknown">@string/unknown</string>
+    <string name="compass_declination">%d°</string>
+    <string name="compass_declination_label">Declination:</string>
     <string name="compass_degrees">%d°</string>
-    <string name="compass_accuracy_accelerometer">accelerometer: %s</string>
-    <string name="compass_accuracy_high">high</string>
-    <string name="compass_accuracy_low">low</string>
-    <string name="compass_accuracy_magnetometer">magnetometer: %s</string>
-    <string name="compass_accuracy_medium">medium</string>
-    <string name="compass_accuracy_no_contact">unusable</string>
-    <string name="compass_accuracy_no_sensor_found">no sensor found</string>
-    <string name="compass_accuracy_not_applicable">n/a</string>
+    <string name="compass_degrees_content_description">Current bearing %d degrees</string>
+    <string name="compass_degrees_content_description_unknown">Current bearing unknown</string>
+    <string name="compass_accuracy_accelerometer_label">Accelerometer:</string>
+    <string name="compass_accuracy_high">High</string>
+    <string name="compass_accuracy_low">Low</string>
+    <string name="compass_accuracy_magnetometer_label">Magnetometer:</string>
+    <string name="compass_accuracy_medium">Medium</string>
+    <string name="compass_accuracy_no_contact">Unusable</string>
     <string name="compass_accuracy_title">ACCURACY </string>
-    <string name="compass_accuracy_unknown">unknown </string>
-    <string name="compass_accuracy_unreliable">unreliable</string>
-    <string name="compass_mode_change_snackbar">Mode is now changed via the Settings tab</string>
+    <string name="compass_accuracy_unknown">@string/dash</string>
+    <string name="compass_accuracy_unreliable">Unreliable</string>
     <string name="compass_mode_title">MODE</string>
-    <string name="compass_mode_magnetic_north">magnetic north</string>
-    <string name="compass_mode_true_north">true north</string>
+    <string name="compass_mode_magnetic_north">Magnetic North</string>
+    <string name="compass_mode_true_north">True North</string>
     <string name="compass_sensor_missing_button_positive">@string/ok</string>
     <string name="compass_sensor_missing_message">Hmm… Your device is missing an accelerometer or magnetometer, but the compass needs both of them. The compass will be disabled, but the rest of the app will function normally.</string>
-    <string name="compass_sensor_missing_title">Missing Required Sensor</string>
+    <string name="compass_sensor_missing_title">Missing Required Sensor(s)</string>
 
 
     <!-- Location -->

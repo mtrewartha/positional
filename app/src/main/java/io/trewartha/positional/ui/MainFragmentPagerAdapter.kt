@@ -8,13 +8,13 @@ import io.trewartha.positional.ui.location.LocationFragment
 import io.trewartha.positional.ui.settings.SettingsFragment
 
 class MainFragmentPagerAdapter(
-        fragmentManager: FragmentManager
+    fragmentManager: FragmentManager
 ) : FragmentPagerAdapter(fragmentManager) {
 
     private val fragments = arrayOf(
-            LocationFragment(),
-            CompassFragment(),
-            SettingsFragment()
+        LocationFragment(),
+        CompassFragment(),
+        SettingsFragment()
     )
 
     override fun getItem(position: Int): Fragment = fragments[position]

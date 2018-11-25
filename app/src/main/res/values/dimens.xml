@@ -9,6 +9,10 @@
     <dimen name="bottom_sheet_list_item_text_size">16sp</dimen>
     <dimen name="bottom_sheet_title_text_size">16sp</dimen>
 
+    <dimen name="compass_details_text_size">14sp</dimen>
+    <dimen name="compass_details_accuracy_min_width">48dp</dimen>
+    <dimen name="compass_details_mode_min_width">72dp</dimen>
+
     <dimen name="label_text_size">@dimen/text_size_small</dimen>
     <dimen name="label_text_size_landscape">@dimen/text_size_small</dimen>
     <dimen name="label_text_size_large">@dimen/text_size_medium</dimen>

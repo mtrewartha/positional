@@ -54,19 +54,25 @@
     <!-- Compass -->
 
     <style name="CompassAttributeTitle">
-        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="CompassAttributeValue">
         <item name="android:textSize">12sp</item>
+        <item name="corners">4</item>
+        <item name="custom_color">@color/loaderViewShimmer</item>
+        <item name="height_weight">0.8</item>
     </style>
 
     <style name="CompassBackground">
         <item name="android:tint">@color/colorOnSurface</item>
     </style>
 
-    <style name="CompassDegrees" />
+    <style name="CompassDegrees">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/loaderViewShimmer</item>
+        <item name="height_weight">0.8</item>
+    </style>
 
     <!-- Coordinates -->
 
@@ -119,28 +125,6 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
-    </style>
-
-    <style name="PositionStatRowLarge" parent="PositionStatRow">
-        <item name="android:layout_height">96dp</item>
-    </style>
-
-    <style name="PositionStatRowLargeLandscape" parent="PositionStatRowLandscape" />
-
-    <style name="PositionStatUnit">
-        <item name="android:textSize">@dimen/unit_text_size</item>
-    </style>
-
-    <style name="PositionStatUnitLandscape" parent="PositionStatUnit">
-        <item name="android:textSize">@dimen/unit_text_size_landscape</item>
-    </style>
-
-    <style name="PositionStatUnitLarge" parent="PositionStatUnit">
-        <item name="android:textSize">@dimen/unit_text_size_large</item>
-    </style>
-
-    <style name="PositionStatUnitLargeLandscape" parent="PositionStatUnitLandscape">
-        <item name="android:textSize">@dimen/unit_text_size_large_landscape</item>
     </style>
 
     <style name="PositionStatValue">

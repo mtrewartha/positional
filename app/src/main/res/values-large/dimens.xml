@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="compass_details_text_size">20sp</dimen>
+    <dimen name="compass_details_accuracy_min_width">48dp</dimen>
+    <dimen name="compass_details_mode_min_width">72dp</dimen>
+</resources>

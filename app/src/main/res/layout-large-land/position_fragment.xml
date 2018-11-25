@@ -127,7 +127,8 @@
                     android:layout_marginEnd="6dp"
                     android:minWidth="192dp"
                     app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer" />
+                    app:custom_color="@color/loaderViewShimmer"
+                    app:height_weight="0.8" />
 
             </LinearLayout>
 
@@ -168,7 +169,8 @@
                     android:layout_marginEnd="6dp"
                     android:minWidth="192dp"
                     app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer" />
+                    app:custom_color="@color/loaderViewShimmer"
+                    app:height_weight="0.8" />
 
             </LinearLayout>
 
@@ -209,7 +211,8 @@
                     android:layout_marginEnd="6dp"
                     android:minWidth="192dp"
                     app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer" />
+                    app:custom_color="@color/loaderViewShimmer"
+                    app:height_weight="0.8" />
 
             </LinearLayout>
 
@@ -250,7 +253,8 @@
                     android:layout_marginEnd="6dp"
                     android:minWidth="192dp"
                     app:corners="4"
-                    app:custom_color="@color/loaderViewShimmer" />
+                    app:custom_color="@color/loaderViewShimmer"
+                    app:height_weight="0.8" />
 
             </LinearLayout>
 
