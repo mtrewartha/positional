@@ -50,6 +50,58 @@ class LocationFormatter(context: Context) {
         String.format(Locale.getDefault(), formatBearing, bearing)
     }
 
+    fun getDecimalLatitude(latitude: Double) = String
+        .format(Locale.getDefault(), formatCoordinateDecimal, latitude)
+        .padStart(10)
+
+    fun getDecimalLongitude(longitude: Double) = String
+        .format(Locale.getDefault(), formatCoordinateDecimal, longitude)
+        .padStart(10)
+
+    fun getDegreesAndDecimalMinutesLatitude(latitude: Double): String {
+        var latitudeDM = Location.convert(latitude, Location.FORMAT_MINUTES)
+        latitudeDM = replaceDelimiters(latitudeDM)
+        if (latitude >= 0.0) {
+            latitudeDM += " N"
+        } else {
+            latitudeDM = latitudeDM.replaceFirst("-".toRegex(), "") + " S"
+        }
+        return latitudeDM.padStart(17)
+    }
+
+    fun getDegreesAndDecimalMinutesLongitude(longitude: Double): String {
+        var longitudeDM = Location.convert(longitude, Location.FORMAT_MINUTES)
+        longitudeDM = replaceDelimiters(longitudeDM)
+        if (longitude >= 0.0) {
+            longitudeDM += " E"
+        } else {
+            longitudeDM = longitudeDM.replaceFirst("-".toRegex(), "") + " W"
+        }
+        return longitudeDM.padStart(17)
+    }
+
+    fun getDmsLatitude(latitude: Double): String {
+        var latitudeDMS = Location.convert(latitude, Location.FORMAT_SECONDS)
+        latitudeDMS = replaceDelimiters(latitudeDMS)
+        if (latitude >= 0.0) {
+            latitudeDMS += " N"
+        } else {
+            latitudeDMS = latitudeDMS.replaceFirst("-".toRegex(), "") + " S"
+        }
+        return latitudeDMS.padStart(20)
+    }
+
+    fun getDmsLongitude(longitude: Double): String {
+        var longitudeDMS = Location.convert(longitude, Location.FORMAT_SECONDS)
+        longitudeDMS = replaceDelimiters(longitudeDMS)
+        if (longitude >= 0.0) {
+            longitudeDMS += " E"
+        } else {
+            longitudeDMS = longitudeDMS.replaceFirst("-".toRegex(), "") + " W"
+        }
+        return longitudeDMS.padStart(20)
+    }
+
     fun getElevation(
         location: Location?,
         metric: Boolean
@@ -65,34 +117,6 @@ class LocationFormatter(context: Context) {
         else
             formatElevationImperial
         String.format(Locale.getDefault(), format, elevation)
-    }
-
-    fun getDecimalLatitude(latitude: Double) =
-        String.format(Locale.getDefault(), formatCoordinateDecimal, latitude)
-
-    fun getDecimalLongitude(longitude: Double) =
-        String.format(Locale.getDefault(), formatCoordinateDecimal, longitude)
-
-    fun getDmsLatitude(latitude: Double): String {
-        var latitudeDMS = Location.convert(latitude, Location.FORMAT_SECONDS)
-        latitudeDMS = replaceDelimiters(latitudeDMS)
-        if (latitude >= 0.0) {
-            latitudeDMS += " N"
-        } else {
-            latitudeDMS = latitudeDMS.replaceFirst("-".toRegex(), "") + " S"
-        }
-        return latitudeDMS
-    }
-
-    fun getDmsLongitude(longitude: Double): String {
-        var longitudeDMS = Location.convert(longitude, Location.FORMAT_SECONDS)
-        longitudeDMS = replaceDelimiters(longitudeDMS)
-        if (longitude >= 0.0) {
-            longitudeDMS += " E"
-        } else {
-            longitudeDMS = longitudeDMS.replaceFirst("-".toRegex(), "") + " W"
-        }
-        return longitudeDMS
     }
 
     fun getMgrsCoordinates(latitude: Double, longitude: Double): String {
@@ -163,6 +187,11 @@ class LocationFormatter(context: Context) {
         DECIMAL -> {
             val latitudeText = getDecimalLatitude(latitude)
             val longitudeText = getDecimalLongitude(longitude)
+            "$latitudeText, $longitudeText"
+        }
+        DDM -> {
+            val latitudeText = getDegreesAndDecimalMinutesLatitude(latitude)
+            val longitudeText = getDegreesAndDecimalMinutesLongitude(longitude)
             "$latitudeText, $longitudeText"
         }
         DMS -> {

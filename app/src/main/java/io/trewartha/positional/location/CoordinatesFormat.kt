@@ -1,3 +1,3 @@
 package io.trewartha.positional.location
 
-enum class CoordinatesFormat { DECIMAL, DMS, MGRS, UTM }
+enum class CoordinatesFormat { DECIMAL, DDM, DMS, MGRS, UTM }

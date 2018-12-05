@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import io.trewartha.positional.R
 import io.trewartha.positional.location.LocationFormatter
-import kotlinx.android.synthetic.main.coordinates_degrees_decimal_fragment.*
+import kotlinx.android.synthetic.main.coordinates_decimal_degrees_fragment.*
 
-class CoordinatesDegreesDecimalFragment : CoordinatesFragment() {
+class CoordinatesDegreesDecimalMinutesFragment : CoordinatesFragment() {
 
     private lateinit var locationFormatter: LocationFormatter
 
@@ -22,10 +22,11 @@ class CoordinatesDegreesDecimalFragment : CoordinatesFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.coordinates_degrees_decimal_fragment, container, false)
+    ): View =
+        inflater.inflate(R.layout.coordinates_degrees_decimal_minutes_fragment, container, false)
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
-        latitudeTextView.text = locationFormatter.getDecimalLatitude(latitude)
-        longitudeTextView.text = locationFormatter.getDecimalLongitude(longitude)
+        latitudeTextView.text = locationFormatter.getDegreesAndDecimalMinutesLatitude(latitude)
+        longitudeTextView.text = locationFormatter.getDegreesAndDecimalMinutesLongitude(longitude)
     }
 }

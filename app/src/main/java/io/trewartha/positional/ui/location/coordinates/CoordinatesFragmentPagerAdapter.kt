@@ -5,21 +5,18 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
 class CoordinatesFragmentPagerAdapter(
-        fragmentManager: FragmentManager
+    fragmentManager: FragmentManager
 ) : FragmentPagerAdapter(fragmentManager) {
 
     private val fragments = arrayOf(
-        CoordinatesDegreesDecimalFragment(),
+        CoordinatesDecimalDegreesFragment(),
+        CoordinatesDegreesDecimalMinutesFragment(),
         CoordinatesDegreesMinutesSecondsFragment(),
         CoordinatesUTMFragment(),
         CoordinatesMGRSFragment()
     )
 
-    override fun getItem(position: Int): Fragment {
-        return fragments[position]
-    }
+    override fun getItem(position: Int): Fragment = fragments[position]
 
-    override fun getCount(): Int {
-        return fragments.size
-    }
+    override fun getCount(): Int = fragments.size
 }

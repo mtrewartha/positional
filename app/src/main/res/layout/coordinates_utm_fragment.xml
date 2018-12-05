@@ -46,7 +46,7 @@
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/formatLabelTextView"
-        style="@style/TextAppearance.Positional.Body2"
+        style="@style/TextAppearance.Positional.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location_coordinate_format_label_utm"

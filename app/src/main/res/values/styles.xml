@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
     <style name="Positional.Day" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="android:textColorPrimary">@color/colorOnSurface</item>
         <item name="android:textColorSecondary">@color/onSurfaceLightVariant</item>
         <item name="android:statusBarColor">@color/colorBackground</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
 
         <item name="colorError">@color/colorError</item>
@@ -56,9 +53,9 @@
 
     <!-- Compass -->
 
-    <style name="CompassAttributeTitle" parent="TextAppearance.Positional.Headline6" />
+    <style name="CompassAttributeTitle" parent="TextAppearance.Positional.Subtitle2" />
 
-    <style name="CompassAttributeValue" parent="TextAppearance.Positional.Body1">
+    <style name="CompassAttributeValue" parent="TextAppearance.Positional.Caption">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="height_weight">0.8</item>
@@ -73,14 +70,16 @@
         <item name="autoSizeTextType">uniform</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
+        <item name="fontFamily">@font/oxygen_mono</item>
         <item name="height_weight">0.8</item>
     </style>
 
     <!-- Location -->
 
-    <style name="LocationCoordinate" parent="TextAppearance.Positional.Headline5">
+    <style name="LocationCoordinate">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
+        <item name="fontFamily">@font/oxygen_mono</item>
         <item name="height_weight">0.8</item>
     </style>
 
@@ -94,6 +93,13 @@
     <style name="LocationStatIcon">
         <item name="android:tintMode">src_in</item>
         <item name="android:tint">@color/colorOnSurface</item>
+    </style>
+
+    <style name="LocationStat" parent="TextAppearance.Positional.Headline5">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/loaderViewShimmer</item>
+        <item name="fontFamily">@font/oxygen_mono</item>
+        <item name="height_weight">0.8</item>
     </style>
 
     <style name="LocationStatRow">

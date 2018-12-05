@@ -121,7 +121,7 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/accuracyValueTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
@@ -161,7 +161,7 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/bearingValueTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
@@ -201,7 +201,7 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/elevationValueTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
@@ -241,7 +241,7 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/speedValueTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
@@ -281,7 +281,7 @@
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/timestampValueTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"

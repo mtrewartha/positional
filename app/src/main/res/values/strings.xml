@@ -43,7 +43,8 @@
     <string name="location_bearing">%d°</string>
     <string name="location_coordinate_decimal">% 10.5f</string>
     <string name="location_coordinate_utm">%7.0f</string>
-    <string name="location_coordinate_format_label_degrees_decimal">Degrees</string>
+    <string name="location_coordinate_format_label_decimal_degrees">Decimal Degrees</string>
+    <string name="location_coordinate_format_label_degrees_decimal_minutes">Degrees, Decimal Minutes</string>
     <string name="location_coordinate_format_label_degrees_minutes_seconds">Degrees, Minutes, Seconds</string>
     <string name="location_coordinate_format_label_mgrs">MGRS</string>
     <string name="location_coordinate_format_label_utm">UTM</string>

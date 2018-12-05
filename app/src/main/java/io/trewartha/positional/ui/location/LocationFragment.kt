@@ -131,9 +131,10 @@ class LocationFragment : LocationAwareFragment() {
     private fun getCoordinatesFragmentIndex(coordinatesFormat: CoordinatesFormat): Int {
         return when (coordinatesFormat) {
             CoordinatesFormat.DECIMAL -> 0
-            CoordinatesFormat.DMS -> 1
-            CoordinatesFormat.UTM -> 2
-            CoordinatesFormat.MGRS -> 3
+            CoordinatesFormat.DDM -> 1
+            CoordinatesFormat.DMS -> 2
+            CoordinatesFormat.UTM -> 3
+            CoordinatesFormat.MGRS -> 4
         }
     }
 
@@ -278,9 +279,10 @@ class LocationFragment : LocationAwareFragment() {
         override fun onPageSelected(position: Int) {
             coordinatesFormat = when (position) {
                 0 -> CoordinatesFormat.DECIMAL
-                1 -> CoordinatesFormat.DMS
-                2 -> CoordinatesFormat.UTM
-                3 -> CoordinatesFormat.MGRS
+                1 -> CoordinatesFormat.DDM
+                2 -> CoordinatesFormat.DMS
+                3 -> CoordinatesFormat.UTM
+                4 -> CoordinatesFormat.MGRS
                 else -> CoordinatesFormat.DECIMAL
             }
             setStringPreference(

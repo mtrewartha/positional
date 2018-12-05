@@ -16,7 +16,7 @@
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@id/longitudeTextView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="-100° 60' 60&quot;" />
+        tools:text="+100 100.0000" />
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/longitudeTextView"
@@ -24,19 +24,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="12dp"
-        android:gravity="top|center_horizontal"
+        android:gravity="center_horizontal|top"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
+        app:custom_color="@color/loaderViewShimmer"
         app:layout_constraintBottom_toTopOf="@id/formatLabelTextView"
         app:layout_constraintTop_toBottomOf="@id/latitudeTextView"
-        tools:text="-100° 60' 60&quot;" />
+        tools:text="+100 100.0000" />
 
     <TextView
         android:id="@+id/formatLabelTextView"
         style="@style/TextAppearance.Positional.Subtitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/location_coordinate_format_label_degrees_minutes_seconds"
+        android:text="@string/location_coordinate_format_label_decimal_degrees"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
