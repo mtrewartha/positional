@@ -15,7 +15,6 @@ import io.trewartha.positional.ui.location.LocationViewModel
 abstract class LocationAwareFragment : Fragment() {
 
     abstract val locationUpdateInterval: Long
-    abstract val locationUpdateMaxWaitTime: Long
     abstract val locationUpdatePriority: Int
 
     abstract fun onLocationChanged(location: Location?)
@@ -29,13 +28,13 @@ abstract class LocationAwareFragment : Fragment() {
             .location
         locationLiveData.updatePriority = locationUpdatePriority
         locationLiveData.updateInterval = locationUpdateInterval
-        locationLiveData.updateMaxWaitTime = locationUpdateMaxWaitTime
     }
 
     override fun onResume() {
         super.onResume()
-        if (haveLocationPermissions())
+        if (haveLocationPermissions()) {
             locationLiveData.observe(this, Observer<Location> { onLocationChanged(it) })
+        }
     }
 
     override fun onPause() {

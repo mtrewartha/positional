@@ -22,11 +22,9 @@ import kotlinx.android.synthetic.main.location_fragment.*
 import timber.log.Timber
 import java.util.*
 
-
 class LocationFragment : LocationAwareFragment() {
 
-    override val locationUpdateInterval = 5000L
-    override val locationUpdateMaxWaitTime = 10000L
+    override val locationUpdateInterval = 3_000L
     override val locationUpdatePriority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
     private var coordinatesFragments: MutableList<CoordinatesFragment> = LinkedList()
@@ -120,15 +118,14 @@ class LocationFragment : LocationAwareFragment() {
         if (location != null) updateLocationViews(location)
     }
 
-    private fun getCoordinatesFragmentIndex(coordinatesFormat: CoordinatesFormat): Int {
-        return when (coordinatesFormat) {
+    private fun getCoordinatesFragmentIndex(coordinatesFormat: CoordinatesFormat): Int =
+        when (coordinatesFormat) {
             CoordinatesFormat.DECIMAL -> 0
             CoordinatesFormat.DDM -> 1
             CoordinatesFormat.DMS -> 2
             CoordinatesFormat.UTM -> 3
             CoordinatesFormat.MGRS -> 4
         }
-    }
 
     private fun lockScreen(lock: Boolean) {
         activity?.window?.apply {

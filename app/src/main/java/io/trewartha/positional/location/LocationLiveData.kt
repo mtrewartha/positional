@@ -11,7 +11,6 @@ import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.metrics.Trace
 import timber.log.Timber
 
-
 class LocationLiveData(context: Context) : LiveData<Location>() {
 
     private val locationCallback = LocationCallback()
@@ -19,8 +18,7 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
 
     private var firstLocationUpdateTrace: Trace? = null
 
-    var updateInterval = 5000L
-    var updateMaxWaitTime = 10000L
+    var updateInterval = 10_000L
     var updatePriority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
     override fun onActive() {
@@ -32,20 +30,15 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
         try {
             val locationRequest = LocationRequest.create()
                 .setPriority(updatePriority)
-                .setMaxWaitTime(updateMaxWaitTime)
                 .setInterval(updateInterval)
-                .setFastestInterval(updateInterval)
             Timber.i("Requesting location updates: $locationRequest")
             locationClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
                 Looper.getMainLooper()
             )
-        } catch (securityException: SecurityException) {
-            Timber.w(
-                securityException,
-                "Don't have location permissions, no location updates will be received"
-            )
+        } catch (e: SecurityException) {
+            Timber.w(e, "Don't have location permissions, no location updates will be received")
         }
     }
 
@@ -57,7 +50,6 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
     private inner class LocationCallback : com.google.android.gms.location.LocationCallback() {
 
         override fun onLocationResult(locationResult: LocationResult?) {
-            super.onLocationResult(locationResult)
             val location = locationResult?.lastLocation
             value = location
 
@@ -69,14 +61,12 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
             }
         }
 
-        private fun getAccuracyLevelCounter(accuracy: Float): String {
-            return when (accuracy) {
-                in 0.0f.rangeTo(5.0f) -> COUNTER_ACCURACY_VERY_HIGH
-                in 5.0f.rangeTo(10.0f) -> COUNTER_ACCURACY_HIGH
-                in 10.0f.rangeTo(15.0f) -> COUNTER_ACCURACY_MEDIUM
-                in 15.0f.rangeTo(20.0f) -> COUNTER_ACCURACY_LOW
-                else -> COUNTER_ACCURACY_VERY_LOW
-            }
+        private fun getAccuracyLevelCounter(accuracy: Float): String = when (accuracy) {
+            in 0.0f.rangeTo(5.0f) -> COUNTER_ACCURACY_VERY_HIGH
+            in 5.0f.rangeTo(10.0f) -> COUNTER_ACCURACY_HIGH
+            in 10.0f.rangeTo(15.0f) -> COUNTER_ACCURACY_MEDIUM
+            in 15.0f.rangeTo(20.0f) -> COUNTER_ACCURACY_LOW
+            else -> COUNTER_ACCURACY_VERY_LOW
         }
     }
 
