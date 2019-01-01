@@ -25,11 +25,9 @@ import java.util.*
 
 class LocationFragment : LocationAwareFragment() {
 
-    companion object {
-        private const val LOCATION_UPDATE_INTERVAL = 5000L // ms
-        private const val LOCATION_UPDATE_MAX_WAIT_TIME = 10000L // ms
-        private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
-    }
+    override val locationUpdateInterval = 5000L
+    override val locationUpdateMaxWaitTime = 10000L
+    override val locationUpdatePriority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
     private var coordinatesFragments: MutableList<CoordinatesFragment> = LinkedList()
 
@@ -121,12 +119,6 @@ class LocationFragment : LocationAwareFragment() {
         this.location = location
         if (location != null) updateLocationViews(location)
     }
-
-    override fun getLocationUpdateInterval(): Long = LOCATION_UPDATE_INTERVAL
-
-    override fun getLocationUpdateMaxWaitTime(): Long = LOCATION_UPDATE_MAX_WAIT_TIME
-
-    override fun getLocationUpdatePriority(): Int = LOCATION_UPDATE_PRIORITY
 
     private fun getCoordinatesFragmentIndex(coordinatesFormat: CoordinatesFormat): Int {
         return when (coordinatesFormat) {

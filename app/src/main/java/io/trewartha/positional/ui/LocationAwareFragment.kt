@@ -3,9 +3,9 @@ package io.trewartha.positional.ui
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
-import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,33 +14,28 @@ import io.trewartha.positional.ui.location.LocationViewModel
 
 abstract class LocationAwareFragment : Fragment() {
 
-    protected var lastLocation: Location? = null
-
-    private lateinit var locationLiveData: LocationLiveData
+    abstract val locationUpdateInterval: Long
+    abstract val locationUpdateMaxWaitTime: Long
+    abstract val locationUpdatePriority: Int
 
     abstract fun onLocationChanged(location: Location?)
-    abstract fun getLocationUpdateInterval(): Long
-    abstract fun getLocationUpdateMaxWaitTime(): Long
-    abstract fun getLocationUpdatePriority(): Int
+
+    private lateinit var locationLiveData: LocationLiveData
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         locationLiveData = ViewModelProviders.of(this)
-                .get(LocationViewModel::class.java)
-                .location
-        locationLiveData.updatePriority = getLocationUpdatePriority()
-        locationLiveData.updateInterval = getLocationUpdateInterval()
-        locationLiveData.updateMaxWaitTime = getLocationUpdateMaxWaitTime()
+            .get(LocationViewModel::class.java)
+            .location
+        locationLiveData.updatePriority = locationUpdatePriority
+        locationLiveData.updateInterval = locationUpdateInterval
+        locationLiveData.updateMaxWaitTime = locationUpdateMaxWaitTime
     }
 
     override fun onResume() {
         super.onResume()
-        if (haveLocationPermissions()) {
-            locationLiveData.observe(this, Observer<Location> {
-                lastLocation = it
-                onLocationChanged(it)
-            })
-        }
+        if (haveLocationPermissions())
+            locationLiveData.observe(this, Observer<Location> { onLocationChanged(it) })
     }
 
     override fun onPause() {
@@ -48,11 +43,7 @@ abstract class LocationAwareFragment : Fragment() {
         locationLiveData.removeObservers(this)
     }
 
-    private fun haveLocationPermissions(): Boolean {
-        val context = context ?: return false
-        return arrayOf(
-                ActivityCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION),
-                ActivityCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION)
-        ).all { it == PackageManager.PERMISSION_GRANTED }
-    }
+    private fun haveLocationPermissions(): Boolean =
+        checkSelfPermission(requireContext(), ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
+                && checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
 }
