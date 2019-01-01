@@ -58,7 +58,7 @@ repositories {
 
 ext {
     // Dependency Versions
-    lifecycleVersion = '2.0.0'
+    lifecycleVersion = '2.1.0-alpha01'
 }
 
 dependencies {
