@@ -12,16 +12,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.trewartha.positional.R
 import io.trewartha.positional.compass.CompassMode
+import io.trewartha.positional.ui.MainViewModel
 import kotlinx.android.synthetic.main.compass_fragment.*
 import kotlin.math.roundToInt
 
 class CompassFragment : Fragment() {
 
-    private lateinit var viewModel: CompassViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = ViewModelProviders.of(this).get(CompassViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -41,7 +42,7 @@ class CompassFragment : Fragment() {
                     .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
                     .show()
             } else {
-                compassLiveData.observe(this@CompassFragment, Observer {
+                compass.observe(this@CompassFragment, Observer {
                     it.azimuth?.let { azimuth ->
                         backgroundCompassView.rotationUpdate(360f - azimuth, true)
                         needleCompassView.rotationUpdate(360f - azimuth, true)

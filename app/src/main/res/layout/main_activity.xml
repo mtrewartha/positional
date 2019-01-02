@@ -8,12 +8,15 @@
     android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
-    <io.trewartha.positional.ui.UndraggableViewPager
-        android:id="@+id/viewPager"
+    <fragment
+        android:id="@+id/navHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:elevation="0dp" />
+        android:elevation="0dp"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

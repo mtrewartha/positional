@@ -59,12 +59,15 @@ repositories {
 ext {
     // Dependency Versions
     lifecycleVersion = '2.1.0-alpha01'
+    navigationVersion = '1.0.0-alpha09'
 }
 
 dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.fragment:fragment-ktx:1.1.0-alpha03'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"

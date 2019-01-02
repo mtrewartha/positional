@@ -6,12 +6,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import io.trewartha.positional.R
 import kotlinx.android.synthetic.main.main_activity.*
 import timber.log.Timber
@@ -29,9 +29,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
         setContentView(R.layout.main_activity)
 
-        viewPager.adapter = MainFragmentPagerAdapter(supportFragmentManager)
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(NavigationItemSelectedListener())
+        bottomNavigationView.setupWithNavController(findNavController(R.id.navHost))
     }
 
     override fun onStart() {
@@ -88,19 +86,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
             permissions.toTypedArray(),
             REQUEST_CODE_PERMISSIONS
         )
-    }
-
-    private inner class NavigationItemSelectedListener :
-        BottomNavigationView.OnNavigationItemSelectedListener {
-
-        override fun onNavigationItemSelected(item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.positionNavMenuItem -> viewPager.currentItem = 0
-                R.id.compassNavMenuItem -> viewPager.currentItem = 1
-                R.id.settingsNavMenuItem -> viewPager.currentItem = 2
-            }
-            return true
-        }
     }
 
     private inner class ThemeModeObserver : Observer<ThemeMode> {

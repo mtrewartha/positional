@@ -1,13 +1,19 @@
 package io.trewartha.positional.ui.location
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.*
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.location.LocationRequest
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -15,19 +21,14 @@ import com.google.android.material.snackbar.Snackbar
 import io.trewartha.positional.R
 import io.trewartha.positional.location.CoordinatesFormat
 import io.trewartha.positional.location.LocationFormatter
-import io.trewartha.positional.ui.LocationAwareFragment
+import io.trewartha.positional.ui.MainViewModel
 import io.trewartha.positional.ui.location.coordinates.CoordinatesFragment
 import io.trewartha.positional.ui.location.coordinates.CoordinatesFragmentPagerAdapter
 import kotlinx.android.synthetic.main.location_fragment.*
 import timber.log.Timber
 import java.util.*
 
-class LocationFragment : LocationAwareFragment() {
-
-    override val locationUpdateInterval = 3_000L
-    override val locationUpdatePriority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
-    private var coordinatesFragments: MutableList<CoordinatesFragment> = LinkedList()
+class LocationFragment : Fragment() {
 
     private lateinit var coordinatesFormat: CoordinatesFormat
     private lateinit var locationFormatter: LocationFormatter
@@ -36,13 +37,16 @@ class LocationFragment : LocationAwareFragment() {
     private lateinit var sharedPreferencesUnitsKey: String
     private lateinit var sharedPreferencesUnitsImperial: String
     private lateinit var sharedPreferencesUnitsMetric: String
+    private lateinit var viewModel: MainViewModel
 
+    private var coordinatesFragments: MutableList<CoordinatesFragment> = LinkedList()
     private var location: Location? = null
     private var screenLock: Boolean = false
     private var useMetricUnits: Boolean = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         locationFormatter = LocationFormatter(context)
         preferenceChangeListener = PreferenceChangeListener()
         sharedPreferences = context.getSharedPreferences(
@@ -52,6 +56,12 @@ class LocationFragment : LocationAwareFragment() {
         sharedPreferencesUnitsKey = context.getString(R.string.settings_units_key)
         sharedPreferencesUnitsImperial = context.getString(R.string.settings_units_imperial_value)
         sharedPreferencesUnitsMetric = context.getString(R.string.settings_units_metric_value)
+        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java).apply {
+            location.apply {
+                updatePriority = LOCATION_UPDATE_PRIORITY
+                updateInterval = LOCATION_UPDATE_INTERVAL
+            }
+        }
     }
 
     override fun onCreateView(
@@ -63,10 +73,9 @@ class LocationFragment : LocationAwareFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        copyButton.setOnClickListener { onCopyClicked() }
-        shareButton.setOnClickListener { onShareClicked() }
-
-        screenLockButton.setOnClickListener { onScreenLockClicked() }
+        copyButton.setOnClickListener(::onCopyClick)
+        screenLockButton.setOnClickListener(::onScreenLockClick)
+        shareButton.setOnClickListener(::onShareClick)
 
         useMetricUnits = try {
             sharedPreferences.getString(
@@ -88,10 +97,7 @@ class LocationFragment : LocationAwareFragment() {
         lockScreen(screenLock)
 
         coordinatesViewPager.apply {
-            val coordinatesPagerAdapter =
-                CoordinatesFragmentPagerAdapter(
-                    childFragmentManager
-                )
+            val coordinatesPagerAdapter = CoordinatesFragmentPagerAdapter(childFragmentManager)
             adapter = coordinatesPagerAdapter
             offscreenPageLimit = coordinatesPagerAdapter.count
             setCurrentItem(getCoordinatesFragmentIndex(coordinatesFormat), true)
@@ -108,14 +114,21 @@ class LocationFragment : LocationAwareFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (haveLocationPermissions()) {
+            viewModel.location.observe(this, Observer<Location> { onLocationChanged(it) })
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.location.removeObservers(this)
+    }
+
     override fun onDestroyView() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
         super.onDestroyView()
-    }
-
-    override fun onLocationChanged(location: Location?) {
-        this.location = location
-        if (location != null) updateLocationViews(location)
     }
 
     private fun getCoordinatesFragmentIndex(coordinatesFormat: CoordinatesFormat): Int =
@@ -127,6 +140,10 @@ class LocationFragment : LocationAwareFragment() {
             CoordinatesFormat.MGRS -> 4
         }
 
+    private fun haveLocationPermissions(): Boolean =
+        checkSelfPermission(requireContext(), ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
+                && checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
+
     private fun lockScreen(lock: Boolean) {
         activity?.window?.apply {
             if (lock)
@@ -136,7 +153,7 @@ class LocationFragment : LocationAwareFragment() {
         }
     }
 
-    private fun onCopyClicked() {
+    private fun onCopyClick(@Suppress("UNUSED_PARAMETER") view: View) {
         val context = context ?: return
         val location = location
 
@@ -156,8 +173,6 @@ class LocationFragment : LocationAwareFragment() {
             setContentView(R.layout.coordinates_copy_fragment)
         }
 
-        val coordinatesCopier = CoordinatesCopier(location) { bottomSheetDialog.dismiss() }
-
         val bothTextView = bottomSheetDialog.findViewById<View>(R.id.coordinatesCopyBothTextView)
         val latitudeTextView = bottomSheetDialog
             .findViewById<View>(R.id.coordinatesCopyLatitudeTextView)
@@ -173,14 +188,21 @@ class LocationFragment : LocationAwareFragment() {
             return
         }
 
-        bothTextView.setOnClickListener(coordinatesCopier)
-        latitudeTextView.setOnClickListener(coordinatesCopier)
-        longitudeTextView.setOnClickListener(coordinatesCopier)
+        CoordinatesCopier(location) { bottomSheetDialog.dismiss() }.let {
+            bothTextView.setOnClickListener(it)
+            latitudeTextView.setOnClickListener(it)
+            longitudeTextView.setOnClickListener(it)
+        }
 
         bottomSheetDialog.show()
     }
 
-    private fun onScreenLockClicked() {
+    private fun onLocationChanged(location: Location?) {
+        this.location = location
+        if (location != null) updateLocationViews(location)
+    }
+
+    private fun onScreenLockClick(@Suppress("UNUSED_PARAMETER") view: View) {
         screenLock = !screenLock
         screenLockButton.setIconResource(
             if (screenLock)
@@ -197,7 +219,7 @@ class LocationFragment : LocationAwareFragment() {
         Snackbar.make(coordinatorLayout, textRes, Snackbar.LENGTH_LONG).show()
     }
 
-    private fun onShareClicked() {
+    private fun onShareClick(@Suppress("UNUSED_PARAMETER") view: View) {
         val safeLocation = location
         if (safeLocation == null) {
             Snackbar.make(
@@ -343,5 +365,10 @@ class LocationFragment : LocationAwareFragment() {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val LOCATION_UPDATE_INTERVAL = 3_000L
+        private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 }
