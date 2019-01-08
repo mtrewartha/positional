@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -113,7 +114,7 @@
 
                 <TextView
                     android:id="@+id/accuracyLabelTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStatLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -153,7 +154,7 @@
 
                 <TextView
                     android:id="@+id/bearingLabelTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStatLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -193,7 +194,7 @@
 
                 <TextView
                     android:id="@+id/elevationLabelTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStatLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -233,7 +234,7 @@
 
                 <TextView
                     android:id="@+id/speedLabelTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
+                    style="@style/LocationStatLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -259,36 +260,17 @@
                 android:padding="@dimen/activity_horizontal_margin" />
 
             <!-- Timestamp -->
-            <LinearLayout
-                style="@style/LocationStatRow"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/LocationStatIcon"
-                    android:layout_width="@dimen/stat_image_size"
-                    android:layout_height="@dimen/stat_image_size"
-                    android:layout_marginEnd="20dp"
-                    android:contentDescription="@string/location_label_timestamp"
-                    android:src="@drawable/ic_twotone_access_time_24px" />
-
-                <TextView
-                    android:id="@+id/timestampLabelTextView"
-                    style="@style/TextAppearance.Positional.Headline5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/location_label_timestamp" />
+            <FrameLayout style="@style/LocationStatRow">
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
-                    android:id="@+id/timestampValueTextView"
-                    style="@style/LocationStat"
+                    android:id="@+id/timestampTextView"
+                    style="@style/LocationUpdatedAt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:gravity="end"
-                    android:minWidth="96dp" />
+                    android:layout_gravity="center"
+                    tools:text="Updated at 12:59:59 PM" />
 
-            </LinearLayout>
+            </FrameLayout>
 
         </LinearLayout>
 

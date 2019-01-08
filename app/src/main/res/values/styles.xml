@@ -95,7 +95,12 @@
         <item name="android:tint">@color/colorOnSurface</item>
     </style>
 
-    <style name="LocationStat" parent="TextAppearance.Positional.Headline5">
+    <style name="LocationStatLabel" parent="@style/TextAppearance.Positional.Headline6">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="LocationStat" parent="TextAppearance.Positional.Headline6">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="fontFamily">@font/ubuntu_mono</item>
@@ -117,6 +122,12 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Body2">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/loaderViewShimmer</item>
+        <item name="height_weight">0.8</item>
     </style>
 
     <!-- Text Appearance -->

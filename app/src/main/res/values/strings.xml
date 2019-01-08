@@ -64,7 +64,6 @@
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_elevation">Elevation</string>
     <string name="location_label_speed">Speed</string>
-    <string name="location_label_timestamp">Time</string>
     <string name="location_permission_explanation_title">Location Permission Needed</string>
     <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through the Settings app before using this app.</string>
     <string name="location_permission_explanation_positive">Go to Settings</string>
@@ -76,6 +75,7 @@
     <string name="location_speed_imperial">%.0f mph</string>
     <string name="location_speed_metric">%.0f km/h</string>
     <string name="location_value_unknown">@string/dash</string>
+    <string name="location_updated_at">Updated at %s</string>
 
 
     <!-- Settings -->

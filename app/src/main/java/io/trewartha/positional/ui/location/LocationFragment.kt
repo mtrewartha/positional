@@ -249,7 +249,7 @@ class LocationFragment : Fragment() {
         bearingValueTextView.text = locationFormatter.getBearing(location)
         elevationValueTextView.text = locationFormatter.getElevation(location, useMetricUnits)
         speedValueTextView.text = locationFormatter.getSpeed(location, useMetricUnits)
-        timestampValueTextView.text = locationFormatter.getTimestamp(location)
+        timestampTextView.text = getString(R.string.location_updated_at, locationFormatter.getTimestamp(location))
     }
 
     private fun setBooleanPreference(key: String, value: Boolean) {
