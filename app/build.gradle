@@ -27,7 +27,7 @@ android {
         targetSdkVersion 28
 
         versionCode gitCountMaster.isEmpty() ? 1337 : Integer.parseInt(gitCountMaster)
-        versionName "2.12.1.$versionCode"
+        versionName "2.12.2.$versionCode"
     }
     buildTypes {
         debug {
