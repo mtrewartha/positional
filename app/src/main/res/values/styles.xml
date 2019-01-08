@@ -70,7 +70,7 @@
         <item name="autoSizeTextType">uniform</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="fontFamily">@font/oxygen_mono</item>
+        <item name="fontFamily">@font/ubuntu_mono</item>
         <item name="height_weight">0.8</item>
     </style>
 
@@ -79,7 +79,7 @@
     <style name="LocationCoordinate">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="fontFamily">@font/oxygen_mono</item>
+        <item name="fontFamily">@font/ubuntu_mono</item>
         <item name="height_weight">0.8</item>
     </style>
 
@@ -98,7 +98,7 @@
     <style name="LocationStat" parent="TextAppearance.Positional.Headline5">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="fontFamily">@font/oxygen_mono</item>
+        <item name="fontFamily">@font/ubuntu_mono</item>
         <item name="height_weight">0.8</item>
     </style>
 

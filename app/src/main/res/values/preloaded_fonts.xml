@@ -2,6 +2,6 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/basic</item>
-        <item>@font/oxygen_mono</item>
+        <item>@font/ubuntu_mono</item>
     </array>
 </resources>
