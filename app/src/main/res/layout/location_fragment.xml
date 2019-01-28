@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -250,28 +249,16 @@
 
             </LinearLayout>
 
-            <include
-                layout="@layout/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:padding="@dimen/activity_horizontal_margin" />
-
-            <!-- Timestamp -->
-            <FrameLayout style="@style/LocationStatRow">
-
-                <com.elyeproj.loaderviewlibrary.LoaderTextView
-                    android:id="@+id/timestampTextView"
-                    style="@style/LocationUpdatedAt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    tools:text="Updated at 12:59:59 PM" />
-
-            </FrameLayout>
-
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/updatedAtTextView"
+            style="@style/LocationUpdatedAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/location_updating" />
 
     </LinearLayout>
 

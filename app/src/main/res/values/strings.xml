@@ -11,6 +11,7 @@
     <!-- Bottom Navigation -->
     <string name="bottom_navigation_compass">Compass</string>
     <string name="bottom_navigation_location">Location</string>
+    <string name="bottom_navigation_sun">Sun</string>
     <string name="bottom_navigation_settings">Settings</string>
 
 
@@ -76,7 +77,33 @@
     <string name="location_speed_metric">%.0f km/h</string>
     <string name="location_value_unknown">@string/dash</string>
     <string name="location_updated_at">Updated at %s</string>
+    <string name="location_updating">Device is acquiring location…</string>
 
+    <!-- Sun -->
+    <string name="sun_label">Sun</string>
+    <string name="sun_astronomical_content_description_dawn">Astronomical dawn</string>
+    <string name="sun_astronomical_content_description_dusk">Astronomical dusk</string>
+    <string name="sun_astronomical_label">Astronomical</string>
+    <string name="sun_astronomical_tooltip_dawn">Astronomical dawn is the morning moment when the sun\'s center is 18° below the horizon.</string>
+    <string name="sun_astronomical_tooltip_dusk">Astronomical dusk is the evening moment when the sun\'s center is 18° below the horizon.</string>
+    <string name="sun_civil_content_description_dawn">Civil dawn</string>
+    <string name="sun_civil_content_description_dusk">Civil dusk</string>
+    <string name="sun_civil_label">Civil</string>
+    <string name="sun_civil_tooltip_dawn">Civil dawn is the morning moment when the sun\'s center is 6° below the horizon.</string>
+    <string name="sun_civil_tooltip_dusk">Civil dusk is the evening moment when the sun\'s center is 6° below the horizon.</string>
+    <string name="sun_dawn_label">Dawn</string>
+    <string name="sun_dusk_label">Dusk</string>
+    <string name="sun_nautical_content_description_dawn">Nautical dawn</string>
+    <string name="sun_nautical_content_description_dusk">Nautical dusk</string>
+    <string name="sun_nautical_label">Nautical</string>
+    <string name="sun_nautical_tooltip_dawn">Nautical dawn is the morning moment when the sun\'s center is 12° below the horizon.</string>
+    <string name="sun_nautical_tooltip_dusk">Nautical dusk is the evening moment when the sun\'s center is 12° below the horizon.</string>
+    <string name="sun_sunrise_label">Sunrise</string>
+    <string name="sun_sunrise_tooltip">Sunrise is the morning moment when the sun\'s center is visible on the horizon.</string>
+    <string name="sun_sunset_label">Sunset</string>
+    <string name="sun_sunset_tooltip">Sunset is the evening moment when the sun\'s center is no longer visible on the horizon.</string>
+    <string name="sun_date_unknown">@string/dash</string>
+    <string name="sun_time_unknown">@string/dash</string>
 
     <!-- Settings -->
     <string name="settings_compass_mode_dialog_title">Compass Mode</string>
@@ -98,6 +125,7 @@
     <string name="settings_theme_mode_auto_value">auto</string>
     <string name="settings_theme_mode_day_label">Day</string>
     <string name="settings_theme_mode_day_value">day</string>
+    <string name="settings_theme_mode_dialog_title">@string/settings_theme_mode_title</string>
     <string name="settings_theme_mode_key">themeMode</string>
     <string name="settings_theme_mode_title">Theme</string>
     <string name="settings_theme_mode_night_label">Night</string>
@@ -109,5 +137,12 @@
     <string name="settings_units_metric_label">Metric</string>
     <string name="settings_units_metric_value">metric</string>
     <string name="settings_units_title">Units of measurement</string>
+    <string name="settings_time_format_dialog_title">Time Format</string>
+    <string name="settings_time_format_key">timeFormat</string>
+    <string name="settings_time_format_title">Time format</string>
+    <string name="settings_time_format_12hr_label">12-hour</string>
+    <string name="settings_time_format_12hr_value">12hr</string>
+    <string name="settings_time_format_24hr_label">24-hour</string>
+    <string name="settings_time_format_24hr_value">24hr</string>
 
 </resources>

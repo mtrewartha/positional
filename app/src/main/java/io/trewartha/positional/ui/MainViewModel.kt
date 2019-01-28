@@ -11,10 +11,11 @@ import io.trewartha.positional.R
 import io.trewartha.positional.common.SharedPreferenceStringLiveData
 import io.trewartha.positional.compass.CompassLiveData
 import io.trewartha.positional.location.LocationLiveData
+import io.trewartha.positional.sun.SunLiveData
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    val compass by lazy { CompassLiveData(getApplication()) }
+    val compassViewData by lazy { CompassLiveData(getApplication()) }
 
     val deviceHasAccelerometer by lazy {
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
@@ -25,6 +26,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     val location by lazy { LocationLiveData(getApplication()) }
+
+    val sunViewData by lazy { SunLiveData(getApplication()) }
 
     val themeMode: LiveData<ThemeMode> by lazy {
         Transformations.map(themeModePreferenceLiveData) { ThemeMode.valueOf(it.toUpperCase()) }

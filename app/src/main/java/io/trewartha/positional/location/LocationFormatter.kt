@@ -7,11 +7,13 @@ import gov.nasa.worldwind.geom.coords.MGRSCoord
 import gov.nasa.worldwind.geom.coords.UTMCoord
 import io.trewartha.positional.R
 import io.trewartha.positional.location.CoordinatesFormat.*
-import java.text.SimpleDateFormat
+import io.trewartha.positional.ui.utils.DateTimeFormatter
+import org.threeten.bp.Instant
 import java.util.*
 
 class LocationFormatter(context: Context) {
 
+    private val dateTimeFormatter by lazy { DateTimeFormatter(context) }
     private val formatAccuracyImperial by lazy { context.getString(R.string.location_accuracy_imperial) }
     private val formatAccuracyMetric by lazy { context.getString(R.string.location_accuracy_metric) }
     private val formatBearing by lazy { context.getString(R.string.location_bearing) }
@@ -22,7 +24,6 @@ class LocationFormatter(context: Context) {
     private val formatSpeedImperial by lazy { context.getString(R.string.location_speed_imperial) }
     private val formatSpeedMetric by lazy { context.getString(R.string.location_speed_metric) }
     private val locationValueUnknown by lazy { context.getString(R.string.location_value_unknown) }
-    private val simpleDateFormat by lazy { SimpleDateFormat.getTimeInstance() }
 
     fun getAccuracy(
         location: Location?,
@@ -230,7 +231,8 @@ class LocationFormatter(context: Context) {
     fun getTimestamp(location: Location?): String = if (location == null || location.time == 0L) {
         locationValueUnknown
     } else {
-        simpleDateFormat.format(Date(location.time))
+        dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(location.time), true)
+            ?: locationValueUnknown
     }
 
     private fun replaceDelimiters(string: String): String = string

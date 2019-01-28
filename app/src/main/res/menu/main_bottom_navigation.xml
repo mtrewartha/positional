@@ -17,6 +17,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/sun"
+        android:enabled="true"
+        android:icon="@drawable/ic_twotone_wb_sunny_24px"
+        android:title="@string/bottom_navigation_sun"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/settings"
         android:enabled="true"
         android:icon="@drawable/ic_twotone_settings_24px"

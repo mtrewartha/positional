@@ -42,7 +42,7 @@ class CompassFragment : Fragment() {
                     .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
                     .show()
             } else {
-                compass.observe(this@CompassFragment, Observer {
+                compassViewData.observe(this@CompassFragment, Observer {
                     it.azimuth?.let { azimuth ->
                         backgroundCompassView.rotationUpdate(360f - azimuth, true)
                         needleCompassView.rotationUpdate(360f - azimuth, true)
