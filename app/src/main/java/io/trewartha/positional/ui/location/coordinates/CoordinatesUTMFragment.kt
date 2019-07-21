@@ -19,14 +19,21 @@ class CoordinatesUTMFragment : CoordinatesFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.coordinates_utm_fragment, container, false)
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
-        zoneTextView?.text = locationFormatter.getUtmZone(latitude, longitude)
-        eastingTextView?.text = locationFormatter.getUtmEasting(latitude, longitude)
-        northingTextView?.text = locationFormatter.getUtmNorthing(latitude, longitude)
+        coordinatesTextView.text = String.format(
+                COORDINATES_FORMAT,
+                locationFormatter.getUtmZone(latitude, longitude),
+                locationFormatter.getUtmEasting(latitude, longitude),
+                locationFormatter.getUtmNorthing(latitude, longitude)
+        )
+    }
+
+    companion object {
+        private const val COORDINATES_FORMAT = "%s\n%s\n%s"
     }
 }

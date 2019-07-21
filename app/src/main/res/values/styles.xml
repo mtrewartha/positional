@@ -75,7 +75,7 @@
 
     <!-- Location -->
 
-    <style name="LocationCoordinate">
+    <style name="LocationCoordinates">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="fontFamily">@font/ubuntu_mono</item>
@@ -149,7 +149,6 @@
         <item name="android:gravity">end</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="fontFamily">@font/ubuntu_mono</item>
         <item name="height_weight">0.8</item>
         <item name="android:minWidth">96dp</item>
     </style>

@@ -7,30 +7,17 @@
     android:layout_height="match_parent">
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
-        android:id="@+id/latitudeTextView"
-        style="@style/LocationCoordinate"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="bottom|center_horizontal"
-        android:maxLines="1"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toTopOf="@id/longitudeTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="+100.00000" />
-
-    <com.elyeproj.loaderviewlibrary.LoaderTextView
-        android:id="@+id/longitudeTextView"
-        style="@style/LocationCoordinate"
+        android:id="@+id/coordinatesTextView"
+        style="@style/LocationCoordinates"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="12dp"
-        android:gravity="center_horizontal|top"
-        android:maxLines="1"
+        android:gravity="center"
+        android:maxLines="2"
         app:autoSizeTextType="uniform"
-        app:custom_color="@color/loaderViewShimmer"
         app:layout_constraintBottom_toTopOf="@id/formatLabelTextView"
-        app:layout_constraintTop_toBottomOf="@id/latitudeTextView"
-        tools:text="+100.00000" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text=" 90° 10.00000\n180° 10.00000" />
 
     <TextView
         android:id="@+id/formatLabelTextView"

@@ -19,17 +19,24 @@ class CoordinatesDegreesMinutesSecondsFragment : CoordinatesFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View = inflater.inflate(
-        R.layout.coordinates_degrees_minutes_seconds_fragment,
-        container,
-        false
+            R.layout.coordinates_degrees_minutes_seconds_fragment,
+            container,
+            false
     )
 
     override fun setCoordinates(latitude: Double, longitude: Double) {
-        latitudeTextView?.text = locationFormatter.getDmsLatitude(latitude)
-        longitudeTextView?.text = locationFormatter.getDmsLongitude(longitude)
+        coordinatesTextView.text = String.format(
+                COORDINATES_FORMAT,
+                locationFormatter.getDmsLatitude(latitude),
+                locationFormatter.getDmsLongitude(longitude)
+        )
+    }
+
+    companion object {
+        private const val COORDINATES_FORMAT = "%s\n%s"
     }
 }

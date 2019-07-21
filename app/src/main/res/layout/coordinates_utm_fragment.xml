@@ -7,42 +7,17 @@
     android:layout_height="match_parent">
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
-        android:id="@+id/zoneTextView"
-        style="@style/LocationCoordinate"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="bottom|center_horizontal"
-        android:maxLines="1"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toTopOf="@id/eastingTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="10N" />
-
-    <com.elyeproj.loaderviewlibrary.LoaderTextView
-        android:id="@+id/eastingTextView"
-        style="@style/LocationCoordinate"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:maxLines="1"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toTopOf="@id/northingTextView"
-        app:layout_constraintTop_toBottomOf="@id/zoneTextView"
-        tools:text="1234567m E" />
-
-    <com.elyeproj.loaderviewlibrary.LoaderTextView
-        android:id="@+id/northingTextView"
-        style="@style/LocationCoordinate"
+        android:id="@+id/coordinatesTextView"
+        style="@style/LocationCoordinates"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="12dp"
-        android:gravity="top|center_horizontal"
-        android:maxLines="1"
+        android:gravity="center"
+        android:maxLines="3"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@id/formatLabelTextView"
-        app:layout_constraintTop_toBottomOf="@id/eastingTextView"
-        tools:text="1234567m N" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="10N\n1234567m E\n1234567m N" />
 
     <com.elyeproj.loaderviewlibrary.LoaderTextView
         android:id="@+id/formatLabelTextView"

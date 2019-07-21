@@ -26,8 +26,8 @@ class LocationFormatter(context: Context) {
     private val locationValueUnknown by lazy { context.getString(R.string.location_value_unknown) }
 
     fun getAccuracy(
-        location: Location?,
-        metric: Boolean
+            location: Location?,
+            metric: Boolean
     ): String = if (location == null || !location.hasAccuracy()) {
         locationValueUnknown
     } else {
@@ -43,7 +43,7 @@ class LocationFormatter(context: Context) {
     }
 
     fun getBearing(
-        location: Location?
+            location: Location?
     ): String = if (location == null || !location.hasBearing()) {
         locationValueUnknown
     } else {
@@ -52,12 +52,12 @@ class LocationFormatter(context: Context) {
     }
 
     fun getDecimalLatitude(latitude: Double) = String
-        .format(Locale.getDefault(), formatCoordinateDecimal, latitude)
-        .padStart(10)
+            .format(Locale.getDefault(), formatCoordinateDecimal, latitude)
+            .padStart(10)
 
     fun getDecimalLongitude(longitude: Double) = String
-        .format(Locale.getDefault(), formatCoordinateDecimal, longitude)
-        .padStart(10)
+            .format(Locale.getDefault(), formatCoordinateDecimal, longitude)
+            .padStart(10)
 
     fun getDegreesAndDecimalMinutesLatitude(latitude: Double): String {
         var latitudeDM = Location.convert(latitude, Location.FORMAT_MINUTES)
@@ -104,8 +104,8 @@ class LocationFormatter(context: Context) {
     }
 
     fun getElevation(
-        location: Location?,
-        metric: Boolean
+            location: Location?,
+            metric: Boolean
     ): String = if (location == null || !location.hasAltitude()) {
         locationValueUnknown
     } else {
@@ -129,9 +129,9 @@ class LocationFormatter(context: Context) {
     fun getUtmEasting(latitude: Double, longitude: Double): String {
         val utmCoordinate = getUtmCoordinate(latitude, longitude)
         return "${String.format(
-            Locale.getDefault(),
-            formatCoordinateUtm,
-            utmCoordinate.easting
+                Locale.getDefault(),
+                formatCoordinateUtm,
+                utmCoordinate.easting
         )}m E"
     }
 
@@ -162,9 +162,9 @@ class LocationFormatter(context: Context) {
     fun getUtmNorthing(latitude: Double, longitude: Double): String {
         val utmCoordinate = getUtmCoordinate(latitude, longitude)
         return "${String.format(
-            Locale.getDefault(),
-            formatCoordinateUtm,
-            utmCoordinate.northing
+                Locale.getDefault(),
+                formatCoordinateUtm,
+                utmCoordinate.northing
         )}m N"
     }
 
@@ -175,15 +175,15 @@ class LocationFormatter(context: Context) {
     }
 
     private fun getUtmCoordinate(latitude: Double, longitude: Double): UTMCoord = UTMCoord
-        .fromLatLon(
-            Angle.fromDegreesLatitude(latitude),
-            Angle.fromDegreesLongitude(longitude)
-        )
+            .fromLatLon(
+                    Angle.fromDegreesLatitude(latitude),
+                    Angle.fromDegreesLongitude(longitude)
+            )
 
     fun getCoordinates(
-        latitude: Double,
-        longitude: Double,
-        coordinatesFormat: CoordinatesFormat
+            latitude: Double,
+            longitude: Double,
+            coordinatesFormat: CoordinatesFormat
     ): String = when (coordinatesFormat) {
         DECIMAL -> {
             val latitudeText = getDecimalLatitude(latitude)
@@ -212,8 +212,8 @@ class LocationFormatter(context: Context) {
     }
 
     fun getSpeed(
-        location: Location?,
-        metric: Boolean
+            location: Location?,
+            metric: Boolean
     ): String = if (location == null || !location.hasSpeed() || location.speed == 0f) {
         locationValueUnknown
     } else {
@@ -232,10 +232,10 @@ class LocationFormatter(context: Context) {
         locationValueUnknown
     } else {
         dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(location.time), true)
-            ?: locationValueUnknown
+                ?: locationValueUnknown
     }
 
     private fun replaceDelimiters(string: String): String = string
-        .replaceFirst(":".toRegex(), "° ")
-        .replaceFirst(":".toRegex(), "' ") + "\""
+            .replaceFirst(":".toRegex(), "° ")
+            .replaceFirst(":".toRegex(), "' ") + "\""
 }
