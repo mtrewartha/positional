@@ -15,8 +15,8 @@ class DateTimeFormatter(private val context: Context) {
     }
     private val sharedPreferences by lazy {
         context.getSharedPreferences(
-            context.getString(R.string.settings_filename),
-            Context.MODE_PRIVATE
+                context.getString(R.string.settings_filename),
+                Context.MODE_PRIVATE
         )
     }
     private val simpleDateFormat by lazy { SimpleDateFormat.getDateInstance() }
@@ -48,5 +48,5 @@ class DateTimeFormatter(private val context: Context) {
     }
 
     private fun use12HourTime(): Boolean =
-        sharedPreferences.getString(timeFormatKey, timeFormatValue12Hour) == timeFormatValue12Hour
+            sharedPreferences.getString(timeFormatKey, timeFormatValue12Hour) == timeFormatValue12Hour
 }

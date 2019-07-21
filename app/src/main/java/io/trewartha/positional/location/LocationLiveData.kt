@@ -29,13 +29,13 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
 
         try {
             val locationRequest = LocationRequest.create()
-                .setPriority(updatePriority)
-                .setInterval(updateInterval)
+                    .setPriority(updatePriority)
+                    .setInterval(updateInterval)
             Timber.i("Requesting location updates: $locationRequest")
             locationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
+                    locationRequest,
+                    locationCallback,
+                    Looper.getMainLooper()
             )
         } catch (e: SecurityException) {
             Timber.w(e, "Don't have location permissions, no location updates will be received")

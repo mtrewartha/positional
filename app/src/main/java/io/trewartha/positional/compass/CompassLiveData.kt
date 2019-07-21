@@ -33,13 +33,13 @@ class CompassLiveData(context: Context) : MediatorLiveData<CompassViewData>() {
     private val orientationData = FloatArray(3)
     private val rotationMatrix = FloatArray(9)
     private val sharedPrefs = context
-        .getSharedPreferences(context.getString(R.string.settings_filename), Context.MODE_PRIVATE)
+            .getSharedPreferences(context.getString(R.string.settings_filename), Context.MODE_PRIVATE)
     private val sharedPrefCompassMode = context
-        .getString(R.string.settings_compass_mode_key)
+            .getString(R.string.settings_compass_mode_key)
     private val sharedPrefCompassModeTrue = context
-        .getString(R.string.settings_compass_mode_true_value)
+            .getString(R.string.settings_compass_mode_true_value)
     private val sharedPrefCompassModeMagnetic = context
-        .getString(R.string.settings_compass_mode_magnetic_value)
+            .getString(R.string.settings_compass_mode_magnetic_value)
     private val temporaryRotationMatrix = FloatArray(9)
 
     private var azimuth: Float? = null
@@ -83,36 +83,36 @@ class CompassLiveData(context: Context) : MediatorLiveData<CompassViewData>() {
     private fun adjustForDeviceOrientation() {
         when (windowManager.defaultDisplay.rotation) {
             Surface.ROTATION_0 -> SensorManager.remapCoordinateSystem(
-                temporaryRotationMatrix,
-                SensorManager.AXIS_Z,
-                SensorManager.AXIS_Y,
-                rotationMatrix
+                    temporaryRotationMatrix,
+                    SensorManager.AXIS_Z,
+                    SensorManager.AXIS_Y,
+                    rotationMatrix
             )
             Surface.ROTATION_90 -> SensorManager.remapCoordinateSystem(
-                temporaryRotationMatrix,
-                SensorManager.AXIS_Y,
-                SensorManager.AXIS_MINUS_Z,
-                rotationMatrix
+                    temporaryRotationMatrix,
+                    SensorManager.AXIS_Y,
+                    SensorManager.AXIS_MINUS_Z,
+                    rotationMatrix
             )
             Surface.ROTATION_180 -> SensorManager.remapCoordinateSystem(
-                temporaryRotationMatrix,
-                SensorManager.AXIS_MINUS_Z,
-                SensorManager.AXIS_MINUS_Y,
-                rotationMatrix
+                    temporaryRotationMatrix,
+                    SensorManager.AXIS_MINUS_Z,
+                    SensorManager.AXIS_MINUS_Y,
+                    rotationMatrix
             )
             Surface.ROTATION_270 -> SensorManager.remapCoordinateSystem(
-                temporaryRotationMatrix,
-                SensorManager.AXIS_MINUS_Y,
-                SensorManager.AXIS_Z,
-                rotationMatrix
+                    temporaryRotationMatrix,
+                    SensorManager.AXIS_MINUS_Y,
+                    SensorManager.AXIS_Z,
+                    rotationMatrix
             )
         }
     }
 
     private fun getCompassModePreference(): CompassMode {
         val magneticNorthPreference = sharedPrefs.getString(
-            sharedPrefCompassMode,
-            sharedPrefCompassModeTrue
+                sharedPrefCompassMode,
+                sharedPrefCompassModeTrue
         ) == sharedPrefCompassModeMagnetic
 
         return if (magneticNorthPreference) {
@@ -124,17 +124,17 @@ class CompassLiveData(context: Context) : MediatorLiveData<CompassViewData>() {
 
     private fun getDeclination(location: Location?): Float? = location?.let {
         GeomagneticField(
-            it.latitude.toFloat(),
-            it.longitude.toFloat(),
-            it.altitude.toFloat(),
-            it.time
+                it.latitude.toFloat(),
+                it.longitude.toFloat(),
+                it.altitude.toFloat(),
+                it.time
         ).declination
     }
 
     private fun updateValue() {
         SensorManager.getRotationMatrix(
-            temporaryRotationMatrix, null,
-            accelerometerReadings, magnetometerReadings
+                temporaryRotationMatrix, null,
+                accelerometerReadings, magnetometerReadings
         )
         adjustForDeviceOrientation()
         SensorManager.getOrientation(rotationMatrix, orientationData)
@@ -145,8 +145,8 @@ class CompassLiveData(context: Context) : MediatorLiveData<CompassViewData>() {
             azimuth = azimuth?.let { a -> declination?.let { d -> a + d } }
 
         value = CompassViewData(
-            azimuth, declination, mode,
-            accelerometerAccuracy, magnetometerAccuracy
+                azimuth, declination, mode,
+                accelerometerAccuracy, magnetometerAccuracy
         )
     }
 

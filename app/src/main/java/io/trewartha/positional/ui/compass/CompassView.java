@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import java.util.Date;
-
 import androidx.appcompat.widget.AppCompatImageView;
+
+import java.util.Date;
 
 // Pulled from this Stack Overflow answer: http://stackoverflow.com/a/22738030/1253644
 

@@ -39,16 +39,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val sharedPreferences by lazy {
         application.getSharedPreferences(
-            application.getString(R.string.settings_filename),
-            Context.MODE_PRIVATE
+                application.getString(R.string.settings_filename),
+                Context.MODE_PRIVATE
         )
     }
 
     private val themeModePreferenceLiveData by lazy {
         SharedPreferenceStringLiveData(
-            sharedPreferences,
-            application.getString(R.string.settings_theme_mode_key),
-            ThemeMode.AUTO.name
+                sharedPreferences,
+                application.getString(R.string.settings_theme_mode_key),
+                ThemeMode.AUTO.name
         )
     }
 }

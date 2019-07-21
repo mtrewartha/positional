@@ -26,9 +26,9 @@ class SunFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.sun_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,8 +40,8 @@ class SunFragment : Fragment() {
         }
         viewModel.sunViewData.observe(this, Observer {
             updatedAtTextView.text = getString(
-                R.string.location_updated_at,
-                locationFormatter.getTimestamp(it.location)
+                    R.string.location_updated_at,
+                    locationFormatter.getTimestamp(it.location)
             )
         })
     }

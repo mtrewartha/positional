@@ -7,12 +7,12 @@ import io.trewartha.positional.ui.sun.DawnFragment
 import io.trewartha.positional.ui.sun.DuskFragment
 
 class SunFragmentPagerAdapter(
-    fragmentManager: FragmentManager
+        fragmentManager: FragmentManager
 ) : FragmentPagerAdapter(fragmentManager) {
 
     private val fragments = arrayOf(
-        DawnFragment(),
-        DuskFragment()
+            DawnFragment(),
+            DuskFragment()
     )
 
     override fun getItem(position: Int): Fragment = fragments[position]

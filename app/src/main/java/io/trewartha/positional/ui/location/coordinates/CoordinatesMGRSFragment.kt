@@ -19,9 +19,9 @@ class CoordinatesMGRSFragment : CoordinatesFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.coordinates_mgrs_fragment, container, false)
 
     override fun setCoordinates(latitude: Double, longitude: Double) {

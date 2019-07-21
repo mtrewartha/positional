@@ -23,15 +23,15 @@ class SunLiveData(context: Context) : MediatorLiveData<SunViewData>() {
             val astronomicalTwilights = getAstronomicalTwilight(calendar, latitude, longitude)
 
             value = SunViewData(
-                it,
-                instantFrom(astronomicalTwilights[0]),
-                instantFrom(nauticalTwilights[0]),
-                instantFrom(civilTwilights[0]),
-                instantFrom(sunriseSunset[0]),
-                instantFrom(sunriseSunset[1]),
-                instantFrom(civilTwilights[1]),
-                instantFrom(nauticalTwilights[1]),
-                instantFrom(astronomicalTwilights[1])
+                    it,
+                    instantFrom(astronomicalTwilights[0]),
+                    instantFrom(nauticalTwilights[0]),
+                    instantFrom(civilTwilights[0]),
+                    instantFrom(sunriseSunset[0]),
+                    instantFrom(sunriseSunset[1]),
+                    instantFrom(civilTwilights[1]),
+                    instantFrom(nauticalTwilights[1]),
+                    instantFrom(astronomicalTwilights[1])
             )
         }
     }
@@ -42,5 +42,5 @@ class SunLiveData(context: Context) : MediatorLiveData<SunViewData>() {
     }
 
     private fun instantFrom(calendar: Calendar?): Instant? = calendar
-        ?.let { Instant.ofEpochMilli(it.timeInMillis) }
+            ?.let { Instant.ofEpochMilli(it.timeInMillis) }
 }

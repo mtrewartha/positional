@@ -45,25 +45,25 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode != REQUEST_CODE_PERMISSIONS) return
 
         if (grantResults.any { it == PackageManager.PERMISSION_DENIED }) {
             AlertDialog.Builder(this)
-                .setTitle(R.string.location_permission_explanation_title)
-                .setMessage(R.string.location_permission_explanation_message)
-                .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ ->
-                    goToSettings()
-                }
-                .setNegativeButton(R.string.location_permission_explanation_negative) { _, _ ->
-                    exit()
-                }
-                .setCancelable(false)
-                .show()
+                    .setTitle(R.string.location_permission_explanation_title)
+                    .setMessage(R.string.location_permission_explanation_message)
+                    .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ ->
+                        goToSettings()
+                    }
+                    .setNegativeButton(R.string.location_permission_explanation_negative) { _, _ ->
+                        exit()
+                    }
+                    .setCancelable(false)
+                    .show()
         }
     }
 
@@ -72,15 +72,15 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     private fun getPermissionsToRequest(): List<String> = PERMISSIONS
-        .filter {
-            val permissionResult = ActivityCompat.checkSelfPermission(this, it)
-            permissionResult != PackageManager.PERMISSION_GRANTED
-        }
+            .filter {
+                val permissionResult = ActivityCompat.checkSelfPermission(this, it)
+                permissionResult != PackageManager.PERMISSION_GRANTED
+            }
 
     private fun goToSettings() {
         val intent = Intent(
-            android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-            Uri.fromParts("package", packageName, null)
+                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", packageName, null)
         )
         startActivity(intent)
     }
@@ -88,9 +88,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
     private fun requestPermissions(permissions: List<String>) {
         Timber.i("Requesting permissions")
         ActivityCompat.requestPermissions(
-            this,
-            permissions.toTypedArray(),
-            REQUEST_CODE_PERMISSIONS
+                this,
+                permissions.toTypedArray(),
+                REQUEST_CODE_PERMISSIONS
         )
     }
 
@@ -98,11 +98,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
         override fun onChanged(themeMode: ThemeMode?) {
             delegate.setLocalNightMode(
-                when (themeMode) {
-                    ThemeMode.DAY -> MODE_NIGHT_NO
-                    ThemeMode.NIGHT -> MODE_NIGHT_YES
-                    else -> MODE_NIGHT_AUTO
-                }
+                    when (themeMode) {
+                        ThemeMode.DAY -> MODE_NIGHT_NO
+                        ThemeMode.NIGHT -> MODE_NIGHT_YES
+                        else -> MODE_NIGHT_AUTO
+                    }
             )
         }
     }
