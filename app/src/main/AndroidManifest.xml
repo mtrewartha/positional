@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.trewartha.positional">
 
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 

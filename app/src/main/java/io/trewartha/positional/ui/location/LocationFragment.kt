@@ -346,7 +346,7 @@ class LocationFragment : Fragment() {
                 }
             }
 
-            clipboardManager.primaryClip = ClipData.newPlainText(clipDataLabel, clipDataText)
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(clipDataLabel, clipDataText))
 
             Snackbar.make(coordinatorLayout, snackbarText, Snackbar.LENGTH_LONG).show()
 
