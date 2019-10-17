@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.trewartha.positional.R
 import io.trewartha.positional.location.LocationFormatter
 import io.trewartha.positional.ui.MainViewModel
@@ -22,7 +22,7 @@ class SunFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         locationFormatter = LocationFormatter(context)
-        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(

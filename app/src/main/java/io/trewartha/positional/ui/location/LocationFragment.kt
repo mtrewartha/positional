@@ -13,7 +13,7 @@ import android.view.WindowManager
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.location.LocationRequest
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -56,7 +56,7 @@ class LocationFragment : Fragment() {
         sharedPreferencesUnitsKey = context.getString(R.string.settings_units_key)
         sharedPreferencesUnitsImperial = context.getString(R.string.settings_units_imperial_value)
         sharedPreferencesUnitsMetric = context.getString(R.string.settings_units_metric_value)
-        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java).apply {
+        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java).apply {
             location.apply {
                 updatePriority = LOCATION_UPDATE_PRIORITY
                 updateInterval = LOCATION_UPDATE_INTERVAL

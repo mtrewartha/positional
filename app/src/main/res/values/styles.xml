@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Positional.Day" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Positional" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="android:textColorPrimary">@color/colorOnSurface</item>
@@ -17,38 +17,12 @@
         <item name="fontFamily">@font/basic</item>
     </style>
 
-    <style name="Positional.DayNight" parent="Positional.Day" />
-
     <!-- Bottom Navigation -->
 
     <style name="BottomNavigationViewStyle">
         <item name="android:background">@color/colorSurface</item>
         <item name="itemIconTint">@color/bottom_navigation_icon_tint</item>
         <item name="itemTextColor">@color/bottom_navigation_text_color</item>
-    </style>
-
-    <!-- Bottom Sheets -->
-
-    <style name="BottomSheetTitle">
-        <item name="android:gravity">center_vertical|left|start</item>
-        <item name="android:layout_height">@dimen/bottom_sheet_title_height</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:paddingEnd">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingStart">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:textSize">@dimen/bottom_sheet_title_text_size</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="BottomSheetListItem">
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:gravity">center_vertical|left|start</item>
-        <item name="android:layout_height">@dimen/bottom_sheet_list_item_height</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:paddingEnd">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:paddingStart">@dimen/bottom_sheet_padding_horizontal</item>
-        <item name="android:textColor">@color/onSurfaceLightVariant</item>
-        <item name="android:textSize">@dimen/bottom_sheet_list_item_text_size</item>
     </style>
 
     <!-- Compass -->
@@ -78,7 +52,7 @@
     <style name="LocationCoordinates">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="fontFamily">@font/ubuntu_mono</item>
+        <item name="fontFamily">@font/roboto_mono</item>
         <item name="height_weight">0.8</item>
     </style>
 

@@ -8,9 +8,7 @@ import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import io.trewartha.positional.R
@@ -20,8 +18,6 @@ import timber.log.Timber
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
-    private lateinit var viewModel: MainViewModel
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         window.setFormat(PixelFormat.RGBA_8888)
@@ -29,9 +25,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = getViewModel()
-        viewModel.themeMode.observe(this, ThemeModeObserver())
 
         setContentView(R.layout.main_activity)
 
@@ -92,19 +85,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 permissions.toTypedArray(),
                 REQUEST_CODE_PERMISSIONS
         )
-    }
-
-    private inner class ThemeModeObserver : Observer<ThemeMode> {
-
-        override fun onChanged(themeMode: ThemeMode?) {
-            delegate.setLocalNightMode(
-                    when (themeMode) {
-                        ThemeMode.DAY -> MODE_NIGHT_NO
-                        ThemeMode.NIGHT -> MODE_NIGHT_YES
-                        else -> MODE_NIGHT_AUTO
-                    }
-            )
-        }
     }
 
     companion object {

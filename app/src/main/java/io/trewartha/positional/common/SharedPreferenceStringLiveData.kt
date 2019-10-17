@@ -9,7 +9,7 @@ class SharedPreferenceStringLiveData(
         private val defaultValue: String
 ) : MediatorLiveData<String>() {
 
-    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, changedKey: String ->
+    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, changedKey ->
         if (changedKey == key) readAndSetValue()
     }
 
