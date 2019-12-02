@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.MainViewModel
 import io.trewartha.positional.ui.utils.DateTimeFormatter
@@ -20,7 +20,7 @@ class DawnFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
         dateTimeFormatter = DateTimeFormatter(context)
     }
 
@@ -31,7 +31,7 @@ class DawnFragment : Fragment() {
     ): View = inflater.inflate(R.layout.dawn_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.sunViewData.observe(this, Observer {
+        viewModel.sunViewData.observe(viewLifecycleOwner, Observer {
             dateTextView.text = dateTimeFormatter.getFormattedDate(it.astronomicalDawn)
             astronomicalValueTextView.text = dateTimeFormatter.getFormattedTime(it.astronomicalDawn)
             nauticalValueTextView.text = dateTimeFormatter.getFormattedTime(it.nauticalDawn)

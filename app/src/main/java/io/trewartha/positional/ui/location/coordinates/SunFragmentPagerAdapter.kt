@@ -8,7 +8,7 @@ import io.trewartha.positional.ui.sun.DuskFragment
 
 class SunFragmentPagerAdapter(
         fragmentManager: FragmentManager
-) : FragmentPagerAdapter(fragmentManager) {
+) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val fragments = arrayOf(
             DawnFragment(),

@@ -4,6 +4,7 @@
 /local.properties
 .DS_Store
 /build
+/buildSrc/build
 /captures
 *.apk
 keystore

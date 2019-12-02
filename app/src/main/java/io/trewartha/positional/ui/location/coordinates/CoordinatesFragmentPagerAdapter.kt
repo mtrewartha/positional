@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 
 class CoordinatesFragmentPagerAdapter(
         fragmentManager: FragmentManager
-) : FragmentPagerAdapter(fragmentManager) {
+) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val fragments = arrayOf(
             CoordinatesDecimalDegreesFragment(),
