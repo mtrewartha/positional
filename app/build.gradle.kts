@@ -1,6 +1,9 @@
+import de.mannodermaus.gradle.plugins.junit5.junitPlatform
+
 plugins {
     id("com.android.application")
     id("com.google.firebase.firebase-perf")
+    id("de.mannodermaus.android-junit5")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
@@ -10,6 +13,10 @@ plugins {
 android {
     sourceSets.forEach {
         it.java.setSrcDirs(listOf("src/${it.name}/kotlin"))
+    }
+
+    testOptions {
+        junitPlatform.filters.includeEngines("spek2")
     }
 
     signingConfigs {
@@ -82,6 +89,11 @@ dependencies {
     implementation(Dependencies.sunriseSunset)
     implementation(Dependencies.threeTenAbp)
     implementation(Dependencies.timber)
+
+    testImplementation(Dependencies.kotlinReflect) // for Spek
+    testImplementation(Dependencies.spekDsl)
+    testImplementation(Dependencies.spekRunnerJUnit5)
+    testImplementation(Dependencies.truth)
 }
 
 apply(plugin = "com.google.gms.google-services")

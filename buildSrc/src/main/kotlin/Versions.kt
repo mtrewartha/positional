@@ -48,16 +48,19 @@ object Versions {
         const val material = "1.2.0-alpha02"
         const val pageIndicatorView = "1.0.3"
         const val playServicesLocation = "17.0.0"
+        const val spek = "2.0.8"
         const val sunriseSunset = "1.1.1"
         const val threeTenAbp = "1.2.1"
         const val timber = "4.7.1"
+        const val truth = "1.0"
     }
 
     object Plugins {
-        const val android = "4.0.0-alpha04"
+        const val android = "4.0.0-alpha05"
         const val fabric = "1.31.2"
         const val firebasePerf = "1.3.1"
         const val googleServices = "4.3.3"
+        const val jUnit5 = "1.5.2.0"
         const val kotlin = Versions.kotlin
     }
 }

@@ -10,6 +10,7 @@ buildscript {
         classpath(Plugins.firebasePerf)
         classpath(Plugins.googleServices)
         classpath(Plugins.fabric)
+        classpath(Plugins.jUnit5)
         classpath(Plugins.kotlin)
     }
 }
