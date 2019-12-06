@@ -8,6 +8,10 @@ plugins {
 }
 
 android {
+    sourceSets.forEach {
+        it.java.setSrcDirs(listOf("src/${it.name}/kotlin"))
+    }
+
     signingConfigs {
         create("release") {
             val keyStoreConfig = KeyStore(rootProject)
