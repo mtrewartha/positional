@@ -32,34 +32,35 @@ object Versions {
     }
 
     object Dependencies {
-        const val androidXConstraintLayout = "2.0.0-beta3"
-        const val androidXFragment = "1.2.0-rc02"
+        const val androidXConstraintLayout = "2.0.0-beta4"
+        const val androidXFragment = "1.2.2"
         const val androidXLegacySupportV4 = "1.0.0"
-        const val androidXLifecycle = "2.2.0-rc02"
-        const val androidXNavigation = "2.2.0-rc02"
+        const val androidXLifecycle = "2.2.0"
+        const val androidXNavigation = "2.3.0-alpha02"
         const val androidXPreference = "1.1.0"
-        const val androidXRecyclerView = "1.1.0"
-        const val crashlytics = "2.10.1"
-        const val firebaseCore = "17.2.1"
-        const val firebasePerf = "19.0.2"
+        const val androidXRecyclerView = "1.2.0-alpha01"
+        const val firebaseAnalytics = "17.2.2"
+        const val firebaseCrashlytics = "17.0.0-beta01"
+        const val firebasePerf = "19.0.5"
         const val geoCoordinatesConversion = "360781e"
         const val kotlin = Versions.kotlin
         const val loaderView = "2.0.0"
-        const val material = "1.2.0-alpha02"
+        const val material = "1.2.0-alpha05"
         const val pageIndicatorView = "1.0.3"
         const val playServicesLocation = "17.0.0"
-        const val spek = "2.0.8"
+        const val spek = "2.0.9"
         const val sunriseSunset = "1.1.1"
-        const val threeTenAbp = "1.2.1"
+        const val threeTenAbp = "1.2.2"
         const val timber = "4.7.1"
-        const val truth = "1.0"
+        const val truth = "1.0.1"
     }
 
     object Plugins {
         const val android = "4.0.0-alpha09"
-        const val fabric = "1.31.2"
+        const val firebaseCrashlytics = "2.0.0-beta02"
         const val firebasePerf = "1.3.1"
         const val googleServices = "4.3.3"
+        const val gradleVersions = "0.28.0"
         const val jUnit5 = "1.5.2.0"
         const val kotlin = Versions.kotlin
     }

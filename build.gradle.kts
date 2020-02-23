@@ -3,13 +3,13 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
-        maven(url = "https://maven.fabric.io/public")
     }
     dependencies {
-        classpath(Plugins.android)
+        classpath(Plugins.androidGradle)
+        classpath(Plugins.firebaseCrashlytics)
         classpath(Plugins.firebasePerf)
         classpath(Plugins.googleServices)
-        classpath(Plugins.fabric)
+        classpath(Plugins.gradleVersions)
         classpath(Plugins.jUnit5)
         classpath(Plugins.kotlin)
     }

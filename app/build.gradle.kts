@@ -2,12 +2,13 @@ import de.mannodermaus.gradle.plugins.junit5.junitPlatform
 
 plugins {
     id("com.android.application")
+    id("com.github.ben-manes.versions")
+    id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
     id("de.mannodermaus.android-junit5")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    id("io.fabric")
 }
 
 android {
@@ -77,8 +78,8 @@ dependencies {
     implementation(Dependencies.androidXNavigationUIKtx)
     implementation(Dependencies.androidXPreferenceKtx)
     implementation(Dependencies.androidXRecyclerView)
-    implementation(Dependencies.crashlytics)
-    implementation(Dependencies.firebaseCore)
+    implementation(Dependencies.firebaseCrashlytics)
+    implementation(Dependencies.firebaseAnalytics)
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.geoCoordinatesConversion)
     implementation(Dependencies.kotlinStdLibJdk8)
