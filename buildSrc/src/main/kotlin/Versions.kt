@@ -56,7 +56,7 @@ object Versions {
     }
 
     object Plugins {
-        const val android = "4.0.0-alpha05"
+        const val android = "4.0.0-alpha09"
         const val fabric = "1.31.2"
         const val firebasePerf = "1.3.1"
         const val googleServices = "4.3.3"
