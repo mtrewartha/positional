@@ -31,7 +31,7 @@ class DuskFragment : Fragment() {
     ): View = inflater.inflate(R.layout.dusk_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.sunViewData.observe(viewLifecycleOwner, Observer {
+        viewModel.sunLiveData.observe(viewLifecycleOwner, Observer {
             dateTextView.text = dateTimeFormatter.getFormattedDate(it.astronomicalDusk)
             astronomicalValueTextView.text = dateTimeFormatter.getFormattedTime(it.astronomicalDusk)
             nauticalValueTextView.text = dateTimeFormatter.getFormattedTime(it.nauticalDusk)

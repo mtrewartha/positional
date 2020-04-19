@@ -14,12 +14,11 @@
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
-        <item name="fontFamily">@font/basic</item>
     </style>
 
     <!-- Bottom Navigation -->
 
-    <style name="BottomNavigationViewStyle">
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:background">@color/colorSurface</item>
         <item name="itemIconTint">@color/bottom_navigation_icon_tint</item>
         <item name="itemTextColor">@color/bottom_navigation_text_color</item>
@@ -43,16 +42,17 @@
         <item name="autoSizeMaxTextSize">128sp</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="corners">4</item>
-        <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="height_weight">0.8</item>
     </style>
 
     <!-- Location -->
 
     <style name="LocationCoordinates">
+        <item name="android:gravity">center</item>
+        <item name="autoSizeMinTextSize">16sp</item>
+        <item name="autoSizeTextType">uniform</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="fontFamily">@font/roboto_mono</item>
         <item name="height_weight">0.8</item>
     </style>
 
@@ -68,12 +68,12 @@
         <item name="android:tint">@color/colorOnSurface</item>
     </style>
 
-    <style name="LocationStatLabel" parent="@style/TextAppearance.Positional.Headline6">
+    <style name="LocationStatLabel" parent="@style/TextAppearance.Positional.Body1">
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="LocationStat" parent="TextAppearance.Positional.Headline6">
+    <style name="LocationStat" parent="TextAppearance.Positional.Body1">
         <item name="android:textIsSelectable">true</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
@@ -82,12 +82,7 @@
 
     <style name="LocationStatRow">
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_weight">.2</item>
         <item name="android:minHeight">64dp</item>
-        <item name="android:paddingEnd">32dp</item>
-        <item name="android:paddingStart">32dp</item>
     </style>
 
     <style name="LocationStatRowLandscape" parent="LocationStatRow">
@@ -97,7 +92,7 @@
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Body2">
+    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Caption">
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="height_weight">0.8</item>
@@ -149,8 +144,12 @@
 
     <style name="TextAppearance.Positional.Subtitle2" parent="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
-    <style name="TextAppearance.Positional.Body1" parent="@style/TextAppearance.MaterialComponents.Body1" />
+    <style name="TextAppearance.Positional.Body1" parent="@style/TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">@dimen/text_size_body1</item>
+    </style>
 
-    <style name="TextAppearance.Positional.Body2" parent="@style/TextAppearance.MaterialComponents.Body2" />
+    <style name="TextAppearance.Positional.Body2" parent="@style/TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">@dimen/text_size_body2</item>
+    </style>
 
 </resources>

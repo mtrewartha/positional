@@ -50,10 +50,10 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
     private inner class LocationCallback : com.google.android.gms.location.LocationCallback() {
 
         override fun onLocationResult(locationResult: LocationResult?) {
-            val location = locationResult?.lastLocation
+            val location = locationResult?.lastLocation ?: return
             value = location
 
-            if (location != null && firstLocationUpdateTrace != null) {
+            if (firstLocationUpdateTrace != null) {
                 val accuracyCounter = getAccuracyLevelCounter(location.accuracy)
                 firstLocationUpdateTrace?.incrementMetric(accuracyCounter, 1L)
                 firstLocationUpdateTrace?.stop()

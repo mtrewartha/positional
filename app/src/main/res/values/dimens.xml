@@ -13,27 +13,10 @@
     <dimen name="compass_details_accuracy_min_width">48dp</dimen>
     <dimen name="compass_details_mode_min_width">72dp</dimen>
 
-    <dimen name="label_text_size">@dimen/text_size_small</dimen>
-    <dimen name="label_text_size_landscape">@dimen/text_size_small</dimen>
-    <dimen name="label_text_size_large">@dimen/text_size_medium</dimen>
-    <dimen name="label_text_size_large_landscape">@dimen/text_size_medium</dimen>
+    <dimen name="location_stat_row_gap_horizontal">24dp</dimen>
+    <dimen name="location_stat_row_gap_vertical">24dp</dimen>
+    <dimen name="location_stat_row_image_size">@dimen/text_size_body1</dimen>
 
-    <dimen name="stat_image_size">@dimen/text_size_small</dimen>
-    <dimen name="stat_image_size_landscape">@dimen/text_size_small</dimen>
-    <dimen name="stat_image_size_large">@dimen/text_size_medium</dimen>
-    <dimen name="stat_image_size_large_landscape">@dimen/text_size_large</dimen>
-
-    <dimen name="text_size_small">24sp</dimen>
-    <dimen name="text_size_medium">34sp</dimen>
-    <dimen name="text_size_large">42sp</dimen>
-
-    <dimen name="unit_text_size">@dimen/text_size_small</dimen>
-    <dimen name="unit_text_size_landscape">@dimen/text_size_small</dimen>
-    <dimen name="unit_text_size_large">@dimen/text_size_medium</dimen>
-    <dimen name="unit_text_size_large_landscape">@dimen/text_size_medium</dimen>
-
-    <dimen name="value_text_size">@dimen/text_size_small</dimen>
-    <dimen name="value_text_size_landscape">@dimen/text_size_small</dimen>
-    <dimen name="value_text_size_large">@dimen/text_size_medium</dimen>
-    <dimen name="value_text_size_large_landscape">@dimen/text_size_medium</dimen>
+    <dimen name="text_size_body1">16sp</dimen>
+    <dimen name="text_size_body2">14sp</dimen>
 </resources>

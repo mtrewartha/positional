@@ -14,6 +14,16 @@
         android:title="@string/settings_compass_mode_title" />
 
     <ListPreference
+        android:defaultValue="@string/settings_coordinates_format_dd_label"
+        android:dialogTitle="@string/settings_coordinates_format_dialog_title"
+        android:entries="@array/settings_location_format_labels"
+        android:entryValues="@array/settings_location_format_values"
+        android:icon="@drawable/ic_twotone_my_location_24px"
+        android:key="@string/settings_coordinates_format_key"
+        android:summary="%s"
+        android:title="@string/settings_coordinates_format_title" />
+
+    <ListPreference
         android:defaultValue="@string/settings_theme_system_value"
         android:dialogTitle="@string/settings_theme_dialog_title"
         android:entries="@array/settings_theme_mode_labels"

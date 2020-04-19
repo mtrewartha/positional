@@ -58,6 +58,9 @@ android {
         sourceCompatibility = Versions.Compatibility.source
         targetCompatibility = Versions.Compatibility.target
     }
+    kotlinOptions {
+        jvmTarget = Versions.Compatibility.target.toString()
+    }
 }
 
 repositories {
@@ -70,6 +73,7 @@ repositories {
 
 dependencies {
     implementation(Dependencies.androidXConstraintLayout)
+    implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXFragmentKtx)
     implementation(Dependencies.androidXLegacySupportV4)
     implementation(Dependencies.androidXLifecycleCommonJava8)
@@ -78,6 +82,7 @@ dependencies {
     implementation(Dependencies.androidXNavigationUIKtx)
     implementation(Dependencies.androidXPreferenceKtx)
     implementation(Dependencies.androidXRecyclerView)
+    implementation(platform(Dependencies.firebaseBoM))
     implementation(Dependencies.firebaseCrashlytics)
     implementation(Dependencies.firebaseAnalytics)
     implementation(Dependencies.firebasePerf)

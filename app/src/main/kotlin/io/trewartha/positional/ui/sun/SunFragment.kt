@@ -38,7 +38,7 @@ class SunFragment : Fragment() {
             adapter = sunFragmentPagerAdapter
             offscreenPageLimit = sunFragmentPagerAdapter.count
         }
-        viewModel.sunViewData.observe(this, Observer {
+        viewModel.sunLiveData.observe(this, Observer {
             updatedAtTextView.text = getString(
                     R.string.location_updated_at,
                     locationFormatter.getTimestamp(it.location)
