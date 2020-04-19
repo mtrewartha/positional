@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp">
+        android:padding="@dimen/activity_horizontal_margin">
 
         <com.elyeproj.loaderviewlibrary.LoaderTextView
             android:id="@+id/coordinatesTextView"
@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread"
-            tools:text="12.34\n56.78" />
+            tools:text="-180.00000\n-180.00000" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/buttonFlow"
@@ -69,7 +69,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:constraint_referenced_ids="accuracyFlow,divider1,bearingFlow,divider2,elevationFlow,divider3,speedFlow,updatedAtTextView"
-            app:flow_verticalStyle="spread_inside"
+            app:flow_verticalGap="12dp"
+            app:flow_verticalStyle="spread"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toEndOf="@id/coordinatesTextView" />

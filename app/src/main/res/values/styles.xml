@@ -2,10 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Positional" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:textColorPrimary">@color/colorOnSurface</item>
-        <item name="android:textColorSecondary">@color/onSurfaceLightVariant</item>
         <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
 
@@ -14,6 +10,20 @@
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+
+        <item name="textAppearanceHeadline1">@style/TextAppearance.Positional.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.Positional.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.Positional.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.Positional.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.Positional.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Positional.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Positional.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.Positional.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Positional.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.Positional.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Positional.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Positional.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.Positional.Overline</item>
     </style>
 
     <!-- Bottom Navigation -->
@@ -47,9 +57,10 @@
 
     <!-- Location -->
 
-    <style name="LocationCoordinates">
+    <style name="LocationCoordinates" parent="TextAppearance.Positional.Headline1">
         <item name="android:gravity">center</item>
-        <item name="autoSizeMinTextSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="autoSizeMinTextSize">14sp</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
@@ -73,8 +84,9 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="LocationStat" parent="TextAppearance.Positional.Body1">
+    <style name="LocationStat" parent="TextAppearance.Positional.Subtitle1">
         <item name="android:textIsSelectable">true</item>
+        <item name="android:textStyle">bold</item>
         <item name="corners">4</item>
         <item name="custom_color">@color/loaderViewShimmer</item>
         <item name="height_weight">0.8</item>
@@ -124,9 +136,13 @@
 
     <!-- Text Appearance -->
 
+    <style name="TextAppearance.Positional.Button" parent="@style/TextAppearance.MaterialComponents.Button" />
+
     <style name="TextAppearance.Positional.Caption" parent="@style/TextAppearance.MaterialComponents.Caption" />
 
-    <style name="TextAppearance.Positional.Headline1" parent="@style/TextAppearance.MaterialComponents.Headline1" />
+    <style name="TextAppearance.Positional.Headline1" parent="@style/TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
 
     <style name="TextAppearance.Positional.Headline2" parent="@style/TextAppearance.MaterialComponents.Headline2" />
 
@@ -144,12 +160,8 @@
 
     <style name="TextAppearance.Positional.Subtitle2" parent="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
-    <style name="TextAppearance.Positional.Body1" parent="@style/TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">@dimen/text_size_body1</item>
-    </style>
+    <style name="TextAppearance.Positional.Body1" parent="@style/TextAppearance.MaterialComponents.Body1" />
 
-    <style name="TextAppearance.Positional.Body2" parent="@style/TextAppearance.MaterialComponents.Body2">
-        <item name="android:textSize">@dimen/text_size_body2</item>
-    </style>
+    <style name="TextAppearance.Positional.Body2" parent="@style/TextAppearance.MaterialComponents.Body2" />
 
 </resources>

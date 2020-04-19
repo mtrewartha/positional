@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="location_stat_row_gap_horizontal">12dp</dimen>
+    <dimen name="location_stat_row_gap_vertical">12dp</dimen>
+    <dimen name="location_stat_row_image_size">12dp</dimen>
+</resources>
