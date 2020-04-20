@@ -1,28 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#7ad7d7</color>
-    <color name="colorPrimaryVariant">#45c6c9</color>
-    <color name="colorOnPrimary">#de000000</color>
-
-    <color name="colorSecondary">#90caf9</color>
-    <color name="colorSecondaryVariant">#65b5f6</color>
-    <color name="colorOnSecondary">#de000000</color>
-
-    <color name="colorBackground">#000000</color>
-    <color name="colorOnBackground">#f9f9f9</color>
-
-    <color name="colorSurface">#000000</color>
-    <color name="colorSurfaceVariant">#000000</color>
-    <color name="colorSurfaceLightVariant">#282828</color>
-    <color name="colorOnSurface">#deffffff</color>
-
-    <color name="colorError">#f44336</color>
-    <color name="colorOnError">#000000</color>
-
-    <color name="onSurfaceLightVariant">#99ffffff</color>
-    <color name="onSurfaceVeryLightVariant">#61ffffff</color>
-
-    <color name="loaderViewShimmer">@color/colorSurfaceLightVariant</color>
+    <color name="background">@color/_black</color>
+    <color name="onSurface">@color/_gray2</color>
+    <color name="primary">@color/_blue100</color>
+    <color name="primaryVariant">@color/_blue300</color>
+    <color name="secondary">@color/_deepPurple100</color>
+    <color name="secondaryVariant">@color/_deepPurple300</color>
+    <color name="shimmer">@color/_gray3</color>
+    <color name="surface">@color/_black</color>
+    <color name="surfaceVariant">@color/_gray3</color>
 
 </resources>

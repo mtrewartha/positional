@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#007779</color>
-    <color name="colorPrimaryVariant">#005450</color>
-    <color name="colorOnPrimary">#deffffff</color>
+    <color name="_black">#000000</color>
 
-    <color name="colorSecondary">#1665c0</color>
-    <color name="colorSecondaryVariant">#0e47a1</color>
-    <color name="colorOnSecondary">#deffffff</color>
+    <color name="_blue100">#bbdefb</color>
+    <color name="_blue300">#64b5f6</color>
+    <color name="_blue700">#1976d2</color>
+    <color name="_blue900">#0d47a1</color>
 
-    <color name="colorBackground">#f9f9f9</color>
-    <color name="colorOnBackground">#000000</color>
+    <color name="_gray1">#f9f9f9</color>
+    <color name="_gray2">#e8e8e8</color>
+    <color name="_gray3">#282828</color>
 
-    <color name="colorSurface">#ffffff</color>
-    <color name="colorSurfaceVariant">#e8e8e8</color>
-    <color name="colorSurfaceLightVariant">#ffffff</color>
-    <color name="colorOnSurface">#de000000</color>
+    <color name="_deepPurple100">#D1C4E9</color>
+    <color name="_deepPurple300">#9575CD</color>
+    <color name="_deepPurple700">#512DA8</color>
+    <color name="_deepPurple900">#311B92</color>
 
-    <color name="colorError">#f44336</color>
-    <color name="colorOnError">#ffffff</color>
+    <color name="_red">#f44336</color>
+    <color name="_white">#ffffff</color>
 
-    <color name="onSurfaceLightVariant">#99000000</color>
-    <color name="onSurfaceVeryLightVariant">#61000000</color>
-
-    <color name="loaderViewShimmer">@color/colorSurfaceVariant</color>
+    <color name="background">@color/_gray1</color>
+    <color name="onSurface">@color/_black</color>
+    <color name="primary">@color/_blue700</color>
+    <color name="primaryVariant">@color/_blue900</color>
+    <color name="secondary">@color/_deepPurple700</color>
+    <color name="secondaryVariant">@color/_deepPurple900</color>
+    <color name="shimmer">@color/_gray2</color>
+    <color name="surface">@color/_white</color>
+    <color name="surfaceVariant">@color/_gray2</color>
 
 </resources>

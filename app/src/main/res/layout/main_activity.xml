@@ -18,11 +18,13 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
 
+    <!--  https://github.com/material-components/material-components-android/issues/1148  -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        style="@style/BottomNavigationViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/surface"
+        android:theme="@style/ThemeOverlay.Positional.BottomNavigationView"
         app:menu="@menu/main_bottom_navigation" />
 
 </LinearLayout>

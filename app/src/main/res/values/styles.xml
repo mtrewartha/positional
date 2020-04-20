@@ -2,14 +2,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Positional" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/colorBackground</item>
+        <item name="android:statusBarColor">@color/background</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
 
-        <item name="colorError">@color/colorError</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <!-- Material Theme Colors -->
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="colorOnSurface">@color/onSurface</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSurface">@color/surface</item>
+
+        <item name="bottomNavigationStyle">@style/Widget.Positional.BottomNavigationView</item>
+        <item name="materialButtonStyle">@style/Widget.Positional.Button</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.Positional.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.Positional.Headline2</item>
@@ -26,122 +32,28 @@
         <item name="textAppearanceOverline">@style/TextAppearance.Positional.Overline</item>
     </style>
 
-    <!-- Bottom Navigation -->
+    <style name="Positional.System" />
 
-    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="android:background">@color/colorSurface</item>
-        <item name="itemIconTint">@color/bottom_navigation_icon_tint</item>
-        <item name="itemTextColor">@color/bottom_navigation_text_color</item>
+    <style name="Positional.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+
     </style>
 
-    <!-- Compass -->
+    <style name="Positional.Dark" parent="Theme.MaterialComponents.NoActionBar">
 
-    <style name="CompassAttributeTitle" parent="TextAppearance.Positional.Subtitle2" />
-
-    <style name="CompassAttributeValue" parent="TextAppearance.Positional.Caption">
-        <item name="corners">4</item>
-        <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="height_weight">0.8</item>
     </style>
 
-    <style name="CompassBackground">
-        <item name="android:tint">@color/colorOnSurface</item>
+    <style name="Positional.Black" parent="Theme.MaterialComponents.NoActionBar">
+
     </style>
 
-    <style name="CompassDegrees" parent="TextAppearance.Positional.Headline5">
-        <item name="autoSizeMaxTextSize">128sp</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="corners">4</item>
-        <item name="height_weight">0.8</item>
-    </style>
-
-    <!-- Location -->
-
-    <style name="LocationCoordinates" parent="TextAppearance.Positional.Headline1">
-        <item name="android:gravity">center</item>
-        <item name="android:textStyle">bold</item>
-        <item name="autoSizeMinTextSize">14sp</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="corners">4</item>
-        <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="height_weight">0.8</item>
-    </style>
-
-    <style name="LocationCoordinatesFragment">
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:paddingEnd">32dp</item>
-        <item name="android:paddingStart">32dp</item>
-        <item name="android:paddingTop">32dp</item>
-    </style>
-
-    <style name="LocationStatIcon">
-        <item name="android:tintMode">src_in</item>
-        <item name="android:tint">@color/colorOnSurface</item>
-    </style>
-
-    <style name="LocationStatLabel" parent="@style/TextAppearance.Positional.Body1">
-        <item name="android:maxLines">1</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="LocationStat" parent="TextAppearance.Positional.Subtitle1">
-        <item name="android:textIsSelectable">true</item>
-        <item name="android:textStyle">bold</item>
-        <item name="corners">4</item>
-        <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="height_weight">0.8</item>
-    </style>
-
-    <style name="LocationStatRow">
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:minHeight">64dp</item>
-    </style>
-
-    <style name="LocationStatRowLandscape" parent="LocationStatRow">
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_weight">1</item>
-    </style>
-
-    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Caption">
-        <item name="corners">4</item>
-        <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="height_weight">0.8</item>
-    </style>
-
-    <!-- Sun -->
-
-    <style name="SunStatLabel" parent="@style/TextAppearance.Positional.Headline6">
-        <item name="android:maxLines">1</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="SunDate" parent="TextAppearance.Positional.Caption">
-        <item name="corners">4</item>
-        <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="android:gravity">end</item>
-        <item name="height_weight">0.8</item>
-        <item name="android:minWidth">72dp</item>
-    </style>
-
-    <style name="SunStat" parent="TextAppearance.Positional.Headline6">
-        <item name="android:textIsSelectable">true</item>
-        <item name="android:gravity">end</item>
-        <item name="corners">4</item>
-        <item name="custom_color">@color/loaderViewShimmer</item>
-        <item name="height_weight">0.8</item>
-        <item name="android:minWidth">96dp</item>
-    </style>
-
-    <!-- Text Appearance -->
+    <!-- Overrides for Text Appearances -->
 
     <style name="TextAppearance.Positional.Button" parent="@style/TextAppearance.MaterialComponents.Button" />
 
     <style name="TextAppearance.Positional.Caption" parent="@style/TextAppearance.MaterialComponents.Caption" />
 
     <style name="TextAppearance.Positional.Headline1" parent="@style/TextAppearance.MaterialComponents.Headline1">
-        <item name="android:textColor">@color/colorOnSurface</item>
+        <!--        <item name="android:textColor">@color/onSurface</item>-->
     </style>
 
     <style name="TextAppearance.Positional.Headline2" parent="@style/TextAppearance.MaterialComponents.Headline2" />
@@ -163,5 +75,118 @@
     <style name="TextAppearance.Positional.Body1" parent="@style/TextAppearance.MaterialComponents.Body1" />
 
     <style name="TextAppearance.Positional.Body2" parent="@style/TextAppearance.MaterialComponents.Body2" />
+
+    <!-- Overrides for Widgets -->
+
+    <!--  https://github.com/material-components/material-components-android/issues/1148  -->
+    <style name="ThemeOverlay.Positional.BottomNavigationView" parent="@style/ThemeOverlay.MaterialComponents">
+        <item name="colorSurface">@null</item>
+    </style>
+
+    <style name="Widget.Positional.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView" />
+
+    <style name="Widget.Positional.Button" parent="Widget.MaterialComponents.Button" />
+
+    <style name="Widget.Positional.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton" />
+
+    <!-- Compass -->
+
+    <style name="CompassAttributeTitle" parent="TextAppearance.Positional.Subtitle2" />
+
+    <style name="CompassAttributeValue" parent="TextAppearance.Positional.Caption">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/shimmer</item>
+        <item name="height_weight">0.8</item>
+    </style>
+
+    <style name="CompassBackground">
+        <item name="android:tint">@color/onSurface</item>
+    </style>
+
+    <style name="CompassDegrees" parent="TextAppearance.Positional.Headline5">
+        <item name="autoSizeMaxTextSize">128sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="corners">4</item>
+        <item name="height_weight">0.8</item>
+    </style>
+
+    <!-- Location -->
+
+    <style name="LocationCoordinates" parent="TextAppearance.Positional.Headline3">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/onSurface</item>
+        <item name="autoSizeMinTextSize">14sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="corners">4</item>
+        <item name="custom_color">@color/shimmer</item>
+        <item name="height_weight">0.8</item>
+    </style>
+
+    <style name="LocationCoordinatesFragment">
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingTop">32dp</item>
+    </style>
+
+    <style name="LocationStatIcon">
+        <item name="android:tintMode">src_in</item>
+        <item name="android:tint">@color/onSurface</item>
+    </style>
+
+    <style name="LocationStatLabel" parent="@style/TextAppearance.Positional.Body1">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="LocationStat" parent="TextAppearance.Positional.Subtitle1">
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="corners">4</item>
+        <item name="custom_color">@color/shimmer</item>
+        <item name="height_weight">0.8</item>
+    </style>
+
+    <style name="LocationStatRow">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">64dp</item>
+    </style>
+
+    <style name="LocationStatRowLandscape" parent="LocationStatRow">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Caption">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/shimmer</item>
+        <item name="height_weight">0.8</item>
+    </style>
+
+    <!-- Sun -->
+
+    <style name="SunStatLabel" parent="@style/TextAppearance.Positional.Headline6">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="SunDate" parent="TextAppearance.Positional.Caption">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/shimmer</item>
+        <item name="android:gravity">end</item>
+        <item name="height_weight">0.8</item>
+        <item name="android:minWidth">72dp</item>
+    </style>
+
+    <style name="SunStat" parent="TextAppearance.Positional.Headline6">
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:gravity">end</item>
+        <item name="corners">4</item>
+        <item name="custom_color">@color/shimmer</item>
+        <item name="height_weight">0.8</item>
+        <item name="android:minWidth">96dp</item>
+    </style>
 
 </resources>

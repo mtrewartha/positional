@@ -18,10 +18,10 @@ import timber.log.Timber
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        window.setFormat(PixelFormat.RGBA_8888)
-    }
+//    override fun onAttachedToWindow() {
+//        super.onAttachedToWindow()
+//        window.setFormat(PixelFormat.RGBA_8888)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
