@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import io.trewartha.positional.R
 import io.trewartha.positional.compass.CompassMode
 import io.trewartha.positional.ui.MainViewModel
@@ -22,7 +22,7 @@ class CompassFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -42,16 +42,12 @@ class CompassFragment : Fragment() {
                         .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
                         .show()
             } else {
-                compassLiveData.observe(this@CompassFragment, Observer {
+                compassLiveData.observe(viewLifecycleOwner) {
                     it.azimuth?.let { azimuth ->
                         backgroundCompassView.rotationUpdate(360f - azimuth, true)
                         needleCompassView.rotationUpdate(360f - azimuth, true)
                         degreesTextView.text = getString(
                                 R.string.compass_degrees, azimuth.roundToInt()
-                        )
-                        degreesTextView.contentDescription = getString(
-                                R.string.compass_degrees_content_description,
-                                azimuth.toInt()
                         )
 
                         // If there's an azimuth, we should be showing some accuracies. If they're
@@ -69,7 +65,7 @@ class CompassFragment : Fragment() {
                     it.declination?.let { dec ->
                         declinationTextView.text = getDeclinationText(dec)
                     }
-                })
+                }
             }
         }
     }
