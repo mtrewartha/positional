@@ -194,7 +194,7 @@ class CompassLiveData(context: Context) : MediatorLiveData<CompassViewData>() {
     }
 
     companion object {
-        private const val ALPHA = 0.90f
+        private const val ALPHA = 0.95f
         private const val SENSOR_DELAY = SensorManager.SENSOR_DELAY_UI
     }
 }
