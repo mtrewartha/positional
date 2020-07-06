@@ -3,6 +3,7 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
     }
     dependencies {
         classpath(Plugins.androidGradle)
@@ -10,7 +11,6 @@ buildscript {
         classpath(Plugins.firebasePerf)
         classpath(Plugins.googleServices)
         classpath(Plugins.gradleVersions)
-        classpath(Plugins.jUnit5)
         classpath(Plugins.kotlin)
     }
 }
