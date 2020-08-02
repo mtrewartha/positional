@@ -53,6 +53,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = Versions.Compatibility.target.toString()
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
 
@@ -70,7 +71,8 @@ dependencies {
     implementation(Dependencies.androidXFragmentKtx)
     implementation(Dependencies.androidXLegacySupportV4)
     implementation(Dependencies.androidXLifecycleCommonJava8)
-    implementation(Dependencies.androidXLifecycleExtensions)
+    implementation(Dependencies.androidXLifecycleLiveDataKtx)
+    implementation(Dependencies.androidXLifecycleViewModelKtx)
     implementation(Dependencies.androidXNavigationFragmentKtx)
     implementation(Dependencies.androidXNavigationUIKtx)
     implementation(Dependencies.androidXPreferenceKtx)

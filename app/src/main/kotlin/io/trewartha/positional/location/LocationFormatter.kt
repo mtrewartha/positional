@@ -2,20 +2,29 @@ package io.trewartha.positional.location
 
 import android.content.Context
 import android.location.Location
+import android.os.Build
+import androidx.core.os.LocaleListCompat
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.MGRSCoord
 import gov.nasa.worldwind.geom.coords.UTMCoord
 import io.trewartha.positional.R
-import io.trewartha.positional.location.CoordinatesFormat.*
+import io.trewartha.positional.domain.entities.CoordinatesFormat
+import io.trewartha.positional.domain.entities.CoordinatesFormat.*
+import io.trewartha.positional.domain.entities.Units
 import io.trewartha.positional.ui.utils.DateTimeFormatter
 import org.threeten.bp.Instant
+import java.math.RoundingMode
+import java.text.NumberFormat
 import java.util.*
 
-class LocationFormatter(context: Context) {
+class LocationFormatter(
+        private val context: Context
+) {
 
     private val dateTimeFormatter by lazy { DateTimeFormatter(context) }
-    private val formatAccuracyImperial by lazy { context.getString(R.string.location_accuracy_imperial) }
-    private val formatAccuracyMetric by lazy { context.getString(R.string.location_accuracy_metric) }
+    private val formatAccuracy by lazy { context.getString(R.string.location_accuracy) }
+    private val formatAccuracyDistanceImperial by lazy { context.getString(R.string.location_accuracy_imperial) }
+    private val formatAccuracyDistanceMetric by lazy { context.getString(R.string.location_accuracy_metric) }
     private val formatBearing by lazy { context.getString(R.string.location_bearing) }
     private val formatCoordinateDecimal by lazy { context.getString(R.string.location_coordinate_decimal) }
     private val formatCoordinateUtm by lazy { context.getString(R.string.location_coordinate_utm) }
@@ -24,41 +33,73 @@ class LocationFormatter(context: Context) {
     private val formatSpeedImperial by lazy { context.getString(R.string.location_speed_imperial) }
     private val formatSpeedMetric by lazy { context.getString(R.string.location_speed_metric) }
     private val formatUpdatedAt by lazy { context.getString(R.string.location_updated_at) }
+    private val locale: Locale
+        get() = LocaleListCompat.getDefault()[0] ?: Locale.US
     private val locationValueUnknown by lazy { context.getString(R.string.location_value_unknown) }
-
-    fun getAccuracy(location: Location?, metric: Boolean): String {
-        if (location == null || !location.hasAccuracy()) return locationValueUnknown
-
-        val accuracy = if (metric)
-            location.accuracy.toInt()
-        else
-            DistanceUtils.metersToFeet(location.accuracy).toInt()
-        val format = if (metric)
-            formatAccuracyMetric
-        else
-            formatAccuracyImperial
-        return String.format(Locale.getDefault(), format, accuracy)
-    }
+    private val numberFormat = NumberFormat.getNumberInstance(locale)
+            .apply {
+                roundingMode = RoundingMode.HALF_UP
+                maximumFractionDigits = 0
+                minimumFractionDigits = 0
+            }
+    private val prefs = context.getSharedPreferences(
+            context.getString(R.string.settings_filename),
+            Context.MODE_PRIVATE
+    )
+    private val prefsShowAccuracies: Boolean
+        get() = prefs.getBoolean(context.getString(R.string.settings_show_accuracies_key), true)
 
     fun getBearing(location: Location?): String {
         if (location == null || !location.hasBearing()) return locationValueUnknown
 
         val bearing = location.bearing.toInt()
-        return String.format(Locale.getDefault(), formatBearing, bearing)
+        return String.format(locale, formatBearing, bearing)
     }
 
-    fun getElevation(location: Location?, metric: Boolean): String {
+    fun getBearingAccuracy(location: Location?): String? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
+            return null
+
+        if (location == null
+                || !location.hasBearingAccuracy()
+                || location.bearingAccuracyDegrees == 0f)
+            return locationValueUnknown
+
+        val accuracy = numberFormat.format(location.bearingAccuracyDegrees)
+        return String.format(locale, formatAccuracy, accuracy)
+    }
+
+    fun getElevation(location: Location?, units: Units): String {
         if (location == null || !location.hasAltitude()) return locationValueUnknown
 
-        val elevation = if (metric)
-            location.altitude.toInt()
-        else
-            DistanceUtils.metersToFeet(location.altitude.toFloat()).toInt()
-        val format = if (metric)
-            formatElevationMetric
-        else
-            formatElevationImperial
-        return String.format(Locale.getDefault(), format, elevation)
+        val elevation = when (units) {
+            Units.IMPERIAL -> DistanceUtils.metersToFeet(location.altitude.toFloat()).toInt()
+            Units.METRIC -> location.altitude.toInt()
+        }
+        val format = when (units) {
+            Units.IMPERIAL -> formatElevationImperial
+            Units.METRIC -> formatElevationMetric
+        }
+        return String.format(locale, format, elevation)
+    }
+
+    fun getElevationAccuracy(location: Location?, units: Units?): String? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
+            return null
+
+        if (location == null
+                || !location.hasVerticalAccuracy()
+                || location.verticalAccuracyMeters == 0f
+                || units == null)
+            return locationValueUnknown
+
+        val accuracy = numberFormat.format(location.verticalAccuracyMeters.let {
+            when (units) {
+                Units.IMPERIAL -> DistanceUtils.metersToFeet(it)
+                Units.METRIC -> it
+            }
+        })
+        return String.format(locale, formatAccuracy, accuracy)
     }
 
     fun getCoordinates(location: Location, format: CoordinatesFormat): Pair<String, Int> {
@@ -71,19 +112,55 @@ class LocationFormatter(context: Context) {
         }
     }
 
-    fun getSpeed(location: Location?, metric: Boolean): String {
-        if (location == null || !location.hasSpeed() || location.speed == 0f)
+    fun getCoordinatesAccuracy(location: Location?, units: Units): String {
+        if (location == null || !location.hasAccuracy()) return locationValueUnknown
+        val accuracy = numberFormat.format(location.accuracy.let {
+            when (units) {
+                Units.IMPERIAL -> DistanceUtils.metersToFeet(it).toInt()
+                Units.METRIC -> it.toInt()
+            }
+        })
+        val format = when (units) {
+            Units.IMPERIAL -> formatAccuracyDistanceImperial
+            Units.METRIC -> formatAccuracyDistanceMetric
+        }
+        return String.format(locale, format, accuracy)
+    }
+
+    fun getSpeed(location: Location?, units: Units?): String? {
+        if (location == null || !location.hasSpeed() || location.speed == 0f || units == null)
+            return null
+
+        val speed = numberFormat.format(location.speed.let {
+            when (units) {
+                Units.IMPERIAL -> DistanceUtils.metersPerSecondToMilesPerHour(it)
+                Units.METRIC -> DistanceUtils.metersPerSecondToKilometersPerHour(it)
+            }
+        })
+        val format = when (units) {
+            Units.IMPERIAL -> formatSpeedImperial
+            Units.METRIC -> formatSpeedMetric
+        }
+        return String.format(locale, format, speed)
+    }
+
+    fun getSpeedAccuracy(location: Location?, units: Units?): String? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
+            return null
+
+        if (location == null
+                || !location.hasSpeedAccuracy()
+                || location.speedAccuracyMetersPerSecond == 0f
+                || units == null)
             return locationValueUnknown
 
-        val speed = if (metric)
-            DistanceUtils.metersPerSecondToKilometersPerHour(location.speed)
-        else
-            DistanceUtils.metersPerSecondToMilesPerHour(location.speed)
-        val format = if (metric)
-            formatSpeedMetric
-        else
-            formatSpeedImperial
-        return String.format(Locale.getDefault(), format, speed)
+        val accuracy = numberFormat.format(location.speedAccuracyMetersPerSecond.let {
+            when (units) {
+                Units.IMPERIAL -> DistanceUtils.metersPerSecondToMilesPerHour(it)
+                Units.METRIC -> DistanceUtils.metersPerSecondToKilometersPerHour(it)
+            }
+        })
+        return String.format(locale, formatAccuracy, accuracy)
     }
 
     fun getTimestamp(location: Location?): String {
@@ -97,8 +174,8 @@ class LocationFormatter(context: Context) {
     }
 
     private fun getDDCoords(lat: Double, lon: Double): Pair<String, Int> {
-        val formattedLat = String.format(Locale.getDefault(), formatCoordinateDecimal, lat)
-        val formattedLon = String.format(Locale.getDefault(), formatCoordinateDecimal, lon)
+        val formattedLat = String.format(locale, formatCoordinateDecimal, lat)
+        val formattedLon = String.format(locale, formatCoordinateDecimal, lon)
         val maxLength = maxOf(formattedLat.length, formattedLon.length)
         return Pair("${formattedLat.padStart(maxLength)}\n${formattedLon.padStart(maxLength)}", 2)
     }
@@ -179,7 +256,7 @@ class LocationFormatter(context: Context) {
 
     private fun getUtmEasting(lat: Double, lon: Double): String {
         return "${String.format(
-                Locale.getDefault(),
+                locale,
                 formatCoordinateUtm,
                 getUtmCoord(lat, lon).easting
         )}m E"
@@ -214,7 +291,7 @@ class LocationFormatter(context: Context) {
     private fun getUtmNorthing(lat: Double, lon: Double): String {
         val utmCoordinate = getUtmCoord(lat, lon)
         return "${String.format(
-                Locale.getDefault(),
+                locale,
                 formatCoordinateUtm,
                 utmCoordinate.northing
         )}m N"

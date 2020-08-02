@@ -7,21 +7,21 @@ import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.trewartha.positional.R
 import kotlinx.android.synthetic.main.main_activity.*
 import timber.log.Timber
 
-
 class MainActivity : BaseActivity<MainViewModel>() {
 
-//    override fun onAttachedToWindow() {
-//        super.onAttachedToWindow()
-//        window.setFormat(PixelFormat.RGBA_8888)
-//    }
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        window.setFormat(PixelFormat.RGBA_8888)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         if (requestCode != REQUEST_CODE_PERMISSIONS) return
 
         if (grantResults.any { it == PackageManager.PERMISSION_DENIED }) {
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.location_permission_explanation_title)
                     .setMessage(R.string.location_permission_explanation_message)
                     .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ ->
@@ -66,16 +66,14 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     private fun getPermissionsToRequest(): List<String> = PERMISSIONS
             .filter {
-                val permissionResult = ActivityCompat.checkSelfPermission(this, it)
-                permissionResult != PackageManager.PERMISSION_GRANTED
+                ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
             }
 
     private fun goToSettings() {
-        val intent = Intent(
-                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        startActivity(Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", packageName, null)
-        )
-        startActivity(intent)
+        ))
     }
 
     private fun requestPermissions(permissions: List<String>) {

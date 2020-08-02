@@ -1,7 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" tools:override="true">Positional</string>
 
-
     <!-- Common Text -->
     <string name="dash">—</string>
     <string name="exit">Exit</string>
@@ -34,13 +33,14 @@
     <string name="compass_mode_magnetic_north">Magnetic North</string>
     <string name="compass_mode_true_north">True North</string>
     <string name="compass_sensor_missing_button_positive">@string/ok</string>
-    <string name="compass_sensor_missing_message">Hmm… Your device is missing an accelerometer or magnetometer, but the compass needs both of them. The compass will be disabled, but the rest of the app will function normally.</string>
+    <string name="compass_sensor_missing_message">Unfortunately, your device doesn\'t have some of the hardware that is required for the compass to work.</string>
     <string name="compass_sensor_missing_title">Missing Required Sensor(s)</string>
 
 
     <!-- Location -->
-    <string name="location_accuracy_imperial">%d ft</string>
-    <string name="location_accuracy_metric">%d m</string>
+    <string name="location_accuracy">± %s</string>
+    <string name="location_accuracy_imperial">%s ft</string>
+    <string name="location_accuracy_metric">%s m</string>
     <string name="location_bearing">%d°</string>
     <string name="location_coordinate_decimal">%.5f</string>
     <string name="location_coordinate_utm">%7.0f</string>
@@ -54,8 +54,8 @@
     <string name="location_copy_coordinates_latitude">Latitude only</string>
     <string name="location_copy_coordinates_longitude">Longitude only</string>
     <string name="location_copy_coordinates_title">Which coordinates would you like to copy?</string>
-    <string name="location_elevation_imperial">%,d ft</string>
-    <string name="location_elevation_metric">%,d m</string>
+    <string name="location_elevation_imperial">%s ft</string>
+    <string name="location_elevation_metric">%s m</string>
     <string name="location_label_accuracy">Accuracy</string>
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_elevation">Elevation</string>
@@ -66,8 +66,10 @@
     <string name="location_permission_explanation_negative">@string/exit</string>
     <string name="location_share_button_content_description">share coordinates</string>
     <string name="location_share_snackbar_failure">Hold tight, still trying to get your coordinates…</string>
-    <string name="location_speed_imperial">%.0f mph</string>
-    <string name="location_speed_metric">%.0f km/h</string>
+    <string name="location_snackbar_screen_locked">Screen locked on while app is visible</string>
+    <string name="location_snackbar_screen_unlocked">Screen unlocked</string>
+    <string name="location_speed_imperial">%s mph</string>
+    <string name="location_speed_metric">%s km/h</string>
     <string name="location_value_unknown">@string/dash</string>
     <string name="location_updated_at">Updated at %s</string>
     <string name="location_updating">Device is acquiring location…</string>
@@ -126,6 +128,9 @@
     <string name="settings_root_title">Settings</string>
     <string name="settings_screen_lock_key">screenLock</string>
     <string name="settings_screen_lock_content_description">lock screen</string>
+    <string name="settings_show_accuracies_key">showAccuracies</string>
+    <string name="settings_show_accuracies_summary">Android 8 (Oreo) and above only</string>
+    <string name="settings_show_accuracies_title">Show accuracies</string>
     <string name="settings_theme_system_label">System</string>
     <string name="settings_theme_system_value">system</string>
     <string name="settings_theme_light_label">Light</string>
@@ -136,12 +141,12 @@
     <string name="settings_theme_dark_label">Dark</string>
     <string name="settings_theme_dark_value">dark</string>
     <string name="settings_units_dialog_title">Units of measurement</string>
-    <string name="settings_units_imperial_label">Imperial</string>
-    <string name="settings_units_imperial_value">imperial</string>
     <string name="settings_units_key">useMetricUnits</string>
-    <string name="settings_units_metric_label">Metric</string>
-    <string name="settings_units_metric_value">metric</string>
+    <string name="settings_units_label_imperial">Imperial</string>
+    <string name="settings_units_label_metric">Metric</string>
     <string name="settings_units_title">Units of measurement</string>
+    <string name="settings_units_value_imperial">imperial</string>
+    <string name="settings_units_value_metric">metric</string>
     <string name="settings_time_format_dialog_title">Time Format</string>
     <string name="settings_time_format_key">timeFormat</string>
     <string name="settings_time_format_title">Time format</string>
@@ -149,5 +154,4 @@
     <string name="settings_time_format_12hr_value">12hr</string>
     <string name="settings_time_format_24hr_label">24-hour</string>
     <string name="settings_time_format_24hr_value">24hr</string>
-
 </resources>

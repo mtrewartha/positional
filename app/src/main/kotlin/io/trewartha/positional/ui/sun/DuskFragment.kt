@@ -6,22 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.MainViewModel
-import io.trewartha.positional.ui.utils.DateTimeFormatter
 import kotlinx.android.synthetic.main.dusk_fragment.*
 
 class DuskFragment : Fragment() {
 
-    private lateinit var dateTimeFormatter: DateTimeFormatter
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SunViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
-        dateTimeFormatter = DateTimeFormatter(context)
+        viewModel = ViewModelProvider(requireActivity()).get(SunViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -31,12 +27,14 @@ class DuskFragment : Fragment() {
     ): View = inflater.inflate(R.layout.dusk_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.sunLiveData.observe(viewLifecycleOwner, Observer {
-            dateTextView.text = dateTimeFormatter.getFormattedDate(it.astronomicalDusk)
-            astronomicalValueTextView.text = dateTimeFormatter.getFormattedTime(it.astronomicalDusk)
-            nauticalValueTextView.text = dateTimeFormatter.getFormattedTime(it.nauticalDusk)
-            civilValueTextView.text = dateTimeFormatter.getFormattedTime(it.civilDusk)
-            sunsetValueTextView.text = dateTimeFormatter.getFormattedTime(it.sunset)
-        })
+        viewModel.sunData.observe(viewLifecycleOwner, ::handleSunData)
+    }
+
+    private fun handleSunData(data: SunViewModel.Data.Sun) {
+        dateTextView.text = data.date
+        astronomicalValueTextView.text = data.astronomicalDusk
+        nauticalValueTextView.text = data.nauticalDusk
+        civilValueTextView.text = data.civilDusk
+        sunsetValueTextView.text = data.sunset
     }
 }

@@ -23,6 +23,13 @@
         android:summary="%s"
         android:title="@string/settings_coordinates_format_title" />
 
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_adjust_24px"
+        android:key="@string/settings_show_accuracies_key"
+        android:summary="@string/settings_show_accuracies_summary"
+        android:title="@string/settings_show_accuracies_title" />
+
     <ListPreference
         android:defaultValue="@string/settings_theme_system_value"
         android:dialogTitle="@string/settings_theme_dialog_title"
@@ -44,7 +51,7 @@
         android:title="@string/settings_time_format_title" />
 
     <ListPreference
-        android:defaultValue="@string/settings_units_metric_value"
+        android:defaultValue="@string/settings_units_value_metric"
         android:dialogTitle="@string/settings_units_dialog_title"
         android:entries="@array/settings_units_labels"
         android:entryValues="@array/settings_units_values"

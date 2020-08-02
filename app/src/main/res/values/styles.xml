@@ -147,6 +147,12 @@
         <item name="height_weight">0.8</item>
     </style>
 
+    <style name="LocationStatAccuracy" parent="TextAppearance.Positional.Caption">
+        <item name="corners">4</item>
+        <item name="custom_color">@color/shimmer</item>
+        <item name="height_weight">0.8</item>
+    </style>
+
     <style name="LocationStatRow">
         <item name="android:gravity">center_vertical</item>
         <item name="android:minHeight">64dp</item>

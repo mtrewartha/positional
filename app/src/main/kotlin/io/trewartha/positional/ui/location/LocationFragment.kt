@@ -1,29 +1,27 @@
 package io.trewartha.positional.ui.location
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import com.google.android.material.snackbar.Snackbar
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.MainViewModel
+import io.trewartha.positional.ui.utils.showSnackbar
 import kotlinx.android.synthetic.main.location_fragment.*
 
 class LocationFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: LocationViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = ViewModelProvider(requireActivity()).get(LocationViewModel::class.java)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -32,98 +30,105 @@ class LocationFragment : Fragment() {
     ): View? = inflater.inflate(R.layout.location_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        // ViewModel data
+        viewModel.locationData.observe(viewLifecycleOwner, ::handleLocationData)
+        viewModel.screenLockData.observe(viewLifecycleOwner, ::handleScreenLockData)
 
-        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java).apply {
-            locationLiveData.observe(viewLifecycleOwner) { onLocationObserved(it) }
-            screenLockLiveData.observe(viewLifecycleOwner) { onScreenLockObserved(it) }
-        }
+        // ViewModel events
+        viewModel.coordinatesCopyEvents.observe(viewLifecycleOwner, ::handleCoordinatesCopyEvent)
+        viewModel.coordinatesShareEvents.observe(viewLifecycleOwner, ::handleCoordinatesShareEvent)
+        viewModel.screenLockEvents.observe(viewLifecycleOwner, ::handleScreenLockEvent)
 
-        copyButton.setOnClickListener { onCopyClick() }
-        screenLockButton.setOnClickListener { onScreenLockClick() }
-        shareButton.setOnClickListener { onShareClick() }
+        // View events
+        copyButton.setOnClickListener { viewModel.handleViewEvent(Event.CopyClick) }
+        screenLockButton.setOnClickListener { viewModel.handleViewEvent(Event.ScreenLockClick) }
+        shareButton.setOnClickListener { viewModel.handleViewEvent(Event.ShareClick) }
     }
 
-    private fun haveLocationPermissions(): Boolean =
-            checkSelfPermission(requireContext(), ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
-                    && checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
-
-    private fun lockScreen(lock: Boolean) {
-        activity?.window?.apply {
-            if (lock)
-                addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            else
-                clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-    }
-
-    private fun onCopyClick() {
-        val coordinates = viewModel.locationLiveData.value?.coordinates
-        if (coordinates == null) {
-            Snackbar.make(
-                    coordinatorLayout,
-                    R.string.location_copied_coordinates_failure,
-                    Snackbar.LENGTH_LONG
-            ).show()
-            return
-        }
-
-        val clipboardManager = requireContext()
-                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-        clipboardManager.setPrimaryClip(
-                ClipData.newPlainText(
-                        requireContext().getString(R.string.location_copied_coordinates_label),
-                        coordinates
-                )
-        )
-
-        Snackbar.make(
-                coordinatorLayout,
-                requireContext().getString(R.string.location_copied_coordinates_both_success),
-                Snackbar.LENGTH_LONG
-        ).show()
-    }
-
-    private fun onLocationObserved(locationViewData: MainViewModel.LocationViewData) {
+    private fun handleLocationData(data: LocationViewModel.Data.Location) {
         coordinatesTextView.apply {
-            maxLines = locationViewData.coordinatesLines
-            text = locationViewData.coordinates
+            maxLines = data.coordinatesLines
+            text = data.coordinates
         }
-        accuracyValueTextView.text = locationViewData.accuracy
-        bearingValueTextView.text = locationViewData.bearing
-        elevationValueTextView.text = locationViewData.elevation
-        speedValueTextView.text = locationViewData.speed
-        updatedAtTextView.text = locationViewData.updatedAt
+        bearingValueTextView.text = data.bearing
+        bearingAccuracyValueTextView.apply {
+            if (data.bearingAccuracy == null) {
+                visibility = View.GONE
+            } else {
+                text = data.bearingAccuracy
+            }
+        }
+        elevationValueTextView.text = data.elevation
+        elevationAccuracyValueTextView.apply {
+            if (data.elevationAccuracy == null) {
+                visibility = View.GONE
+            } else {
+                text = data.elevationAccuracy
+            }
+        }
+        speedValueTextView.text = data.speed
+        speedAccuracyValueTextView.apply {
+            if (data.speedAccuracy == null) {
+                visibility = View.GONE
+            } else {
+                text = data.speedAccuracy
+            }
+        }
+        updatedAtTextView.text = data.updatedAt
     }
 
-    private fun onScreenLockClick() {
-        viewModel.toggleScreenLock()
-    }
-
-    private fun onScreenLockObserved(screenLock: Boolean?) {
-        lockScreen(screenLock ?: return)
+    private fun handleScreenLockData(data: LocationViewModel.Data.ScreenLock) {
         screenLockButton.setIconResource(
-                if (screenLock) R.drawable.ic_twotone_smartphone_24px
+                if (data.locked) R.drawable.ic_twotone_smartphone_24px
                 else R.drawable.ic_twotone_screen_lock_portrait_24px
         )
+        activity?.window?.apply {
+            if (data.locked) addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            else clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
     }
 
-    private fun onShareClick() {
-        val coordinates = viewModel.locationLiveData.value?.coordinates
-        if (coordinates == null) {
-            Snackbar.make(
-                    coordinatorLayout,
-                    R.string.location_share_snackbar_failure,
-                    Snackbar.LENGTH_LONG
-            ).show()
-            return
+    private fun handleCoordinatesCopyEvent(event: LocationViewModel.Event.CoordinatesCopy) {
+        if (event.handled) return
+        when (event) {
+            is LocationViewModel.Event.CoordinatesCopy.Error -> {
+                coordinatorLayout.showSnackbar(R.string.location_copied_coordinates_failure)
+            }
+            is LocationViewModel.Event.CoordinatesCopy.Success -> {
+                coordinatorLayout.showSnackbar(R.string.location_copied_coordinates_both_success)
+            }
         }
+        event.handled = true
+    }
 
-        val sendIntent = Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_TEXT, coordinates)
-            type = "text/plain"
+    private fun handleCoordinatesShareEvent(event: LocationViewModel.Event.CoordinatesShare) {
+        if (event.handled) return
+        when (event) {
+            is LocationViewModel.Event.CoordinatesShare.Error -> {
+                coordinatorLayout.showSnackbar(R.string.location_share_snackbar_failure)
+            }
+            is LocationViewModel.Event.CoordinatesShare.Success -> {
+                startActivity(Intent(Intent.ACTION_SEND).apply {
+                    putExtra(Intent.EXTRA_TEXT, event.coordinates)
+                    type = "text/plain"
+                })
+            }
         }
-        startActivity(sendIntent)
+        event.handled = true
+    }
+
+    private fun handleScreenLockEvent(event: LocationViewModel.Event.ScreenLock) {
+        if (event.handled) return
+        coordinatorLayout.showSnackbar(
+                if (event.locked) R.string.location_snackbar_screen_locked
+                else R.string.location_snackbar_screen_unlocked
+        )
+        event.handled = true
+    }
+
+    sealed class Event {
+        object CopyClick : Event()
+        object ScreenLockClick : Event()
+        object ShareClick : Event()
     }
 }

@@ -68,7 +68,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:constraint_referenced_ids="accuracyFlow,divider1,bearingFlow,divider2,elevationFlow,divider3,speedFlow,updatedAtTextView"
+            app:constraint_referenced_ids="bearingFlow,divider2,elevationFlow,divider3,speedFlow,updatedAtTextView"
             app:flow_verticalGap="12dp"
             app:flow_verticalStyle="spread"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,48 +76,11 @@
             app:layout_constraintStart_toEndOf="@id/coordinatesTextView" />
 
         <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/accuracyFlow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/location_stat_row_gap_horizontal"
-            app:constraint_referenced_ids="accuracyImageView,accuracyLabelTextView,accuracyValueTextView"
-            app:flow_horizontalGap="@dimen/location_stat_row_gap_horizontal" />
-
-        <ImageView
-            android:id="@+id/accuracyImageView"
-            style="@style/LocationStatIcon"
-            android:layout_width="@dimen/location_stat_row_image_size"
-            android:layout_height="@dimen/location_stat_row_image_size"
-            android:contentDescription="@string/location_label_accuracy"
-            android:src="@drawable/ic_twotone_straighten_24px" />
-
-        <TextView
-            android:id="@+id/accuracyLabelTextView"
-            style="@style/LocationStatLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/location_label_accuracy" />
-
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
-            android:id="@+id/accuracyValueTextView"
-            style="@style/LocationStat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:minWidth="96dp" />
-
-        <include
-            android:id="@+id/divider1"
-            layout="@layout/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp" />
-
-        <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/bearingFlow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/location_stat_row_gap_horizontal"
-            app:constraint_referenced_ids="bearingImageView,bearingLabelTextView,bearingValueTextView"
+            app:constraint_referenced_ids="bearingImageView,bearingLabelTextView,bearingValueTextView,bearingAccuracyValueTextView"
             app:flow_horizontalGap="@dimen/location_stat_row_gap_horizontal" />
 
         <ImageView
@@ -143,6 +106,14 @@
             android:gravity="end"
             android:minWidth="96dp" />
 
+        <com.elyeproj.loaderviewlibrary.LoaderTextView
+            android:id="@+id/bearingAccuracyValueTextView"
+            style="@style/LocationStatAccuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:minWidth="36dp" />
+
         <include
             android:id="@+id/divider2"
             layout="@layout/divider"
@@ -154,7 +125,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/location_stat_row_gap_horizontal"
-            app:constraint_referenced_ids="elevationImageView,elevationLabelTextView,elevationValueTextView"
+            app:constraint_referenced_ids="elevationImageView,elevationLabelTextView,elevationValueTextView,elevationAccuracyValueTextView"
             app:flow_horizontalGap="@dimen/location_stat_row_gap_horizontal" />
 
         <ImageView
@@ -180,6 +151,14 @@
             android:gravity="end"
             android:minWidth="96dp" />
 
+        <com.elyeproj.loaderviewlibrary.LoaderTextView
+            android:id="@+id/elevationAccuracyValueTextView"
+            style="@style/LocationStatAccuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:minWidth="36dp" />
+
         <include
             android:id="@+id/divider3"
             layout="@layout/divider"
@@ -191,7 +170,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/location_stat_row_gap_horizontal"
-            app:constraint_referenced_ids="speedImageView,speedLabelTextView,speedValueTextView"
+            app:constraint_referenced_ids="speedImageView,speedLabelTextView,speedValueTextView,speedAccuracyValueTextView"
             app:flow_horizontalGap="@dimen/location_stat_row_gap_horizontal" />
 
         <ImageView
@@ -216,6 +195,14 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:minWidth="96dp" />
+
+        <com.elyeproj.loaderviewlibrary.LoaderTextView
+            android:id="@+id/speedAccuracyValueTextView"
+            style="@style/LocationStatAccuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:minWidth="36dp" />
 
         <TextView
             android:id="@+id/updatedAtTextView"

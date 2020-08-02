@@ -12,17 +12,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import io.trewartha.positional.R
 import io.trewartha.positional.compass.CompassMode
-import io.trewartha.positional.ui.MainViewModel
 import kotlinx.android.synthetic.main.compass_fragment.*
 import kotlin.math.roundToInt
 
 class CompassFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: CompassViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(CompassViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -32,42 +31,8 @@ class CompassFragment : Fragment() {
     ): View = inflater.inflate(R.layout.compass_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.apply {
-            if (!deviceHasAccelerometer || !deviceHasMagnetometer) {
-                AlertDialog.Builder(view.context)
-                        .setTitle(R.string.compass_sensor_missing_title)
-                        .setMessage(R.string.compass_sensor_missing_message)
-                        .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
-                        .show()
-            } else {
-                compassLiveData.observe(viewLifecycleOwner) {
-                    it.azimuth?.let { azimuth ->
-                        backgroundCompassView.rotationUpdate(360f - azimuth, true)
-                        needleCompassView.rotationUpdate(360f - azimuth, true)
-                        degreesTextView.text = getString(
-                                R.string.compass_degrees, azimuth.roundToInt()
-                        )
-
-                        // If there's an azimuth, we should be showing some accuracies. If they're
-                        // not present, make sure they're shown as unknown.
-                        accelerometerAccuracyTextView.text = getAccuracyText(
-                                it.accelerometerAccuracy
-                        )
-                        magnetometerAccuracyTextView.text = getAccuracyText(
-                                it.magnetometerAccuracy
-                        )
-                    }
-                    it.mode?.let { mode ->
-                        modeTextView.text = getModeText(mode)
-                    }
-                    it.declination?.let { dec ->
-                        declinationTextView.text = getDeclinationText(dec)
-                    }
-                }
-            }
-        }
+        // ViewModel data
+        viewModel.compassData.observe(viewLifecycleOwner, ::handleCompassData)
     }
 
     private fun getAccuracyText(accuracy: Int?): String = getString(
@@ -81,15 +46,37 @@ class CompassFragment : Fragment() {
             }
     )
 
-    private fun getDeclinationText(declination: Float): String = getString(
-            R.string.compass_declination,
-            declination.roundToInt()
-    )
+    private fun handleCompassData(data: CompassViewModel.Data.Compass?) {
+        if (data == null) {
+            // TODO: Show this as text that replaces the compass visuals instead of using a dialog
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.compass_sensor_missing_title)
+                    .setMessage(R.string.compass_sensor_missing_message)
+                    .setPositiveButton(R.string.compass_sensor_missing_button_positive, null)
+                    .show()
+            return
+        }
 
-    private fun getModeText(compassMode: CompassMode): String = getString(
-            when (compassMode) {
-                CompassMode.MAGNETIC_NORTH -> R.string.compass_mode_magnetic_north
-                CompassMode.TRUE_NORTH -> R.string.compass_mode_true_north
-            }
-    )
+        data.azimuth?.let { azimuth ->
+            backgroundCompassView.rotationUpdate(360f - azimuth, true)
+            needleCompassView.rotationUpdate(360f - azimuth, true)
+            degreesTextView.text = getString(R.string.compass_degrees, azimuth.roundToInt())
+
+            // If there's an azimuth, we should be showing some accuracies. If they're
+            // not present, make sure they're shown as unknown.
+            accelerometerAccuracyTextView.text = getAccuracyText(data.accelerometerAccuracy)
+            magnetometerAccuracyTextView.text = getAccuracyText(data.magnetometerAccuracy)
+        }
+        data.mode?.let { mode ->
+            modeTextView.text = getString(
+                    when (mode) {
+                        CompassMode.MAGNETIC_NORTH -> R.string.compass_mode_magnetic_north
+                        CompassMode.TRUE_NORTH -> R.string.compass_mode_true_north
+                    }
+            )
+        }
+        data.declination?.let {
+            declinationTextView.text = getString(R.string.compass_declination, it.roundToInt())
+        }
+    }
 }
