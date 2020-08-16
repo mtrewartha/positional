@@ -39,7 +39,7 @@ class SunFragment : Fragment() {
         viewModel.sunData.observe(viewLifecycleOwner, ::handleSunData)
     }
 
-    private fun handleSunData(data: SunViewModel.Data.Sun) {
+    private fun handleSunData(data: SunViewModel.SunData) {
         updatedAtTextView.text = data.updatedAt
     }
 }

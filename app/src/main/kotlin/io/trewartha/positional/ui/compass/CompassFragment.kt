@@ -46,7 +46,7 @@ class CompassFragment : Fragment() {
             }
     )
 
-    private fun handleCompassData(data: CompassViewModel.Data.Compass?) {
+    private fun handleCompassData(data: CompassViewModel.CompassData?) {
         if (data == null) {
             // TODO: Show this as text that replaces the compass visuals instead of using a dialog
             AlertDialog.Builder(requireContext())

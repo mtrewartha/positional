@@ -30,7 +30,7 @@ class DawnFragment : Fragment() {
         viewModel.sunData.observe(viewLifecycleOwner, ::handleSunData)
     }
 
-    private fun handleSunData(data: SunViewModel.Data.Sun) {
+    private fun handleSunData(data: SunViewModel.SunData) {
         dateTextView.text = data.date
         astronomicalValueTextView.text = data.astronomicalDawn
         nauticalValueTextView.text = data.nauticalDawn

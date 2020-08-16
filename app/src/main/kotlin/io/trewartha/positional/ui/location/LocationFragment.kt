@@ -45,7 +45,7 @@ class LocationFragment : Fragment() {
         shareButton.setOnClickListener { viewModel.handleViewEvent(Event.ShareClick) }
     }
 
-    private fun handleLocationData(data: LocationViewModel.Data.Location) {
+    private fun handleLocationData(data: LocationViewModel.LocationData) {
         coordinatesTextView.apply {
             maxLines = data.coordinatesLines
             text = data.coordinates
@@ -77,7 +77,7 @@ class LocationFragment : Fragment() {
         updatedAtTextView.text = data.updatedAt
     }
 
-    private fun handleScreenLockData(data: LocationViewModel.Data.ScreenLock) {
+    private fun handleScreenLockData(data: LocationViewModel.ScreenLockData) {
         screenLockButton.setIconResource(
                 if (data.locked) R.drawable.ic_twotone_smartphone_24px
                 else R.drawable.ic_twotone_screen_lock_portrait_24px
@@ -88,26 +88,26 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun handleCoordinatesCopyEvent(event: LocationViewModel.Event.CoordinatesCopy) {
+    private fun handleCoordinatesCopyEvent(event: LocationViewModel.CoordinatesCopyEvent) {
         if (event.handled) return
         when (event) {
-            is LocationViewModel.Event.CoordinatesCopy.Error -> {
+            is LocationViewModel.CoordinatesCopyEvent.Error -> {
                 coordinatorLayout.showSnackbar(R.string.location_copied_coordinates_failure)
             }
-            is LocationViewModel.Event.CoordinatesCopy.Success -> {
+            is LocationViewModel.CoordinatesCopyEvent.Success -> {
                 coordinatorLayout.showSnackbar(R.string.location_copied_coordinates_both_success)
             }
         }
         event.handled = true
     }
 
-    private fun handleCoordinatesShareEvent(event: LocationViewModel.Event.CoordinatesShare) {
+    private fun handleCoordinatesShareEvent(event: LocationViewModel.CoordinatesShareEvent) {
         if (event.handled) return
         when (event) {
-            is LocationViewModel.Event.CoordinatesShare.Error -> {
+            is LocationViewModel.CoordinatesShareEvent.Error -> {
                 coordinatorLayout.showSnackbar(R.string.location_share_snackbar_failure)
             }
-            is LocationViewModel.Event.CoordinatesShare.Success -> {
+            is LocationViewModel.CoordinatesShareEvent.Success -> {
                 startActivity(Intent(Intent.ACTION_SEND).apply {
                     putExtra(Intent.EXTRA_TEXT, event.coordinates)
                     type = "text/plain"
@@ -117,7 +117,7 @@ class LocationFragment : Fragment() {
         event.handled = true
     }
 
-    private fun handleScreenLockEvent(event: LocationViewModel.Event.ScreenLock) {
+    private fun handleScreenLockEvent(event: LocationViewModel.ScreenLockEvent) {
         if (event.handled) return
         coordinatorLayout.showSnackbar(
                 if (event.locked) R.string.location_snackbar_screen_locked

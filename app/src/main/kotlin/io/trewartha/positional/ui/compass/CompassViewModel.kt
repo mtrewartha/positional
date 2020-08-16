@@ -30,10 +30,10 @@ import java.util.*
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class CompassViewModel(app: Application) : AndroidViewModel(app) {
 
-    val compassData: LiveData<Data.Compass>
+    val compassData: LiveData<CompassData>
         get() = _compassData
 
-    private val _compassData = MediatorLiveData<Data.Compass>()
+    private val _compassData = MediatorLiveData<CompassData>()
 
     private val sensorManager = app.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val windowManager = app.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -81,7 +81,7 @@ class CompassViewModel(app: Application) : AndroidViewModel(app) {
         }
     }.asLiveData()
 
-    private val location = callbackFlow<Location> {
+    private val location = callbackFlow {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 val location = locationResult?.lastLocation ?: return
@@ -282,7 +282,7 @@ class CompassViewModel(app: Application) : AndroidViewModel(app) {
             accelerometerReadings: FloatArray,
             magnetometerAccuracy: Int,
             magnetometerReadings: FloatArray
-    ): Data.Compass {
+    ): CompassData {
         SensorManager.getRotationMatrix(
                 temporaryRotationMatrix, null,
                 accelerometerReadings, magnetometerReadings
@@ -295,7 +295,7 @@ class CompassViewModel(app: Application) : AndroidViewModel(app) {
         if (mode == CompassMode.TRUE_NORTH)
             azimuth += declination
 
-        return Data.Compass(azimuth, declination, mode, accelerometerAccuracy, magnetometerAccuracy)
+        return CompassData(azimuth, declination, mode, accelerometerAccuracy, magnetometerAccuracy)
     }
 
     private val Location.magneticDeclination: Float
@@ -306,15 +306,13 @@ class CompassViewModel(app: Application) : AndroidViewModel(app) {
                 time
         ).declination
 
-    sealed class Data {
-        data class Compass(
-                val azimuth: Float?,
-                val declination: Float?,
-                val mode: CompassMode?,
-                val accelerometerAccuracy: Int?,
-                val magnetometerAccuracy: Int?
-        ) : Data()
-    }
+    data class CompassData(
+            val azimuth: Float?,
+            val declination: Float?,
+            val mode: CompassMode?,
+            val accelerometerAccuracy: Int?,
+            val magnetometerAccuracy: Int?
+    )
 
     private inner class PrefCompassModeListener(
             val producerScope: ProducerScope<String?>
