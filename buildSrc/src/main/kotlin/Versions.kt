@@ -53,7 +53,7 @@ object Versions {
     }
 
     object Plugins {
-        const val android = "4.1.0-beta05"
+        const val android = "4.1.0-rc01"
         const val firebaseCrashlytics = "2.2.0"
         const val firebasePerf = "1.3.1"
         const val googleServices = "4.3.3"
