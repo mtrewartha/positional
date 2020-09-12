@@ -2,7 +2,7 @@ import org.gradle.api.JavaVersion
 
 object Versions {
 
-    const val kotlin = "1.3.72"
+    const val kotlin = "1.4.0"
 
     object Android {
         const val compileSdk = 29
@@ -41,7 +41,9 @@ object Versions {
         const val androidXRecyclerView = "1.2.0-alpha04"
         const val firebaseBoM = "25.5.0"
         const val geoCoordinatesConversion = "360781e"
+        const val guava = "29.0-android"
         const val kotlin = Versions.kotlin
+        const val kotest = "4.2.0"
         const val loaderView = "2.0.0"
         const val material = "1.3.0-alpha01"
         const val pageIndicatorView = "1.0.3"
@@ -53,7 +55,7 @@ object Versions {
     }
 
     object Plugins {
-        const val android = "4.1.0-rc01"
+        const val android = "4.1.0-rc02"
         const val firebaseCrashlytics = "2.2.0"
         const val firebasePerf = "1.3.1"
         const val googleServices = "4.3.3"

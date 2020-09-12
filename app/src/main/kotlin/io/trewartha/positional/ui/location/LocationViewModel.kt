@@ -78,7 +78,7 @@ class LocationViewModel(app: Application) : AndroidViewModel(app) {
         emit(DEFAULT_COORDINATES_FORMAT)
     }.asLiveData()
 
-    private val location = callbackFlow {
+    private val location = callbackFlow<Location> {
         var firstLocationUpdateTrace: Trace? =
                 FirebasePerformance.getInstance().newTrace("first_location")
         val locationClient = FusedLocationProviderClient(app)

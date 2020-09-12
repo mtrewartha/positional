@@ -1,6 +1,7 @@
 package io.trewartha.positional.ui.sun
 
 import android.app.Application
+import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -21,7 +22,7 @@ import java.util.*
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class SunViewModel(app: Application) : AndroidViewModel(app) {
 
-    val sunData: LiveData<SunData> = callbackFlow {
+    val sunData: LiveData<SunData> = callbackFlow<Location> {
         val locationClient = FusedLocationProviderClient(app)
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {

@@ -9,6 +9,7 @@
         <!-- Material Theme Colors -->
         <item name="android:colorBackground">@color/surface</item>
         <item name="android:navigationBarColor">@color/surface</item>
+        <item name="colorError">@color/error</item>
         <item name="colorOnSurface">@color/onSurface</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorSecondary">@color/secondary</item>

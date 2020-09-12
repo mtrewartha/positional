@@ -2,17 +2,15 @@
     <string name="app_name" tools:override="true">Positional</string>
 
     <!-- Common Text -->
-    <string name="dash">—</string>
-    <string name="exit">Exit</string>
-    <string name="ok">OK</string>
-
+    <string name="common_dash">—</string>
+    <string name="common_exit">Exit</string>
+    <string name="common_ok">OK</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_navigation_compass">Compass</string>
     <string name="bottom_navigation_location">Location</string>
     <string name="bottom_navigation_sun">Sun</string>
     <string name="bottom_navigation_settings">Settings</string>
-
 
     <!-- Compass -->
     <string name="compass_declination">%d°</string>
@@ -27,15 +25,17 @@
     <string name="compass_accuracy_medium">Medium</string>
     <string name="compass_accuracy_no_contact">Unusable</string>
     <string name="compass_accuracy_title">Accuracy </string>
-    <string name="compass_accuracy_unknown">@string/dash</string>
+    <string name="compass_accuracy_unknown">@string/common_dash</string>
     <string name="compass_accuracy_unreliable">Unreliable</string>
     <string name="compass_mode_title">Mode</string>
     <string name="compass_mode_magnetic_north">Magnetic North</string>
     <string name="compass_mode_true_north">True North</string>
-    <string name="compass_sensor_missing_button_positive">@string/ok</string>
-    <string name="compass_sensor_missing_message">Unfortunately, your device doesn\'t have some of the hardware that is required for the compass to work.</string>
-    <string name="compass_sensor_missing_title">Missing Required Sensor(s)</string>
-
+    <string name="compass_missing_accelerometer_body">No Accelerometer in Device</string>
+    <string name="compass_missing_accelerometer_caption">This device is missing hardware that the app needs to determine orientation. Unfortunately, that means the compass can\'t work on this device.</string>
+    <string name="compass_missing_magnetometer_body">No Magnetometer in Device</string>
+    <string name="compass_missing_magnetometer_caption">This device is missing hardware that the app needs to measure Earth\'s magnetic field. Unfortunately, that means the compass can\'t work on this device.</string>
+    <string name="compass_missing_both_sensors_body">No Accelerometer or Magnetometer in Device</string>
+    <string name="compass_missing_both_sensors_caption">This device is missing hardware that the app needs to measure Earth\'s magnetic field and determine orientation. Unfortunately, that means the compass can\'t work on this device.</string>
 
     <!-- Location -->
     <string name="location_accuracy">± %s</string>
@@ -63,14 +63,14 @@
     <string name="location_permission_explanation_title">Location Permission Needed</string>
     <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through the Settings app before using this app.</string>
     <string name="location_permission_explanation_positive">Go to Settings</string>
-    <string name="location_permission_explanation_negative">@string/exit</string>
+    <string name="location_permission_explanation_negative">@string/common_exit</string>
     <string name="location_share_button_content_description">share coordinates</string>
     <string name="location_share_snackbar_failure">Hold tight, still trying to get your coordinates…</string>
     <string name="location_snackbar_screen_locked">Screen locked on while app is visible</string>
     <string name="location_snackbar_screen_unlocked">Screen unlocked</string>
     <string name="location_speed_imperial">%s mph</string>
     <string name="location_speed_metric">%s km/h</string>
-    <string name="location_value_unknown">@string/dash</string>
+    <string name="location_value_unknown">@string/common_dash</string>
     <string name="location_updated_at">Updated at %s</string>
     <string name="location_updating">Device is acquiring location…</string>
 
@@ -97,8 +97,8 @@
     <string name="sun_sunrise_tooltip">Sunrise is the morning moment when the sun\'s center is visible on the horizon.</string>
     <string name="sun_sunset_label">Sunset</string>
     <string name="sun_sunset_tooltip">Sunset is the evening moment when the sun\'s center is no longer visible on the horizon.</string>
-    <string name="sun_date_unknown">@string/dash</string>
-    <string name="sun_time_unknown">@string/dash</string>
+    <string name="sun_date_unknown">@string/common_dash</string>
+    <string name="sun_time_unknown">@string/common_dash</string>
 
     <!-- Settings -->
     <string name="settings_compass_mode_dialog_title">Compass Mode</string>

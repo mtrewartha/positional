@@ -20,19 +20,19 @@
             android:layout_height="0dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@id/degreesTextView"
-            app:layout_constraintHeight_percent=".60"
+            app:layout_constraintHeight_percent=".50"
             app:layout_constraintTop_toTopOf="parent">
 
-            <io.trewartha.positional.ui.compass.CompassView
-                android:id="@+id/backgroundCompassView"
+            <ImageView
+                android:id="@+id/compassBackgroundImageView"
                 style="@style/CompassBackground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_compass_background"
                 tools:ignore="ContentDescription" />
 
-            <io.trewartha.positional.ui.compass.CompassView
-                android:id="@+id/needleCompassView"
+            <ImageView
+                android:id="@+id/compassNeedleImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitCenter"
@@ -197,6 +197,59 @@
                 tools:text="@string/compass_accuracy_unknown" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/missingSensorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:paddingStart="32dp"
+        android:paddingTop="32dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="32dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/missingSensorIconImageView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_error_black_24dp"
+            android:tint="?attr/colorError"
+            app:layout_constraintBottom_toTopOf="@id/missingSensorBodyTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/missingSensorBodyTextView"
+            style="@style/TextAppearance.Positional.Subtitle2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toTopOf="@id/missingSensorCaptionTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/missingSensorIconImageView"
+            app:layout_constraintWidth_max="320dp"
+            tools:text="@string/compass_missing_both_sensors_body" />
+
+        <TextView
+            android:id="@+id/missingSensorCaptionTextView"
+            style="@style/TextAppearance.Positional.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/missingSensorBodyTextView"
+            app:layout_constraintWidth_max="320dp"
+            tools:text="@string/compass_missing_both_sensors_caption" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

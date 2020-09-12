@@ -65,6 +65,10 @@ repositories {
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXConstraintLayout)
@@ -82,7 +86,7 @@ dependencies {
     implementation(Dependencies.firebaseAnalytics)
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.geoCoordinatesConversion)
-    implementation(Dependencies.kotlinStdLibJdk8)
+    implementation(Dependencies.guava)
     implementation(Dependencies.loaderView)
     implementation(Dependencies.material)
     implementation(Dependencies.pageIndicatorView)
@@ -90,6 +94,10 @@ dependencies {
     implementation(Dependencies.sunriseSunset)
     implementation(Dependencies.threeTenAbp)
     implementation(Dependencies.timber)
+
+    testImplementation(Dependencies.kotestAssertionsCoreJvm)
+    testImplementation(Dependencies.kotestPropertyJvm)
+    testImplementation(Dependencies.kotestRunnerJUnit5)
 }
 
 apply(plugin = "com.google.gms.google-services")

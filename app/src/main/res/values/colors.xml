@@ -12,15 +12,16 @@
     <color name="_gray2">#f0f0f0</color>
     <color name="_gray3">#282828</color>
 
-    <color name="_deepPurple100">#D1C4E9</color>
-    <color name="_deepPurple300">#9575CD</color>
-    <color name="_deepPurple700">#512DA8</color>
-    <color name="_deepPurple900">#311B92</color>
+    <color name="_deepPurple100">#d1c4e9</color>
+    <color name="_deepPurple300">#9575cd</color>
+    <color name="_deepPurple700">#512da8</color>
+    <color name="_deepPurple900">#311b92</color>
 
     <color name="_red">#f44336</color>
     <color name="_white">#ffffff</color>
 
     <color name="background">@color/_gray1</color>
+    <color name="error">@color/_red</color>
     <color name="onSurface">@color/_black</color>
     <color name="primary">@color/_blue700</color>
     <color name="primaryVariant">@color/_blue900</color>
