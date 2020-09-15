@@ -32,31 +32,30 @@ object Versions {
     }
 
     object Dependencies {
-        const val androidXConstraintLayout = "2.0.0-beta7"
-        const val androidXFragment = "1.3.0-alpha06"
+        const val androidXConstraintLayout = "2.0.0"
+        const val androidXFragment = "1.3.0-alpha08"
         const val androidXLegacySupportV4 = "1.0.0"
         const val androidXLifecycle = "2.2.0"
         const val androidXNavigation = "2.3.0"
         const val androidXPreference = "1.1.1"
-        const val androidXRecyclerView = "1.2.0-alpha04"
-        const val firebaseBoM = "25.5.0"
+        const val androidXRecyclerView = "1.2.0-alpha05"
+        const val firebaseBoM = "25.8.0"
         const val geoCoordinatesConversion = "360781e"
         const val guava = "29.0-android"
         const val kotlin = Versions.kotlin
-        const val kotest = "4.2.0"
+        const val kotest = "4.2.4"
         const val loaderView = "2.0.0"
-        const val material = "1.3.0-alpha01"
+        const val material = "1.3.0-alpha02"
         const val pageIndicatorView = "1.0.3"
         const val playServicesLocation = "17.0.0"
         const val sunriseSunset = "1.1.1"
         const val threeTenAbp = "1.2.4"
         const val timber = "4.7.1"
-        const val worldWind = "0.8.0"
     }
 
     object Plugins {
         const val android = "4.1.0-rc02"
-        const val firebaseCrashlytics = "2.2.0"
+        const val firebaseCrashlytics = "2.2.1"
         const val firebasePerf = "1.3.1"
         const val googleServices = "4.3.3"
         const val gradleVersions = "0.28.0"
