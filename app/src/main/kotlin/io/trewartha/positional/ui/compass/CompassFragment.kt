@@ -45,7 +45,6 @@ class CompassFragment : Fragment() {
     private fun onDataReadings(data: CompassViewModel.Data.Readings) {
         if (missingSensorLayout.visibility != View.GONE) missingSensorLayout.visibility = View.GONE
         compassBackgroundImageView.rotation = data.compassViewRotation
-        compassNeedleImageView.rotation = data.compassViewRotation
         degreesTextView.text = getString(R.string.compass_degrees, data.azimuth)
         accelerometerAccuracyTextView.text = getAccuracyText(data.accelerometerAccuracy)
         magnetometerAccuracyTextView.text = getAccuracyText(data.magnetometerAccuracy)

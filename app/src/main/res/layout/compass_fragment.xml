@@ -14,55 +14,43 @@
         android:paddingEnd="32dp"
         android:paddingBottom="32dp">
 
-        <FrameLayout
-            android:id="@+id/compassFrameLayout"
+        <ImageView
+            android:id="@+id/compassBackgroundImageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_compass_background"
+            app:layout_constraintBottom_toTopOf="@id/detailsLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="1"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/arrowImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_twotone_expand_less_24px"
+            android:tint="@color/onSurface"
             app:layout_constraintBottom_toTopOf="@id/degreesTextView"
-            app:layout_constraintHeight_percent=".50"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/compassBackgroundImageView"
-                style="@style/CompassBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_compass_background"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/compassNeedleImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_compass_needle"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/pinImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_compass_pin"
-                tools:ignore="ContentDescription" />
-
-        </FrameLayout>
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".10" />
 
         <com.elyeproj.loaderviewlibrary.LoaderTextView
             android:id="@+id/degreesTextView"
             style="@style/CompassDegrees"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
             android:contentDescription="@string/compass_degrees_content_description_unknown"
             android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@id/detailsLayout"
+            app:layout_constraintBottom_toBottomOf="@id/compassBackgroundImageView"
+            app:layout_constraintDimensionRatio="H,2:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent=".20"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/compassFrameLayout" />
+            app:layout_constraintTop_toTopOf="@id/compassBackgroundImageView"
+            app:layout_constraintWidth_percent=".3" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detailsLayout"
@@ -70,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/degreesTextView">
+            app:layout_constraintTop_toBottomOf="@id/compassBackgroundImageView">
 
             <TextView
                 android:id="@+id/accuracyTitleTextView"

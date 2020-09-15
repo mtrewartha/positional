@@ -14,185 +14,138 @@
         android:paddingEnd="32dp"
         android:paddingBottom="32dp">
 
-        <FrameLayout
-            android:id="@+id/compassFrameLayout"
+        <ImageView
+            android:id="@+id/compassBackgroundImageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_compass_background"
+            app:layout_constraintBottom_toTopOf="@id/accelerometerAccuracyTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="1"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/arrowImageView"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toStartOf="@id/degreesTextView"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <ImageView
-                android:id="@+id/compassBackgroundImageView"
-                style="@style/CompassBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_compass_background"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/compassNeedleImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_compass_needle"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/pinImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_compass_pin"
-                tools:ignore="ContentDescription" />
-
-        </FrameLayout>
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_twotone_expand_less_24px"
+            android:tint="@color/onSurface"
+            app:layout_constraintBottom_toTopOf="@id/degreesTextView"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent=".10"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.elyeproj.loaderviewlibrary.LoaderTextView
             android:id="@+id/degreesTextView"
             style="@style/CompassDegrees"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="bottom|center_horizontal"
-            app:layout_constraintBottom_toTopOf="@id/detailsLayout"
+            android:contentDescription="@string/compass_degrees_content_description_unknown"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@id/compassBackgroundImageView"
+            app:layout_constraintDimensionRatio="W,2:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_max="192dp"
-            app:layout_constraintStart_toEndOf="@id/compassFrameLayout"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="100°" />
+            app:layout_constraintHeight_percent=".12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/compassBackgroundImageView" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/detailsLayout"
+        <TextView
+            android:id="@+id/accuracyTitleTextView"
+            style="@style/CompassAttributeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:text="@string/compass_accuracy_title"
+            app:layout_constraintBottom_toTopOf="@id/accelerometerAccuracyLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/accelerometerAccuracyLabelTextView" />
+
+        <TextView
+            android:id="@+id/accelerometerAccuracyLabelTextView"
+            style="@style/CompassAttributeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:labelFor="@id/accelerometerAccuracyTextView"
+            android:text="@string/compass_accuracy_accelerometer_label"
+            app:layout_constraintBottom_toTopOf="@id/magnetometerAccuracyLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/magnetometerAccuracyLabelTextView" />
+
+        <com.elyeproj.loaderviewlibrary.LoaderTextView
+            android:id="@+id/accelerometerAccuracyTextView"
+            style="@style/CompassAttributeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:minWidth="@dimen/compass_details_accuracy_min_width"
+            app:layout_constraintBottom_toBottomOf="@id/accelerometerAccuracyLabelTextView"
+            app:layout_constraintStart_toEndOf="@id/accelerometerAccuracyLabelTextView"
+            tools:text="@string/compass_accuracy_unknown" />
+
+        <TextView
+            android:id="@+id/magnetometerAccuracyLabelTextView"
+            style="@style/CompassAttributeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:labelFor="@id/magnetometerAccuracyTextView"
+            android:text="@string/compass_accuracy_magnetometer_label"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.elyeproj.loaderviewlibrary.LoaderTextView
+            android:id="@+id/magnetometerAccuracyTextView"
+            style="@style/CompassAttributeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:minWidth="@dimen/compass_details_accuracy_min_width"
+            app:layout_constraintBottom_toBottomOf="@id/magnetometerAccuracyLabelTextView"
+            app:layout_constraintStart_toEndOf="@id/magnetometerAccuracyLabelTextView"
+            tools:text="@string/compass_accuracy_unknown" />
+
+        <TextView
+            android:id="@+id/modeTitleTextView"
+            style="@style/CompassAttributeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:labelFor="@id/modeTextView"
+            android:text="@string/compass_mode_title"
+            app:layout_constraintBottom_toTopOf="@id/modeTextView"
+            app:layout_constraintEnd_toEndOf="@id/modeTextView" />
+
+        <com.elyeproj.loaderviewlibrary.LoaderTextView
+            android:id="@+id/modeTextView"
+            style="@style/CompassAttributeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:minWidth="@dimen/compass_details_mode_min_width"
+            app:layout_constraintBottom_toTopOf="@id/declinationLabelTextView"
+            app:layout_constraintEnd_toEndOf="@id/declinationTextView"
+            tools:text="@string/compass_mode_true_north" />
+
+        <TextView
+            android:id="@+id/declinationLabelTextView"
+            style="@style/CompassAttributeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:labelFor="@id/declinationTextView"
+            android:text="@string/compass_declination_label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/declinationTextView" />
+
+        <com.elyeproj.loaderviewlibrary.LoaderTextView
+            android:id="@+id/declinationTextView"
+            style="@style/CompassAttributeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/declinationLabelTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/compassFrameLayout"
-            app:layout_constraintTop_toBottomOf="@id/degreesTextView">
-
-            <TextView
-                android:id="@+id/accuracyTitleTextView"
-                style="@style/CompassAttributeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/compass_accuracy_title"
-                app:layout_constraintBottom_toTopOf="@id/accelerometerAccuracyLabelTextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <TextView
-                android:id="@+id/accelerometerAccuracyLabelTextView"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:labelFor="@id/accelerometerAccuracyTextView"
-                android:text="@string/compass_accuracy_accelerometer_label"
-                app:layout_constraintBottom_toTopOf="@id/magnetometerAccuracyLabelTextView"
-                app:layout_constraintEnd_toStartOf="@id/accelerometerAccuracyTextView"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="@id/accuracyTitleTextView"
-                app:layout_constraintTop_toBottomOf="@id/accuracyTitleTextView" />
-
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
-                android:id="@+id/accelerometerAccuracyTextView"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="@dimen/compass_details_accuracy_min_width"
-                app:layout_constraintBottom_toBottomOf="@id/accelerometerAccuracyLabelTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/accelerometerAccuracyLabelTextView"
-                app:layout_constraintTop_toTopOf="@id/accelerometerAccuracyLabelTextView"
-                tools:text="@string/compass_accuracy_unknown" />
-
-            <TextView
-                android:id="@+id/magnetometerAccuracyLabelTextView"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="end"
-                android:labelFor="@id/magnetometerAccuracyTextView"
-                android:text="@string/compass_accuracy_magnetometer_label"
-                app:layout_constraintBottom_toTopOf="@id/modeTitleTextView"
-                app:layout_constraintEnd_toStartOf="@id/magnetometerAccuracyTextView"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="@id/accelerometerAccuracyLabelTextView"
-                app:layout_constraintTop_toBottomOf="@id/accelerometerAccuracyLabelTextView" />
-
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
-                android:id="@+id/magnetometerAccuracyTextView"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="@dimen/compass_details_accuracy_min_width"
-                app:layout_constraintBottom_toBottomOf="@id/magnetometerAccuracyLabelTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/magnetometerAccuracyLabelTextView"
-                app:layout_constraintTop_toTopOf="@id/magnetometerAccuracyLabelTextView"
-                tools:text="@string/compass_accuracy_unknown" />
-
-            <TextView
-                android:id="@+id/modeTitleTextView"
-                style="@style/CompassAttributeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/modeTextView"
-                android:text="@string/compass_mode_title"
-                app:layout_constraintBottom_toTopOf="@id/modeTextView"
-                app:layout_constraintStart_toStartOf="@id/magnetometerAccuracyLabelTextView"
-                app:layout_constraintTop_toBottomOf="@id/magnetometerAccuracyLabelTextView" />
-
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
-                android:id="@+id/modeTextView"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="@dimen/compass_details_mode_min_width"
-                app:layout_constraintBottom_toTopOf="@id/declinationLabelTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="@id/modeTitleTextView"
-                app:layout_constraintTop_toBottomOf="@id/modeTitleTextView"
-                tools:text="@string/compass_mode_true_north" />
-
-            <TextView
-                android:id="@+id/declinationLabelTextView"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:labelFor="@id/declinationTextView"
-                android:text="@string/compass_declination_label"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/declinationTextView"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="@id/modeTextView"
-                app:layout_constraintTop_toBottomOf="@id/modeTextView" />
-
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
-                android:id="@+id/declinationTextView"
-                style="@style/CompassAttributeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="@dimen/compass_details_accuracy_min_width"
-                app:layout_constraintBottom_toBottomOf="@id/declinationLabelTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/declinationLabelTextView"
-                app:layout_constraintTop_toTopOf="@id/declinationLabelTextView"
-                tools:text="@string/compass_accuracy_unknown" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:text="@string/compass_accuracy_unknown" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -223,7 +176,7 @@
 
         <TextView
             android:id="@+id/missingSensorBodyTextView"
-            style="@style/TextAppearance.Positional.Body2"
+            style="@style/TextAppearance.Positional.Subtitle2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
