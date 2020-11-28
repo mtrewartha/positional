@@ -23,6 +23,7 @@
             app:layout_constraintBottom_toTopOf="@id/detailsLayout"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_weight="1"
+            app:tint="?attr/colorOnSurface"
             tools:ignore="ContentDescription" />
 
         <ImageView
@@ -31,14 +32,14 @@
             android:layout_height="0dp"
             android:contentDescription="@null"
             android:src="@drawable/ic_twotone_expand_less_24px"
-            android:tint="@color/onSurface"
             app:layout_constraintBottom_toTopOf="@id/degreesTextView"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".10" />
+            app:layout_constraintWidth_percent=".10"
+            app:tint="?attr/colorOnSurface" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/degreesTextView"
             style="@style/CompassDegrees"
             android:layout_width="0dp"
@@ -51,6 +52,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/compassBackgroundImageView"
             app:layout_constraintWidth_percent=".3" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressIndicator"
+            style="@style/Widget.MaterialComponents.CircularProgressIndicator"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="@id/degreesTextView"
+            app:layout_constraintEnd_toEndOf="@id/degreesTextView"
+            app:layout_constraintStart_toStartOf="@id/degreesTextView"
+            app:layout_constraintTop_toTopOf="@id/degreesTextView" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detailsLayout"
@@ -87,7 +99,7 @@
                 app:layout_constraintStart_toStartOf="@id/accuracyTitleTextView"
                 app:layout_constraintTop_toBottomOf="@id/accuracyTitleTextView" />
 
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
+            <TextView
                 android:id="@+id/accelerometerAccuracyTextView"
                 style="@style/CompassAttributeValue"
                 android:layout_width="wrap_content"
@@ -116,7 +128,7 @@
                 app:layout_constraintStart_toStartOf="@id/accelerometerAccuracyLabelTextView"
                 app:layout_constraintTop_toBottomOf="@id/accelerometerAccuracyLabelTextView" />
 
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
+            <TextView
                 android:id="@+id/magnetometerAccuracyTextView"
                 style="@style/CompassAttributeValue"
                 android:layout_width="wrap_content"
@@ -143,7 +155,7 @@
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
+            <TextView
                 android:id="@+id/modeTextView"
                 style="@style/CompassAttributeValue"
                 android:layout_width="wrap_content"
@@ -172,7 +184,7 @@
                 app:layout_constraintStart_toStartOf="@id/modeTextView"
                 app:layout_constraintTop_toBottomOf="@id/modeTextView" />
 
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
+            <TextView
                 android:id="@+id/declinationTextView"
                 style="@style/CompassAttributeValue"
                 android:layout_width="wrap_content"
@@ -206,12 +218,12 @@
             android:layout_marginBottom="24dp"
             android:contentDescription="@null"
             android:src="@drawable/ic_error_black_24dp"
-            android:tint="?attr/colorError"
             app:layout_constraintBottom_toTopOf="@id/missingSensorBodyTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:tint="?attr/colorError" />
 
         <TextView
             android:id="@+id/missingSensorBodyTextView"

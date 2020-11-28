@@ -2,7 +2,7 @@
     <string name="app_name" tools:override="true">Positional</string>
 
     <!-- Common Text -->
-    <string name="common_dash">—</string>
+    <string name="common_dash" translatable="false">—</string>
     <string name="common_exit">Exit</string>
     <string name="common_ok">OK</string>
 

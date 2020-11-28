@@ -31,6 +31,9 @@ android {
         versionCode = Versions.Application.code
         versionName = Versions.Application.name
     }
+    buildFeatures {
+        viewBinding = true
+    }
     buildTypes {
         getByName("debug").apply {
             isDebuggable = true
@@ -55,6 +58,9 @@ android {
         jvmTarget = Versions.Compatibility.target.toString()
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
+    packagingOptions {
+        exclude("DebugProbesKt.bin")
+    }
 }
 
 repositories {
@@ -74,7 +80,7 @@ dependencies {
     implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXFragmentKtx)
     implementation(Dependencies.androidXLegacySupportV4)
-    implementation(Dependencies.androidXLifecycleCommonJava8)
+    implementation(Dependencies.androidXLifecycleRuntime)
     implementation(Dependencies.androidXLifecycleLiveDataKtx)
     implementation(Dependencies.androidXLifecycleViewModelKtx)
     implementation(Dependencies.androidXNavigationFragmentKtx)
@@ -87,6 +93,8 @@ dependencies {
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.geoCoordinatesConversion)
     implementation(Dependencies.guava)
+    implementation(Dependencies.kotlinxCoroutinesCore)
+    implementation(Dependencies.kotlinxCoroutinesAndroid)
     implementation(Dependencies.loaderView)
     implementation(Dependencies.material)
     implementation(Dependencies.pageIndicatorView)

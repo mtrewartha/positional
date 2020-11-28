@@ -95,8 +95,6 @@
     <style name="CompassAttributeTitle" parent="TextAppearance.Positional.Subtitle2" />
 
     <style name="CompassAttributeValue" parent="TextAppearance.Positional.Caption">
-        <item name="corners">4</item>
-        <item name="custom_color">@color/shimmer</item>
         <item name="height_weight">0.8</item>
     </style>
 
@@ -104,7 +102,6 @@
         <item name="android:textStyle">bold</item>
         <item name="autoSizeMaxTextSize">128sp</item>
         <item name="autoSizeTextType">uniform</item>
-        <item name="corners">4</item>
     </style>
 
     <!-- Location -->
