@@ -2,7 +2,7 @@
 Positional is a free and open-source app, offered for use as is. This document details data collection and usage by the app.
 
 ### Data Collection
-Positional only directly collects one piece of information about you or your device: location.This is the core function of the
+Positional only directly collects one piece of information about you or your device: location. This is the core function of the
 app. As such, it requests your location from Google Play Services. Once Google Play Services provides the location to
 Positional, the app displays it, then discards it. Your privacy is highly valued, so the location of your device is never
 stored or sent to anyone or anywhere- it is solely for displaying to you.
