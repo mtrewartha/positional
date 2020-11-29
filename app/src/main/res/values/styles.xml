@@ -111,9 +111,6 @@
         <item name="android:textColor">@color/onSurface</item>
         <item name="autoSizeMinTextSize">14sp</item>
         <item name="autoSizeTextType">uniform</item>
-        <item name="corners">4</item>
-        <item name="custom_color">@color/shimmer</item>
-        <item name="height_weight">0.8</item>
     </style>
 
     <style name="LocationCoordinatesFragment">
@@ -136,16 +133,9 @@
     <style name="LocationStat" parent="TextAppearance.Positional.Subtitle1">
         <item name="android:textIsSelectable">true</item>
         <item name="android:textStyle">bold</item>
-        <item name="corners">4</item>
-        <item name="custom_color">@color/shimmer</item>
-        <item name="height_weight">0.8</item>
     </style>
 
-    <style name="LocationStatAccuracy" parent="TextAppearance.Positional.Caption">
-        <item name="corners">4</item>
-        <item name="custom_color">@color/shimmer</item>
-        <item name="height_weight">0.8</item>
-    </style>
+    <style name="LocationStatAccuracy" parent="TextAppearance.Positional.Caption" />
 
     <style name="LocationStatRow">
         <item name="android:gravity">center_vertical</item>
@@ -159,11 +149,7 @@
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Caption">
-        <item name="corners">4</item>
-        <item name="custom_color">@color/shimmer</item>
-        <item name="height_weight">0.8</item>
-    </style>
+    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Caption" />
 
     <!-- Sun -->
 

@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:padding="24dp">
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/coordinatesTextView"
             style="@style/LocationCoordinates"
             android:layout_width="match_parent"
@@ -20,6 +20,16 @@
             app:layout_constraintBottom_toTopOf="@id/buttonFlow"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="12.34567\n23.45678" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressIndicator"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="@id/coordinatesTextView"
+            app:layout_constraintEnd_toEndOf="@id/coordinatesTextView"
+            app:layout_constraintStart_toStartOf="@id/coordinatesTextView"
+            app:layout_constraintTop_toTopOf="@id/coordinatesTextView" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/buttonFlow"
@@ -97,7 +107,7 @@
             android:layout_height="wrap_content"
             android:text="@string/location_label_bearing" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/bearingValueTextView"
             style="@style/LocationStat"
             android:layout_width="wrap_content"
@@ -105,7 +115,7 @@
             android:gravity="end"
             android:minWidth="96dp" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/bearingAccuracyValueTextView"
             style="@style/LocationStatAccuracy"
             android:layout_width="wrap_content"
@@ -141,7 +151,7 @@
             android:layout_height="wrap_content"
             android:text="@string/location_label_elevation" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/elevationValueTextView"
             style="@style/LocationStat"
             android:layout_width="wrap_content"
@@ -149,7 +159,7 @@
             android:gravity="end"
             android:minWidth="96dp" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/elevationAccuracyValueTextView"
             style="@style/LocationStatAccuracy"
             android:layout_width="wrap_content"
@@ -185,7 +195,7 @@
             android:layout_height="wrap_content"
             android:text="@string/location_label_speed" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/speedValueTextView"
             style="@style/LocationStat"
             android:layout_width="wrap_content"
@@ -193,7 +203,7 @@
             android:gravity="end"
             android:minWidth="96dp" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/speedAccuracyValueTextView"
             style="@style/LocationStatAccuracy"
             android:layout_width="wrap_content"

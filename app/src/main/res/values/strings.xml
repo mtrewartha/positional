@@ -70,7 +70,6 @@
     <string name="location_snackbar_screen_unlocked">Screen unlocked</string>
     <string name="location_speed_imperial">%s mph</string>
     <string name="location_speed_metric">%s km/h</string>
-    <string name="location_value_unknown">@string/common_dash</string>
     <string name="location_updated_at">Updated at %s</string>
     <string name="location_updating">Device is acquiring location…</string>
 

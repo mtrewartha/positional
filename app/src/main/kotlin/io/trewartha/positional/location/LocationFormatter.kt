@@ -35,7 +35,6 @@ class LocationFormatter(
     private val formatUpdatedAt by lazy { context.getString(R.string.location_updated_at) }
     private val locale: Locale
         get() = LocaleListCompat.getDefault()[0] ?: Locale.US
-    private val locationValueUnknown by lazy { context.getString(R.string.location_value_unknown) }
     private val numberFormat = NumberFormat.getNumberInstance(locale)
             .apply {
                 roundingMode = RoundingMode.HALF_UP
@@ -49,28 +48,26 @@ class LocationFormatter(
     private val prefsShowAccuracies: Boolean
         get() = prefs.getBoolean(context.getString(R.string.settings_show_accuracies_key), true)
 
-    fun getBearing(location: Location?): String {
-        if (location == null || !location.hasBearing()) return locationValueUnknown
+    fun getBearing(location: Location): String? {
+        if (!location.hasBearing()) return null
 
         val bearing = location.bearing.toInt()
         return String.format(locale, formatBearing, bearing)
     }
 
-    fun getBearingAccuracy(location: Location?): String? {
+    fun getBearingAccuracy(location: Location): String? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
             return null
 
-        if (location == null
-                || !location.hasBearingAccuracy()
-                || location.bearingAccuracyDegrees == 0f)
-            return locationValueUnknown
+        if (!location.hasBearingAccuracy() || location.bearingAccuracyDegrees == 0f)
+            return null
 
         val accuracy = numberFormat.format(location.bearingAccuracyDegrees)
         return String.format(locale, formatAccuracy, accuracy)
     }
 
-    fun getElevation(location: Location?, units: Units): String {
-        if (location == null || !location.hasAltitude()) return locationValueUnknown
+    fun getElevation(location: Location, units: Units): String? {
+        if (!location.hasAltitude()) return null
 
         val elevation = when (units) {
             Units.IMPERIAL -> DistanceUtils.metersToFeet(location.altitude.toFloat()).toInt()
@@ -83,15 +80,12 @@ class LocationFormatter(
         return String.format(locale, format, elevation)
     }
 
-    fun getElevationAccuracy(location: Location?, units: Units?): String? {
+    fun getElevationAccuracy(location: Location, units: Units): String? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
             return null
 
-        if (location == null
-                || !location.hasVerticalAccuracy()
-                || location.verticalAccuracyMeters == 0f
-                || units == null)
-            return locationValueUnknown
+        if (!location.hasVerticalAccuracy() || location.verticalAccuracyMeters == 0f)
+            return null
 
         val accuracy = numberFormat.format(location.verticalAccuracyMeters.let {
             when (units) {
@@ -112,8 +106,49 @@ class LocationFormatter(
         }
     }
 
-    fun getCoordinatesAccuracy(location: Location?, units: Units): String {
-        if (location == null || !location.hasAccuracy()) return locationValueUnknown
+    fun getSharedCoordinates(location: Location, format: CoordinatesFormat): String {
+        return when (format) {
+            DD -> getSharedDDCoords(location.latitude, location.longitude)
+            DDM -> getSharedDdmCoords(location.latitude, location.longitude)
+            DMS -> getSharedDmsCoords(location.latitude, location.longitude)
+            MGRS -> getSharedMgrsCoords(location.latitude, location.longitude)
+            UTM -> getSharedUtmCoords(location.latitude, location.longitude)
+        }
+    }
+
+    private fun getSharedDDCoords(lat: Double, lon: Double): String {
+        val formattedLat = String.format(locale, formatCoordinateDecimal, lat)
+        val formattedLon = String.format(locale, formatCoordinateDecimal, lon)
+        val maxLength = maxOf(formattedLat.length, formattedLon.length)
+        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
+    }
+
+    private fun getSharedDdmCoords(lat: Double, lon: Double): String {
+        val formattedLat = getDdmLat(lat)
+        val formattedLon = getDdmLon(lon)
+        val maxLength = maxOf(formattedLat.length, formattedLon.length)
+        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
+    }
+
+    private fun getSharedDmsCoords(lat: Double, lon: Double): String {
+        val formattedLat = getDmsLat(lat)
+        val formattedLon = getDmsLon(lon)
+        val maxLength = maxOf(formattedLat.length, formattedLon.length)
+        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
+    }
+
+    private fun getSharedMgrsCoords(lat: Double, lon: Double): String {
+        return MGRSCoord.fromLatLon(
+                Angle.fromDegreesLatitude(lat),
+                Angle.fromDegreesLongitude(lon)
+        ).toString()
+    }
+
+    private fun getSharedUtmCoords(lat: Double, lon: Double): String =
+            "${getUtmZone(lat, lon)} ${getUtmEasting(lat, lon)} ${getUtmNorthing(lat, lon)}"
+
+    fun getCoordinatesAccuracy(location: Location, units: Units): String? {
+        if (!location.hasAccuracy()) return null
         val accuracy = numberFormat.format(location.accuracy.let {
             when (units) {
                 Units.IMPERIAL -> DistanceUtils.metersToFeet(it).toInt()
@@ -127,8 +162,8 @@ class LocationFormatter(
         return String.format(locale, format, accuracy)
     }
 
-    fun getSpeed(location: Location?, units: Units?): String? {
-        if (location == null || !location.hasSpeed() || location.speed == 0f || units == null)
+    fun getSpeed(location: Location, units: Units): String? {
+        if (!location.hasSpeed() || location.speed == 0f)
             return null
 
         val speed = numberFormat.format(location.speed.let {
@@ -144,15 +179,12 @@ class LocationFormatter(
         return String.format(locale, format, speed)
     }
 
-    fun getSpeedAccuracy(location: Location?, units: Units?): String? {
+    fun getSpeedAccuracy(location: Location, units: Units): String? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
             return null
 
-        if (location == null
-                || !location.hasSpeedAccuracy()
-                || location.speedAccuracyMetersPerSecond == 0f
-                || units == null)
-            return locationValueUnknown
+        if (!location.hasSpeedAccuracy() || location.speedAccuracyMetersPerSecond == 0f)
+            return null
 
         val accuracy = numberFormat.format(location.speedAccuracyMetersPerSecond.let {
             when (units) {
@@ -163,13 +195,12 @@ class LocationFormatter(
         return String.format(locale, formatAccuracy, accuracy)
     }
 
-    fun getTimestamp(location: Location?): String {
-        return if (location == null || location.time == 0L) {
-            locationValueUnknown
+    fun getTimestamp(location: Location): String? {
+        return if (location.time == 0L) {
+            null
         } else {
             dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(location.time), true)
                     ?.let { String.format(formatUpdatedAt, it) }
-                    ?: locationValueUnknown
         }
     }
 
@@ -255,11 +286,13 @@ class LocationFormatter(
     }
 
     private fun getUtmEasting(lat: Double, lon: Double): String {
-        return "${String.format(
-                locale,
-                formatCoordinateUtm,
-                getUtmCoord(lat, lon).easting
-        )}m E"
+        return "${
+            String.format(
+                    locale,
+                    formatCoordinateUtm,
+                    getUtmCoord(lat, lon).easting
+            )
+        }m E"
     }
 
     private fun getUtmLatBand(lat: Double): String {
@@ -290,11 +323,13 @@ class LocationFormatter(
 
     private fun getUtmNorthing(lat: Double, lon: Double): String {
         val utmCoordinate = getUtmCoord(lat, lon)
-        return "${String.format(
-                locale,
-                formatCoordinateUtm,
-                utmCoordinate.northing
-        )}m N"
+        return "${
+            String.format(
+                    locale,
+                    formatCoordinateUtm,
+                    utmCoordinate.northing
+            )
+        }m N"
     }
 
     private fun getUtmZone(lat: Double, lon: Double): String {
