@@ -22,8 +22,8 @@ import java.util.*
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class SunViewModel(app: Application) : AndroidViewModel(app) {
 
-    val sunData: LiveData<SunData> = callbackFlow<Location> {
-        val locationClient = FusedLocationProviderClient(app)
+    val sunState: LiveData<SunState> = callbackFlow<Location> {
+        val locationClient = LocationServices.getFusedLocationProviderClient(app)
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 val location = locationResult?.lastLocation ?: return
@@ -67,7 +67,7 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
         val astronomicalTwilights =
                 SunriseSunset.getAstronomicalTwilight(calendar, latitude, longitude)
 
-        SunData(
+        SunState(
                 formatDate(it.time),
                 formatTime(astronomicalTwilights[0]?.timeInMillis),
                 formatTime(nauticalTwilights[0]?.timeInMillis),
@@ -90,7 +90,7 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
     private fun formatTime(epochMillis: Long?): String? =
             epochMillis?.let { dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(it)) }
 
-    data class SunData(
+    data class SunState(
             val date: String?,
             val astronomicalDawn: String?,
             val nauticalDawn: String?,

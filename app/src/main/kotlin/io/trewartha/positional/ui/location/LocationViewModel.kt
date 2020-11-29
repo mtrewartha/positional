@@ -47,12 +47,6 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         _coordinates.mapNotNull { it }.asLiveData()
     }
 
-    val coordinatesCopyEvents: LiveData<CoordinatesCopyEvent>
-        get() = _coordinatesCopyEvents
-
-    val coordinatesShareEvents: LiveData<CoordinatesShareEvent>
-        get() = _coordinatesShareEvents
-
     val elevation: LiveData<String> by lazy {
         combine(location.mapNotNull { it }, units) { location, units ->
             locationFormatter.getElevation(location, units) ?: app.getString(R.string.common_dash)
@@ -66,6 +60,9 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         }.asLiveData()
     }
 
+    val events: LiveData<Event>
+        get() = _events
+
     val screenLocked: LiveData<Boolean> by lazy {
         callbackFlow {
             if (prefs.contains(prefsKeyScreenLock))
@@ -77,9 +74,6 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             }
         }.asLiveData()
     }
-
-    val screenLockEvents: LiveData<ScreenLockEvent>
-        get() = _screenLockEvents
 
     val speed: LiveData<String> by lazy {
         combine(location.mapNotNull { it }, units) { location, units ->
@@ -108,10 +102,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             location.toCoordinates(format)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     }
-    private val _coordinatesCopyEvents = MutableLiveData<CoordinatesCopyEvent>()
-    private val _coordinatesShareEvents = MutableLiveData<CoordinatesShareEvent>()
-    private val _screenLockEvents = MutableLiveData<ScreenLockEvent>()
-
+    private val _events = MutableLiveData<Event>()
     private val coordinatesFormat: StateFlow<CoordinatesFormat?> = callbackFlow {
         if (prefs.contains(prefsKeyCoordinatesFormat))
             offer(prefs.getString(prefsKeyCoordinatesFormat, null))
@@ -219,8 +210,8 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     private fun handleCopyClick() {
         val location = location.value
         val format = coordinatesFormat.value
-        _coordinatesCopyEvents.value = if (location == null || format == null) {
-            CoordinatesCopyEvent.Error()
+        _events.value = if (location == null || format == null) {
+            Event.CoordinatesCopy.Error()
         } else {
             clipboardManager.setPrimaryClip(
                     ClipData.newPlainText(
@@ -229,23 +220,23 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
                             locationFormatter.getSharedCoordinates(location, format)
                     )
             )
-            CoordinatesCopyEvent.Success()
+            Event.CoordinatesCopy.Success()
         }
     }
 
     private fun handleScreenLockClick() {
         val locked = !prefs.getBoolean(prefsKeyScreenLock, false)
         prefs.edit { putBoolean(prefsKeyScreenLock, locked) }
-        _screenLockEvents.value = ScreenLockEvent(locked)
+        _events.value = Event.ScreenLock(locked)
     }
 
     private fun handleShareClick() {
         val location = location.value
         val format = coordinatesFormat.value
-        _coordinatesShareEvents.value = if (location == null || format == null)
-            CoordinatesShareEvent.Error()
+        _events.value = if (location == null || format == null)
+            Event.CoordinatesShare.Error()
         else
-            CoordinatesShareEvent.Success(locationFormatter.getSharedCoordinates(location, format))
+            Event.CoordinatesShare.Success(locationFormatter.getSharedCoordinates(location, format))
     }
 
     private fun Location.toCoordinates(format: CoordinatesFormat): Coordinates {
@@ -255,17 +246,20 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
     data class Coordinates(val maxLines: Int, val text: String)
 
-    sealed class CoordinatesCopyEvent : ViewModelEvent() {
-        class Error : CoordinatesCopyEvent()
-        class Success : CoordinatesCopyEvent()
-    }
+    sealed class Event : ViewModelEvent() {
 
-    sealed class CoordinatesShareEvent : ViewModelEvent() {
-        class Error : CoordinatesShareEvent()
-        data class Success(val coordinates: String) : CoordinatesShareEvent()
-    }
+        sealed class CoordinatesCopy : Event() {
+            class Error : CoordinatesCopy()
+            class Success : CoordinatesCopy()
+        }
 
-    data class ScreenLockEvent(val locked: Boolean) : ViewModelEvent()
+        sealed class CoordinatesShare : Event() {
+            class Error : CoordinatesShare()
+            data class Success(val coordinates: String) : CoordinatesShare()
+        }
+
+        data class ScreenLock(val locked: Boolean) : Event()
+    }
 
     private inner class PrefCoordinatesFormatListener(
             val producerScope: ProducerScope<String?>

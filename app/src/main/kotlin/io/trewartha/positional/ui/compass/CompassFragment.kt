@@ -30,36 +30,56 @@ class CompassFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.accelerometerAccuracy.observe(viewLifecycleOwner) {
-            viewBinding.accelerometerAccuracyTextView.text = it
-        }
-        viewModel.missingSensorState.observe(viewLifecycleOwner) {
-            viewBinding.missingSensorLayout.visibility = View.VISIBLE
-            viewBinding.missingSensorBodyTextView.text = it.title
-            viewBinding.missingSensorCaptionTextView.text = it.body
-        }
-        viewModel.azimuth.observe(viewLifecycleOwner) {
-            if (it != null) {
-                viewBinding.progressIndicator.hide()
-                viewBinding.degreesTextView.text = it
-            }
-        }
-        viewModel.compassRotation.observe(viewLifecycleOwner) {
-            viewBinding.compassBackgroundImageView.rotation = it
-        }
-        viewModel.declination.observe(viewLifecycleOwner) {
-            viewBinding.declinationTextView.text = it
-        }
-        viewModel.magnetometerAccuracy.observe(viewLifecycleOwner) {
-            viewBinding.magnetometerAccuracyTextView.text = it
-        }
-        viewModel.mode.observe(viewLifecycleOwner) {
-            viewBinding.modeTextView.text = it
+        with(viewModel) {
+            accelerometerAccuracy.observe(viewLifecycleOwner, ::observeAccelerometerAccuracy)
+            missingSensorState.observe(viewLifecycleOwner, ::observeMissingSensorState)
+            azimuth.observe(viewLifecycleOwner, ::observeAzimuth)
+            compassRotation.observe(viewLifecycleOwner, ::observeCompassRotation)
+            declination.observe(viewLifecycleOwner, ::observeDeclination)
+            magnetometerAccuracy.observe(viewLifecycleOwner, ::observeMagnetometerAccuracy)
+            mode.observe(viewLifecycleOwner, ::observeMode)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _viewBinding = null
+    }
+
+    private fun observeAccelerometerAccuracy(accelerometerAccuracy: String) {
+        viewBinding.accelerometerAccuracyTextView.text = accelerometerAccuracy
+    }
+
+    private fun observeAzimuth(azimuth: String) {
+        with(viewBinding) {
+            progressIndicator.hide()
+            degreesTextView.text = azimuth
+        }
+    }
+
+    private fun observeCompassRotation(compassRotation: Float) {
+        viewBinding.compassBackgroundImageView.rotation = compassRotation
+    }
+
+    private fun observeDeclination(declination: String) {
+        viewBinding.declinationTextView.text = declination
+    }
+
+    private fun observeMagnetometerAccuracy(magnetometerAccuracy: String) {
+        viewBinding.magnetometerAccuracyTextView.text = magnetometerAccuracy
+    }
+
+    private fun observeMissingSensorState(
+            missingSensorState: CompassViewModel.MissingSensorState
+    ) {
+        with(viewBinding) {
+            missingSensorLayout.visibility = View.VISIBLE
+            missingSensorBodyTextView.text = missingSensorState.title
+            missingSensorCaptionTextView.text = missingSensorState.body
+        }
+    }
+
+    private fun observeMode(mode: String) {
+        viewBinding.modeTextView.text = mode
     }
 }

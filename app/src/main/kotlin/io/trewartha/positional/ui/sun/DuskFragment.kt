@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
-import io.trewartha.positional.R
-import kotlinx.android.synthetic.main.dusk_fragment.*
+import io.trewartha.positional.databinding.DuskFragmentBinding
 
 class DuskFragment : Fragment() {
 
+    private var _viewBinding: DuskFragmentBinding? = null
+    private val viewBinding get() = _viewBinding!!
     private lateinit var viewModel: SunViewModel
 
     override fun onAttach(context: Context) {
@@ -24,17 +24,27 @@ class DuskFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.dusk_fragment, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.sunData.observe(viewLifecycleOwner, ::handleSunData)
+    ): View {
+        _viewBinding = DuskFragmentBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
-    private fun handleSunData(data: SunViewModel.SunData) {
-        dateTextView.text = data.date
-        astronomicalValueTextView.text = data.astronomicalDusk
-        nauticalValueTextView.text = data.nauticalDusk
-        civilValueTextView.text = data.civilDusk
-        sunsetValueTextView.text = data.sunset
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.sunState.observe(viewLifecycleOwner, ::observeSunState)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
+    }
+
+    private fun observeSunState(sunState: SunViewModel.SunState) {
+        with(viewBinding) {
+            dateTextView.text = sunState.date
+            astronomicalValueTextView.text = sunState.astronomicalDusk
+            nauticalValueTextView.text = sunState.nauticalDusk
+            civilValueTextView.text = sunState.civilDusk
+            sunsetValueTextView.text = sunState.sunset
+        }
     }
 }

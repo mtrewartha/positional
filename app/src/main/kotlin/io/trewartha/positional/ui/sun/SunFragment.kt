@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
-import io.trewartha.positional.R
+import io.trewartha.positional.databinding.SunFragmentBinding
 import io.trewartha.positional.ui.location.coordinates.SunFragmentPagerAdapter
-import kotlinx.android.synthetic.main.sun_fragment.*
 
 class SunFragment : Fragment() {
 
+    private var _viewBinding: SunFragmentBinding? = null
+    private val viewBinding get() = _viewBinding!!
     private lateinit var viewModel: SunViewModel
 
     override fun onAttach(context: Context) {
@@ -25,21 +25,27 @@ class SunFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.sun_fragment, container, false)
+    ): View {
+        _viewBinding = SunFragmentBinding.inflate(inflater, container, false)
+        return viewBinding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewPager.apply {
+        viewBinding.viewPager.apply {
             val sunFragmentPagerAdapter = SunFragmentPagerAdapter(childFragmentManager)
             adapter = sunFragmentPagerAdapter
             offscreenPageLimit = sunFragmentPagerAdapter.count
         }
-
-        // ViewModel data
-        viewModel.sunData.observe(viewLifecycleOwner, ::handleSunData)
+        viewModel.sunState.observe(viewLifecycleOwner, ::observeSunState)
     }
 
-    private fun handleSunData(data: SunViewModel.SunData) {
-        updatedAtTextView.text = data.updatedAt
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
+    }
+
+    private fun observeSunState(sunState: SunViewModel.SunState) {
+        viewBinding.updatedAtTextView.text = sunState.updatedAt
     }
 }
