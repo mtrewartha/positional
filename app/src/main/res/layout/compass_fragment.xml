@@ -14,7 +14,7 @@
         android:paddingEnd="32dp"
         android:paddingBottom="32dp">
 
-        <ImageView
+        <io.trewartha.positional.ui.compass.CompassView
             android:id="@+id/compassBackgroundImageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"

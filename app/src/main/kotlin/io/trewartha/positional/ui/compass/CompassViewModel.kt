@@ -23,14 +23,14 @@ import kotlin.math.roundToInt
 class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val accelerometerAccuracy: LiveData<String> by lazy {
-        (compass.accelerometerAccuracy as Flow<CompassAccuracy?>)
-                .onStart { emit(null) }
+        compass.accelerometerAccuracy
                 .map { getAccuracyText(it) }
                 .asLiveData()
     }
 
     val azimuth: LiveData<String> by lazy {
         compass.azimuth
+                .mapNotNull { it }
                 .map {
                     val azimuth = (adjustAzimuthForDisplayRotation(it).roundToInt() + 360) % 360
                     app.getString(R.string.compass_degrees, azimuth)
@@ -41,6 +41,7 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val compassRotation: LiveData<Float> by lazy {
         compass.azimuth
+                .mapNotNull { it }
                 .map { -((adjustAzimuthForDisplayRotation(it) + 360f) % 360f) }
                 .onStart { emit(0f) }
                 .asLiveData()
@@ -60,8 +61,7 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     val magnetometerAccuracy: LiveData<String> by lazy {
-        (compass.magnetometerAccuracy as Flow<CompassAccuracy?>)
-                .onStart { emit(null) }
+        compass.magnetometerAccuracy
                 .map { getAccuracyText(it) }
                 .asLiveData()
     }

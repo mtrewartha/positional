@@ -58,7 +58,7 @@ class CompassFragment : Fragment() {
     }
 
     private fun observeCompassRotation(compassRotation: Float) {
-        viewBinding.compassBackgroundImageView.rotation = compassRotation
+        viewBinding.compassBackgroundImageView.azimuth = compassRotation
     }
 
     private fun observeDeclination(declination: String) {

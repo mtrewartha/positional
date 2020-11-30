@@ -14,7 +14,7 @@
         android:paddingEnd="32dp"
         android:paddingBottom="32dp">
 
-        <ImageView
+        <io.trewartha.positional.ui.compass.CompassView
             android:id="@+id/compassBackgroundImageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -22,7 +22,6 @@
             app:layout_constraintBottom_toTopOf="@id/accelerometerAccuracyTextView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_weight="1"
-            app:tint="?attr/colorOnSurface"
             tools:ignore="ContentDescription" />
 
         <ImageView

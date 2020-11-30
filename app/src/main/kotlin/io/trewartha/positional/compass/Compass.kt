@@ -10,16 +10,18 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
+import kotlin.math.abs
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class Compass(context: Context, private val coroutineScope: CoroutineScope) {
 
-    private val locationClient = FusedLocationProviderClient(context.applicationContext)
+    private val locationClient =
+            LocationServices.getFusedLocationProviderClient(context.applicationContext)
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     private val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
-    val accelerometerAccuracy: Flow<CompassAccuracy>
+    val accelerometerAccuracy: Flow<CompassAccuracy?>
         get() = callbackFlow<CompassAccuracy> {
             if (!hasAccelerometer) return@callbackFlow
             val listener = object : SensorEventListener {
@@ -39,9 +41,9 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
             }
             sensorManager.registerListener(listener, accelerometer, SENSOR_DELAY)
             awaitClose { sensorManager.unregisterListener(listener) }
-        }.conflate().shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
+        }.conflate().stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
 
-    val magnetometerAccuracy: Flow<CompassAccuracy>
+    val magnetometerAccuracy: StateFlow<CompassAccuracy?>
         get() = callbackFlow<CompassAccuracy> {
             if (!hasMagnetometer) return@callbackFlow
             val listener = object : SensorEventListener {
@@ -61,9 +63,9 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
             }
             sensorManager.registerListener(listener, magnetometer, SENSOR_DELAY)
             awaitClose { sensorManager.unregisterListener(listener) }
-        }.conflate().shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
+        }.conflate().stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
 
-    val azimuth: Flow<Float> = callbackFlow<Float> {
+    val azimuth: StateFlow<Float?> = callbackFlow<Float> {
         if (!hasAccelerometer || !hasMagnetometer) {
             Timber.e("Unable to calculate azimuth, device has accelerometer = $hasAccelerometer, magnetometer = $hasMagnetometer")
             return@callbackFlow
@@ -98,7 +100,16 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
         sensorManager.registerListener(listener, accelerometer, SENSOR_DELAY)
         sensorManager.registerListener(listener, magnetometer, SENSOR_DELAY)
         awaitClose { sensorManager.unregisterListener(listener) }
-    }.conflate().shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
+    }.conflate()
+            .mapNotNull {
+                if (abs(it - oldAzimuth) > AZIMUTH_CHANGE_THRESHOLD) {
+                    oldAzimuth = it
+                    it
+                } else {
+                    null
+                }
+            }
+            .stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
 
     val hasAccelerometer: Boolean
         get() = accelerometer != null
@@ -146,6 +157,8 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
             }
         }.distinctUntilChanged().shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
+    private var oldAzimuth = 0f
+
     private fun smoothAndSetReadings(readings: FloatArray, newReadings: FloatArray) {
         readings[0] = READINGS_ALPHA * newReadings[0] + (1 - READINGS_ALPHA) * readings[0]
         readings[1] = READINGS_ALPHA * newReadings[1] + (1 - READINGS_ALPHA) * readings[1]
@@ -153,6 +166,7 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
     }
 
     companion object {
+        private const val AZIMUTH_CHANGE_THRESHOLD = 0.5f
         private const val DEGREES_PER_RADIAN = 180 / Math.PI
         private const val LOCATION_UPDATE_INTERVAL_MS = 300_000L // 5 minutes
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_LOW_POWER
