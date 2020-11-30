@@ -13,10 +13,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.trewartha.positional.R
-import kotlinx.android.synthetic.main.main_activity.*
+import io.trewartha.positional.databinding.MainActivityBinding
 import timber.log.Timber
 
 class MainActivity : BaseActivity<MainViewModel>() {
+
+    private lateinit var viewBinding: MainActivityBinding
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -25,10 +27,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.main_activity)
-
-        bottomNavigationView.setupWithNavController(findNavController(R.id.navHost))
+        viewBinding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+        viewBinding.bottomNavigationView.setupWithNavController(findNavController(R.id.navHost))
     }
 
     override fun onStart() {
