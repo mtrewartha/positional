@@ -23,7 +23,6 @@
             app:layout_constraintBottom_toTopOf="@id/detailsLayout"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_weight="1"
-            app:tint="?attr/colorOnSurface"
             tools:ignore="ContentDescription" />
 
         <ImageView
