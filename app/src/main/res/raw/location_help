@@ -1,0 +1,9 @@
+Positional shows you 5 different aspects of your location.
+
+- **Coordinates**: Your current latitude and longitude. You can adjust their format in Settings.
+- **Accuracy**: The accuracy of the coordinates.
+- **Bearing**: The direction you are moving, regardless of orientation of your Android device.
+- **Elevation**: Your current elevation above sea level.
+- **Speed**: Your current speed.
+
+If your device is running Android 8.0 or higher, Positional will also show you accuracies for each of these aspects. You can hide these accuracies in Settings.

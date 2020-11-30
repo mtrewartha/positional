@@ -96,6 +96,7 @@ dependencies {
     implementation(Dependencies.kotlinxCoroutinesCore)
     implementation(Dependencies.kotlinxCoroutinesAndroid)
     implementation(Dependencies.loaderView)
+    implementation(Dependencies.markwon)
     implementation(Dependencies.material)
     implementation(Dependencies.pageIndicatorView)
     implementation(Dependencies.playServicesLocation)

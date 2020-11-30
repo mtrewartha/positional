@@ -5,8 +5,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Looper
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.*
 import com.google.android.gms.location.*
@@ -29,22 +32,41 @@ import java.util.*
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
+    val accuracyVisibility: LiveData<Int> by lazy {
+        callbackFlow {
+            if (prefs.contains(prefsKeyShowAccuracies))
+                offer(prefs.getBoolean(prefsKeyShowAccuracies, DEFAULT_SHOW_ACCURACIES))
+            prefShowAccuraciesListener = PrefShowAccuraciesListener(this)
+            prefs.registerOnSharedPreferenceChangeListener(prefShowAccuraciesListener)
+            awaitClose {
+                prefShowAccuraciesListener
+                        ?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
+            }
+        }.map {
+            if (it) View.VISIBLE else View.GONE
+        }.asLiveData()
+    }
+
     val bearing: LiveData<String> by lazy {
         location.mapNotNull { it }
                 .map { locationFormatter.getBearing(it) ?: app.getString(R.string.common_dash) }
                 .asLiveData()
     }
 
-    val bearingAccuracy: LiveData<String> by lazy {
+    val bearingAccuracy: LiveData<String?> by lazy {
         location.mapNotNull { it }
-                .map {
-                    locationFormatter.getBearingAccuracy(it) ?: app.getString(R.string.common_dash)
-                }
+                .map { locationFormatter.getBearingAccuracy(it) }
                 .asLiveData()
     }
 
     val coordinates: LiveData<Coordinates> by lazy {
         _coordinates.mapNotNull { it }.asLiveData()
+    }
+
+    val coordinatesAccuracy: LiveData<String> by lazy {
+        combine(location.mapNotNull { it }, units) { location, units ->
+            locationFormatter.getCoordinatesAccuracy(location, units)
+        }.asLiveData()
     }
 
     val elevation: LiveData<String> by lazy {
@@ -53,17 +75,16 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         }.asLiveData()
     }
 
-    val elevationAccuracy: LiveData<String> by lazy {
+    val elevationAccuracy: LiveData<String?> by lazy {
         combine(location.mapNotNull { it }, units) { location, units ->
             locationFormatter.getElevationAccuracy(location, units)
-                    ?: app.getString(R.string.common_dash)
         }.asLiveData()
     }
 
     val events: LiveData<Event>
         get() = _events
 
-    val screenLocked: LiveData<Boolean> by lazy {
+    val screenLockState: LiveData<ScreenLockState> by lazy {
         callbackFlow {
             if (prefs.contains(prefsKeyScreenLock))
                 offer(prefs.getBoolean(prefsKeyScreenLock, DEFAULT_SCREEN_LOCK))
@@ -72,6 +93,21 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             awaitClose {
                 prefScreenLockListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
             }
+        }.map {
+            val icon = ContextCompat.getDrawable(
+                    app,
+                    if (it) R.drawable.ic_twotone_smartphone_24px
+                    else R.drawable.ic_twotone_screen_lock_portrait_24px
+            )!!
+            val contentDescription = app.getString(
+                    if (it) R.string.location_screen_lock_button_content_description_on
+                    else R.string.location_screen_lock_button_content_description_off
+            )
+            val tooltip = app.getString(
+                    if (it) R.string.location_screen_lock_button_tooltip_on
+                    else R.string.location_screen_lock_button_tooltip_off
+            )
+            ScreenLockState(it, icon, contentDescription, tooltip)
         }.asLiveData()
     }
 
@@ -81,10 +117,9 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         }.asLiveData()
     }
 
-    val speedAccuracy: LiveData<String> by lazy {
+    val speedAccuracy: LiveData<String?> by lazy {
         combine(location.mapNotNull { it }, units) { location, units ->
             locationFormatter.getSpeedAccuracy(location, units)
-                    ?: app.getString(R.string.common_dash)
         }.asLiveData()
     }
 
@@ -194,14 +229,17 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     )
     private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
     private val prefsKeyScreenLock = app.getString(R.string.settings_screen_lock_key)
+    private val prefsKeyShowAccuracies = app.getString(R.string.settings_show_accuracies_key)
     private val prefsKeyUnits = app.getString(R.string.settings_units_key)
     private var prefCoordinatesFormatListener: PrefCoordinatesFormatListener? = null
     private var prefScreenLockListener: PrefScreenLockListener? = null
+    private var prefShowAccuraciesListener: PrefShowAccuraciesListener? = null
     private var prefUnitsListener: PrefUnitsListener? = null
 
     fun handleViewEvent(event: LocationFragment.Event) {
         when (event) {
             is LocationFragment.Event.CopyClick -> handleCopyClick()
+            is LocationFragment.Event.HelpClick -> handleHelpClick()
             is LocationFragment.Event.ScreenLockClick -> handleScreenLockClick()
             is LocationFragment.Event.ShareClick -> handleShareClick()
         }
@@ -222,6 +260,10 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             )
             Event.CoordinatesCopy.Success()
         }
+    }
+
+    private fun handleHelpClick() {
+        _events.value = Event.NavigateToLocationHelp()
     }
 
     private fun handleScreenLockClick() {
@@ -246,6 +288,13 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
     data class Coordinates(val maxLines: Int, val text: String)
 
+    data class ScreenLockState(
+            val locked: Boolean,
+            val icon: Drawable,
+            val contentDescription: String,
+            val tooltip: String
+    )
+
     sealed class Event : ViewModelEvent() {
 
         sealed class CoordinatesCopy : Event() {
@@ -257,6 +306,8 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             class Error : CoordinatesShare()
             data class Success(val coordinates: String) : CoordinatesShare()
         }
+
+        class NavigateToLocationHelp : Event()
 
         data class ScreenLock(val locked: Boolean) : Event()
     }
@@ -279,6 +330,15 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    private inner class PrefShowAccuraciesListener(
+            val producerScope: ProducerScope<Boolean>
+    ) : SharedPreferences.OnSharedPreferenceChangeListener {
+        override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
+            if (key == prefsKeyShowAccuracies)
+                producerScope.offer(sharedPrefs.getBoolean(key, DEFAULT_SHOW_ACCURACIES))
+        }
+    }
+
     private inner class PrefUnitsListener(
             val producerScope: ProducerScope<String?>
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
@@ -291,6 +351,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     companion object {
         private val DEFAULT_COORDINATES_FORMAT = CoordinatesFormat.DD
         private const val DEFAULT_SCREEN_LOCK = false
+        private const val DEFAULT_SHOW_ACCURACIES = true
         private val DEFAULT_UNITS = Units.METRIC
         private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY

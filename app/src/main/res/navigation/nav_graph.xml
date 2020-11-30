@@ -18,6 +18,12 @@
         tools:layout="@layout/compass_fragment" />
 
     <fragment
+        android:id="@+id/help"
+        android:name="io.trewartha.positional.ui.location.help.LocationHelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/location_help_fragment" />
+
+    <fragment
         android:id="@+id/sun"
         android:name="io.trewartha.positional.ui.sun.SunFragment"
         android:label="SunFragment"

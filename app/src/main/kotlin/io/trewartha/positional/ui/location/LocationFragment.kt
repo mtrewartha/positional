@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.transition.MaterialSharedAxis
 import io.trewartha.positional.R
 import io.trewartha.positional.databinding.LocationFragmentBinding
 import io.trewartha.positional.ui.utils.showSnackbar
@@ -35,7 +37,9 @@ class LocationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         with(viewModel) {
+            accuracyVisibility.observe(viewLifecycleOwner, ::observeAccuracyVisibility)
             coordinates.observe(viewLifecycleOwner, ::observeCoordinates)
+            coordinatesAccuracy.observe(viewLifecycleOwner, ::observeCoordinatesAccuracy)
             bearing.observe(viewLifecycleOwner, ::observeBearing)
             bearingAccuracy.observe(viewLifecycleOwner, ::observeBearingAccuracy)
             elevation.observe(viewLifecycleOwner, ::observeElevation)
@@ -43,7 +47,7 @@ class LocationFragment : Fragment() {
             speed.observe(viewLifecycleOwner, ::observeSpeed)
             speedAccuracy.observe(viewLifecycleOwner, ::observeSpeedAccuracy)
             updatedAt.observe(viewLifecycleOwner, ::observeUpdatedAt)
-            screenLocked.observe(viewLifecycleOwner, ::observeScreenLocked)
+            screenLockState.observe(viewLifecycleOwner, ::observeScreenLockState)
             events.observe(viewLifecycleOwner, ::observeEvent)
         }
 
@@ -51,6 +55,7 @@ class LocationFragment : Fragment() {
             copyButton.setOnClickListener { viewModel.handleViewEvent(Event.CopyClick) }
             screenLockButton.setOnClickListener { viewModel.handleViewEvent(Event.ScreenLockClick) }
             shareButton.setOnClickListener { viewModel.handleViewEvent(Event.ShareClick) }
+            helpButton.setOnClickListener { viewModel.handleViewEvent(Event.HelpClick) }
         }
     }
 
@@ -59,11 +64,20 @@ class LocationFragment : Fragment() {
         _viewBinding = null
     }
 
+    private fun observeAccuracyVisibility(visibility: Int) {
+        with(viewBinding) {
+            coordinatesAccuracyPlaceholderTextView.visibility = visibility
+            bearingAccuracyValueTextView.visibility = visibility
+            elevationAccuracyValueTextView.visibility = visibility
+            speedAccuracyValueTextView.visibility = visibility
+        }
+    }
+
     private fun observeBearing(bearing: String) {
         viewBinding.bearingValueTextView.text = bearing
     }
 
-    private fun observeBearingAccuracy(bearingAccuracy: String) {
+    private fun observeBearingAccuracy(bearingAccuracy: String?) {
         viewBinding.bearingAccuracyValueTextView.text = bearingAccuracy
     }
 
@@ -75,6 +89,10 @@ class LocationFragment : Fragment() {
                 text = coordinates.text
             }
         }
+    }
+
+    private fun observeCoordinatesAccuracy(coordinatesAccuracy: String) {
+        viewBinding.coordinatesAccuracyValueTextView.text = coordinatesAccuracy
     }
 
     private fun observeCoordinatesCopyEvent(event: LocationViewModel.Event.CoordinatesCopy) {
@@ -106,7 +124,7 @@ class LocationFragment : Fragment() {
         viewBinding.elevationValueTextView.text = elevation
     }
 
-    private fun observeElevationAccuracy(elevationAccuracy: String) {
+    private fun observeElevationAccuracy(elevationAccuracy: String?) {
         viewBinding.elevationAccuracyValueTextView.text = elevationAccuracy
     }
 
@@ -118,18 +136,29 @@ class LocationFragment : Fragment() {
                 observeCoordinatesCopyEvent(event)
             is LocationViewModel.Event.CoordinatesShare ->
                 observeCoordinatesShareEvent(event)
+            is LocationViewModel.Event.NavigateToLocationHelp ->
+                observeNavigateToLocationHelp()
             is LocationViewModel.Event.ScreenLock ->
                 observeScreenLockEvent(event)
         }
     }
 
-    private fun observeScreenLocked(screenLocked: Boolean) {
-        viewBinding.screenLockButton.setIconResource(
-                if (screenLocked) R.drawable.ic_twotone_smartphone_24px
-                else R.drawable.ic_twotone_screen_lock_portrait_24px
-        )
+    private fun observeNavigateToLocationHelp() {
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+        findNavController().navigate(R.id.help)
+    }
+
+    private fun observeScreenLockState(screenLockState: LocationViewModel.ScreenLockState) {
+        with(viewBinding.screenLockButton) {
+            icon = screenLockState.icon
+            contentDescription = screenLockState.contentDescription
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                tooltipText = screenLockState.tooltip
+            }
+        }
         activity?.window?.apply {
-            if (screenLocked) addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            if (screenLockState.locked) addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             else clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
@@ -145,7 +174,7 @@ class LocationFragment : Fragment() {
         viewBinding.speedValueTextView.text = speed
     }
 
-    private fun observeSpeedAccuracy(speedAccuracy: String) {
+    private fun observeSpeedAccuracy(speedAccuracy: String?) {
         viewBinding.speedAccuracyValueTextView.text = speedAccuracy
     }
 
@@ -155,6 +184,7 @@ class LocationFragment : Fragment() {
 
     sealed class Event {
         object CopyClick : Event()
+        object HelpClick : Event()
         object ScreenLockClick : Event()
         object ShareClick : Event()
     }

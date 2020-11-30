@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionGroup="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/location_stat_row_gap_vertical"
-            app:constraint_referenced_ids="shareButton,copyButton,screenLockButton"
+            app:constraint_referenced_ids="shareButton,copyButton,screenLockButton,helpButton"
             app:layout_constraintBottom_toTopOf="@id/statsFlow"
             app:layout_constraintTop_toBottomOf="@id/coordinatesTextView" />
 
@@ -45,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:constraint_referenced_ids="divider1,bearingFlow,divider2,elevationFlow,divider3,speedFlow,updatedAtTextView"
+            app:constraint_referenced_ids="divider0,coordinatesAccuracyFlow,divider1,bearingFlow,divider2,elevationFlow,divider3,speedFlow,updatedAtTextView"
             app:flow_verticalGap="@dimen/location_stat_row_gap_horizontal"
             app:flow_verticalStyle="spread_inside"
             app:flow_wrapMode="none"
@@ -58,8 +59,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/location_share_button_content_description"
+            android:tooltipText="@string/location_share_button_tooltip"
             app:icon="@drawable/ic_twotone_share_24px"
-            app:iconGravity="textStart" />
+            app:iconGravity="textStart"
+            tools:targetApi="o" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/copyButton"
@@ -67,17 +70,76 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/location_copy_coordinates_content_description"
+            android:tooltipText="@string/location_copy_coordinates_tooltip"
             app:icon="@drawable/ic_twotone_file_copy_24px"
-            app:iconGravity="textStart" />
+            app:iconGravity="textStart"
+            tools:targetApi="o" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/screenLockButton"
             style="@style/Widget.Positional.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/settings_screen_lock_content_description"
+            android:contentDescription="@string/location_screen_lock_button_content_description_off"
+            android:tooltipText="@string/location_screen_lock_button_tooltip_off"
             app:icon="@drawable/ic_twotone_screen_lock_portrait_24px"
-            app:iconGravity="textStart" />
+            app:iconGravity="textStart"
+            tools:targetApi="o" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/helpButton"
+            style="@style/Widget.Positional.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/location_help_button_content_description"
+            android:tooltipText="@string/location_help_button_tooltip"
+            app:icon="@drawable/ic_twotone_help_24"
+            app:iconGravity="textStart"
+            tools:targetApi="o" />
+
+        <include
+            android:id="@+id/divider0"
+            layout="@layout/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/coordinatesAccuracyFlow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="coordinatesAccuracyImageView,coordinatesAccuracyLabelTextView,coordinatesAccuracyValueTextView,coordinatesAccuracyPlaceholderTextView"
+            app:flow_horizontalGap="@dimen/location_stat_row_gap_horizontal" />
+
+        <ImageView
+            android:id="@+id/coordinatesAccuracyImageView"
+            style="@style/LocationStatIcon"
+            android:layout_width="@dimen/location_stat_row_image_size"
+            android:layout_height="@dimen/location_stat_row_image_size"
+            android:contentDescription="@string/location_label_accuracy"
+            android:src="@drawable/ic_adjust_24px" />
+
+        <TextView
+            android:id="@+id/coordinatesAccuracyLabelTextView"
+            style="@style/LocationStatLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/location_label_accuracy" />
+
+        <TextView
+            android:id="@+id/coordinatesAccuracyValueTextView"
+            style="@style/LocationStat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:minWidth="96dp" />
+
+        <TextView
+            android:id="@+id/coordinatesAccuracyPlaceholderTextView"
+            style="@style/LocationStatAccuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:minWidth="36dp" />
 
         <include
             android:id="@+id/divider1"

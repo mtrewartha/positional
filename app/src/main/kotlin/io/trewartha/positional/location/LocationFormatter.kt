@@ -60,7 +60,7 @@ class LocationFormatter(
             return null
 
         if (!location.hasBearingAccuracy() || location.bearingAccuracyDegrees == 0f)
-            return null
+            return context.getString(R.string.common_dash)
 
         val accuracy = numberFormat.format(location.bearingAccuracyDegrees)
         return String.format(locale, formatAccuracy, accuracy)
@@ -85,7 +85,7 @@ class LocationFormatter(
             return null
 
         if (!location.hasVerticalAccuracy() || location.verticalAccuracyMeters == 0f)
-            return null
+            return context.getString(R.string.common_dash)
 
         val accuracy = numberFormat.format(location.verticalAccuracyMeters.let {
             when (units) {
@@ -106,49 +106,8 @@ class LocationFormatter(
         }
     }
 
-    fun getSharedCoordinates(location: Location, format: CoordinatesFormat): String {
-        return when (format) {
-            DD -> getSharedDDCoords(location.latitude, location.longitude)
-            DDM -> getSharedDdmCoords(location.latitude, location.longitude)
-            DMS -> getSharedDmsCoords(location.latitude, location.longitude)
-            MGRS -> getSharedMgrsCoords(location.latitude, location.longitude)
-            UTM -> getSharedUtmCoords(location.latitude, location.longitude)
-        }
-    }
-
-    private fun getSharedDDCoords(lat: Double, lon: Double): String {
-        val formattedLat = String.format(locale, formatCoordinateDecimal, lat)
-        val formattedLon = String.format(locale, formatCoordinateDecimal, lon)
-        val maxLength = maxOf(formattedLat.length, formattedLon.length)
-        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
-    }
-
-    private fun getSharedDdmCoords(lat: Double, lon: Double): String {
-        val formattedLat = getDdmLat(lat)
-        val formattedLon = getDdmLon(lon)
-        val maxLength = maxOf(formattedLat.length, formattedLon.length)
-        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
-    }
-
-    private fun getSharedDmsCoords(lat: Double, lon: Double): String {
-        val formattedLat = getDmsLat(lat)
-        val formattedLon = getDmsLon(lon)
-        val maxLength = maxOf(formattedLat.length, formattedLon.length)
-        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
-    }
-
-    private fun getSharedMgrsCoords(lat: Double, lon: Double): String {
-        return MGRSCoord.fromLatLon(
-                Angle.fromDegreesLatitude(lat),
-                Angle.fromDegreesLongitude(lon)
-        ).toString()
-    }
-
-    private fun getSharedUtmCoords(lat: Double, lon: Double): String =
-            "${getUtmZone(lat, lon)} ${getUtmEasting(lat, lon)} ${getUtmNorthing(lat, lon)}"
-
-    fun getCoordinatesAccuracy(location: Location, units: Units): String? {
-        if (!location.hasAccuracy()) return null
+    fun getCoordinatesAccuracy(location: Location, units: Units): String {
+        if (!location.hasAccuracy()) return context.getString(R.string.common_dash)
         val accuracy = numberFormat.format(location.accuracy.let {
             when (units) {
                 Units.IMPERIAL -> DistanceUtils.metersToFeet(it).toInt()
@@ -160,6 +119,16 @@ class LocationFormatter(
             Units.METRIC -> formatAccuracyDistanceMetric
         }
         return String.format(locale, format, accuracy)
+    }
+
+    fun getSharedCoordinates(location: Location, format: CoordinatesFormat): String {
+        return when (format) {
+            DD -> getSharedDDCoords(location.latitude, location.longitude)
+            DDM -> getSharedDdmCoords(location.latitude, location.longitude)
+            DMS -> getSharedDmsCoords(location.latitude, location.longitude)
+            MGRS -> getSharedMgrsCoords(location.latitude, location.longitude)
+            UTM -> getSharedUtmCoords(location.latitude, location.longitude)
+        }
     }
 
     fun getSpeed(location: Location, units: Units): String? {
@@ -184,7 +153,7 @@ class LocationFormatter(
             return null
 
         if (!location.hasSpeedAccuracy() || location.speedAccuracyMetersPerSecond == 0f)
-            return null
+            return context.getString(R.string.common_dash)
 
         val accuracy = numberFormat.format(location.speedAccuracyMetersPerSecond.let {
             when (units) {
@@ -260,6 +229,37 @@ class LocationFormatter(
             "${dmsLon.replaceFirst("-".toRegex(), "")} W"
         }
     }
+
+    private fun getSharedDDCoords(lat: Double, lon: Double): String {
+        val formattedLat = String.format(locale, formatCoordinateDecimal, lat)
+        val formattedLon = String.format(locale, formatCoordinateDecimal, lon)
+        val maxLength = maxOf(formattedLat.length, formattedLon.length)
+        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
+    }
+
+    private fun getSharedDdmCoords(lat: Double, lon: Double): String {
+        val formattedLat = getDdmLat(lat)
+        val formattedLon = getDdmLon(lon)
+        val maxLength = maxOf(formattedLat.length, formattedLon.length)
+        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
+    }
+
+    private fun getSharedDmsCoords(lat: Double, lon: Double): String {
+        val formattedLat = getDmsLat(lat)
+        val formattedLon = getDmsLon(lon)
+        val maxLength = maxOf(formattedLat.length, formattedLon.length)
+        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
+    }
+
+    private fun getSharedMgrsCoords(lat: Double, lon: Double): String {
+        return MGRSCoord.fromLatLon(
+                Angle.fromDegreesLatitude(lat),
+                Angle.fromDegreesLongitude(lon)
+        ).toString()
+    }
+
+    private fun getSharedUtmCoords(lat: Double, lon: Double): String =
+            "${getUtmZone(lat, lon)} ${getUtmEasting(lat, lon)} ${getUtmNorthing(lat, lon)}"
 
     private fun getUtmCoord(lat: Double, lon: Double): UTMCoord {
         return UTMCoord.fromLatLon(

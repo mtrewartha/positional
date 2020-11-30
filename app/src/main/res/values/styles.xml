@@ -135,7 +135,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="LocationStatAccuracy" parent="TextAppearance.Positional.Caption" />
+    <style name="LocationStatAccuracy" parent="TextAppearance.Positional.Caption"/>
 
     <style name="LocationStatRow">
         <item name="android:gravity">center_vertical</item>
@@ -149,7 +149,7 @@
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Caption" />
+    <style name="LocationUpdatedAt" parent="TextAppearance.Positional.Caption"/>
 
     <!-- Sun -->
 
