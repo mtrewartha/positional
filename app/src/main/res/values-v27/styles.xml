@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Positional.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item> // the key diff between API 23 and 27
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="bottomNavigationStyle">@style/Widget.Positional.BottomNavigationView</item>
+        <item name="colorError">@color/red</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorPrimary">@color/blue700</item>
+        <item name="colorPrimaryVariant">@color/blue900</item>
+        <item name="colorSecondary">@color/deepPurple700</item>
+        <item name="colorSecondaryVariant">@color/deepPurple900</item>
+        <item name="materialButtonStyle">@style/Widget.Positional.Button</item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.Positional.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.Positional.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.Positional.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.Positional.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.Positional.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Positional.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Positional.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.Positional.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Positional.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.Positional.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Positional.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Positional.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.Positional.Overline</item>
+    </style>
+
+    <style name="Positional.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/gray4</item>
+        <item name="android:windowBackground">@color/gray4</item>
+        <item name="android:windowLightNavigationBar">false</item> // the key diff between API 23 and 27
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="bottomNavigationStyle">@style/Widget.Positional.BottomNavigationView</item>
+        <item name="colorError">@color/red</item>
+        <item name="colorOnSurface">@color/gray2</item>
+        <item name="colorPrimary">@color/blue100</item>
+        <item name="colorPrimaryVariant">@color/blue300</item>
+        <item name="colorSecondary">@color/deepPurple100</item>
+        <item name="colorSecondaryVariant">@color/deepPurple300</item>
+        <item name="materialButtonStyle">@style/Widget.Positional.Button</item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.Positional.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.Positional.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.Positional.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.Positional.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.Positional.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Positional.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Positional.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.Positional.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Positional.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.Positional.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Positional.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Positional.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.Positional.Overline</item>
+    </style>
+</resources>

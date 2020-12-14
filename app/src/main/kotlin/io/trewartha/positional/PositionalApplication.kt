@@ -35,7 +35,7 @@ class PositionalApplication : Application() {
                 getString(R.string.settings_filename),
                 Context.MODE_PRIVATE,
                 R.xml.settings,
-                false
+                true
         )
     }
 }

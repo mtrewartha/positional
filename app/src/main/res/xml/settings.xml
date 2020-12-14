@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:title="@string/settings_root_title">
 
@@ -11,7 +12,8 @@
         android:icon="@drawable/ic_twotone_explore_24px"
         android:key="@string/settings_compass_mode_key"
         android:summary="%s"
-        android:title="@string/settings_compass_mode_title" />
+        android:title="@string/settings_compass_mode_title"
+        app:defaultValue="@string/settings_compass_mode_true_value" />
 
     <ListPreference
         android:defaultValue="@string/settings_coordinates_format_dd_label"
@@ -21,14 +23,16 @@
         android:icon="@drawable/ic_twotone_my_location_24px"
         android:key="@string/settings_coordinates_format_key"
         android:summary="%s"
-        android:title="@string/settings_coordinates_format_title" />
+        android:title="@string/settings_coordinates_format_title"
+        app:defaultValue="@string/settings_coordinates_format_dd_value" />
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:icon="@drawable/ic_adjust_24px"
         android:key="@string/settings_show_accuracies_key"
         android:summary="@string/settings_show_accuracies_summary"
-        android:title="@string/settings_show_accuracies_title" />
+        android:title="@string/settings_show_accuracies_title"
+        app:defaultValue="true" />
 
     <ListPreference
         android:defaultValue="@string/settings_theme_system_value"
@@ -38,7 +42,8 @@
         android:icon="@drawable/ic_twotone_color_lens_24px"
         android:key="@string/settings_theme_key"
         android:summary="%s"
-        android:title="@string/settings_theme_title" />
+        android:title="@string/settings_theme_title"
+        app:defaultValue="@string/settings_theme_system_value" />
 
     <ListPreference
         android:defaultValue="@string/settings_time_format_12hr_value"
@@ -48,7 +53,8 @@
         android:icon="@drawable/ic_twotone_access_time_24px"
         android:key="@string/settings_time_format_key"
         android:summary="%s"
-        android:title="@string/settings_time_format_title" />
+        android:title="@string/settings_time_format_title"
+        app:defaultValue="@string/settings_time_format_12hr_value" />
 
     <ListPreference
         android:defaultValue="@string/settings_units_value_metric"
@@ -58,7 +64,8 @@
         android:icon="@drawable/ic_twotone_straighten_24px"
         android:key="@string/settings_units_key"
         android:summary="%s"
-        android:title="@string/settings_units_title" />
+        android:title="@string/settings_units_title"
+        app:defaultValue="@string/settings_units_value_metric" />
 
     <Preference
         android:iconSpaceReserved="true"

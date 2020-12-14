@@ -23,11 +23,11 @@
         android:alpha="0.6"
         android:contentDescription="@null"
         android:src="@drawable/ic_dusk"
-        android:tint="@color/onSurface"
         app:layout_constraintBottom_toBottomOf="@id/duskTextView"
         app:layout_constraintEnd_toStartOf="@id/duskTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/duskTextView" />
+        app:layout_constraintTop_toTopOf="@id/duskTextView"
+        app:tint="?attr/colorOnSurface" />
 
     <TextView
         android:id="@+id/duskTextView"

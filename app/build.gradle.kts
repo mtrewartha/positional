@@ -4,7 +4,6 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
 }
 
@@ -59,7 +58,9 @@ android {
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
     packagingOptions {
-        exclude("DebugProbesKt.bin")
+        resources {
+            excludes += "DebugProbesKt.bin"
+        }
     }
 }
 

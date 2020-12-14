@@ -23,11 +23,11 @@
         android:alpha="0.6"
         android:contentDescription="@null"
         android:src="@drawable/ic_dawn"
-        android:tint="@color/onSurface"
         app:layout_constraintBottom_toBottomOf="@id/dawnTextView"
         app:layout_constraintEnd_toStartOf="@id/dawnTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/dawnTextView" />
+        app:layout_constraintTop_toTopOf="@id/dawnTextView"
+        app:tint="?attr/colorOnSurface" />
 
     <TextView
         android:id="@+id/dawnTextView"

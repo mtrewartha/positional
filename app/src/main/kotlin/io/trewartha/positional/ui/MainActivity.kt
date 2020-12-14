@@ -4,31 +4,54 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.PixelFormat
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.TypedValue
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.elevation.ElevationOverlayProvider
 import io.trewartha.positional.R
 import io.trewartha.positional.databinding.MainActivityBinding
 import timber.log.Timber
 
-class MainActivity : BaseActivity<MainViewModel>() {
 
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: MainViewModel
     private lateinit var viewBinding: MainActivityBinding
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        window.setFormat(PixelFormat.RGBA_8888)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+//        viewModel.theme.observe(this) { setTheme(it) }
+        setTheme(viewModel.theme)
+
+        val typedValue = TypedValue()
+        theme.resolveAttribute(R.attr.colorSurface, typedValue, true)
+        Timber.i("Resolved color surface to ${typedValue.data.toString(16)}")
+
         super.onCreate(savedInstanceState)
+
         viewBinding = MainActivityBinding.inflate(layoutInflater)
+
+        // While the navigation bar color can technically be changed started in API 21, we can't
+        // specify that the navigation bar is light (and the icons should be dark) until API 27.
+        // Therefore, we don't mess with navigation bar color until API 27.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            window.navigationBarColor = ElevationOverlayProvider(this@MainActivity)
+                    .compositeOverlayWithThemeSurfaceColorIfNeeded(
+                            viewBinding.bottomNavigationView.elevation,
+                            viewBinding.bottomNavigationView
+                    )
+        }
+
         setContentView(viewBinding.root)
+
         viewBinding.bottomNavigationView.setupWithNavController(findNavController(R.id.navHost))
     }
 

@@ -23,8 +23,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
-        android:theme="@style/ThemeOverlay.Positional.BottomNavigationView"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:menu="@menu/main_bottom_navigation" />
 
 </LinearLayout>
