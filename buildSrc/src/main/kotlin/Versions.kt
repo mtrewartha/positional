@@ -5,9 +5,9 @@ object Versions {
     const val kotlin = "1.4.20"
 
     object Android {
-        const val compileSdk = 29
+        const val compileSdk = 30
         const val minSdk = 21
-        const val targetSdk = 29
+        const val targetSdk = 30
     }
 
     object Application {
