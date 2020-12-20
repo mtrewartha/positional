@@ -49,7 +49,7 @@
             app:layout_constraintVertical_bias="1"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/dateTextView"
             style="@style/SunDate"
             android:layout_width="wrap_content"
@@ -70,6 +70,14 @@
             app:layout_constraintBottom_toTopOf="@id/sunriseLabelTextView"
             app:layout_constraintTop_toBottomOf="@id/dawnTextView" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressIndicator"
+            style="@style/Widget.Positional.LinearProgressIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintTop_toBottomOf="@id/divider0" />
+
         <TextView
             android:id="@+id/sunriseLabelTextView"
             style="@style/SunStatLabel"
@@ -86,7 +94,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider0"
             tools:targetApi="o" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/sunriseValueTextView"
             style="@style/SunStat"
             android:layout_width="wrap_content"
@@ -127,7 +135,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider1"
             tools:ignore="UnusedAttribute" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/civilValueTextView"
             style="@style/SunStat"
             android:layout_width="wrap_content"
@@ -168,7 +176,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider2"
             tools:ignore="UnusedAttribute" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/nauticalValueTextView"
             style="@style/SunStat"
             android:layout_width="wrap_content"
@@ -208,7 +216,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider3"
             tools:ignore="UnusedAttribute" />
 
-        <com.elyeproj.loaderviewlibrary.LoaderTextView
+        <TextView
             android:id="@+id/astronomicalValueTextView"
             style="@style/SunStat"
             android:layout_width="wrap_content"

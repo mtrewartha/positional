@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Positional.System" parent="Positional.Light" />
 
@@ -101,6 +101,8 @@
     <style name="Widget.Positional.Button" parent="Widget.MaterialComponents.Button" />
 
     <style name="Widget.Positional.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton" />
+
+    <style name="Widget.Positional.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator" />
 
     <!-- Compass -->
 

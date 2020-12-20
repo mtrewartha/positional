@@ -40,6 +40,9 @@ class DuskFragment : Fragment() {
 
     private fun observeSunState(sunState: SunViewModel.SunState) {
         with(viewBinding) {
+            progressIndicator.animate()
+                    .alpha(0f)
+                    .withEndAction { progressIndicator.visibility = View.GONE }
             dateTextView.text = sunState.date
             astronomicalValueTextView.text = sunState.astronomicalDusk
             nauticalValueTextView.text = sunState.nauticalDusk
