@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             val mode = when (it) {
                 Theme.DARK -> AppCompatDelegate.MODE_NIGHT_YES
                 Theme.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
-                Theme.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
             AppCompatDelegate.setDefaultNightMode(mode)
         }
