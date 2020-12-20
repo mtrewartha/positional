@@ -8,8 +8,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -28,12 +28,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-//        viewModel.theme.observe(this) { setTheme(it) }
-        setTheme(viewModel.theme)
-
-        val typedValue = TypedValue()
-        theme.resolveAttribute(R.attr.colorSurface, typedValue, true)
-        Timber.i("Resolved color surface to ${typedValue.data.toString(16)}")
+        viewModel.theme.observe(this) {
+            val mode = when (it) {
+                Theme.DARK -> AppCompatDelegate.MODE_NIGHT_YES
+                Theme.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+                Theme.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+            AppCompatDelegate.setDefaultNightMode(mode)
+        }
 
         super.onCreate(savedInstanceState)
 
