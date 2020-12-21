@@ -23,7 +23,6 @@ object Dependencies {
     const val kotestRunnerJUnit5 = "io.kotest:kotest-runner-junit5-jvm:${Versions.Dependencies.kotest}"
     const val kotlinxCoroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Dependencies.kotlinxCoroutines}"
     const val kotlinxCoroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Dependencies.kotlinxCoroutines}"
-    const val loaderView = "com.elyeproj.libraries:loaderviewlibrary:${Versions.Dependencies.loaderView}"
     const val markwon = "io.noties.markwon:core:${Versions.Dependencies.markwon}"
     const val material = "com.google.android.material:material:${Versions.Dependencies.material}"
     const val pageIndicatorView = "com.romandanylyk:pageindicatorview:${Versions.Dependencies.pageIndicatorView}"

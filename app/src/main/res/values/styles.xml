@@ -108,9 +108,7 @@
 
     <style name="CompassAttributeTitle" parent="TextAppearance.Positional.Subtitle2" />
 
-    <style name="CompassAttributeValue" parent="TextAppearance.Positional.Caption">
-        <item name="height_weight">0.8</item>
-    </style>
+    <style name="CompassAttributeValue" parent="TextAppearance.Positional.Caption" />
 
     <style name="CompassDegrees" parent="TextAppearance.Positional.Headline5">
         <item name="android:textStyle">bold</item>

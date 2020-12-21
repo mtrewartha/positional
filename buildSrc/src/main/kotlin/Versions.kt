@@ -45,7 +45,6 @@ object Versions {
         const val kotlin = Versions.kotlin
         const val kotlinxCoroutines = "1.4.2"
         const val kotest = "4.3.1"
-        const val loaderView = "2.0.0"
         const val markwon = "4.6.0"
         const val material = "1.3.0-alpha04"
         const val pageIndicatorView = "1.0.3"
