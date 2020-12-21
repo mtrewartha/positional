@@ -1,9 +1,41 @@
-Positional shows you 5 different aspects of your location.
+Positional shows you 5 different aspects of your location: coordinates, accuracy, bearing,
+elevation, and speed.
 
-- **Coordinates**: Your current latitude and longitude. You can adjust their format in Settings.
-- **Accuracy**: The accuracy of the coordinates.
-- **Bearing**: The direction you are moving, regardless of orientation of your Android device.
-- **Elevation**: Your current elevation above sea level.
-- **Speed**: Your current speed.
+_Positional does not calculate any of these; it simply asks Google Play
+Services and your Android device for them, then displays them to you as they flow in. They are
+discarded by the app instantly without being recorded._
 
-If your device is running Android 8.0 or higher, Positional will also show you accuracies for each of these aspects. You can hide these accuracies in Settings.
+### Coordinates
+Your current position, e.g. latitude and longitude. You can adjust the format for this in Settings.
+The following formats are available:
+
+- Decimal degrees
+- Degrees with decimal minutes
+- Degrees, minutes, and seconds
+- MGRS
+- UTM
+
+These coordinates are determined using a "fused" approach, using data from various sources like GNSS
+(e.g. GPS, Galileo, BDS, GLONASS, IRNSS, or QZSS), cell towers, and WiFi networks.
+
+### Accuracy
+The accuracy of the coordinates above. This varies depending on the coordinates source (for more
+info about sources, see above) and the current environment your Android device is located in. For
+example, when you're outside with a clear view of the sky, you'll most likely have great GPS
+reception and see great accuracies. When you're deep inside of a building surrounded by concrete,
+steel, or other materials that interfere with GPS, cell, and WiFi signals, you'll most likely have
+poor reception and see worse accuracies.
+
+### Bearing
+The direction you are moving, regardless of orientation of your Android device. On some devices,
+Google Play Services reports a bearing even when speed is zero. In this case, the app hides the
+bearing to avoid confusion.
+
+### Elevation
+Your current elevation above the WGS-84 ellipsoid (a rough approximation of Earth's surface).
+
+### Speed
+Your current ground speed (not air speed).
+
+If your device is running Android 8.0 or higher, Positional will also show you accuracies for each
+of these aspects. You can hide these accuracies in Settings.
