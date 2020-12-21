@@ -15,7 +15,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import java.util.*
 import kotlin.math.roundToInt
 
 @Suppress("UnstableApiUsage")
@@ -79,10 +78,10 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
                 prefCompassModeListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
             }
         }.map {
-            try {
-                CompassMode.valueOf(it!!.toUpperCase(Locale.US))
-            } catch (exception: Exception) {
-                CompassMode.TRUE_NORTH
+            when (it) {
+                compassModePrefValueMagneticNorth -> CompassMode.MAGNETIC_NORTH
+                compassModePrefValueTrueNorth -> CompassMode.TRUE_NORTH
+                else -> CompassMode.TRUE_NORTH
             }
         }.map {
             app.getString(
@@ -96,6 +95,10 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val _missingSensorState = MediatorLiveData<MissingSensorState>()
     private val compass = Compass(app, viewModelScope)
+    private val compassModePrefValueMagneticNorth =
+            app.getString(R.string.settings_compass_mode_magnetic_value)
+    private val compassModePrefValueTrueNorth =
+            app.getString(R.string.settings_compass_mode_true_value)
     private val prefs = app.getSharedPreferences(
             app.getString(R.string.settings_filename),
             Context.MODE_PRIVATE
