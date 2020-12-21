@@ -51,7 +51,7 @@ class LocationFormatter(
     fun getBearing(location: Location): String? {
         if (!location.hasBearing()) return null
 
-        if (location.speed <= BEARING_MIN_SPEED_THRESHOLD)
+        if (location.speed <= MIN_SPEED_THRESHOLD)
             return context.getString(R.string.common_dash)
 
         val bearing = location.bearing.toInt()
@@ -65,7 +65,7 @@ class LocationFormatter(
         if (
                 !location.hasBearingAccuracy() ||
                 location.bearingAccuracyDegrees == 0f ||
-                location.speed <= BEARING_MIN_SPEED_THRESHOLD
+                location.speed <= MIN_SPEED_THRESHOLD
         )
             return context.getString(R.string.common_dash)
 
@@ -142,6 +142,9 @@ class LocationFormatter(
         if (!location.hasSpeed() || location.speed == 0f)
             return null
 
+        if (location.speed <= MIN_SPEED_THRESHOLD)
+            return context.getString(R.string.common_dash)
+
         val speed = numberFormat.format(location.speed.let {
             when (units) {
                 Units.IMPERIAL -> DistanceUtils.metersPerSecondToMilesPerHour(it)
@@ -159,7 +162,11 @@ class LocationFormatter(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
             return null
 
-        if (!location.hasSpeedAccuracy() || location.speedAccuracyMetersPerSecond == 0f)
+        if (
+                !location.hasSpeedAccuracy() ||
+                location.speedAccuracyMetersPerSecond == 0f ||
+                location.speed <= MIN_SPEED_THRESHOLD
+        )
             return context.getString(R.string.common_dash)
 
         val accuracy = numberFormat.format(location.speedAccuracyMetersPerSecond.let {
@@ -348,6 +355,6 @@ class LocationFormatter(
     }
 
     companion object {
-        private const val BEARING_MIN_SPEED_THRESHOLD = 0.5f
+        private const val MIN_SPEED_THRESHOLD = 0.3f
     }
 }
