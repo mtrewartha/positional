@@ -22,7 +22,7 @@ object Versions {
         val name by lazy { "$major.$minor.$patch" }
 
         private const val major = 2
-        private const val minor = 13
+        private const val minor = 14
         private const val patch = 0
     }
 
