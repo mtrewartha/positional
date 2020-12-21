@@ -51,6 +51,9 @@ class LocationFormatter(
     fun getBearing(location: Location): String? {
         if (!location.hasBearing()) return null
 
+        if (location.speed <= BEARING_MIN_SPEED_THRESHOLD)
+            return context.getString(R.string.common_dash)
+
         val bearing = location.bearing.toInt()
         return String.format(locale, formatBearing, bearing)
     }
@@ -59,7 +62,11 @@ class LocationFormatter(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !prefsShowAccuracies)
             return null
 
-        if (!location.hasBearingAccuracy() || location.bearingAccuracyDegrees == 0f)
+        if (
+                !location.hasBearingAccuracy() ||
+                location.bearingAccuracyDegrees == 0f ||
+                location.speed <= BEARING_MIN_SPEED_THRESHOLD
+        )
             return context.getString(R.string.common_dash)
 
         val accuracy = numberFormat.format(location.bearingAccuracyDegrees)
@@ -338,5 +345,9 @@ class LocationFormatter(
 
     private fun replaceDelimiters(string: String): String {
         return string.replaceFirst(":".toRegex(), "° ").replaceFirst(":".toRegex(), "' ") + "\""
+    }
+
+    companion object {
+        private const val BEARING_MIN_SPEED_THRESHOLD = 0.5f
     }
 }
