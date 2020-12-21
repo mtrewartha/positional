@@ -27,15 +27,17 @@ steel, or other materials that interfere with GPS, cell, and WiFi signals, you'l
 poor reception and see worse accuracies.
 
 ### Bearing
-The direction you are moving, regardless of orientation of your Android device. On some devices,
-Google Play Services reports a bearing even when speed is zero. In this case, the app hides the
-bearing to avoid confusion.
+The direction you are moving, regardless of orientation of your Android device. To minimize
+distraction, speed and bearing are not shown when speed is 0.3 m/s (roughly 0.67 mph) or lower. This
+is because accuracies are often poor enough for devices to think they are moving when they are not.
 
 ### Elevation
 Your current elevation above the WGS-84 ellipsoid (a rough approximation of Earth's surface).
 
 ### Speed
-Your current ground speed (not air speed).
+Your current ground speed (not air speed). To minimize distraction, speed and bearing are not shown
+when speed is 0.3 m/s (roughly 0.67 mph) or lower. This is because accuracies are often poor enough
+for devices to think they are moving when they are not.
 
 If your device is running Android 8.0 or higher, Positional will also show you accuracies for each
 of these aspects. You can hide these accuracies in Settings.
