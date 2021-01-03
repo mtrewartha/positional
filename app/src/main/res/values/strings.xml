@@ -65,8 +65,8 @@
     <string name="location_label_elevation">Elevation</string>
     <string name="location_label_speed">Speed</string>
     <string name="location_permission_explanation_title">Location Permission Needed</string>
-    <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through the Settings app before using this app.</string>
-    <string name="location_permission_explanation_positive">Go to Settings</string>
+    <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through your device\'s Settings app before using this app.</string>
+    <string name="location_permission_explanation_positive">Go to Settings App</string>
     <string name="location_permission_explanation_negative">@string/common_exit</string>
     <string name="location_screen_lock_button_content_description_off">Lock screen (currently off)</string>
     <string name="location_screen_lock_button_content_description_on">Lock screen (currently on)</string>

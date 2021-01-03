@@ -1,10 +1,12 @@
 package io.trewartha.positional.ui.location
 
+import android.Manifest
 import android.app.Application
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Looper
@@ -153,57 +155,62 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     }.catch {
         emit(DEFAULT_COORDINATES_FORMAT)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    private val location: StateFlow<Location?> by lazy {
+        havePermissions.filter { it }.flatMapLatest {
+            callbackFlow<Location> {
+                var firstLocationUpdateTrace: Trace? =
+                        FirebasePerformance.getInstance().newTrace("first_location")
+                val locationClient = LocationServices.getFusedLocationProviderClient(app)
+                val locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult?) {
+                        val location = locationResult?.lastLocation ?: return
+                        offer(location)
 
-    private val location: StateFlow<Location?> = callbackFlow<Location> {
-        var firstLocationUpdateTrace: Trace? =
-                FirebasePerformance.getInstance().newTrace("first_location")
-        val locationClient = LocationServices.getFusedLocationProviderClient(app)
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                val location = locationResult?.lastLocation ?: return
-                offer(location)
-
-                if (firstLocationUpdateTrace != null) {
-                    val accuracyCounter = when (location.accuracy) {
-                        in 0.0f.rangeTo(5.0f) -> COUNTER_ACCURACY_VERY_HIGH
-                        in 5.0f.rangeTo(10.0f) -> COUNTER_ACCURACY_HIGH
-                        in 10.0f.rangeTo(15.0f) -> COUNTER_ACCURACY_MEDIUM
-                        in 15.0f.rangeTo(20.0f) -> COUNTER_ACCURACY_LOW
-                        else -> COUNTER_ACCURACY_VERY_LOW
+                        if (firstLocationUpdateTrace != null) {
+                            val accuracyCounter = when (location.accuracy) {
+                                in 0.0f.rangeTo(5.0f) -> COUNTER_ACCURACY_VERY_HIGH
+                                in 5.0f.rangeTo(10.0f) -> COUNTER_ACCURACY_HIGH
+                                in 10.0f.rangeTo(15.0f) -> COUNTER_ACCURACY_MEDIUM
+                                in 15.0f.rangeTo(20.0f) -> COUNTER_ACCURACY_LOW
+                                else -> COUNTER_ACCURACY_VERY_LOW
+                            }
+                            firstLocationUpdateTrace?.incrementMetric(accuracyCounter, 1L)
+                            firstLocationUpdateTrace?.stop()
+                            firstLocationUpdateTrace = null
+                        }
                     }
-                    firstLocationUpdateTrace?.incrementMetric(accuracyCounter, 1L)
-                    firstLocationUpdateTrace?.stop()
-                    firstLocationUpdateTrace = null
+
+                    override fun onLocationAvailability(locationAvailability: LocationAvailability) {
+                        Timber.d("Location availability changed to $locationAvailability")
+                    }
+                }
+
+                try {
+                    val locationRequest = LocationRequest.create()
+                            .setPriority(LOCATION_UPDATE_PRIORITY)
+                            .setInterval(LOCATION_UPDATE_INTERVAL_MS)
+                    Timber.i("Requesting location updates: $locationRequest")
+                    if (firstLocationUpdateTrace == null) {
+                        firstLocationUpdateTrace?.start()
+                    }
+                    locationClient.requestLocationUpdates(
+                            locationRequest,
+                            locationCallback,
+                            Looper.getMainLooper()
+                    )
+                } catch (e: SecurityException) {
+                    Timber.w(e, "Don't have location permissions, no location updates will be received")
+                }
+
+                awaitClose {
+                    Timber.i("Suspending location updates")
+                    locationClient.removeLocationUpdates(locationCallback)
                 }
             }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    }
 
-            override fun onLocationAvailability(locationAvailability: LocationAvailability) {
-                Timber.d("Location availability changed to $locationAvailability")
-            }
-        }
-
-        try {
-            val locationRequest = LocationRequest.create()
-                    .setPriority(LOCATION_UPDATE_PRIORITY)
-                    .setInterval(LOCATION_UPDATE_INTERVAL_MS)
-            Timber.i("Requesting location updates: $locationRequest")
-            if (firstLocationUpdateTrace == null) {
-                firstLocationUpdateTrace?.start()
-            }
-            locationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.getMainLooper()
-            )
-        } catch (e: SecurityException) {
-            Timber.w(e, "Don't have location permissions, no location updates will be received")
-        }
-
-        awaitClose {
-            Timber.i("Suspending location updates")
-            locationClient.removeLocationUpdates(locationCallback)
-        }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    private val havePermissions: MutableStateFlow<Boolean> = MutableStateFlow(checkPermissions())
 
     private val units: SharedFlow<Units> = callbackFlow {
         if (prefs.contains(prefsKeyUnits))
@@ -236,12 +243,24 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     private var prefShowAccuraciesListener: PrefShowAccuraciesListener? = null
     private var prefUnitsListener: PrefUnitsListener? = null
 
+    init {
+        if (!checkPermissions()) _events.value = Event.RequestPermissions(PERMISSIONS)
+    }
+
     fun handleViewEvent(event: LocationFragment.Event) {
         when (event) {
             is LocationFragment.Event.CopyClick -> handleCopyClick()
             is LocationFragment.Event.HelpClick -> handleHelpClick()
+            is LocationFragment.Event.PermissionsResult -> handlePermissionsResult(event)
             is LocationFragment.Event.ScreenLockClick -> handleScreenLockClick()
+            is LocationFragment.Event.SystemSettingsResult -> handleSystemSettingsResult()
             is LocationFragment.Event.ShareClick -> handleShareClick()
+        }
+    }
+
+    private fun checkPermissions(): Boolean {
+        return PERMISSIONS.all {
+            ContextCompat.checkSelfPermission(app, it) == PackageManager.PERMISSION_GRANTED
         }
     }
 
@@ -266,6 +285,12 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         _events.value = Event.NavigateToLocationHelp()
     }
 
+    private fun handlePermissionsResult(event: LocationFragment.Event.PermissionsResult) {
+        val allPermissionsGranted = event.result.all { it.value }
+        havePermissions.tryEmit(allPermissionsGranted)
+        if (!allPermissionsGranted) _events.value = Event.ShowPermissionsDeniedDialog()
+    }
+
     private fun handleScreenLockClick() {
         val locked = !prefs.getBoolean(prefsKeyScreenLock, false)
         prefs.edit { putBoolean(prefsKeyScreenLock, locked) }
@@ -279,6 +304,12 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             Event.CoordinatesShare.Error()
         else
             Event.CoordinatesShare.Success(locationFormatter.getSharedCoordinates(location, format))
+    }
+
+    private fun handleSystemSettingsResult() {
+        val havePermissionsNow = checkPermissions()
+        havePermissions.tryEmit(havePermissionsNow)
+        if (!havePermissionsNow) _events.value = Event.ShowPermissionsDeniedDialog()
     }
 
     private fun Location.toCoordinates(format: CoordinatesFormat): Coordinates {
@@ -308,6 +339,10 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         }
 
         class NavigateToLocationHelp : Event()
+
+        class ShowPermissionsDeniedDialog() : Event()
+
+        data class RequestPermissions(val permissions: List<String>) : Event()
 
         data class ScreenLock(val locked: Boolean) : Event()
     }
@@ -349,16 +384,20 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     companion object {
+        private const val COUNTER_ACCURACY_VERY_HIGH = "accuracy_very_high"
+        private const val COUNTER_ACCURACY_HIGH = "accuracy_high"
+        private const val COUNTER_ACCURACY_MEDIUM = "accuracy_medium"
+        private const val COUNTER_ACCURACY_LOW = "accuracy_low"
+        private const val COUNTER_ACCURACY_VERY_LOW = "accuracy_very_low"
         private val DEFAULT_COORDINATES_FORMAT = CoordinatesFormat.DD
         private const val DEFAULT_SCREEN_LOCK = false
         private const val DEFAULT_SHOW_ACCURACIES = true
         private val DEFAULT_UNITS = Units.METRIC
         private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
-        private const val COUNTER_ACCURACY_VERY_HIGH = "accuracy_very_high"
-        private const val COUNTER_ACCURACY_HIGH = "accuracy_high"
-        private const val COUNTER_ACCURACY_MEDIUM = "accuracy_medium"
-        private const val COUNTER_ACCURACY_LOW = "accuracy_low"
-        private const val COUNTER_ACCURACY_VERY_LOW = "accuracy_very_low"
+        private val PERMISSIONS = listOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        )
     }
 }

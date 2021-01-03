@@ -2,27 +2,45 @@ package io.trewartha.positional.ui.location
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialSharedAxis
 import io.trewartha.positional.R
 import io.trewartha.positional.databinding.LocationFragmentBinding
 import io.trewartha.positional.ui.utils.showSnackbar
+import timber.log.Timber
 
 class LocationFragment : Fragment() {
 
     private var _viewBinding: LocationFragmentBinding? = null
     private val viewBinding get() = _viewBinding!!
+    private lateinit var systemSettingsLauncher: ActivityResultLauncher<Intent>
+    private lateinit var permissionsRequestLauncher: ActivityResultLauncher<Array<out String>>
     private lateinit var viewModel: LocationViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        systemSettingsLauncher = registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+        ) {
+            viewModel.handleViewEvent(Event.SystemSettingsResult)
+        }
+        permissionsRequestLauncher = registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+        ) {
+            viewModel.handleViewEvent(Event.PermissionsResult(it))
+        }
         viewModel = ViewModelProvider(requireActivity()).get(LocationViewModel::class.java)
     }
 
@@ -137,16 +155,25 @@ class LocationFragment : Fragment() {
             is LocationViewModel.Event.CoordinatesShare ->
                 observeCoordinatesShareEvent(event)
             is LocationViewModel.Event.NavigateToLocationHelp ->
-                observeNavigateToLocationHelp()
+                observeNavigateToLocationHelpEvent()
+            is LocationViewModel.Event.RequestPermissions ->
+                observeRequestPermissionsEvent(event)
             is LocationViewModel.Event.ScreenLock ->
                 observeScreenLockEvent(event)
+            is LocationViewModel.Event.ShowPermissionsDeniedDialog ->
+                observeShowPermissionsDeniedDialogEvent()
         }
     }
 
-    private fun observeNavigateToLocationHelp() {
+    private fun observeNavigateToLocationHelpEvent() {
         exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
         findNavController().navigate(R.id.help)
+    }
+
+    private fun observeRequestPermissionsEvent(event: LocationViewModel.Event.RequestPermissions) {
+        Timber.i("Requesting permissions")
+        permissionsRequestLauncher.launch(event.permissions.toTypedArray())
     }
 
     private fun observeScreenLockState(screenLockState: LocationViewModel.ScreenLockState) {
@@ -170,6 +197,23 @@ class LocationFragment : Fragment() {
         )
     }
 
+    private fun observeShowPermissionsDeniedDialogEvent() {
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.location_permission_explanation_title)
+                .setMessage(R.string.location_permission_explanation_message)
+                .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ ->
+                    systemSettingsLauncher.launch(Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.fromParts("package", requireContext().packageName, null)
+                    ))
+                }
+                .setNegativeButton(R.string.location_permission_explanation_negative) { _, _ ->
+                    requireActivity().finishAndRemoveTask()
+                }
+                .setCancelable(false)
+                .show()
+    }
+
     private fun observeSpeed(speed: String) {
         viewBinding.speedValueTextView.text = speed
     }
@@ -185,6 +229,8 @@ class LocationFragment : Fragment() {
     sealed class Event {
         object CopyClick : Event()
         object HelpClick : Event()
+        data class PermissionsResult(val result: Map<String, Boolean>) : Event()
+        object SystemSettingsResult : Event()
         object ScreenLockClick : Event()
         object ShareClick : Event()
     }
