@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/coordinatesTextView"
@@ -56,7 +56,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/shareButton"
             style="@style/Widget.Positional.Button.TextButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/location_share_button_content_description"
             android:tooltipText="@string/location_share_button_tooltip"
@@ -67,7 +67,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/copyButton"
             style="@style/Widget.Positional.Button.TextButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/location_copy_coordinates_content_description"
             android:tooltipText="@string/location_copy_coordinates_tooltip"
@@ -78,7 +78,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/screenLockButton"
             style="@style/Widget.Positional.Button.TextButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/location_screen_lock_button_content_description_off"
             android:tooltipText="@string/location_screen_lock_button_tooltip_off"
@@ -89,7 +89,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/helpButton"
             style="@style/Widget.Positional.Button.TextButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/location_help_button_content_description"
             android:tooltipText="@string/location_help_button_tooltip"
