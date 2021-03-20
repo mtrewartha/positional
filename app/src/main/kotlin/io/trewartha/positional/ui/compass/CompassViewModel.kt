@@ -112,19 +112,19 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
             !compass.hasAccelerometer && !compass.hasMagnetometer -> {
                 _missingSensorState.value = MissingSensorState(
                         app.getString(R.string.compass_missing_both_sensors_body),
-                        app.getString(R.string.compass_missing_both_sensors_caption)
+                        app.getString(R.string.compass_missing_hardware_caption)
                 )
             }
             !compass.hasAccelerometer -> {
                 _missingSensorState.value = MissingSensorState(
                         app.getString(R.string.compass_missing_accelerometer_body),
-                        app.getString(R.string.compass_missing_accelerometer_caption)
+                        app.getString(R.string.compass_missing_hardware_caption)
                 )
             }
             !compass.hasMagnetometer -> {
                 _missingSensorState.value = MissingSensorState(
                         app.getString(R.string.compass_missing_magnetometer_body),
-                        app.getString(R.string.compass_missing_magnetometer_caption)
+                        app.getString(R.string.compass_missing_hardware_caption)
                 )
             }
         }

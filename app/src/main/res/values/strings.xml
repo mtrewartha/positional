@@ -30,12 +30,10 @@
     <string name="compass_mode_title">Mode</string>
     <string name="compass_mode_magnetic_north">Magnetic North</string>
     <string name="compass_mode_true_north">True North</string>
-    <string name="compass_missing_accelerometer_body">No Accelerometer in Device</string>
-    <string name="compass_missing_accelerometer_caption">This device is missing hardware that the app needs to determine orientation. Unfortunately, that means the compass can\'t work on this device.</string>
-    <string name="compass_missing_magnetometer_body">No Magnetometer in Device</string>
-    <string name="compass_missing_magnetometer_caption">This device is missing hardware that the app needs to measure Earth\'s magnetic field. Unfortunately, that means the compass can\'t work on this device.</string>
-    <string name="compass_missing_both_sensors_body">No Accelerometer or Magnetometer in Device</string>
-    <string name="compass_missing_both_sensors_caption">This device is missing hardware that the app needs to measure Earth\'s magnetic field and determine orientation. Unfortunately, that means the compass can\'t work on this device.</string>
+    <string name="compass_missing_accelerometer_body">Missing Accelerometer</string>
+    <string name="compass_missing_hardware_caption">Unfortunately, this device does not have the sensors required to use the compass.</string>
+    <string name="compass_missing_magnetometer_body">Missing Magnetometer</string>
+    <string name="compass_missing_both_sensors_body">Missing Accelerometer or Magnetometer</string>
 
     <!-- Location -->
     <string name="location_accuracy">± %s</string>

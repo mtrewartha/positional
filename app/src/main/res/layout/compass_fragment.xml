@@ -216,7 +216,7 @@
             android:layout_height="64dp"
             android:layout_marginBottom="24dp"
             android:contentDescription="@null"
-            android:src="@drawable/ic_error_black_24dp"
+            android:src="@drawable/ic_twotone_explore_off_24"
             app:layout_constraintBottom_toTopOf="@id/missingSensorBodyTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -243,12 +243,13 @@
             style="@style/TextAppearance.Positional.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/missingSensorBodyTextView"
             app:layout_constraintWidth_max="320dp"
-            tools:text="@string/compass_missing_both_sensors_caption" />
+            tools:text="@string/compass_missing_hardware_caption" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
