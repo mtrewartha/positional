@@ -10,7 +10,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
-import kotlin.math.abs
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class Compass(context: Context, private val coroutineScope: CoroutineScope) {
@@ -32,11 +31,16 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
                     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
                         offer(
                             when (accuracy) {
-                                SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> CompassAccuracy.HIGH
-                                SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> CompassAccuracy.MEDIUM
-                                SensorManager.SENSOR_STATUS_ACCURACY_LOW -> CompassAccuracy.LOW
-                                SensorManager.SENSOR_STATUS_UNRELIABLE -> CompassAccuracy.UNRELIABLE
-                                else -> CompassAccuracy.UNUSABLE
+                                SensorManager.SENSOR_STATUS_ACCURACY_HIGH ->
+                                    CompassAccuracy.HIGH
+                                SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM ->
+                                    CompassAccuracy.MEDIUM
+                                SensorManager.SENSOR_STATUS_ACCURACY_LOW ->
+                                    CompassAccuracy.LOW
+                                SensorManager.SENSOR_STATUS_UNRELIABLE ->
+                                    CompassAccuracy.UNRELIABLE
+                                else ->
+                                    CompassAccuracy.UNUSABLE
                             }
                         )
                     }
@@ -85,53 +89,49 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
         }
 
     val azimuth: StateFlow<Float?>
-    get() {
-        if (!hasAccelerometer || !hasMagnetometer) {
-            Timber.e("Unable to calculate azimuth, device has accelerometer = $hasAccelerometer, magnetometer = $hasMagnetometer")
-            return MutableStateFlow(null)
-        }
-        return callbackFlow<Float> {
-            val accelerometerReadings = FloatArray(3)
-            val magnetometerReadings = FloatArray(3)
-            val rotation = FloatArray(9)
-            val inclination = FloatArray(9)
-            val listener = object : SensorEventListener {
-                override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                    // Don't do anything
-                }
+        get() {
+            if (!hasAccelerometer || !hasMagnetometer) {
+                Timber.e("Unable to calculate azimuth, device has accelerometer = $hasAccelerometer, magnetometer = $hasMagnetometer")
+                return MutableStateFlow(null)
+            }
+            return callbackFlow<Float> {
+                val accelerometerReadings = FloatArray(3)
+                val magnetometerReadings = FloatArray(3)
+                val rotation = FloatArray(9)
+                val inclination = FloatArray(9)
+                val listener = object : SensorEventListener {
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                        // Don't do anything
+                    }
 
-                override fun onSensorChanged(event: SensorEvent) {
-                    when (event.sensor) {
-                        accelerometer -> smoothAndSetReadings(accelerometerReadings, event.values)
-                        magnetometer -> smoothAndSetReadings(magnetometerReadings, event.values)
-                    }
-                    val successfullyCalculatedRotationMatrix = SensorManager.getRotationMatrix(
-                        rotation,
-                        inclination,
-                        accelerometerReadings,
-                        magnetometerReadings
-                    )
-                    if (successfullyCalculatedRotationMatrix) {
-                        val orientation = FloatArray(3)
-                        SensorManager.getOrientation(rotation, orientation)
-                        offer((((orientation[0] + TWO_PI) % TWO_PI) * DEGREES_PER_RADIAN).toFloat())
+                    override fun onSensorChanged(event: SensorEvent) {
+                        when (event.sensor) {
+                            accelerometer -> smoothAndSetReadings(
+                                accelerometerReadings,
+                                event.values
+                            )
+                            magnetometer -> smoothAndSetReadings(magnetometerReadings, event.values)
+                        }
+                        val successfullyCalculatedRotationMatrix = SensorManager.getRotationMatrix(
+                            rotation,
+                            inclination,
+                            accelerometerReadings,
+                            magnetometerReadings
+                        )
+                        if (successfullyCalculatedRotationMatrix) {
+                            val orientation = FloatArray(3)
+                            SensorManager.getOrientation(rotation, orientation)
+                            val currentAzimuth =
+                                ((orientation[0] + TWO_PI) % TWO_PI) * DEGREES_PER_RADIAN
+                            offer(currentAzimuth.toFloat())
+                        }
                     }
                 }
-            }
-            sensorManager.registerListener(listener, accelerometer, SENSOR_DELAY)
-            sensorManager.registerListener(listener, magnetometer, SENSOR_DELAY)
-            awaitClose { sensorManager.unregisterListener(listener) }
-        }.conflate()
-            .mapNotNull {
-                if (abs(it - oldAzimuth) > AZIMUTH_CHANGE_THRESHOLD) {
-                    oldAzimuth = it
-                    it
-                } else {
-                    null
-                }
-            }
-            .stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
-    }
+                sensorManager.registerListener(listener, accelerometer, SENSOR_DELAY)
+                sensorManager.registerListener(listener, magnetometer, SENSOR_DELAY)
+                awaitClose { sensorManager.unregisterListener(listener) }
+            }.conflate().stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
+        }
 
     val hasAccelerometer: Boolean
         get() = accelerometer != null
@@ -179,8 +179,6 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
             }
         }.distinctUntilChanged().shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
-    private var oldAzimuth = 0f
-
     private fun smoothAndSetReadings(readings: FloatArray, newReadings: FloatArray) {
         readings[0] = READINGS_ALPHA * newReadings[0] + (1 - READINGS_ALPHA) * readings[0]
         readings[1] = READINGS_ALPHA * newReadings[1] + (1 - READINGS_ALPHA) * readings[1]
@@ -188,11 +186,10 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
     }
 
     companion object {
-        private const val AZIMUTH_CHANGE_THRESHOLD = 0.5f
         private const val DEGREES_PER_RADIAN = 180 / Math.PI
         private const val LOCATION_UPDATE_INTERVAL_MS = 300_000L // 5 minutes
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_LOW_POWER
-        private const val READINGS_ALPHA = 0.03f
+        private const val READINGS_ALPHA = 0.06f
         private const val SENSOR_DELAY = SensorManager.SENSOR_DELAY_GAME
         private const val TWO_PI = 2.0 * Math.PI
     }

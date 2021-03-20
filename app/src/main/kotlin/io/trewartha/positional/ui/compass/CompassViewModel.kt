@@ -15,6 +15,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import kotlin.math.roundToInt
 
 @Suppress("UnstableApiUsage")
@@ -23,46 +24,47 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val accelerometerAccuracy: LiveData<String> by lazy {
         compass.accelerometerAccuracy
-                .map { getAccuracyText(it) }
-                .asLiveData()
+            .map { getAccuracyText(it) }
+            .asLiveData()
     }
 
     val azimuth: LiveData<String> by lazy {
         compass.azimuth
-                .mapNotNull { it }
-                .map {
-                    val azimuth = (adjustAzimuthForDisplayRotation(it).roundToInt() + 360) % 360
-                    app.getString(R.string.compass_degrees, azimuth)
-                }
-                .conflate()
-                .asLiveData()
+            .mapNotNull { it }
+            .map {
+                val azimuth = (adjustAzimuthForDisplayRotation(it).roundToInt() + 360) % 360
+                app.getString(R.string.compass_degrees, azimuth)
+            }
+            .conflate()
+            .onEach { Timber.d("Azimuth = $it") }
+            .asLiveData()
     }
 
     val compassRotation: LiveData<Float> by lazy {
         compass.azimuth
-                .mapNotNull { it }
-                .map { -((adjustAzimuthForDisplayRotation(it) + 360f) % 360f) }
-                .onStart { emit(0f) }
-                .asLiveData()
+            .mapNotNull { it }
+            .map { -((adjustAzimuthForDisplayRotation(it) + 360f) % 360f) }
+            .onStart { emit(0f) }
+            .asLiveData()
     }
 
     val declination: LiveData<String> by lazy {
         (compass.magneticDeclination as Flow<Float?>)
-                .onStart { emit(null) }
-                .map {
-                    if (it == null) {
-                        app.getString(R.string.common_dash)
-                    } else {
-                        app.getString(R.string.compass_declination, it.roundToInt())
-                    }
+            .onStart { emit(null) }
+            .map {
+                if (it == null) {
+                    app.getString(R.string.common_dash)
+                } else {
+                    app.getString(R.string.compass_declination, it.roundToInt())
                 }
-                .asLiveData()
+            }
+            .asLiveData()
     }
 
     val magnetometerAccuracy: LiveData<String> by lazy {
         compass.magnetometerAccuracy
-                .map { getAccuracyText(it) }
-                .asLiveData()
+            .map { getAccuracyText(it) }
+            .asLiveData()
     }
 
     val missingSensorState: LiveData<MissingSensorState>
@@ -85,10 +87,10 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
             }
         }.map {
             app.getString(
-                    when (it) {
-                        CompassMode.MAGNETIC_NORTH -> R.string.compass_mode_magnetic_north
-                        CompassMode.TRUE_NORTH -> R.string.compass_mode_true_north
-                    }
+                when (it) {
+                    CompassMode.MAGNETIC_NORTH -> R.string.compass_mode_magnetic_north
+                    CompassMode.TRUE_NORTH -> R.string.compass_mode_true_north
+                }
             )
         }.asLiveData()
     }
@@ -96,12 +98,12 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
     private val _missingSensorState = MediatorLiveData<MissingSensorState>()
     private val compass = Compass(app, viewModelScope)
     private val compassModePrefValueMagneticNorth =
-            app.getString(R.string.settings_compass_mode_magnetic_value)
+        app.getString(R.string.settings_compass_mode_magnetic_value)
     private val compassModePrefValueTrueNorth =
-            app.getString(R.string.settings_compass_mode_true_value)
+        app.getString(R.string.settings_compass_mode_true_value)
     private val prefs = app.getSharedPreferences(
-            app.getString(R.string.settings_filename),
-            Context.MODE_PRIVATE
+        app.getString(R.string.settings_filename),
+        Context.MODE_PRIVATE
     )
     private val prefsKeyCompassMode = app.getString(R.string.settings_compass_mode_key)
     private var prefCompassModeListener: PrefCompassModeListener? = null
@@ -111,20 +113,20 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
         when {
             !compass.hasAccelerometer && !compass.hasMagnetometer -> {
                 _missingSensorState.value = MissingSensorState(
-                        app.getString(R.string.compass_missing_both_sensors_body),
-                        app.getString(R.string.compass_missing_hardware_caption)
+                    app.getString(R.string.compass_missing_both_sensors_body),
+                    app.getString(R.string.compass_missing_hardware_caption)
                 )
             }
             !compass.hasAccelerometer -> {
                 _missingSensorState.value = MissingSensorState(
-                        app.getString(R.string.compass_missing_accelerometer_body),
-                        app.getString(R.string.compass_missing_hardware_caption)
+                    app.getString(R.string.compass_missing_accelerometer_body),
+                    app.getString(R.string.compass_missing_hardware_caption)
                 )
             }
             !compass.hasMagnetometer -> {
                 _missingSensorState.value = MissingSensorState(
-                        app.getString(R.string.compass_missing_magnetometer_body),
-                        app.getString(R.string.compass_missing_hardware_caption)
+                    app.getString(R.string.compass_missing_magnetometer_body),
+                    app.getString(R.string.compass_missing_hardware_caption)
                 )
             }
         }
@@ -142,21 +144,21 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private fun getAccuracyText(compassAccuracy: CompassAccuracy?): String {
         return app.getString(
-                when (compassAccuracy) {
-                    CompassAccuracy.UNUSABLE -> R.string.compass_accuracy_no_contact
-                    CompassAccuracy.UNRELIABLE -> R.string.compass_accuracy_unreliable
-                    CompassAccuracy.LOW -> R.string.compass_accuracy_low
-                    CompassAccuracy.MEDIUM -> R.string.compass_accuracy_medium
-                    CompassAccuracy.HIGH -> R.string.compass_accuracy_high
-                    null -> R.string.compass_accuracy_unknown
-                }
+            when (compassAccuracy) {
+                CompassAccuracy.UNUSABLE -> R.string.compass_accuracy_no_contact
+                CompassAccuracy.UNRELIABLE -> R.string.compass_accuracy_unreliable
+                CompassAccuracy.LOW -> R.string.compass_accuracy_low
+                CompassAccuracy.MEDIUM -> R.string.compass_accuracy_medium
+                CompassAccuracy.HIGH -> R.string.compass_accuracy_high
+                null -> R.string.compass_accuracy_unknown
+            }
         )
     }
 
     data class MissingSensorState(val title: String, val body: String)
 
     private inner class PrefCompassModeListener(
-            val producerScope: ProducerScope<String?>
+        val producerScope: ProducerScope<String?>
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyCompassMode) {
