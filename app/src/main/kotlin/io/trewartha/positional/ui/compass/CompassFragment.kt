@@ -21,9 +21,9 @@ class CompassFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _viewBinding = CompassFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -70,7 +70,7 @@ class CompassFragment : Fragment() {
     }
 
     private fun observeMissingSensorState(
-            missingSensorState: CompassViewModel.MissingSensorState
+        missingSensorState: CompassViewModel.MissingSensorState
     ) {
         with(viewBinding) {
             missingSensorLayout.visibility = View.VISIBLE

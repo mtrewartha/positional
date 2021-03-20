@@ -37,13 +37,13 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
         }
         try {
             val locationRequest = LocationRequest.create()
-                    .setPriority(LOCATION_UPDATE_PRIORITY)
-                    .setInterval(LOCATION_UPDATE_INTERVAL_MS)
+                .setPriority(LOCATION_UPDATE_PRIORITY)
+                .setInterval(LOCATION_UPDATE_INTERVAL_MS)
             Timber.i("Requesting location updates: $locationRequest")
             locationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.getMainLooper()
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
             )
         } catch (e: SecurityException) {
             Timber.w(e, "Don't have location permissions, no location updates will be received")
@@ -59,25 +59,25 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
         val longitude = it.longitude
 
         val sunriseSunset =
-                SunriseSunset.getSunriseSunset(calendar, latitude, longitude)
+            SunriseSunset.getSunriseSunset(calendar, latitude, longitude)
         val civilTwilights =
-                SunriseSunset.getCivilTwilight(calendar, latitude, longitude)
+            SunriseSunset.getCivilTwilight(calendar, latitude, longitude)
         val nauticalTwilights =
-                SunriseSunset.getNauticalTwilight(calendar, latitude, longitude)
+            SunriseSunset.getNauticalTwilight(calendar, latitude, longitude)
         val astronomicalTwilights =
-                SunriseSunset.getAstronomicalTwilight(calendar, latitude, longitude)
+            SunriseSunset.getAstronomicalTwilight(calendar, latitude, longitude)
 
         SunState(
-                formatDate(it.time),
-                formatTime(astronomicalTwilights[0]?.timeInMillis),
-                formatTime(nauticalTwilights[0]?.timeInMillis),
-                formatTime(civilTwilights[0]?.timeInMillis),
-                formatTime(sunriseSunset[0]?.timeInMillis),
-                formatTime(sunriseSunset[1]?.timeInMillis),
-                formatTime(civilTwilights[1]?.timeInMillis),
-                formatTime(nauticalTwilights[1]?.timeInMillis),
-                formatTime(astronomicalTwilights[1]?.timeInMillis),
-                String.format(formatUpdatedAt, formatTime(it.time))
+            formatDate(it.time),
+            formatTime(astronomicalTwilights[0]?.timeInMillis),
+            formatTime(nauticalTwilights[0]?.timeInMillis),
+            formatTime(civilTwilights[0]?.timeInMillis),
+            formatTime(sunriseSunset[0]?.timeInMillis),
+            formatTime(sunriseSunset[1]?.timeInMillis),
+            formatTime(civilTwilights[1]?.timeInMillis),
+            formatTime(nauticalTwilights[1]?.timeInMillis),
+            formatTime(astronomicalTwilights[1]?.timeInMillis),
+            String.format(formatUpdatedAt, formatTime(it.time))
         )
     }.asLiveData()
 
@@ -85,22 +85,22 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
     private val formatUpdatedAt = app.getString(R.string.location_updated_at)
 
     private fun formatDate(epochMillis: Long?): String? =
-            epochMillis?.let { dateTimeFormatter.getFormattedDate(Instant.ofEpochMilli(it)) }
+        epochMillis?.let { dateTimeFormatter.getFormattedDate(Instant.ofEpochMilli(it)) }
 
     private fun formatTime(epochMillis: Long?): String? =
-            epochMillis?.let { dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(it)) }
+        epochMillis?.let { dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(it)) }
 
     data class SunState(
-            val date: String?,
-            val astronomicalDawn: String?,
-            val nauticalDawn: String?,
-            val civilDawn: String?,
-            val sunrise: String?,
-            val sunset: String?,
-            val civilDusk: String?,
-            val nauticalDusk: String?,
-            val astronomicalDusk: String?,
-            val updatedAt: String?
+        val date: String?,
+        val astronomicalDawn: String?,
+        val nauticalDawn: String?,
+        val civilDawn: String?,
+        val sunrise: String?,
+        val sunset: String?,
+        val civilDusk: String?,
+        val nauticalDusk: String?,
+        val astronomicalDusk: String?,
+        val updatedAt: String?
     )
 
     companion object {

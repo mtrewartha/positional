@@ -42,7 +42,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             prefs.registerOnSharedPreferenceChangeListener(prefShowAccuraciesListener)
             awaitClose {
                 prefShowAccuraciesListener
-                        ?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
+                    ?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
             }
         }.map {
             if (it) View.VISIBLE else View.GONE
@@ -51,14 +51,14 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val bearing: LiveData<String> by lazy {
         location.mapNotNull { it }
-                .map { locationFormatter.getBearing(it) ?: app.getString(R.string.common_dash) }
-                .asLiveData()
+            .map { locationFormatter.getBearing(it) ?: app.getString(R.string.common_dash) }
+            .asLiveData()
     }
 
     val bearingAccuracy: LiveData<String?> by lazy {
         location.mapNotNull { it }
-                .map { locationFormatter.getBearingAccuracy(it) }
-                .asLiveData()
+            .map { locationFormatter.getBearingAccuracy(it) }
+            .asLiveData()
     }
 
     val coordinates: LiveData<Coordinates> by lazy {
@@ -97,17 +97,17 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             }
         }.map {
             val icon = ContextCompat.getDrawable(
-                    app,
-                    if (it) R.drawable.ic_twotone_smartphone_24px
-                    else R.drawable.ic_twotone_screen_lock_portrait_24px
+                app,
+                if (it) R.drawable.ic_twotone_smartphone_24px
+                else R.drawable.ic_twotone_screen_lock_portrait_24px
             )!!
             val contentDescription = app.getString(
-                    if (it) R.string.location_screen_lock_button_content_description_on
-                    else R.string.location_screen_lock_button_content_description_off
+                if (it) R.string.location_screen_lock_button_content_description_on
+                else R.string.location_screen_lock_button_content_description_off
             )
             val tooltip = app.getString(
-                    if (it) R.string.location_screen_lock_button_tooltip_on
-                    else R.string.location_screen_lock_button_tooltip_off
+                if (it) R.string.location_screen_lock_button_tooltip_on
+                else R.string.location_screen_lock_button_tooltip_off
             )
             ScreenLockState(it, icon, contentDescription, tooltip)
         }.asLiveData()
@@ -127,14 +127,14 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val updatedAt: LiveData<String> by lazy {
         location.mapNotNull { it }
-                .map { locationFormatter.getTimestamp(it) ?: app.getString(R.string.common_dash) }
-                .asLiveData()
+            .map { locationFormatter.getTimestamp(it) ?: app.getString(R.string.common_dash) }
+            .asLiveData()
     }
 
     private val _coordinates: StateFlow<Coordinates?> by lazy {
         combine(
-                location.mapNotNull { it },
-                coordinatesFormat.mapNotNull { it }
+            location.mapNotNull { it },
+            coordinatesFormat.mapNotNull { it }
         ) { location, format ->
             location.toCoordinates(format)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -159,7 +159,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         havePermissions.filter { it }.flatMapLatest {
             callbackFlow<Location> {
                 var firstLocationUpdateTrace: Trace? =
-                        FirebasePerformance.getInstance().newTrace("first_location")
+                    FirebasePerformance.getInstance().newTrace("first_location")
                 val locationClient = LocationServices.getFusedLocationProviderClient(app)
                 val locationCallback = object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult?) {
@@ -187,19 +187,22 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
                 try {
                     val locationRequest = LocationRequest.create()
-                            .setPriority(LOCATION_UPDATE_PRIORITY)
-                            .setInterval(LOCATION_UPDATE_INTERVAL_MS)
+                        .setPriority(LOCATION_UPDATE_PRIORITY)
+                        .setInterval(LOCATION_UPDATE_INTERVAL_MS)
                     Timber.i("Requesting location updates: $locationRequest")
                     if (firstLocationUpdateTrace == null) {
                         firstLocationUpdateTrace?.start()
                     }
                     locationClient.requestLocationUpdates(
-                            locationRequest,
-                            locationCallback,
-                            Looper.getMainLooper()
+                        locationRequest,
+                        locationCallback,
+                        Looper.getMainLooper()
                     )
                 } catch (e: SecurityException) {
-                    Timber.w(e, "Don't have location permissions, no location updates will be received")
+                    Timber.w(
+                        e,
+                        "Don't have location permissions, no location updates will be received"
+                    )
                 }
 
                 awaitClose {
@@ -231,8 +234,8 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val locationFormatter = LocationFormatter(app)
     private val prefs = app.getSharedPreferences(
-            app.getString(R.string.settings_filename),
-            Context.MODE_PRIVATE
+        app.getString(R.string.settings_filename),
+        Context.MODE_PRIVATE
     )
     private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
     private val prefsKeyScreenLock = app.getString(R.string.settings_screen_lock_key)
@@ -271,11 +274,11 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             Event.CoordinatesCopy.Error()
         } else {
             clipboardManager.setPrimaryClip(
-                    ClipData.newPlainText(
-                            getApplication<PositionalApplication>()
-                                    .getString(R.string.location_copied_coordinates_label),
-                            locationFormatter.getSharedCoordinates(location, format)
-                    )
+                ClipData.newPlainText(
+                    getApplication<PositionalApplication>()
+                        .getString(R.string.location_copied_coordinates_label),
+                    locationFormatter.getSharedCoordinates(location, format)
+                )
             )
             Event.CoordinatesCopy.Success()
         }
@@ -320,10 +323,10 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     data class Coordinates(val maxLines: Int, val text: String)
 
     data class ScreenLockState(
-            val locked: Boolean,
-            val icon: Drawable,
-            val contentDescription: String,
-            val tooltip: String
+        val locked: Boolean,
+        val icon: Drawable,
+        val contentDescription: String,
+        val tooltip: String
     )
 
     sealed class Event : ViewModelEvent() {
@@ -340,7 +343,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
         class NavigateToLocationHelp : Event()
 
-        class ShowPermissionsDeniedDialog() : Event()
+        class ShowPermissionsDeniedDialog : Event()
 
         data class RequestPermissions(val permissions: List<String>) : Event()
 
@@ -348,7 +351,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     private inner class PrefCoordinatesFormatListener(
-            val producerScope: ProducerScope<String?>
+        val producerScope: ProducerScope<String?>
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyCoordinatesFormat)
@@ -357,7 +360,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     private inner class PrefScreenLockListener(
-            val producerScope: ProducerScope<Boolean>
+        val producerScope: ProducerScope<Boolean>
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyScreenLock)
@@ -366,7 +369,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     private inner class PrefShowAccuraciesListener(
-            val producerScope: ProducerScope<Boolean>
+        val producerScope: ProducerScope<Boolean>
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyShowAccuracies)
@@ -375,7 +378,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     private inner class PrefUnitsListener(
-            val producerScope: ProducerScope<String?>
+        val producerScope: ProducerScope<String?>
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyUnits)
@@ -396,8 +399,8 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
         private val PERMISSIONS = listOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
 }

@@ -30,9 +30,9 @@ class LocationHelpFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _viewBinding = LocationHelpFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root

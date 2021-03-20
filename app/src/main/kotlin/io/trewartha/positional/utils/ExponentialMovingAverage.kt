@@ -15,12 +15,12 @@ import com.google.common.collect.EvictingQueue
 fun EvictingQueue<Float>.ema(alpha: Float): Float? {
     if (isEmpty()) return null
     if (alpha.isNaN()
-            || alpha == Float.NEGATIVE_INFINITY
-            || alpha == Float.POSITIVE_INFINITY
-            || alpha == Float.MIN_VALUE
-            || alpha == Float.MAX_VALUE
-            || alpha <= 0f
-            || alpha >= 1f
+        || alpha == Float.NEGATIVE_INFINITY
+        || alpha == Float.POSITIVE_INFINITY
+        || alpha == Float.MIN_VALUE
+        || alpha == Float.MAX_VALUE
+        || alpha <= 0f
+        || alpha >= 1f
     ) throw IllegalArgumentException("alpha must be between 0 and 1")
 
     return reduceIndexed { index, previousEma, floatElement ->
@@ -44,12 +44,12 @@ fun EvictingQueue<Float>.ema(alpha: Float): Float? {
 fun EvictingQueue<Double>.ema(alpha: Double): Double? {
     if (isEmpty()) return null
     if (alpha.isNaN()
-            || alpha == Double.NEGATIVE_INFINITY
-            || alpha == Double.POSITIVE_INFINITY
-            || alpha == Double.MIN_VALUE
-            || alpha == Double.MAX_VALUE
-            || alpha <= 0.0
-            || alpha >= 1.0
+        || alpha == Double.NEGATIVE_INFINITY
+        || alpha == Double.POSITIVE_INFINITY
+        || alpha == Double.MIN_VALUE
+        || alpha == Double.MAX_VALUE
+        || alpha <= 0.0
+        || alpha >= 1.0
     ) throw IllegalArgumentException("alpha must be between 0 and 1")
 
     return reduceIndexed { index, previousEma, doubleElement ->

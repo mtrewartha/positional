@@ -32,12 +32,12 @@ class LocationFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         systemSettingsLauncher = registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
+            ActivityResultContracts.StartActivityForResult()
         ) {
             viewModel.handleViewEvent(Event.SystemSettingsResult)
         }
         permissionsRequestLauncher = registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()
+            ActivityResultContracts.RequestMultiplePermissions()
         ) {
             viewModel.handleViewEvent(Event.PermissionsResult(it))
         }
@@ -45,9 +45,9 @@ class LocationFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _viewBinding = LocationFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -192,26 +192,28 @@ class LocationFragment : Fragment() {
 
     private fun observeScreenLockEvent(event: LocationViewModel.Event.ScreenLock) {
         viewBinding.coordinatorLayout.showSnackbar(
-                if (event.locked) R.string.location_snackbar_screen_locked
-                else R.string.location_snackbar_screen_unlocked
+            if (event.locked) R.string.location_snackbar_screen_locked
+            else R.string.location_snackbar_screen_unlocked
         )
     }
 
     private fun observeShowPermissionsDeniedDialogEvent() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.location_permission_explanation_title)
-                .setMessage(R.string.location_permission_explanation_message)
-                .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ ->
-                    systemSettingsLauncher.launch(Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.fromParts("package", requireContext().packageName, null)
-                    ))
-                }
-                .setNegativeButton(R.string.location_permission_explanation_negative) { _, _ ->
-                    requireActivity().finishAndRemoveTask()
-                }
-                .setCancelable(false)
-                .show()
+            .setTitle(R.string.location_permission_explanation_title)
+            .setMessage(R.string.location_permission_explanation_message)
+            .setPositiveButton(R.string.location_permission_explanation_positive) { _, _ ->
+                systemSettingsLauncher.launch(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", requireContext().packageName, null)
+                    )
+                )
+            }
+            .setNegativeButton(R.string.location_permission_explanation_negative) { _, _ ->
+                requireActivity().finishAndRemoveTask()
+            }
+            .setCancelable(false)
+            .show()
     }
 
     private fun observeSpeed(speed: String) {

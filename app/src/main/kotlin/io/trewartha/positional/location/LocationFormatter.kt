@@ -18,7 +18,7 @@ import java.text.NumberFormat
 import java.util.*
 
 class LocationFormatter(
-        private val context: Context
+    private val context: Context
 ) {
 
     private val dateTimeFormatter by lazy { DateTimeFormatter(context) }
@@ -36,14 +36,14 @@ class LocationFormatter(
     private val locale: Locale
         get() = LocaleListCompat.getDefault()[0] ?: Locale.US
     private val numberFormat = NumberFormat.getNumberInstance(locale)
-            .apply {
-                roundingMode = RoundingMode.HALF_UP
-                maximumFractionDigits = 0
-                minimumFractionDigits = 0
-            }
+        .apply {
+            roundingMode = RoundingMode.HALF_UP
+            maximumFractionDigits = 0
+            minimumFractionDigits = 0
+        }
     private val prefs = context.getSharedPreferences(
-            context.getString(R.string.settings_filename),
-            Context.MODE_PRIVATE
+        context.getString(R.string.settings_filename),
+        Context.MODE_PRIVATE
     )
     private val prefsShowAccuracies: Boolean
         get() = prefs.getBoolean(context.getString(R.string.settings_show_accuracies_key), true)
@@ -63,9 +63,9 @@ class LocationFormatter(
             return null
 
         if (
-                !location.hasBearingAccuracy() ||
-                location.bearingAccuracyDegrees == 0f ||
-                location.speed <= MIN_SPEED_THRESHOLD
+            !location.hasBearingAccuracy() ||
+            location.bearingAccuracyDegrees == 0f ||
+            location.speed <= MIN_SPEED_THRESHOLD
         )
             return context.getString(R.string.common_dash)
 
@@ -163,9 +163,9 @@ class LocationFormatter(
             return null
 
         if (
-                !location.hasSpeedAccuracy() ||
-                location.speedAccuracyMetersPerSecond == 0f ||
-                location.speed <= MIN_SPEED_THRESHOLD
+            !location.hasSpeedAccuracy() ||
+            location.speedAccuracyMetersPerSecond == 0f ||
+            location.speed <= MIN_SPEED_THRESHOLD
         )
             return context.getString(R.string.common_dash)
 
@@ -183,7 +183,7 @@ class LocationFormatter(
             null
         } else {
             dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(location.time), true)
-                    ?.let { String.format(formatUpdatedAt, it) }
+                ?.let { String.format(formatUpdatedAt, it) }
         }
     }
 
@@ -267,44 +267,44 @@ class LocationFormatter(
 
     private fun getSharedMgrsCoords(lat: Double, lon: Double): String {
         return MGRSCoord.fromLatLon(
-                Angle.fromDegreesLatitude(lat),
-                Angle.fromDegreesLongitude(lon)
+            Angle.fromDegreesLatitude(lat),
+            Angle.fromDegreesLongitude(lon)
         ).toString()
     }
 
     private fun getSharedUtmCoords(lat: Double, lon: Double): String =
-            "${getUtmZone(lat, lon)} ${getUtmEasting(lat, lon)} ${getUtmNorthing(lat, lon)}"
+        "${getUtmZone(lat, lon)} ${getUtmEasting(lat, lon)} ${getUtmNorthing(lat, lon)}"
 
     private fun getUtmCoord(lat: Double, lon: Double): UTMCoord {
         return UTMCoord.fromLatLon(
-                Angle.fromDegreesLatitude(lat),
-                Angle.fromDegreesLongitude(lon)
+            Angle.fromDegreesLatitude(lat),
+            Angle.fromDegreesLongitude(lon)
         )
     }
 
     private fun getMgrsCoords(lat: Double, lon: Double): Pair<String, Int> {
         return Pair(
-                MGRSCoord.fromLatLon(
-                        Angle.fromDegreesLatitude(lat),
-                        Angle.fromDegreesLongitude(lon)
-                ).toString().replace(' ', '\n'),
-                3
+            MGRSCoord.fromLatLon(
+                Angle.fromDegreesLatitude(lat),
+                Angle.fromDegreesLongitude(lon)
+            ).toString().replace(' ', '\n'),
+            3
         )
     }
 
     private fun getUtmCoords(lat: Double, lon: Double): Pair<String, Int> {
         return Pair(
-                "${getUtmZone(lat, lon)}\n${getUtmEasting(lat, lon)}\n${getUtmNorthing(lat, lon)}",
-                3
+            "${getUtmZone(lat, lon)}\n${getUtmEasting(lat, lon)}\n${getUtmNorthing(lat, lon)}",
+            3
         )
     }
 
     private fun getUtmEasting(lat: Double, lon: Double): String {
         return "${
             String.format(
-                    locale,
-                    formatCoordinateUtm,
-                    getUtmCoord(lat, lon).easting
+                locale,
+                formatCoordinateUtm,
+                getUtmCoord(lat, lon).easting
             )
         }m E"
     }
@@ -339,9 +339,9 @@ class LocationFormatter(
         val utmCoordinate = getUtmCoord(lat, lon)
         return "${
             String.format(
-                    locale,
-                    formatCoordinateUtm,
-                    utmCoordinate.northing
+                locale,
+                formatCoordinateUtm,
+                utmCoordinate.northing
             )
         }m N"
     }

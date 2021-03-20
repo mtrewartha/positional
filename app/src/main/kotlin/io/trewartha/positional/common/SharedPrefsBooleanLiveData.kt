@@ -4,9 +4,9 @@ import android.content.SharedPreferences
 import androidx.lifecycle.MediatorLiveData
 
 class SharedPrefsBooleanLiveData(
-        private val sharedPrefs: SharedPreferences,
-        private val key: String,
-        private val defaultValue: Boolean
+    private val sharedPrefs: SharedPreferences,
+    private val key: String,
+    private val defaultValue: Boolean
 ) : MediatorLiveData<Boolean>() {
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, changedKey ->

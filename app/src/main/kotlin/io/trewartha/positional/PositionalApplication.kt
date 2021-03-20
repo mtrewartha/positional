@@ -31,11 +31,11 @@ class PositionalApplication : Application() {
         Timber.plant(logTree)
 
         PreferenceManager.setDefaultValues(
-                this,
-                getString(R.string.settings_filename),
-                Context.MODE_PRIVATE,
-                R.xml.settings,
-                true
+            this,
+            getString(R.string.settings_filename),
+            Context.MODE_PRIVATE,
+            R.xml.settings,
+            true
         )
     }
 }

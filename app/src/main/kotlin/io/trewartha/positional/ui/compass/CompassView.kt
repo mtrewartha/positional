@@ -57,9 +57,11 @@ class CompassView : AppCompatImageView {
         }
         val koefI = INERTIA_MOMENT_DEFAULT / deltaT1 / deltaT2
         val koefAlpha = DAMPING_COEFFICIENT_DEFAULT / deltaT1
-        val koefk = MB_DEFAULT * (sin(Math.toRadians(angle0.toDouble())) * cos(Math.toRadians(angle1.toDouble())) -
-                sin(Math.toRadians(angle1.toDouble())) * cos(Math.toRadians(angle0.toDouble()))).toFloat()
-        val angleNew = (koefI * (angle1 * 2f - angle2) + koefAlpha * angle1 + koefk) / (koefI + koefAlpha)
+        val koefk =
+            MB_DEFAULT * (sin(Math.toRadians(angle0.toDouble())) * cos(Math.toRadians(angle1.toDouble())) -
+                    sin(Math.toRadians(angle1.toDouble())) * cos(Math.toRadians(angle0.toDouble()))).toFloat()
+        val angleNew =
+            (koefI * (angle1 * 2f - angle2) + koefAlpha * angle1 + koefk) / (koefI + koefAlpha)
         angle2 = angle1
         angle1 = angleNew
         time2 = time1

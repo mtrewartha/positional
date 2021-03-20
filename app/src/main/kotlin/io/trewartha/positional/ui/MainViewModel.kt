@@ -34,13 +34,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val prefsKeyTheme = app.getString(R.string.settings_theme_key)
     private val prefs = app.getSharedPreferences(
-            app.getString(R.string.settings_filename),
-            Context.MODE_PRIVATE
+        app.getString(R.string.settings_filename),
+        Context.MODE_PRIVATE
     )
     private var prefThemeListener: PrefThemeListener? = null
 
     private inner class PrefThemeListener(
-            val producerScope: ProducerScope<String?>
+        val producerScope: ProducerScope<String?>
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyTheme)

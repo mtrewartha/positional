@@ -37,10 +37,10 @@ class MainActivity : AppCompatActivity() {
         // Therefore, we don't mess with navigation bar color until API 27.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             window.navigationBarColor = ElevationOverlayProvider(this@MainActivity)
-                    .compositeOverlayWithThemeSurfaceColorIfNeeded(
-                            viewBinding.bottomNavigationView.elevation,
-                            viewBinding.bottomNavigationView
-                    )
+                .compositeOverlayWithThemeSurfaceColorIfNeeded(
+                    viewBinding.bottomNavigationView.elevation,
+                    viewBinding.bottomNavigationView
+                )
         }
 
         setContentView(viewBinding.root)

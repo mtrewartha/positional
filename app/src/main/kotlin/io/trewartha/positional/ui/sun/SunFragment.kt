@@ -22,9 +22,9 @@ class SunFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _viewBinding = SunFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root

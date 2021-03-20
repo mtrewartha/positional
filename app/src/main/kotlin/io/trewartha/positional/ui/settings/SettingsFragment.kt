@@ -38,6 +38,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     companion object {
         private const val PRIVACY_POLICY_URL =
-                "https://github.com/miketrewartha/positional/blob/master/PRIVACY.md"
+            "https://github.com/miketrewartha/positional/blob/master/PRIVACY.md"
     }
 }

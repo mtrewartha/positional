@@ -21,9 +21,9 @@ class DuskFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _viewBinding = DuskFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -41,8 +41,8 @@ class DuskFragment : Fragment() {
     private fun observeSunState(sunState: SunViewModel.SunState) {
         with(viewBinding) {
             progressIndicator.animate()
-                    .alpha(0f)
-                    .withEndAction { progressIndicator.visibility = View.GONE }
+                .alpha(0f)
+                .withEndAction { progressIndicator.visibility = View.GONE }
             dateTextView.text = sunState.date
             astronomicalValueTextView.text = sunState.astronomicalDusk
             nauticalValueTextView.text = sunState.nauticalDusk
