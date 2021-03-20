@@ -68,6 +68,7 @@
         app:defaultValue="@string/settings_units_value_metric" />
 
     <Preference
+        android:icon="@drawable/ic_twotone_lock_24"
         android:iconSpaceReserved="true"
         android:key="@string/settings_privacy_policy_key"
         android:summary="@string/settings_privacy_policy_summary"

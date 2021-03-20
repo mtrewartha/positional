@@ -112,7 +112,6 @@
 
         <ImageView
             android:id="@+id/coordinatesAccuracyImageView"
-            style="@style/LocationStatIcon"
             android:layout_width="@dimen/location_stat_row_image_size"
             android:layout_height="@dimen/location_stat_row_image_size"
             android:contentDescription="@string/location_label_accuracy"
@@ -156,7 +155,6 @@
 
         <ImageView
             android:id="@+id/bearingImageView"
-            style="@style/LocationStatIcon"
             android:layout_width="@dimen/location_stat_row_image_size"
             android:layout_height="@dimen/location_stat_row_image_size"
             android:contentDescription="@string/location_label_bearing"
@@ -200,7 +198,6 @@
 
         <ImageView
             android:id="@+id/elevationImageView"
-            style="@style/LocationStatIcon"
             android:layout_width="@dimen/location_stat_row_image_size"
             android:layout_height="@dimen/location_stat_row_image_size"
             android:contentDescription="@string/location_label_elevation"
@@ -244,7 +241,6 @@
 
         <ImageView
             android:id="@+id/speedImageView"
-            style="@style/LocationStatIcon"
             android:layout_width="@dimen/location_stat_row_image_size"
             android:layout_height="@dimen/location_stat_row_image_size"
             android:contentDescription="@string/location_label_speed"
