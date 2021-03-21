@@ -1,23 +1,23 @@
 package io.trewartha.positional.ui.utils
 
 import android.content.Context
+import android.content.SharedPreferences
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.trewartha.positional.R
 import org.threeten.bp.Instant
 import java.text.DateFormat.SHORT
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class DateTimeFormatter(private val context: Context) {
+class DateTimeFormatter @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val sharedPreferences: SharedPreferences,
+) {
 
     private val timeFormatKey by lazy { context.getString(R.string.settings_time_format_key) }
     private val timeFormatValue12Hour by lazy {
         context.getString(R.string.settings_time_format_12hr_value)
-    }
-    private val sharedPreferences by lazy {
-        context.getSharedPreferences(
-            context.getString(R.string.settings_filename),
-            Context.MODE_PRIVATE
-        )
     }
     private val simpleDateFormat by lazy { SimpleDateFormat.getDateInstance() }
     private val timeFormat12Hour by lazy { SimpleDateFormat.getTimeInstance(SHORT) }

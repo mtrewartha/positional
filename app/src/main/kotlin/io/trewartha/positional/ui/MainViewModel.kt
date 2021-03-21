@@ -1,11 +1,11 @@
 package io.trewartha.positional.ui
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -14,9 +14,14 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
 import java.util.*
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class MainViewModel(app: Application) : AndroidViewModel(app) {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    app: Application,
+    private val prefs: SharedPreferences
+) : AndroidViewModel(app) {
 
     val theme: LiveData<Theme> by lazy {
         callbackFlow {
@@ -33,10 +38,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private val prefsKeyTheme = app.getString(R.string.settings_theme_key)
-    private val prefs = app.getSharedPreferences(
-        app.getString(R.string.settings_filename),
-        Context.MODE_PRIVATE
-    )
     private var prefThemeListener: PrefThemeListener? = null
 
     private inner class PrefThemeListener(

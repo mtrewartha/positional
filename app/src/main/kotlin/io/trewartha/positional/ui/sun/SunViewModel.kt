@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import ca.rmen.sunrisesunset.SunriseSunset
 import com.google.android.gms.location.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.utils.DateTimeFormatter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,12 +19,17 @@ import kotlinx.coroutines.flow.map
 import org.threeten.bp.Instant
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class SunViewModel(app: Application) : AndroidViewModel(app) {
+@HiltViewModel
+class SunViewModel @Inject constructor(
+    app: Application,
+    private val dateTimeFormatter: DateTimeFormatter,
+    private val fusedLocationProviderClient: FusedLocationProviderClient
+) : AndroidViewModel(app) {
 
     val sunState: LiveData<SunState> = callbackFlow<Location> {
-        val locationClient = LocationServices.getFusedLocationProviderClient(app)
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 val location = locationResult?.lastLocation ?: return
@@ -40,7 +46,7 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
                 .setPriority(LOCATION_UPDATE_PRIORITY)
                 .setInterval(LOCATION_UPDATE_INTERVAL_MS)
             Timber.i("Requesting location updates: $locationRequest")
-            locationClient.requestLocationUpdates(
+            fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
                 Looper.getMainLooper()
@@ -51,7 +57,7 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
 
         awaitClose {
             Timber.i("Suspending location updates")
-            locationClient.removeLocationUpdates(locationCallback)
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         }
     }.map {
         val calendar = Calendar.getInstance().apply { timeInMillis = it.time }
@@ -81,7 +87,6 @@ class SunViewModel(app: Application) : AndroidViewModel(app) {
         )
     }.asLiveData()
 
-    private val dateTimeFormatter = DateTimeFormatter(app)
     private val formatUpdatedAt = app.getString(R.string.location_updated_at)
 
     private fun formatDate(epochMillis: Long?): String? =

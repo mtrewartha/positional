@@ -7,10 +7,11 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
 import com.jakewharton.threetenabp.AndroidThreeTen
+import dagger.hilt.android.HiltAndroidApp
 import io.trewartha.positional.utils.FirebaseCrashlyticsTree
 import timber.log.Timber
 
-
+@HiltAndroidApp
 class PositionalApplication : Application() {
 
     override fun onCreate() {

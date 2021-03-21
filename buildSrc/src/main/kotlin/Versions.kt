@@ -42,6 +42,8 @@ object Versions {
         const val firebaseBoM = "26.7.0"
         const val geoCoordinatesConversion = "360781e"
         const val guava = "30.1.1-android"
+        const val hilt = "2.33-beta"
+        const val hiltNavigationFragment = "1.0.0-beta01"
         const val kotlin = Versions.kotlin
         const val kotlinxCoroutines = "1.4.2"
         const val kotest = "4.3.1"
@@ -60,6 +62,7 @@ object Versions {
         const val firebasePerf = "1.3.5"
         const val googleServices = "4.3.5"
         const val gradleVersions = "0.36.0"
+        const val hilt = Versions.Dependencies.hilt
         const val kotlin = Versions.kotlin
     }
 }

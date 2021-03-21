@@ -1,9 +1,11 @@
 package io.trewartha.positional.location
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.Build
 import androidx.core.os.LocaleListCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.MGRSCoord
 import gov.nasa.worldwind.geom.coords.UTMCoord
@@ -16,12 +18,14 @@ import org.threeten.bp.Instant
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
+import javax.inject.Inject
 
-class LocationFormatter(
-    private val context: Context
+class LocationFormatter @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val dateTimeFormatter: DateTimeFormatter,
+    private val sharedPreferences: SharedPreferences
 ) {
 
-    private val dateTimeFormatter by lazy { DateTimeFormatter(context) }
     private val formatAccuracy by lazy { context.getString(R.string.location_accuracy) }
     private val formatAccuracyDistanceImperial by lazy { context.getString(R.string.location_accuracy_imperial) }
     private val formatAccuracyDistanceMetric by lazy { context.getString(R.string.location_accuracy_metric) }
@@ -41,12 +45,13 @@ class LocationFormatter(
             maximumFractionDigits = 0
             minimumFractionDigits = 0
         }
-    private val prefs = context.getSharedPreferences(
-        context.getString(R.string.settings_filename),
-        Context.MODE_PRIVATE
-    )
     private val prefsShowAccuracies: Boolean
-        get() = prefs.getBoolean(context.getString(R.string.settings_show_accuracies_key), true)
+        get() {
+            return sharedPreferences.getBoolean(
+                context.getString(R.string.settings_show_accuracies_key),
+                true
+            )
+        }
 
     fun getBearing(location: Location): String? {
         if (!location.hasBearing()) return null

@@ -3,6 +3,7 @@ plugins {
     id("com.github.ben-manes.versions")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
+    id("dagger.hilt.android.plugin")
     kotlin("android")
     kotlin("kapt")
 }
@@ -77,6 +78,8 @@ tasks.withType<Test> {
 }
 
 dependencies {
+    kapt(Dependencies.hiltCompiler)
+
     implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXFragmentKtx)
@@ -94,6 +97,8 @@ dependencies {
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.geoCoordinatesConversion)
     implementation(Dependencies.guava)
+    implementation(Dependencies.hilt)
+    implementation(Dependencies.hiltNavigationFragment)
     implementation(Dependencies.kotlinxCoroutinesCore)
     implementation(Dependencies.kotlinxCoroutinesAndroid)
     implementation(Dependencies.markwon)
@@ -107,6 +112,15 @@ dependencies {
     testImplementation(Dependencies.kotestAssertionsCoreJvm)
     testImplementation(Dependencies.kotestPropertyJvm)
     testImplementation(Dependencies.kotestRunnerJUnit5)
+    testImplementation(Dependencies.kotlinReflect)
+}
+
+kapt {
+    correctErrorTypes = true
+}
+
+hilt {
+    enableExperimentalClasspathAggregation = true
 }
 
 apply(plugin = "com.google.gms.google-services")

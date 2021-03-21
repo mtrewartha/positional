@@ -1,11 +1,14 @@
 package io.trewartha.positional.ui.compass
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
 import android.view.Surface
 import android.view.WindowManager
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.asLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
 import io.trewartha.positional.compass.Compass
 import io.trewartha.positional.compass.CompassAccuracy
@@ -16,11 +19,18 @@ import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @Suppress("UnstableApiUsage")
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
+@HiltViewModel
+class CompassViewModel @Inject constructor(
+    private val app: Application,
+    private val compass: Compass,
+    private val prefs: SharedPreferences,
+    private val windowManager: WindowManager
+) : AndroidViewModel(app) {
 
     val accelerometerAccuracy: LiveData<String> by lazy {
         compass.accelerometerAccuracy
@@ -96,18 +106,12 @@ class CompassViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     private val _missingSensorState = MediatorLiveData<MissingSensorState>()
-    private val compass = Compass(app, viewModelScope)
     private val compassModePrefValueMagneticNorth =
         app.getString(R.string.settings_compass_mode_magnetic_value)
     private val compassModePrefValueTrueNorth =
         app.getString(R.string.settings_compass_mode_true_value)
-    private val prefs = app.getSharedPreferences(
-        app.getString(R.string.settings_filename),
-        Context.MODE_PRIVATE
-    )
     private val prefsKeyCompassMode = app.getString(R.string.settings_compass_mode_key)
     private var prefCompassModeListener: PrefCompassModeListener? = null
-    private val windowManager = app.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
     init {
         when {

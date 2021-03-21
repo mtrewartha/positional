@@ -12,7 +12,7 @@ import android.view.WindowManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialSharedAxis
@@ -23,11 +23,11 @@ import timber.log.Timber
 
 class LocationFragment : Fragment() {
 
+    private lateinit var permissionsRequestLauncher: ActivityResultLauncher<Array<out String>>
+    private lateinit var systemSettingsLauncher: ActivityResultLauncher<Intent>
     private var _viewBinding: LocationFragmentBinding? = null
     private val viewBinding get() = _viewBinding!!
-    private lateinit var systemSettingsLauncher: ActivityResultLauncher<Intent>
-    private lateinit var permissionsRequestLauncher: ActivityResultLauncher<Array<out String>>
-    private lateinit var viewModel: LocationViewModel
+    private val viewModel: LocationViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,7 +41,6 @@ class LocationFragment : Fragment() {
         ) {
             viewModel.handleViewEvent(Event.PermissionsResult(it))
         }
-        viewModel = ViewModelProvider(requireActivity()).get(LocationViewModel::class.java)
     }
 
     override fun onCreateView(

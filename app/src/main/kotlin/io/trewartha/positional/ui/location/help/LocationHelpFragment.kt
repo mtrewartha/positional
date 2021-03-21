@@ -1,27 +1,28 @@
 package io.trewartha.positional.ui.location.help
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialSharedAxis
+import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
+import io.trewartha.positional.R
 import io.trewartha.positional.databinding.LocationHelpFragmentBinding
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LocationHelpFragment : Fragment() {
+
+    @Inject
+    lateinit var markwon: Markwon
 
     private var _viewBinding: LocationHelpFragmentBinding? = null
     private val viewBinding get() = _viewBinding!!
-    private lateinit var viewModel: LocationHelpViewModel
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = ViewModelProvider(requireActivity()).get(LocationHelpViewModel::class.java)
-    }
+    private val viewModel: LocationHelpViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ class LocationHelpFragment : Fragment() {
 
         viewBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        Markwon.create(requireContext()).setMarkdown(viewBinding.textView, viewModel.helpContent)
+        markwon.setMarkdown(viewBinding.textView, viewModel.helpContent)
     }
 
     override fun onDestroyView() {

@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Application
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -17,6 +16,7 @@ import androidx.lifecycle.*
 import com.google.android.gms.location.*
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.metrics.Trace
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.PositionalApplication
 import io.trewartha.positional.R
 import io.trewartha.positional.domain.entities.CoordinatesFormat
@@ -30,9 +30,17 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
+@HiltViewModel
+class LocationViewModel @Inject constructor(
+    private val app: Application,
+    private val clipboardManager: ClipboardManager,
+    private val fusedLocationProviderClient: FusedLocationProviderClient,
+    private val locationFormatter: LocationFormatter,
+    private val prefs: SharedPreferences
+) : AndroidViewModel(app) {
 
     val accuracyVisibility: LiveData<Int> by lazy {
         callbackFlow {
@@ -160,7 +168,6 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
             callbackFlow<Location> {
                 var firstLocationUpdateTrace: Trace? =
                     FirebasePerformance.getInstance().newTrace("first_location")
-                val locationClient = LocationServices.getFusedLocationProviderClient(app)
                 val locationCallback = object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult?) {
                         val location = locationResult?.lastLocation ?: return
@@ -193,7 +200,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
                     if (firstLocationUpdateTrace == null) {
                         firstLocationUpdateTrace?.start()
                     }
-                    locationClient.requestLocationUpdates(
+                    fusedLocationProviderClient.requestLocationUpdates(
                         locationRequest,
                         locationCallback,
                         Looper.getMainLooper()
@@ -207,7 +214,7 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
 
                 awaitClose {
                     Timber.i("Suspending location updates")
-                    locationClient.removeLocationUpdates(locationCallback)
+                    fusedLocationProviderClient.removeLocationUpdates(locationCallback)
                 }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -229,14 +236,6 @@ class LocationViewModel(private val app: Application) : AndroidViewModel(app) {
         emit(DEFAULT_UNITS)
     }.shareIn(viewModelScope, SharingStarted.WhileSubscribed(), 1)
 
-    private val clipboardManager
-            by lazy { app.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
-
-    private val locationFormatter = LocationFormatter(app)
-    private val prefs = app.getSharedPreferences(
-        app.getString(R.string.settings_filename),
-        Context.MODE_PRIVATE
-    )
     private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
     private val prefsKeyScreenLock = app.getString(R.string.settings_screen_lock_key)
     private val prefsKeyShowAccuracies = app.getString(R.string.settings_show_accuracies_key)

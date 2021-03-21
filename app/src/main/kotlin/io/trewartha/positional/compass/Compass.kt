@@ -1,22 +1,21 @@
 package io.trewartha.positional.compass
 
-import android.content.Context
 import android.hardware.*
 import android.os.Looper
 import com.google.android.gms.location.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class Compass(context: Context, private val coroutineScope: CoroutineScope) {
+class Compass @Inject constructor(
+    private val fusedLocationProviderClient: FusedLocationProviderClient,
+    private val sensorManager: SensorManager
+) {
 
-    private val locationClient =
-        LocationServices.getFusedLocationProviderClient(context.applicationContext)
-    private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     private val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
@@ -51,44 +50,10 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
                 }
                 sensorManager.registerListener(listener, accelerometer, SENSOR_DELAY)
                 awaitClose { sensorManager.unregisterListener(listener) }
-            }.conflate().stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
+            }.conflate()
         }
 
-    val magnetometerAccuracy: StateFlow<CompassAccuracy?>
-        get() {
-            if (!hasMagnetometer) {
-                Timber.e("Unable to calculate magnetometer accuracy, device does not have magnetometer")
-                return MutableStateFlow(null)
-            }
-            return callbackFlow<CompassAccuracy> {
-                val listener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                        offer(
-                            when (accuracy) {
-                                SensorManager.SENSOR_STATUS_ACCURACY_HIGH ->
-                                    CompassAccuracy.HIGH
-                                SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM ->
-                                    CompassAccuracy.MEDIUM
-                                SensorManager.SENSOR_STATUS_ACCURACY_LOW ->
-                                    CompassAccuracy.LOW
-                                SensorManager.SENSOR_STATUS_UNRELIABLE ->
-                                    CompassAccuracy.UNRELIABLE
-                                else ->
-                                    CompassAccuracy.UNUSABLE
-                            }
-                        )
-                    }
-
-                    override fun onSensorChanged(event: SensorEvent) {
-                        // Don't do anything
-                    }
-                }
-                sensorManager.registerListener(listener, magnetometer, SENSOR_DELAY)
-                awaitClose { sensorManager.unregisterListener(listener) }
-            }.conflate().stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
-        }
-
-    val azimuth: StateFlow<Float?>
+    val azimuth: Flow<Float?>
         get() {
             if (!hasAccelerometer || !hasMagnetometer) {
                 Timber.e("Unable to calculate azimuth, device has accelerometer = $hasAccelerometer, magnetometer = $hasMagnetometer")
@@ -130,7 +95,7 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
                 sensorManager.registerListener(listener, accelerometer, SENSOR_DELAY)
                 sensorManager.registerListener(listener, magnetometer, SENSOR_DELAY)
                 awaitClose { sensorManager.unregisterListener(listener) }
-            }.conflate().stateIn(coroutineScope, SharingStarted.WhileSubscribed(), null)
+            }.conflate()
         }
 
     val hasAccelerometer: Boolean
@@ -164,7 +129,7 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
                     .setPriority(LOCATION_UPDATE_PRIORITY)
                     .setInterval(LOCATION_UPDATE_INTERVAL_MS)
                 Timber.i("Requesting location updates: $locationRequest")
-                locationClient.requestLocationUpdates(
+                fusedLocationProviderClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
                     Looper.getMainLooper()
@@ -175,9 +140,43 @@ class Compass(context: Context, private val coroutineScope: CoroutineScope) {
 
             awaitClose {
                 Timber.i("Suspending location updates")
-                locationClient.removeLocationUpdates(locationCallback)
+                fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             }
-        }.distinctUntilChanged().shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
+        }.distinctUntilChanged()
+
+    val magnetometerAccuracy: Flow<CompassAccuracy?>
+        get() {
+            if (!hasMagnetometer) {
+                Timber.e("Unable to calculate magnetometer accuracy, device does not have magnetometer")
+                return MutableStateFlow(null)
+            }
+            return callbackFlow<CompassAccuracy> {
+                val listener = object : SensorEventListener {
+                    override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
+                        offer(
+                            when (accuracy) {
+                                SensorManager.SENSOR_STATUS_ACCURACY_HIGH ->
+                                    CompassAccuracy.HIGH
+                                SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM ->
+                                    CompassAccuracy.MEDIUM
+                                SensorManager.SENSOR_STATUS_ACCURACY_LOW ->
+                                    CompassAccuracy.LOW
+                                SensorManager.SENSOR_STATUS_UNRELIABLE ->
+                                    CompassAccuracy.UNRELIABLE
+                                else ->
+                                    CompassAccuracy.UNUSABLE
+                            }
+                        )
+                    }
+
+                    override fun onSensorChanged(event: SensorEvent) {
+                        // Don't do anything
+                    }
+                }
+                sensorManager.registerListener(listener, magnetometer, SENSOR_DELAY)
+                awaitClose { sensorManager.unregisterListener(listener) }
+            }.conflate()
+        }
 
     private fun smoothAndSetReadings(readings: FloatArray, newReadings: FloatArray) {
         readings[0] = READINGS_ALPHA * newReadings[0] + (1 - READINGS_ALPHA) * readings[0]

@@ -1,24 +1,21 @@
 package io.trewartha.positional.ui.sun
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import dagger.hilt.android.AndroidEntryPoint
+import io.trewartha.positional.R
 import io.trewartha.positional.databinding.DuskFragmentBinding
 
+@AndroidEntryPoint
 class DuskFragment : Fragment() {
 
     private var _viewBinding: DuskFragmentBinding? = null
     private val viewBinding get() = _viewBinding!!
-    private lateinit var viewModel: SunViewModel
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = ViewModelProvider(requireActivity()).get(SunViewModel::class.java)
-    }
+    private val viewModel: SunViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     override fun onCreateView(
         inflater: LayoutInflater,

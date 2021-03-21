@@ -2,23 +2,25 @@ package io.trewartha.positional.ui
 
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.elevation.ElevationOverlayProvider
+import dagger.hilt.android.AndroidEntryPoint
 import io.trewartha.positional.R
 import io.trewartha.positional.databinding.MainActivityBinding
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var viewBinding: MainActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        super.onCreate(savedInstanceState)
+
         viewModel.theme.observe(this) {
             val mode = when (it) {
                 Theme.DARK -> AppCompatDelegate.MODE_NIGHT_YES
@@ -27,8 +29,6 @@ class MainActivity : AppCompatActivity() {
             }
             AppCompatDelegate.setDefaultNightMode(mode)
         }
-
-        super.onCreate(savedInstanceState)
 
         viewBinding = MainActivityBinding.inflate(layoutInflater)
 
