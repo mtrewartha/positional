@@ -15,9 +15,5 @@ class FragmentModule {
 
     @Provides
     @FragmentScoped
-    fun markwon(
-        @ApplicationContext context: Context
-    ): Markwon {
-        return Markwon.create(context)
-    }
+    fun markwon(@ApplicationContext context: Context): Markwon = Markwon.create(context)
 }

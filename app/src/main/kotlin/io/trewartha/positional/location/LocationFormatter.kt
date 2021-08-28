@@ -133,16 +133,6 @@ class LocationFormatter @Inject constructor(
         return String.format(locale, format, accuracy)
     }
 
-    fun getSharedCoordinates(location: Location, format: CoordinatesFormat): String {
-        return when (format) {
-            DD -> getSharedDDCoords(location.latitude, location.longitude)
-            DDM -> getSharedDdmCoords(location.latitude, location.longitude)
-            DMS -> getSharedDmsCoords(location.latitude, location.longitude)
-            MGRS -> getSharedMgrsCoords(location.latitude, location.longitude)
-            UTM -> getSharedUtmCoords(location.latitude, location.longitude)
-        }
-    }
-
     fun getSpeed(location: Location, units: Units): String? {
         if (!location.hasSpeed() || location.speed == 0f)
             return null
@@ -188,7 +178,6 @@ class LocationFormatter @Inject constructor(
             null
         } else {
             dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(location.time), true)
-                ?.let { String.format(formatUpdatedAt, it) }
         }
     }
 
@@ -248,37 +237,6 @@ class LocationFormatter @Inject constructor(
             "${dmsLon.replaceFirst("-".toRegex(), "")} W"
         }
     }
-
-    private fun getSharedDDCoords(lat: Double, lon: Double): String {
-        val formattedLat = String.format(locale, formatCoordinateDecimal, lat)
-        val formattedLon = String.format(locale, formatCoordinateDecimal, lon)
-        val maxLength = maxOf(formattedLat.length, formattedLon.length)
-        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
-    }
-
-    private fun getSharedDdmCoords(lat: Double, lon: Double): String {
-        val formattedLat = getDdmLat(lat)
-        val formattedLon = getDdmLon(lon)
-        val maxLength = maxOf(formattedLat.length, formattedLon.length)
-        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
-    }
-
-    private fun getSharedDmsCoords(lat: Double, lon: Double): String {
-        val formattedLat = getDmsLat(lat)
-        val formattedLon = getDmsLon(lon)
-        val maxLength = maxOf(formattedLat.length, formattedLon.length)
-        return "${formattedLat.padStart(maxLength)}, ${formattedLon.padStart(maxLength)}"
-    }
-
-    private fun getSharedMgrsCoords(lat: Double, lon: Double): String {
-        return MGRSCoord.fromLatLon(
-            Angle.fromDegreesLatitude(lat),
-            Angle.fromDegreesLongitude(lon)
-        ).toString()
-    }
-
-    private fun getSharedUtmCoords(lat: Double, lon: Double): String =
-        "${getUtmZone(lat, lon)} ${getUtmEasting(lat, lon)} ${getUtmNorthing(lat, lon)}"
 
     private fun getUtmCoord(lat: Double, lon: Double): UTMCoord {
         return UTMCoord.fromLatLon(

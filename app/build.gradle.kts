@@ -1,11 +1,11 @@
 plugins {
     id("com.android.application")
+    kotlin("android")
+    kotlin("kapt")
     id("com.github.ben-manes.versions")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
     id("dagger.hilt.android.plugin")
-    kotlin("android")
-    kotlin("kapt")
 }
 
 android {
@@ -22,17 +22,18 @@ android {
             keyPassword = keyStoreConfig.keyPassword
         }
     }
-    compileSdkVersion(Versions.Android.compileSdk)
+    compileSdk = Versions.Android.compileSdk
     defaultConfig {
         applicationId = "io.trewartha.positional"
-        minSdkVersion(Versions.Android.minSdk)
-        targetSdkVersion(Versions.Android.targetSdk)
+        minSdk = Versions.Android.minSdk
+        targetSdk = Versions.Android.targetSdk
 
         versionCode = Versions.Application.code
         versionName = Versions.Application.name
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     buildTypes {
         getByName("debug").apply {
@@ -54,9 +55,20 @@ android {
         sourceCompatibility = Versions.Compatibility.source
         targetCompatibility = Versions.Compatibility.target
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.Dependencies.androidXCompose
+    }
     kotlinOptions {
         jvmTarget = Versions.Compatibility.target.toString()
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs = freeCompilerArgs +
+                "-Xinline-classes" +
+                "-Xopt-in=kotlin.ExperimentalStdlibApi" +
+                "-Xopt-in=kotlin.RequiresOptIn" +
+                "-Xopt-in=kotlin.time.ExperimentalTime" +
+                "-Xopt-in=kotlin.ExperimentalUnsignedTypes" +
+                "-Xopt-in=kotlinx.coroutines.DelicateCoroutinesApi" +
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
+                "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
     }
     packagingOptions {
         resources {
@@ -80,15 +92,24 @@ tasks.withType<Test> {
 dependencies {
     kapt(Dependencies.hiltCompiler)
 
+    implementation(Dependencies.androidXActivityCompose)
+    implementation(Dependencies.androidXComposeFoundation)
+    implementation(Dependencies.androidXComposeMaterial)
+    implementation(Dependencies.androidXComposeMaterialIconsCore)
+    implementation(Dependencies.androidXComposeMaterialIconsExtended)
+    implementation(Dependencies.androidXComposeUI)
+    implementation(Dependencies.androidXComposeUITooling)
     implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXFragmentKtx)
+    implementation(Dependencies.androidXHiltCompiler)
+    implementation(Dependencies.androidXHiltNavigationCompose)
     implementation(Dependencies.androidXLegacySupportV4)
     implementation(Dependencies.androidXLifecycleRuntime)
     implementation(Dependencies.androidXLifecycleLiveDataKtx)
+    implementation(Dependencies.androidXLifecycleViewModelCompose)
     implementation(Dependencies.androidXLifecycleViewModelKtx)
-    implementation(Dependencies.androidXNavigationFragmentKtx)
-    implementation(Dependencies.androidXNavigationUIKtx)
+    implementation(Dependencies.androidXNavigationCompose)
     implementation(Dependencies.androidXPreferenceKtx)
     implementation(Dependencies.androidXRecyclerView)
     implementation(platform(Dependencies.firebaseBoM))
@@ -97,7 +118,7 @@ dependencies {
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.geoCoordinatesConversion)
     implementation(Dependencies.guava)
-    implementation(Dependencies.hilt)
+    implementation(Dependencies.hiltAndroid)
     implementation(Dependencies.hiltNavigationFragment)
     implementation(Dependencies.kotlinxCoroutinesCore)
     implementation(Dependencies.kotlinxCoroutinesAndroid)
