@@ -28,7 +28,7 @@ class Compass @Inject constructor(
             return callbackFlow<CompassAccuracy> {
                 val listener = object : SensorEventListener {
                     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                        offer(
+                        trySend(
                             when (accuracy) {
                                 SensorManager.SENSOR_STATUS_ACCURACY_HIGH ->
                                     CompassAccuracy.HIGH
@@ -88,7 +88,7 @@ class Compass @Inject constructor(
                             SensorManager.getOrientation(rotation, orientation)
                             val currentAzimuth =
                                 ((orientation[0] + TWO_PI) % TWO_PI) * DEGREES_PER_RADIAN
-                            offer(currentAzimuth.toFloat())
+                            trySend(currentAzimuth.toFloat())
                         }
                     }
                 }
@@ -116,7 +116,7 @@ class Compass @Inject constructor(
                         location.altitude.toFloat(),
                         location.time
                     ).declination
-                    offer(declination)
+                    trySend(declination)
                 }
 
                 override fun onLocationAvailability(locationAvailability: LocationAvailability) {
@@ -153,7 +153,7 @@ class Compass @Inject constructor(
             return callbackFlow<CompassAccuracy> {
                 val listener = object : SensorEventListener {
                     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                        offer(
+                        trySend(
                             when (accuracy) {
                                 SensorManager.SENSOR_STATUS_ACCURACY_HIGH ->
                                     CompassAccuracy.HIGH

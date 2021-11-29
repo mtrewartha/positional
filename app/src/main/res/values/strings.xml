@@ -2,7 +2,9 @@
     <string name="app_name" tools:override="true">Positional</string>
 
     <!-- Common Text -->
+    <string name="common_close">Close</string>
     <string name="common_dash" translatable="false">—</string>
+    <string name="common_do_not_ask_again">DON\'T ASK AGAIN</string>
     <string name="common_exit">Exit</string>
     <string name="common_ok">OK</string>
 
@@ -42,17 +44,13 @@
     <string name="location_bearing">%d°</string>
     <string name="location_coordinate_decimal">%.5f</string>
     <string name="location_coordinate_utm">%7.0f</string>
-    <string name="location_copied_coordinates_label">Location</string>
-    <string name="location_copied_coordinates_failure">Hold tight, still trying to get your location…</string>
-    <string name="location_copied_coordinates_both_success">Latitude and longitude copied</string>
-    <string name="location_copied_coordinates_latitude_success">Latitude copied</string>
-    <string name="location_copied_coordinates_longitude_success">Longitude copied</string>
-    <string name="location_copy_coordinates_both">Latitude and longitude</string>
-    <string name="location_copy_coordinates_content_description">Copy coordinates</string>
-    <string name="location_copy_coordinates_latitude">Latitude only</string>
-    <string name="location_copy_coordinates_longitude">Longitude only</string>
-    <string name="location_copy_coordinates_title">Which coordinates would you like to copy?</string>
-    <string name="location_copy_coordinates_tooltip">Copy coordinates</string>
+    <string name="location_coordinates_copy_label">Location</string>
+    <string name="location_coordinates_copy_both">Latitude and longitude</string>
+    <string name="location_coordinates_copy_content_description">Copy coordinates</string>
+    <string name="location_coordinates_copy_latitude">Latitude only</string>
+    <string name="location_coordinates_copy_longitude">Longitude only</string>
+    <string name="location_coordinates_copy_title">Which coordinates would you like to copy?</string>
+    <string name="location_coordinates_copy_tooltip">Copy coordinates</string>
     <string name="location_elevation_imperial">%s ft</string>
     <string name="location_elevation_metric">%s m</string>
     <string name="location_help_button_content_description">Help</string>
@@ -62,17 +60,27 @@
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_elevation">Elevation</string>
     <string name="location_label_speed">Speed</string>
-    <string name="location_permission_explanation_title">Location Permission Needed</string>
-    <string name="location_permission_explanation_message">Positional needs your permission to access this device\'s location, but you previously denied it. You will need to grant it through your device\'s Settings app before using this app.</string>
-    <string name="location_permission_explanation_positive">Go to Settings App</string>
-    <string name="location_permission_explanation_negative">@string/common_exit</string>
+    <string name="location_permission_without_rationale_title">Let\'s get started!</string>
+    <string name="location_permission_without_rationale_message">In order to show your location, Positional needs permission to access it. Your location is simply shown to you and it\'s not recorded. Check out the simple privacy policy.</string>
+    <string name="location_permission_without_rationale_button_request_permission">Let\'s go!</string>
+    <string name="location_permission_with_rationale_title">Location Permission Required</string>
+    <string name="location_permission_with_rationale_message">Positional can\'t show your location without permission to access it. Please tap OK below and grant permission.</string>
+    <string name="location_permission_with_rationale_button_request_permission" translatable="false">@string/common_ok</string>
+    <string name="location_permission_with_rationale_button_prevent_future_requests" translatable="false">@string/common_do_not_ask_again</string>
+    <string name="location_permission_unavailable_title">Location Permission Required</string>
+    <string name="location_permission_unavailable_message">Positional can\'t get your coordinates without Location permission, but it looks like you previously denied that permission. You can grant it using your device\'s Settings app.</string>
+    <string name="location_permission_unavailable_button_navigate_to_settings">Go to Settings</string>
     <string name="location_screen_lock_button_content_description_off">Lock screen (currently off)</string>
     <string name="location_screen_lock_button_content_description_on">Lock screen (currently on)</string>
     <string name="location_screen_lock_button_tooltip_off">Lock screen (currently off)</string>
     <string name="location_screen_lock_button_tooltip_on">Lock screen (currently on)</string>
     <string name="location_share_button_content_description">Share coordinates</string>
     <string name="location_share_button_tooltip">Share coordinates</string>
-    <string name="location_share_snackbar_failure">Hold tight, still trying to get your coordinates…</string>
+    <string name="location_snackbar_coordinates_copy_error">Hold tight, still trying to get your location…</string>
+    <string name="location_snackbar_coordinates_copy_success_both">Latitude and longitude copied</string>
+    <string name="location_snackbar_coordinates_copy_success_latitude">Latitude copied</string>
+    <string name="location_snackbar_coordinates_copy_success_longitude">Longitude copied</string>
+    <string name="location_snackbar_coordinates_share_error">Hold tight, still trying to get your coordinates…</string>
     <string name="location_snackbar_screen_locked">Screen locked on while showing coordinates</string>
     <string name="location_snackbar_screen_unlocked">Screen unlocked</string>
     <string name="location_speed_imperial">%s mph</string>

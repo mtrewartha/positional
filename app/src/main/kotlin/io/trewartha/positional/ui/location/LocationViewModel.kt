@@ -13,7 +13,11 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationAvailability
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.metrics.Trace
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,14 +25,26 @@ import io.trewartha.positional.R
 import io.trewartha.positional.domain.entities.CoordinatesFormat
 import io.trewartha.positional.domain.entities.Units
 import io.trewartha.positional.location.LocationFormatter
-import io.trewartha.positional.ui.ViewModelEvent
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -136,7 +152,7 @@ class LocationViewModel @Inject constructor(
                     Timber.e(it, "Completed location flow abnormally")
             }
 
-    private val _events = MutableSharedFlow<Event>(replay = 1)
+    private val _events = MutableSharedFlow<LocationScreenEvent>()
 
     private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
     private val prefsKeyScreenLock = app.getString(R.string.settings_screen_lock_key)
@@ -157,7 +173,7 @@ class LocationViewModel @Inject constructor(
                 prefUnitsListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
             }
         }.map {
-            Units.valueOf(it!!.toUpperCase(Locale.US))
+            Units.valueOf(it!!.uppercase())
         }.catch {
             emit(DEFAULT_UNITS)
         }
@@ -207,7 +223,7 @@ class LocationViewModel @Inject constructor(
             )
         )
 
-    val events: Flow<Event>
+    val events: Flow<LocationScreenEvent>
         get() = _events
 
     val screenLockEnabledFlow: StateFlow<Boolean> =
@@ -223,47 +239,41 @@ class LocationViewModel @Inject constructor(
             prefs.getBoolean(prefsKeyScreenLock, DEFAULT_SCREEN_LOCK)
         )
 
-    init {
-        viewModelScope.launch {
-            if (!checkPermissions()) _events.emit(Event.RequestPermissions(PERMISSIONS))
-        }
-    }
-
     fun onCopyClick() {
         viewModelScope.launch {
             val coordinates = coordinatesStateFlow.value.coordinates
             val event = if (coordinates.isBlank()) {
-                Event.CoordinatesCopy.Error()
+                LocationScreenEvent.ShowCoordinatesCopyErrorSnackbar
             } else {
                 clipboardManager.setPrimaryClip(
                     ClipData.newPlainText(
-                        app.getString(R.string.location_copied_coordinates_label),
+                        app.getString(R.string.location_coordinates_copy_label),
                         coordinates
                     )
                 )
-                Event.CoordinatesCopy.Success()
+                LocationScreenEvent.ShowCoordinatesCopySuccessBothSnackbar
             }
             _events.emit(event)
         }
     }
 
     fun onHelpClick() {
-        viewModelScope.launch { _events.emit(Event.NavigateToLocationHelp()) }
+        viewModelScope.launch { _events.emit(LocationScreenEvent.NavigateToLocationHelp) }
     }
 
-    fun onPermissionsResult(permissionsResult: Map<String, Boolean>) {
-        viewModelScope.launch {
-            val allPermissionsGranted = permissionsResult.all { it.value }
-            havePermissions.tryEmit(allPermissionsGranted)
-            if (!allPermissionsGranted) _events.emit(Event.ShowPermissionsDeniedDialog())
-        }
+    fun onPermissionsChange() {
+        havePermissions.tryEmit(checkPermissions())
     }
 
     fun onScreenLockCheckedChange(checked: Boolean) {
         viewModelScope.launch {
             Timber.i("Screen lock checked change = $checked")
             prefs.edit { putBoolean(prefsKeyScreenLock, checked) }
-            _events.emit(Event.ScreenLock(checked))
+            val event = if (checked)
+                LocationScreenEvent.ShowScreenLockedSnackbar
+            else
+                LocationScreenEvent.ShowScreenUnlockedSnackbar
+            _events.emit(event)
         }
     }
 
@@ -271,18 +281,10 @@ class LocationViewModel @Inject constructor(
         viewModelScope.launch {
             val coordinates = coordinatesStateFlow.value.coordinates
             val event = if (coordinates.isBlank())
-                Event.CoordinatesShare.Error()
+                LocationScreenEvent.ShowCoordinatesShareErrorSnackbar
             else
-                Event.CoordinatesShare.Success(coordinates)
+                LocationScreenEvent.ShowCoordinatesShareSheet(coordinates)
             _events.emit(event)
-        }
-    }
-
-    fun onSystemSettingsResult() {
-        viewModelScope.launch {
-            val havePermissionsNow = checkPermissions()
-            havePermissions.tryEmit(havePermissionsNow)
-            if (!havePermissionsNow) _events.emit(Event.ShowPermissionsDeniedDialog())
         }
     }
 
@@ -369,27 +371,6 @@ class LocationViewModel @Inject constructor(
     private fun Location.toCoordinatesState(format: CoordinatesFormat): CoordinatesState {
         val (coordinates, coordinatesLines) = locationFormatter.getCoordinates(this, format)
         return CoordinatesState(coordinates, coordinatesLines)
-    }
-
-    sealed class Event : ViewModelEvent() {
-
-        sealed class CoordinatesCopy : Event() {
-            class Error : CoordinatesCopy()
-            class Success : CoordinatesCopy()
-        }
-
-        sealed class CoordinatesShare : Event() {
-            class Error : CoordinatesShare()
-            data class Success(val coordinates: String) : CoordinatesShare()
-        }
-
-        class NavigateToLocationHelp : Event()
-
-        class ShowPermissionsDeniedDialog : Event()
-
-        data class RequestPermissions(val permissions: List<String>) : Event()
-
-        data class ScreenLock(val locked: Boolean) : Event()
     }
 
     private inner class PrefCoordinatesFormatListener(

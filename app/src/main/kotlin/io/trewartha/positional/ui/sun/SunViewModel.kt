@@ -34,7 +34,7 @@ class SunViewModel @Inject constructor(
             override fun onLocationResult(locationResult: LocationResult?) {
                 val location = locationResult?.lastLocation ?: return
                 Timber.d("Received location update")
-                offer(location)
+                trySend(location)
             }
 
             override fun onLocationAvailability(locationAvailability: LocationAvailability) {

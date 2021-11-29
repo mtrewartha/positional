@@ -1,30 +1,35 @@
 package io.trewartha.positional.ui.location
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.tooling.preview.Preview
+import io.trewartha.positional.ui.PositionalTheme
 
 data class CoordinatesState(val coordinates: String, val maxLines: Int)
 
 @Composable
 fun CoordinatesText(
     coordinatesState: CoordinatesState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.fillMaxSize()
 ) {
-    val textStyleH1 = MaterialTheme.typography.h1
-    var textStyle by remember { mutableStateOf(textStyleH1) }
+    val textStyleTitleLarge = MaterialTheme.typography.titleLarge
+    var textStyle by remember { mutableStateOf(textStyleTitleLarge) }
     var readyToDraw by remember { mutableStateOf(false) }
     Text(
         text = coordinatesState.coordinates,
         style = textStyle,
         maxLines = coordinatesState.maxLines,
         softWrap = false,
-        modifier = modifier.drawWithContent {
-            if (readyToDraw) drawContent()
-        },
+        modifier = modifier
+            .drawWithContent { if (readyToDraw) drawContent() },
         onTextLayout = { textLayoutResult ->
             if (textLayoutResult.didOverflowWidth) {
                 textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
@@ -35,26 +40,10 @@ fun CoordinatesText(
     )
 }
 
-@Preview("Decimal Degrees", showBackground = true)
+@Preview(showBackground = true)
 @Composable
-fun DecimalDegreesPreview() {
-    CoordinatesText(coordinatesState = CoordinatesState("123.456789\n123.456789", 2))
-}
-
-@Preview("Degrees Decimal Minutes", showBackground = true)
-@Composable
-fun DegreesDecimalMinutesPreview() {
-    CoordinatesText(coordinatesState = CoordinatesState("123.456789\n123.456789", 2))
-}
-
-@Preview("MGRS", showBackground = true)
-@Composable
-fun MgrsPreview() {
-    CoordinatesText(coordinatesState = CoordinatesState("123.456789\n123.456789", 2))
-}
-
-@Preview("UTM", showBackground = true)
-@Composable
-fun UtmPreview() {
-    CoordinatesText(coordinatesState = CoordinatesState("123.456789\n123.456789", 2))
+fun CoordinatesTextPreview() {
+    PositionalTheme {
+        CoordinatesText(coordinatesState = CoordinatesState("123.456789\n123.456789", 2))
+    }
 }

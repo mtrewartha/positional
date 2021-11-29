@@ -1,21 +1,29 @@
 package io.trewartha.positional.ui.location
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.FileCopy
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import io.trewartha.positional.R
+import io.trewartha.positional.ui.PositionalTheme
 
 @Composable
 fun CopyButton(onCopyClick: () -> Unit) {
     IconButton(onClick = onCopyClick) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_twotone_file_copy_24px),
-            contentDescription = stringResource(R.string.location_copy_coordinates_content_description),
-            tint = MaterialTheme.colors.primary
+            imageVector = Icons.TwoTone.FileCopy,
+            contentDescription = stringResource(R.string.location_coordinates_copy_content_description)
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CopyButtonPreview() {
+    PositionalTheme {
+        CopyButton {}
     }
 }

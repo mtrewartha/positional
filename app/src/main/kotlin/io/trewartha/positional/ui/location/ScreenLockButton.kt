@@ -1,12 +1,12 @@
 package io.trewartha.positional.ui.location
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconToggleButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.ScreenLockPortrait
+import androidx.compose.material.icons.twotone.Smartphone
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.trewartha.positional.R
 
@@ -20,15 +20,14 @@ fun ScreenLockButton(
         onCheckedChange = onScreenLockCheckedChange
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(
-                if (screenLockEnabled) R.drawable.ic_twotone_smartphone_24px
-                else R.drawable.ic_twotone_screen_lock_portrait_24px
-            ),
+            imageVector = if (screenLockEnabled)
+                Icons.TwoTone.Smartphone
+            else
+                Icons.TwoTone.ScreenLockPortrait,
             contentDescription = stringResource(
                 if (screenLockEnabled) R.string.location_screen_lock_button_content_description_on
                 else R.string.location_screen_lock_button_content_description_off
-            ),
-            tint = MaterialTheme.colors.primary
+            )
         )
     }
 }

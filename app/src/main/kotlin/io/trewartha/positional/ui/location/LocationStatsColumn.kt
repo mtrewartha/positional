@@ -1,15 +1,15 @@
 package io.trewartha.positional.ui.location
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Adjust
 import androidx.compose.material.icons.twotone.Explore
 import androidx.compose.material.icons.twotone.Speed
 import androidx.compose.material.icons.twotone.Terrain
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.Divider
 
 data class LocationStatsState(
     val accuracy: String,
@@ -63,16 +62,14 @@ fun LocationStatsColumn(locationStatsState: LocationStatsState) {
             accuracyVisible = locationStatsState.showAccuracies
         )
     )
-    Column(
-        modifier = Modifier.background(MaterialTheme.colors.surface)
-    ) {
+    Column {
         for (locationStatRowState in locationStatRowStates) {
             Divider()
             LocationStatRow(locationStatRowState = locationStatRowState)
         }
         Text(
             text = locationStatsState.updatedAt,
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 24.dp)
                 .align(Alignment.CenterHorizontally)
@@ -80,7 +77,7 @@ fun LocationStatsColumn(locationStatsState: LocationStatsState) {
     }
 }
 
-@Preview("Without Accuracies")
+@Preview("Without Accuracies", showBackground = true)
 @Composable
 fun WithoutAccuraciesPreview() {
     LocationStatsColumn(
@@ -98,7 +95,7 @@ fun WithoutAccuraciesPreview() {
     )
 }
 
-@Preview("Showing Accuracies")
+@Preview("Showing Accuracies", showBackground = true)
 @Composable
 fun ShowingAccuraciesPreview() {
     LocationStatsColumn(
@@ -116,7 +113,7 @@ fun ShowingAccuraciesPreview() {
     )
 }
 
-@Preview("Hiding Accuracies")
+@Preview("Hiding Accuracies", showBackground = true)
 @Composable
 fun HidingAccuraciesPreview() {
     LocationStatsColumn(

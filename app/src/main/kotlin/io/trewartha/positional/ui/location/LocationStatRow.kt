@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Adjust
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +46,7 @@ fun LocationStatRow(
         Text(
             text = locationStatRowState.name,
             fontSize = 18.sp,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .padding(end = HORIZONTAL_PADDING)
@@ -55,14 +55,16 @@ fun LocationStatRow(
         Text(
             text = locationStatRowState.value ?: "",
             fontSize = 18.sp,
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.align(Alignment.CenterVertically).padding(end = HORIZONTAL_PADDING),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(end = HORIZONTAL_PADDING),
         )
         if (locationStatRowState.accuracyVisible) {
             Text(
                 text = locationStatRowState.accuracy ?: "",
                 fontSize = 14.sp,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }

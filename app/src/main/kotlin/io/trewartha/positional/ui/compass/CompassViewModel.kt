@@ -83,7 +83,7 @@ class CompassViewModel @Inject constructor(
     val mode: LiveData<String> by lazy {
         callbackFlow {
             if (prefs.contains(prefsKeyCompassMode))
-                offer(prefs.getString(prefsKeyCompassMode, null))
+                trySend(prefs.getString(prefsKeyCompassMode, null))
             prefCompassModeListener = PrefCompassModeListener(this)
             prefs.registerOnSharedPreferenceChangeListener(prefCompassModeListener)
             awaitClose {
@@ -166,7 +166,7 @@ class CompassViewModel @Inject constructor(
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyCompassMode) {
-                producerScope.offer(sharedPrefs.getString(key, null))
+                producerScope.trySend(sharedPrefs.getString(key, null))
             }
         }
     }

@@ -16,7 +16,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Positional.System"
         tools:replace="android:allowBackup">
 
         <meta-data
@@ -33,7 +32,10 @@
 
         <!-- Activities -->
 
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

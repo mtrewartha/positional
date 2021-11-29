@@ -62,6 +62,9 @@ android {
         jvmTarget = Versions.Compatibility.target.toString()
         freeCompilerArgs = freeCompilerArgs +
                 "-Xinline-classes" +
+                "-Xjvm-default=all" +
+                "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
+                "-Xopt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi" +
                 "-Xopt-in=kotlin.ExperimentalStdlibApi" +
                 "-Xopt-in=kotlin.RequiresOptIn" +
                 "-Xopt-in=kotlin.time.ExperimentalTime" +
@@ -94,13 +97,11 @@ dependencies {
 
     implementation(Dependencies.androidXActivityCompose)
     implementation(Dependencies.androidXComposeFoundation)
-    implementation(Dependencies.androidXComposeMaterial)
+    implementation(Dependencies.androidXComposeMaterial3)
     implementation(Dependencies.androidXComposeMaterialIconsCore)
     implementation(Dependencies.androidXComposeMaterialIconsExtended)
     implementation(Dependencies.androidXComposeUI)
     implementation(Dependencies.androidXComposeUITooling)
-    implementation(Dependencies.androidXConstraintLayout)
-    implementation(Dependencies.androidXConstraintLayout)
     implementation(Dependencies.androidXFragmentKtx)
     implementation(Dependencies.androidXHiltCompiler)
     implementation(Dependencies.androidXHiltNavigationCompose)
@@ -111,19 +112,20 @@ dependencies {
     implementation(Dependencies.androidXLifecycleViewModelKtx)
     implementation(Dependencies.androidXNavigationCompose)
     implementation(Dependencies.androidXPreferenceKtx)
-    implementation(Dependencies.androidXRecyclerView)
     implementation(platform(Dependencies.firebaseBoM))
     implementation(Dependencies.firebaseCrashlytics)
     implementation(Dependencies.firebaseAnalytics)
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.geoCoordinatesConversion)
+    implementation(Dependencies.googleAccompanistInsetsUI)
+    implementation(Dependencies.googleAccompanistPermissions)
+    implementation(Dependencies.googleAccompanistSystemUIController)
     implementation(Dependencies.guava)
     implementation(Dependencies.hiltAndroid)
     implementation(Dependencies.hiltNavigationFragment)
     implementation(Dependencies.kotlinxCoroutinesCore)
     implementation(Dependencies.kotlinxCoroutinesAndroid)
     implementation(Dependencies.markwon)
-    implementation(Dependencies.material)
     implementation(Dependencies.pageIndicatorView)
     implementation(Dependencies.playServicesLocation)
     implementation(Dependencies.sunriseSunset)
@@ -134,6 +136,8 @@ dependencies {
     testImplementation(Dependencies.kotestPropertyJvm)
     testImplementation(Dependencies.kotestRunnerJUnit5)
     testImplementation(Dependencies.kotlinReflect)
+
+    androidTestImplementation(Dependencies.androidXComposeUITestJUnit4)
 }
 
 kapt {

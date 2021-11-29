@@ -13,7 +13,6 @@ import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
-import java.util.*
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -26,14 +25,14 @@ class MainViewModel @Inject constructor(
     val theme: LiveData<Theme> by lazy {
         callbackFlow {
             if (prefs.contains(prefsKeyTheme))
-                offer(prefs.getString(prefsKeyTheme, null))
+                trySend(prefs.getString(prefsKeyTheme, null))
             prefThemeListener = PrefThemeListener(this)
             prefs.registerOnSharedPreferenceChangeListener(prefThemeListener)
             awaitClose {
                 prefThemeListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
             }
         }.map { prefString ->
-            prefString?.toUpperCase(Locale.ROOT)?.let { it -> Theme.valueOf(it) } ?: Theme.SYSTEM
+            prefString?.uppercase()?.let { it -> Theme.valueOf(it) } ?: Theme.SYSTEM
         }.asLiveData()
     }
 
@@ -45,7 +44,7 @@ class MainViewModel @Inject constructor(
     ) : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
             if (key == prefsKeyTheme)
-                producerScope.offer(sharedPrefs.getString(key, null))
+                producerScope.trySend(sharedPrefs.getString(key, null))
         }
     }
 }

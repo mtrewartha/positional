@@ -1,21 +1,29 @@
 package io.trewartha.positional.ui.location
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Help
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import io.trewartha.positional.R
+import io.trewartha.positional.ui.PositionalTheme
 
 @Composable
 fun HelpButton(onHelpClick: () -> Unit) {
     IconButton(onClick = onHelpClick) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_twotone_help_24),
+            imageVector = Icons.TwoTone.Help,
             contentDescription = stringResource(R.string.location_help_button_content_description),
-            tint = MaterialTheme.colors.primary
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HelpButtonPreview() {
+    PositionalTheme {
+        HelpButton {}
     }
 }
