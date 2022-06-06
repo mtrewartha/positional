@@ -1,14 +1,27 @@
 package io.trewartha.positional.compass
 
-import android.hardware.*
+import android.hardware.GeomagneticField
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Looper
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationAvailability
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import timber.log.Timber
+import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
-import timber.log.Timber
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class Compass @Inject constructor(
@@ -105,17 +118,18 @@ class Compass @Inject constructor(
         get() = magnetometer != null
 
     val magneticDeclination: Flow<Float>
-        get() = callbackFlow<Float> {
+        get() = callbackFlow {
             val locationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult?) {
-                    val location = locationResult?.lastLocation ?: return
+                override fun onLocationResult(locationResult: LocationResult) {
                     Timber.d("Received location update")
-                    val declination = GeomagneticField(
-                        location.latitude.toFloat(),
-                        location.longitude.toFloat(),
-                        location.altitude.toFloat(),
-                        location.time
-                    ).declination
+                    val declination = with(locationResult.lastLocation) {
+                        GeomagneticField(
+                            latitude.toFloat(),
+                            longitude.toFloat(),
+                            altitude.toFloat(),
+                            time
+                        )
+                    }.declination
                     trySend(declination)
                 }
 

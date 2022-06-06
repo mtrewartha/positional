@@ -30,7 +30,7 @@ sealed class Screen {
         object Settings : BottomNavigable() {
             override val route = "settings"
             override val navIconRes = R.drawable.ic_twotone_settings_24px
-            override val navLabelRes = R.string.bottom_navigation_compass
+            override val navLabelRes = R.string.bottom_navigation_settings
         }
 
         object Sun : BottomNavigable() {

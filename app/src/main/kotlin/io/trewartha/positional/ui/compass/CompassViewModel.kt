@@ -137,7 +137,7 @@ class CompassViewModel @Inject constructor(
     }
 
     private fun adjustAzimuthForDisplayRotation(azimuth: Float): Float {
-        return when (val displayRotation = windowManager.defaultDisplay.rotation) {
+        return when (val displayRotation = windowManager.defaultDisplay.rotation) { // TODO: Handle window orientation in some new Compose-friendly way
             Surface.ROTATION_0 -> azimuth
             Surface.ROTATION_90 -> azimuth - 270f
             Surface.ROTATION_180 -> azimuth - 180f

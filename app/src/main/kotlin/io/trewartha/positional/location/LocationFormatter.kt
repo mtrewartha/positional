@@ -11,13 +11,17 @@ import gov.nasa.worldwind.geom.coords.MGRSCoord
 import gov.nasa.worldwind.geom.coords.UTMCoord
 import io.trewartha.positional.R
 import io.trewartha.positional.domain.entities.CoordinatesFormat
-import io.trewartha.positional.domain.entities.CoordinatesFormat.*
+import io.trewartha.positional.domain.entities.CoordinatesFormat.DD
+import io.trewartha.positional.domain.entities.CoordinatesFormat.DDM
+import io.trewartha.positional.domain.entities.CoordinatesFormat.DMS
+import io.trewartha.positional.domain.entities.CoordinatesFormat.MGRS
+import io.trewartha.positional.domain.entities.CoordinatesFormat.UTM
 import io.trewartha.positional.domain.entities.Units
 import io.trewartha.positional.ui.utils.DateTimeFormatter
 import org.threeten.bp.Instant
 import java.math.RoundingMode
 import java.text.NumberFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class LocationFormatter @Inject constructor(
@@ -53,10 +57,8 @@ class LocationFormatter @Inject constructor(
             )
         }
 
-    fun getBearing(location: Location): String? {
-        if (!location.hasBearing()) return null
-
-        if (location.speed <= MIN_SPEED_THRESHOLD)
+    fun getBearing(location: Location): String {
+        if (!location.hasBearing() || location.speed <= MIN_SPEED_THRESHOLD)
             return context.getString(R.string.common_dash)
 
         val bearing = location.bearing.toInt()
@@ -78,8 +80,8 @@ class LocationFormatter @Inject constructor(
         return String.format(locale, formatAccuracy, accuracy)
     }
 
-    fun getElevation(location: Location, units: Units): String? {
-        if (!location.hasAltitude()) return null
+    fun getElevation(location: Location, units: Units): String {
+        if (!location.hasAltitude()) return context.getString(R.string.common_dash)
 
         val elevation = when (units) {
             Units.IMPERIAL -> DistanceUtils.metersToFeet(location.altitude.toFloat()).toInt()
@@ -118,6 +120,16 @@ class LocationFormatter @Inject constructor(
         }
     }
 
+    fun getCoordinatesForCopy(location: Location, format: CoordinatesFormat): String {
+        return when (format) {
+            DD -> getDDCoordsForCopy(location.latitude, location.longitude)
+            DDM -> getDdmCoordsForCopy(location.latitude, location.longitude)
+            DMS -> getDmsCoordsForCopy(location.latitude, location.longitude)
+            MGRS -> getMgrsCoordsForCopy(location.latitude, location.longitude)
+            UTM -> getUtmCoordsForCopy(location.latitude, location.longitude)
+        }
+    }
+
     fun getCoordinatesAccuracy(location: Location, units: Units): String {
         if (!location.hasAccuracy()) return context.getString(R.string.common_dash)
         val accuracy = numberFormat.format(location.accuracy.let {
@@ -133,11 +145,8 @@ class LocationFormatter @Inject constructor(
         return String.format(locale, format, accuracy)
     }
 
-    fun getSpeed(location: Location, units: Units): String? {
-        if (!location.hasSpeed() || location.speed == 0f)
-            return null
-
-        if (location.speed <= MIN_SPEED_THRESHOLD)
+    fun getSpeed(location: Location, units: Units): String {
+        if (!location.hasSpeed() || location.speed == 0f || location.speed <= MIN_SPEED_THRESHOLD)
             return context.getString(R.string.common_dash)
 
         val speed = numberFormat.format(location.speed.let {
@@ -161,8 +170,7 @@ class LocationFormatter @Inject constructor(
             !location.hasSpeedAccuracy() ||
             location.speedAccuracyMetersPerSecond == 0f ||
             location.speed <= MIN_SPEED_THRESHOLD
-        )
-            return context.getString(R.string.common_dash)
+        ) return context.getString(R.string.common_dash)
 
         val accuracy = numberFormat.format(location.speedAccuracyMetersPerSecond.let {
             when (units) {
@@ -173,12 +181,14 @@ class LocationFormatter @Inject constructor(
         return String.format(locale, formatAccuracy, accuracy)
     }
 
-    fun getTimestamp(location: Location): String? {
-        return if (location.time == 0L) {
-            null
-        } else {
-            dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(location.time), true)
-        }
+    fun getTimestamp(location: Location): String {
+        val instant = location.time.takeIf { it != 0L }?.let { Instant.ofEpochMilli(it) }
+            ?: Instant.now()
+        return String.format(
+            locale,
+            formatUpdatedAt,
+            dateTimeFormatter.getFormattedTime(instant, true)
+        )
     }
 
     private fun getDDCoords(lat: Double, lon: Double): Pair<String, Int> {
@@ -188,12 +198,21 @@ class LocationFormatter @Inject constructor(
         return Pair("${formattedLat.padStart(maxLength)}\n${formattedLon.padStart(maxLength)}", 2)
     }
 
+    private fun getDDCoordsForCopy(lat: Double, lon: Double): String {
+        val formattedLat = String.format(locale, formatCoordinateDecimal, lat)
+        val formattedLon = String.format(locale, formatCoordinateDecimal, lon)
+        return "$formattedLat, $formattedLon"
+    }
+
     private fun getDdmCoords(lat: Double, lon: Double): Pair<String, Int> {
         val formattedLat = getDdmLat(lat)
         val formattedLon = getDdmLon(lon)
         val maxLength = maxOf(formattedLat.length, formattedLon.length)
         return Pair("${formattedLat.padStart(maxLength)}\n${formattedLon.padStart(maxLength)}", 2)
     }
+
+    private fun getDdmCoordsForCopy(lat: Double, lon: Double) =
+        "${getDdmLat(lat)}, ${getDdmLon(lon)}"
 
     private fun getDdmLat(lat: Double): String {
         val ddmLat = replaceDelimiters(Location.convert(lat, Location.FORMAT_MINUTES))
@@ -219,6 +238,9 @@ class LocationFormatter @Inject constructor(
         val maxLength = maxOf(formattedLat.length, formattedLon.length)
         return Pair("${formattedLat.padStart(maxLength)}\n${formattedLon.padStart(maxLength)}", 2)
     }
+
+    private fun getDmsCoordsForCopy(lat: Double, lon: Double) =
+        "${getDmsLat(lat)}, ${getDmsLon(lon)}"
 
     private fun getDmsLat(lat: Double): String {
         val dmsLat = replaceDelimiters(Location.convert(lat, Location.FORMAT_SECONDS))
@@ -255,12 +277,22 @@ class LocationFormatter @Inject constructor(
         )
     }
 
+    private fun getMgrsCoordsForCopy(lat: Double, lon: Double): String {
+        return MGRSCoord.fromLatLon(
+            Angle.fromDegreesLatitude(lat),
+            Angle.fromDegreesLongitude(lon)
+        ).toString()
+    }
+
     private fun getUtmCoords(lat: Double, lon: Double): Pair<String, Int> {
         return Pair(
             "${getUtmZone(lat, lon)}\n${getUtmEasting(lat, lon)}\n${getUtmNorthing(lat, lon)}",
             3
         )
     }
+
+    private fun getUtmCoordsForCopy(lat: Double, lon: Double) =
+        "${getUtmZone(lat, lon)} ${getUtmEasting(lat, lon)} ${getUtmNorthing(lat, lon)}"
 
     private fun getUtmEasting(lat: Double, lon: Double): String {
         return "${

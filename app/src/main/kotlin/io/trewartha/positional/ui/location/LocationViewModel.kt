@@ -1,17 +1,13 @@
 package io.trewartha.positional.ui.location
 
-import android.Manifest
 import android.app.Application
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Looper
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
@@ -25,32 +21,30 @@ import io.trewartha.positional.R
 import io.trewartha.positional.domain.entities.CoordinatesFormat
 import io.trewartha.positional.domain.entities.Units
 import io.trewartha.positional.location.LocationFormatter
-import kotlinx.coroutines.CancellationException
+import io.trewartha.positional.ui.utils.ForViewModel
+import timber.log.Timber
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
     private val app: Application,
-    private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: ClipboardManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val locationFormatter: LocationFormatter,
@@ -69,7 +63,7 @@ class LocationViewModel @Inject constructor(
             }
         }
 
-    private val coordinatesFormatFlow: Flow<CoordinatesFormat?> =
+    private val coordinatesFormatFlow: Flow<CoordinatesFormat> =
         callbackFlow {
             if (prefs.contains(prefsKeyCoordinatesFormat))
                 trySend(prefs.getString(prefsKeyCoordinatesFormat, null))
@@ -86,73 +80,64 @@ class LocationViewModel @Inject constructor(
             emit(DEFAULT_COORDINATES_FORMAT)
         }
 
-    private val havePermissions: MutableStateFlow<Boolean> = MutableStateFlow(checkPermissions())
-
-    private val locationFlow: Flow<Location?> =
-        havePermissions.filter { it }
-            .flatMapLatest {
-                callbackFlow {
-                    var firstLocationUpdateTrace: Trace? =
-                        FirebasePerformance.getInstance().newTrace("first_location")
-                    val locationCallback = object : LocationCallback() {
-                        override fun onLocationResult(locationResult: LocationResult?) {
-                            val location = locationResult?.lastLocation ?: return
-                            trySend(location)
-
-                            if (firstLocationUpdateTrace != null) {
-                                val accuracyCounter = when (location.accuracy) {
-                                    in 0.0f.rangeTo(5.0f) -> COUNTER_ACCURACY_VERY_HIGH
-                                    in 5.0f.rangeTo(10.0f) -> COUNTER_ACCURACY_HIGH
-                                    in 10.0f.rangeTo(15.0f) -> COUNTER_ACCURACY_MEDIUM
-                                    in 15.0f.rangeTo(20.0f) -> COUNTER_ACCURACY_LOW
-                                    else -> COUNTER_ACCURACY_VERY_LOW
-                                }
-                                firstLocationUpdateTrace?.incrementMetric(accuracyCounter, 1L)
-                                firstLocationUpdateTrace?.stop()
-                                firstLocationUpdateTrace = null
-                            }
+    private val locationFlow: Flow<Location> =
+        callbackFlow {
+            var firstLocationUpdateTrace: Trace? =
+                FirebasePerformance.getInstance().newTrace("first_location")
+            val locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    val location = locationResult.lastLocation
+                    trySend(location)
+                    if (firstLocationUpdateTrace != null) {
+                        val accuracyCounter = when (location.accuracy) {
+                            in 0.0f.rangeTo(5.0f) -> COUNTER_ACCURACY_VERY_HIGH
+                            in 5.0f.rangeTo(10.0f) -> COUNTER_ACCURACY_HIGH
+                            in 10.0f.rangeTo(15.0f) -> COUNTER_ACCURACY_MEDIUM
+                            in 15.0f.rangeTo(20.0f) -> COUNTER_ACCURACY_LOW
+                            else -> COUNTER_ACCURACY_VERY_LOW
                         }
-
-                        override fun onLocationAvailability(locationAvailability: LocationAvailability) {
-                            Timber.d("Location availability changed to $locationAvailability")
-                        }
-                    }
-
-                    try {
-                        val locationRequest = LocationRequest.create()
-                            .setPriority(LOCATION_UPDATE_PRIORITY)
-                            .setInterval(LOCATION_UPDATE_INTERVAL_MS)
-                        Timber.i("Requesting location updates: $locationRequest")
-                        if (firstLocationUpdateTrace == null) {
-                            firstLocationUpdateTrace?.start()
-                        }
-                        fusedLocationProviderClient.requestLocationUpdates(
-                            locationRequest,
-                            locationCallback,
-                            Looper.getMainLooper()
-                        )
-                    } catch (e: SecurityException) {
-                        Timber.w(
-                            e,
-                            "Don't have location permissions, no location updates will be received"
-                        )
-                    }
-
-                    awaitClose {
-                        Timber.i("Suspending location updates")
-                        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+                        firstLocationUpdateTrace?.incrementMetric(accuracyCounter, 1L)
+                        firstLocationUpdateTrace?.stop()
+                        firstLocationUpdateTrace = null
                     }
                 }
-            }.onStart {
-                Timber.i("Starting location flow")
-            }.onCompletion {
-                if (it == null || it is CancellationException)
-                    Timber.i("Completed location flow")
-                else
-                    Timber.e(it, "Completed location flow abnormally")
+
+                override fun onLocationAvailability(locationAvailability: LocationAvailability) {
+                    Timber.d("Location availability changed to $locationAvailability")
+                }
             }
 
-    private val _events = MutableSharedFlow<LocationScreenEvent>()
+            try {
+                val locationRequest = LocationRequest.create()
+                    .setPriority(LOCATION_UPDATE_PRIORITY)
+                    .setInterval(LOCATION_UPDATE_INTERVAL_MS)
+                Timber.i("Requesting location updates: $locationRequest")
+                if (firstLocationUpdateTrace == null) {
+                    firstLocationUpdateTrace?.start()
+                }
+                fusedLocationProviderClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.getMainLooper()
+                )
+            } catch (e: SecurityException) {
+                Timber.w(e, "Location permissions denied, no location updates will be received")
+            }
+
+            awaitClose {
+                Timber.i("Suspending location updates")
+                fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+            }
+        }.onStart {
+            Timber.i("Starting location flow")
+        }.onEach {
+            Timber.i("Location update received")
+        }.retry { throwable ->
+            if (throwable is SecurityException) {
+                delay(1.seconds)
+                true
+            } else throw throwable
+        }
 
     private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
     private val prefsKeyScreenLock = app.getString(R.string.settings_screen_lock_key)
@@ -178,55 +163,7 @@ class LocationViewModel @Inject constructor(
             emit(DEFAULT_UNITS)
         }
 
-    val coordinatesStateFlow: StateFlow<CoordinatesState> =
-        combine(
-            locationFlow.mapNotNull { it },
-            coordinatesFormatFlow.mapNotNull { it }
-        ) { location, format ->
-            location.toCoordinatesState(format)
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(),
-            CoordinatesState(app.getString(R.string.common_dash), 1)
-        )
-
-    val locationStatsStateFlow: StateFlow<LocationStatsState> =
-        combine(
-            accuracyVisibilityFlow,
-            locationFlow,
-            unitsFlow
-        ) { accuracyVisibility, location, units ->
-            LocationStatsState(
-                accuracy = getAccuracy(location, units),
-                bearing = getBearing(location),
-                bearingAccuracy = getBearingAccuracy(location),
-                elevation = getElevation(location, units),
-                elevationAccuracy = getElevationAccuracy(location, units),
-                speed = getSpeed(location, units),
-                speedAccuracy = getSpeedAccuracy(location, units),
-                showAccuracies = accuracyVisibility,
-                updatedAt = getUpdatedAt(location)
-            )
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(),
-            initialValue = LocationStatsState(
-                accuracy = app.getString(R.string.common_dash),
-                bearing = app.getString(R.string.common_dash),
-                bearingAccuracy = null,
-                elevation = app.getString(R.string.common_dash),
-                elevationAccuracy = null,
-                speed = app.getString(R.string.common_dash),
-                speedAccuracy = null,
-                showAccuracies = false,
-                updatedAt = ""
-            )
-        )
-
-    val events: Flow<LocationScreenEvent>
-        get() = _events
-
-    val screenLockEnabledFlow: StateFlow<Boolean> =
+    private val screenLockEnabledFlow: StateFlow<Boolean> =
         callbackFlow {
             prefScreenLockListener = PrefScreenLockListener(this)
             prefs.registerOnSharedPreferenceChangeListener(prefScreenLockListener)
@@ -239,11 +176,55 @@ class LocationViewModel @Inject constructor(
             prefs.getBoolean(prefsKeyScreenLock, DEFAULT_SCREEN_LOCK)
         )
 
+    val state: StateFlow<LocationState?> = combine(
+        accuracyVisibilityFlow,
+        locationFlow,
+        coordinatesFormatFlow,
+        screenLockEnabledFlow,
+        unitsFlow,
+    ) { showAccuracies, location, coordinatesFormat, screenLockEnabled, units ->
+        val accuracy = locationFormatter.getCoordinatesAccuracy(location, units)
+        val (coordinates, maxLines) = locationFormatter.getCoordinates(location, coordinatesFormat)
+        val coordinatesForCopy =
+            locationFormatter.getCoordinatesForCopy(location, coordinatesFormat)
+        val bearing = locationFormatter.getBearing(location)
+        val bearingAccuracy = locationFormatter.getBearingAccuracy(location)
+        val elevation = locationFormatter.getElevation(location, units)
+        val elevationAccuracy = locationFormatter.getElevationAccuracy(location, units)
+        val speed = locationFormatter.getSpeed(location, units)
+        val speedAccuracy = locationFormatter.getSpeedAccuracy(location, units)
+        val updatedAt = locationFormatter.getTimestamp(location)
+
+        LocationState(
+            coordinates = coordinates,
+            maxLines = maxLines,
+            coordinatesForCopy = coordinatesForCopy,
+            accuracy = accuracy,
+            bearing = bearing,
+            bearingAccuracy = bearingAccuracy,
+            elevation = elevation,
+            elevationAccuracy = elevationAccuracy,
+            speed = speed,
+            speedAccuracy = speedAccuracy,
+            showAccuracies = showAccuracies,
+            updatedAt = updatedAt,
+            screenLockEnabled = screenLockEnabled,
+        )
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.ForViewModel,
+        initialValue = null
+    )
+
+    val events: Flow<LocationEvent>
+        get() = _events
+    private val _events = MutableSharedFlow<LocationEvent>()
+
     fun onCopyClick() {
         viewModelScope.launch {
-            val coordinates = coordinatesStateFlow.value.coordinates
-            val event = if (coordinates.isBlank()) {
-                LocationScreenEvent.ShowCoordinatesCopyErrorSnackbar
+            val coordinates = state.value?.coordinatesForCopy
+            val event = if (coordinates.isNullOrBlank()) {
+                LocationEvent.ShowCoordinatesCopyErrorSnackbar
             } else {
                 clipboardManager.setPrimaryClip(
                     ClipData.newPlainText(
@@ -251,18 +232,14 @@ class LocationViewModel @Inject constructor(
                         coordinates
                     )
                 )
-                LocationScreenEvent.ShowCoordinatesCopySuccessBothSnackbar
+                LocationEvent.ShowCoordinatesCopySuccessBothSnackbar
             }
             _events.emit(event)
         }
     }
 
     fun onHelpClick() {
-        viewModelScope.launch { _events.emit(LocationScreenEvent.NavigateToLocationHelp) }
-    }
-
-    fun onPermissionsChange() {
-        havePermissions.tryEmit(checkPermissions())
+        viewModelScope.launch { _events.emit(LocationEvent.NavigateToLocationHelp) }
     }
 
     fun onScreenLockCheckedChange(checked: Boolean) {
@@ -270,107 +247,22 @@ class LocationViewModel @Inject constructor(
             Timber.i("Screen lock checked change = $checked")
             prefs.edit { putBoolean(prefsKeyScreenLock, checked) }
             val event = if (checked)
-                LocationScreenEvent.ShowScreenLockedSnackbar
+                LocationEvent.ShowScreenLockedSnackbar
             else
-                LocationScreenEvent.ShowScreenUnlockedSnackbar
+                LocationEvent.ShowScreenUnlockedSnackbar
             _events.emit(event)
         }
     }
 
     fun onShareClick() {
         viewModelScope.launch {
-            val coordinates = coordinatesStateFlow.value.coordinates
-            val event = if (coordinates.isBlank())
-                LocationScreenEvent.ShowCoordinatesShareErrorSnackbar
+            val coordinates = state.value?.coordinates
+            val event = if (coordinates.isNullOrBlank())
+                LocationEvent.ShowCoordinatesShareErrorSnackbar
             else
-                LocationScreenEvent.ShowCoordinatesShareSheet(coordinates)
+                LocationEvent.ShowCoordinatesShareSheet(coordinates)
             _events.emit(event)
         }
-    }
-
-    private fun checkPermissions(): Boolean {
-        return PERMISSIONS.all {
-            ContextCompat.checkSelfPermission(app, it) == PackageManager.PERMISSION_GRANTED
-        }
-    }
-
-    private fun getAccuracy(location: Location?, units: Units?): String {
-        return if (location == null || units == null) {
-            app.getString(R.string.common_dash)
-        } else {
-            locationFormatter.getCoordinatesAccuracy(location, units)
-        }
-    }
-
-    private fun getBearing(location: Location?): String {
-        return if (location == null) {
-            app.getString(R.string.common_dash)
-        } else {
-            locationFormatter.getBearing(location) ?: app.getString(R.string.common_dash)
-        }
-    }
-
-    // The return type is optional here because only Android 8+ devices have accuracies. If we're on
-    // a device running lower than 8, we don't show *anything* for this field, not even a dash (that
-    // would indicate the device is capable of showing the accuracy but doesn't have one).
-    private fun getBearingAccuracy(location: Location?): String? {
-        return if (location == null)
-            app.getString(R.string.common_dash)
-        else
-            locationFormatter.getBearingAccuracy(location)
-    }
-
-    private fun getElevation(location: Location?, units: Units?): String {
-        return if (location == null || units == null) {
-            app.getString(R.string.common_dash)
-        } else {
-            locationFormatter.getElevation(location, units) ?: app.getString(R.string.common_dash)
-        }
-    }
-
-    // The return type is optional here because only Android 8+ devices have accuracies. If we're on
-    // a device running lower than 8, we don't show *anything* for this field, not even a dash (that
-    // would indicate the device is capable of showing the accuracy but doesn't have one).
-    private fun getElevationAccuracy(location: Location?, units: Units?): String? {
-        return if (location == null || units == null) {
-            app.getString(R.string.common_dash)
-        } else {
-            locationFormatter.getElevationAccuracy(location, units)
-        }
-    }
-
-    private fun getSpeed(location: Location?, units: Units?): String {
-        return if (location == null || units == null) {
-            app.getString(R.string.common_dash)
-        } else {
-            locationFormatter.getSpeed(location, units) ?: app.getString(R.string.common_dash)
-        }
-    }
-
-    // The return type is optional here because only Android 8+ devices have accuracies. If we're on
-    // a device running lower than 8, we don't show *anything* for this field, not even a dash (that
-    // would indicate the device is capable of showing the accuracy but doesn't have one).
-    private fun getSpeedAccuracy(location: Location?, units: Units?): String? {
-        return if (location == null || units == null) {
-            app.getString(R.string.common_dash)
-        } else {
-            locationFormatter.getSpeedAccuracy(location, units)
-        }
-    }
-
-    private fun getUpdatedAt(location: Location?): String {
-        return if (location == null) {
-            app.getString(R.string.common_dash)
-        } else {
-            locationFormatter.getTimestamp(location)
-                ?.let { app.getString(R.string.location_updated_at, it) }
-                ?: app.getString(R.string.common_dash)
-        }
-    }
-
-    private fun Location.toCoordinatesState(format: CoordinatesFormat): CoordinatesState {
-        val (coordinates, coordinatesLines) = locationFormatter.getCoordinates(this, format)
-        return CoordinatesState(coordinates, coordinatesLines)
     }
 
     private inner class PrefCoordinatesFormatListener(
@@ -421,9 +313,5 @@ class LocationViewModel @Inject constructor(
         private val DEFAULT_UNITS = Units.METRIC
         private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
-        private val PERMISSIONS = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
     }
 }

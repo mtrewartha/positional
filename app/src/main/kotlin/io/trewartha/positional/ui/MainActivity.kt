@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             PositionalTheme {
+                // TODO: Handle window insets in the new way (see Accompanist page for why this isn't the correct way anymore)
                 ProvideWindowInsets {
                     val navController = rememberNavController()
                     MainScreen(navController)

@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        gradlePluginPortal()
         mavenCentral()
         maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
     }
@@ -19,7 +19,6 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven(url = "https://jitpack.io")
     }

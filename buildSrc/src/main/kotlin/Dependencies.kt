@@ -8,6 +8,8 @@ object Dependencies {
         "androidx.compose.foundation:foundation:${Versions.Dependencies.androidXCompose}"
     const val androidXComposeMaterial3 =
         "androidx.compose.material3:material3:${Versions.Dependencies.androidXComposeMaterial3}"
+    const val androidXComposeMaterial3WindowSizeClass =
+        "androidx.compose.material3:material3-window-size-class:${Versions.Dependencies.androidXComposeMaterial3}"
     const val androidXComposeMaterialIconsCore =
         "androidx.compose.material:material-icons-core:${Versions.Dependencies.androidXCompose}"
     const val androidXComposeMaterialIconsExtended =
@@ -23,7 +25,7 @@ object Dependencies {
     const val androidXHiltCompiler =
         "androidx.hilt:hilt-compiler:${Versions.Dependencies.androidXHilt}"
     const val androidXHiltNavigationCompose =
-        "androidx.hilt:hilt-navigation-compose:${Versions.Dependencies.androidXHiltNavigationCompose}"
+        "androidx.hilt:hilt-navigation-compose:${Versions.Dependencies.androidXHilt}"
     const val androidXLegacySupportV4 =
         "androidx.legacy:legacy-support-v4:${Versions.Dependencies.androidXLegacySupportV4}"
     const val androidXLifecycleLiveDataKtx =
@@ -31,7 +33,7 @@ object Dependencies {
     const val androidXLifecycleRuntime =
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.Dependencies.androidXLifecycle}"
     const val androidXLifecycleViewModelCompose =
-        "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Dependencies.androidXLifecycleViewModelCompose}"
+        "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Dependencies.androidXLifecycle}"
     const val androidXLifecycleViewModelKtx =
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.Dependencies.androidXLifecycle}"
     const val androidXNavigationCompose =
@@ -40,6 +42,8 @@ object Dependencies {
         "androidx.navigation:navigation-fragment-ktx:${Versions.Dependencies.androidXNavigation}"
     const val androidXPreferenceKtx =
         "androidx.preference:preference-ktx:${Versions.Dependencies.androidXPreference}"
+    const val androidXWindow =
+        "androidx.window:window:${Versions.Dependencies.androidXWindow}"
     const val firebaseBoM =
         "com.google.firebase:firebase-bom:${Versions.Dependencies.firebaseBoM}"
     const val firebaseAnalytics =
@@ -54,8 +58,6 @@ object Dependencies {
         "com.google.accompanist:accompanist-permissions:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistSystemUIController =
         "com.google.accompanist:accompanist-systemuicontroller:${Versions.Dependencies.googleAccompanist}"
-    const val geoCoordinatesConversion =
-        "com.github.Berico-Technologies:Geo-Coordinate-Conversion-Java:${Versions.Dependencies.geoCoordinatesConversion}"
     const val guava =
         "com.google.guava:guava:${Versions.Dependencies.guava}"
     const val hiltAndroid =
@@ -63,7 +65,7 @@ object Dependencies {
     const val hiltCompiler =
         "com.google.dagger:hilt-compiler:${Versions.Dependencies.hilt}"
     const val hiltNavigationFragment =
-        "androidx.hilt:hilt-navigation-fragment:${Versions.Dependencies.androidXHiltNavigationFragment}"
+        "androidx.hilt:hilt-navigation-fragment:${Versions.Dependencies.androidXHilt}"
     const val kotestAssertionsCoreJvm =
         "io.kotest:kotest-assertions-core-jvm:${Versions.Dependencies.kotest}"
     const val kotestPropertyJvm =
@@ -79,7 +81,7 @@ object Dependencies {
     const val markwon =
         "io.noties.markwon:core:${Versions.Dependencies.markwon}"
     const val pageIndicatorView =
-        "com.romandanylyk:pageindicatorview:${Versions.Dependencies.pageIndicatorView}"
+        "com.github.romandanylyk:pageindicatorview:${Versions.Dependencies.pageIndicatorView}"
     const val playServicesLocation =
         "com.google.android.gms:play-services-location:${Versions.Dependencies.playServicesLocation}"
     const val sunriseSunset =

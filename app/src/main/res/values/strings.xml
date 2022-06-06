@@ -7,6 +7,7 @@
     <string name="common_do_not_ask_again">DON\'T ASK AGAIN</string>
     <string name="common_exit">Exit</string>
     <string name="common_ok">OK</string>
+    <string name="common_privacy_policy">Privacy policy</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_navigation_compass">Compass</string>
@@ -60,16 +61,14 @@
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_elevation">Elevation</string>
     <string name="location_label_speed">Speed</string>
+    <string name="location_loading_headline">Getting your location…</string>
+    <string name="location_loading_body">This shouldn\'t take too long.</string>
+    <string name="location_permission_required_button_ok" translatable="false">@string/common_ok</string>
+    <string name="location_permission_required_button_privacy_policy">Here is our simple privacy policy.</string>
+    <string name="location_permission_required_body">Positional is private by design. Your location is never shared with anyone unless you explicitly share it.</string>
+    <string name="location_permission_required_title">Location Permission Required</string>
     <string name="location_permission_without_rationale_title">Let\'s get started!</string>
-    <string name="location_permission_without_rationale_message">In order to show your location, Positional needs permission to access it. Your location is simply shown to you and it\'s not recorded. Check out the simple privacy policy.</string>
-    <string name="location_permission_without_rationale_button_request_permission">Let\'s go!</string>
-    <string name="location_permission_with_rationale_title">Location Permission Required</string>
-    <string name="location_permission_with_rationale_message">Positional can\'t show your location without permission to access it. Please tap OK below and grant permission.</string>
-    <string name="location_permission_with_rationale_button_request_permission" translatable="false">@string/common_ok</string>
-    <string name="location_permission_with_rationale_button_prevent_future_requests" translatable="false">@string/common_do_not_ask_again</string>
-    <string name="location_permission_unavailable_title">Location Permission Required</string>
-    <string name="location_permission_unavailable_message">Positional can\'t get your coordinates without Location permission, but it looks like you previously denied that permission. You can grant it using your device\'s Settings app.</string>
-    <string name="location_permission_unavailable_button_navigate_to_settings">Go to Settings</string>
+    <string name="location_permission_without_rationale_message">In order to show your location, Positional needs permission. Your location is never recorded. For more details, check out the simple privacy policy.</string>
     <string name="location_screen_lock_button_content_description_off">Lock screen (currently off)</string>
     <string name="location_screen_lock_button_content_description_on">Lock screen (currently on)</string>
     <string name="location_screen_lock_button_tooltip_off">Lock screen (currently off)</string>
@@ -138,7 +137,7 @@
     <string name="settings_coordinates_format_utm_value">utm</string>
     <string name="settings_privacy_policy_key">privacyPolicy</string>
     <string name="settings_privacy_policy_summary">Learn more about how Positional respects your privacy and uses your data</string>
-    <string name="settings_privacy_policy_title">Privacy policy</string>
+    <string name="settings_privacy_policy_title" translatable="false">@string/common_privacy_policy</string>
     <string name="settings_root_title">Settings</string>
     <string name="settings_screen_lock_key">screenLock</string>
     <string name="settings_screen_lock_content_description">lock screen</string>

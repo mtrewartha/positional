@@ -2,12 +2,12 @@ import org.gradle.api.JavaVersion
 
 object Versions {
 
-    const val kotlin = "1.5.31"
+    const val kotlin = "1.6.21"
 
     object Android {
-        const val compileSdk = 31
+        const val compileSdk = 32
         const val minSdk = 21
-        const val targetSdk = 31
+        const val targetSdk = 32
     }
 
     object Application {
@@ -32,40 +32,37 @@ object Versions {
     }
 
     object Dependencies {
-        const val androidXActivityCompose = "1.4.0"
-        const val androidXCompose = "1.1.0-beta03"
-        const val androidXComposeMaterial3 = "1.0.0-alpha01"
-        const val androidXFragment = "1.4.0"
+        const val androidXActivityCompose = "1.5.0-rc01"
+        const val androidXCompose = "1.2.0-beta03"
+        const val androidXComposeMaterial3 = "1.0.0-alpha13"
+        const val androidXFragment = "1.5.0-rc01"
         const val androidXHilt = "1.0.0"
-        const val androidXHiltNavigationCompose = "1.0.0-alpha03"
-        const val androidXHiltNavigationFragment = "1.0.0"
         const val androidXLegacySupportV4 = "1.0.0"
-        const val androidXLifecycle = "2.4.0"
-        const val androidXLifecycleViewModelCompose = "2.4.0"
-        const val androidXNavigation = "2.4.0-beta02"
-        const val androidXPreference = "1.1.1"
-        const val firebaseBoM = "29.0.0"
-        const val geoCoordinatesConversion = "360781e"
-        const val googleAccompanist = "0.21.3-beta"
-        const val guava = "30.1.1-android"
-        const val hilt = "2.40.1"
+        const val androidXLifecycle = "2.5.0-rc01"
+        const val androidXNavigation = "2.5.0-rc01"
+        const val androidXPreference = "1.2.0"
+        const val androidXWindow = "1.1.0-alpha02"
+        const val firebaseBoM = "30.1.0"
+        const val googleAccompanist = "0.24.10-beta"
+        const val guava = "31.1-android"
+        const val hilt = "2.42"
         const val kotlin = Versions.kotlin
-        const val kotlinxCoroutines = "1.5.2"
-        const val kotest = "4.6.3"
+        const val kotlinxCoroutines = "1.6.2"
+        const val kotest = "5.3.0"
         const val markwon = "4.6.2"
-        const val pageIndicatorView = "1.0.3"
-        const val playServicesLocation = "18.0.0"
+        const val pageIndicatorView = "v.1.0.3"
+        const val playServicesLocation = "19.0.1"
         const val sunriseSunset = "1.1.1"
-        const val threeTenAbp = "1.3.1"
-        const val timber = "4.7.1"
+        const val threeTenAbp = "1.4.0"
+        const val timber = "5.0.1"
     }
 
     object Plugins {
-        const val android = "7.1.0-beta04"
-        const val firebaseCrashlytics = "2.7.1"
-        const val firebasePerf = "1.4.0"
+        const val android = "7.2.1"
+        const val firebaseCrashlytics = "2.9.0"
+        const val firebasePerf = "1.4.1"
         const val googleServices = "4.3.10"
-        const val gradleVersions = "0.36.0"
+        const val gradleVersions = "0.42.0"
         const val hilt = Versions.Dependencies.hilt
         const val kotlin = Versions.kotlin
     }

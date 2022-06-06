@@ -20,8 +20,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings, rootKey)
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        return if (preference?.key == getString(R.string.settings_privacy_policy_key)) {
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        return if (preference.key == getString(R.string.settings_privacy_policy_key)) {
             showPrivacyPolicy()
             true
         } else {

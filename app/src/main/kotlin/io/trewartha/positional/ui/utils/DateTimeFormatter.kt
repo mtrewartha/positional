@@ -7,7 +7,8 @@ import io.trewartha.positional.R
 import org.threeten.bp.Instant
 import java.text.DateFormat.SHORT
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class DateTimeFormatter @Inject constructor(
@@ -33,8 +34,7 @@ class DateTimeFormatter @Inject constructor(
         simpleDateFormat.format(Date(instant.toEpochMilli()))
     }
 
-    fun getFormattedTime(instant: Instant?, includeSeconds: Boolean = false): String? = when {
-        instant == null -> context.getString(R.string.sun_time_unknown)
+    fun getFormattedTime(instant: Instant, includeSeconds: Boolean = false): String = when {
         use12HourTime() -> if (includeSeconds) {
             timeFormat12HourWithSeconds.format(Date(instant.toEpochMilli()))
         } else {

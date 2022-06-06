@@ -1,6 +1,5 @@
 package io.trewartha.positional.ui
 
-import android.Manifest.permission
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -18,7 +17,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.ui.Screen.BottomNavigable.Compass
 import io.trewartha.positional.ui.Screen.BottomNavigable.Location
 import io.trewartha.positional.ui.Screen.BottomNavigable.Settings
@@ -33,7 +31,7 @@ fun MainScreen(
 ) {
     Scaffold(
         bottomBar = {
-            NavigationBar(modifier = Modifier.navigationBarsPadding()) {0712
+            NavigationBar(modifier = Modifier.navigationBarsPadding()) { // TODO: Handle window insets in the new way (see Accompanist page for why this isn't the correct way anymore)
                 val navBackStackEntry by navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
                 listOf(
@@ -65,29 +63,15 @@ fun MainScreen(
                 }
             }
         }
-    ) {
+    ) { contentPadding ->
         NavHost(
             navHostController,
             startDestination = Location.route,
             modifier = Modifier
-                .padding(bottom = it.calculateBottomPadding())
+                .padding(bottom = contentPadding.calculateBottomPadding())
         ) {
-            composable(Location.route) {
-                LocationScreen(
-                    navController = navHostController,
-                    locationPermissionState = rememberMultiplePermissionsState(
-                        permissions = listOf(
-                            permission.ACCESS_COARSE_LOCATION,
-                            permission.ACCESS_FINE_LOCATION
-                        )
-                    )
-                )
-            }
-            composable(Help.route) {
-                LocationHelpScreen(
-                    navController = navHostController,
-                )
-            }
+            composable(Location.route) { LocationScreen(navController = navHostController) }
+            composable(Help.route) { LocationHelpScreen(navController = navHostController) }
         }
     }
 }

@@ -63,15 +63,14 @@ android {
         freeCompilerArgs = freeCompilerArgs +
                 "-Xinline-classes" +
                 "-Xjvm-default=all" +
-                "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
-                "-Xopt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi" +
-                "-Xopt-in=kotlin.ExperimentalStdlibApi" +
-                "-Xopt-in=kotlin.RequiresOptIn" +
-                "-Xopt-in=kotlin.time.ExperimentalTime" +
-                "-Xopt-in=kotlin.ExperimentalUnsignedTypes" +
-                "-Xopt-in=kotlinx.coroutines.DelicateCoroutinesApi" +
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" +
-                "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
+                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
+                "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi" +
+                "-opt-in=kotlin.ExperimentalStdlibApi" +
+                "-opt-in=kotlin.RequiresOptIn" +
+                "-opt-in=kotlin.time.ExperimentalTime" +
+                "-opt-in=kotlin.ExperimentalUnsignedTypes" +
+                "-opt-in=kotlinx.coroutines.DelicateCoroutinesApi" +
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
     packagingOptions {
         resources {
@@ -82,7 +81,6 @@ android {
 
 repositories {
     google()
-    jcenter()
     mavenCentral()
     maven(url = "https://jitpack.io")
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
@@ -95,9 +93,11 @@ tasks.withType<Test> {
 dependencies {
     kapt(Dependencies.hiltCompiler)
 
+    implementation(files("libs/worldwind.jar"))
     implementation(Dependencies.androidXActivityCompose)
     implementation(Dependencies.androidXComposeFoundation)
     implementation(Dependencies.androidXComposeMaterial3)
+    implementation(Dependencies.androidXComposeMaterial3WindowSizeClass)
     implementation(Dependencies.androidXComposeMaterialIconsCore)
     implementation(Dependencies.androidXComposeMaterialIconsExtended)
     implementation(Dependencies.androidXComposeUI)
@@ -112,11 +112,11 @@ dependencies {
     implementation(Dependencies.androidXLifecycleViewModelKtx)
     implementation(Dependencies.androidXNavigationCompose)
     implementation(Dependencies.androidXPreferenceKtx)
+    implementation(Dependencies.androidXWindow)
     implementation(platform(Dependencies.firebaseBoM))
     implementation(Dependencies.firebaseCrashlytics)
     implementation(Dependencies.firebaseAnalytics)
     implementation(Dependencies.firebasePerf)
-    implementation(Dependencies.geoCoordinatesConversion)
     implementation(Dependencies.googleAccompanistInsetsUI)
     implementation(Dependencies.googleAccompanistPermissions)
     implementation(Dependencies.googleAccompanistSystemUIController)

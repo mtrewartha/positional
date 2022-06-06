@@ -7,19 +7,23 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import ca.rmen.sunrisesunset.SunriseSunset
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationAvailability
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.utils.DateTimeFormatter
+import org.threeten.bp.Instant
+import timber.log.Timber
+import java.util.Calendar
+import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
-import org.threeten.bp.Instant
-import timber.log.Timber
-import java.util.*
-import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
@@ -31,10 +35,9 @@ class SunViewModel @Inject constructor(
 
     val sunState: LiveData<SunState> = callbackFlow<Location> {
         val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                val location = locationResult?.lastLocation ?: return
+            override fun onLocationResult(locationResult: LocationResult) {
                 Timber.d("Received location update")
-                trySend(location)
+                trySend(locationResult.lastLocation)
             }
 
             override fun onLocationAvailability(locationAvailability: LocationAvailability) {

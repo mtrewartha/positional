@@ -8,27 +8,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Adjust
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.ThemePreviews
 
-
-data class LocationStatRowState(
-    val icon: ImageVector,
-    val name: String,
-    val value: String?,
-    val accuracy: String?,
-    val accuracyVisible: Boolean
-)
 
 @Composable
 fun LocationStatRow(
-    locationStatRowState: LocationStatRowState
+    icon: ImageVector,
+    name: String,
+    value: String?,
+    accuracy: String?,
+    accuracyVisible: Boolean
 ) {
     Row(
         modifier = Modifier
@@ -37,52 +35,49 @@ fun LocationStatRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = locationStatRowState.icon,
+            imageVector = icon,
             contentDescription = null,
-            modifier = Modifier
-                .padding(end = HORIZONTAL_PADDING)
-                .size(ICON_SIZE)
+            modifier = Modifier.size(ICON_SIZE)
         )
         Text(
-            text = locationStatRowState.name,
+            text = name,
             fontSize = 18.sp,
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(end = HORIZONTAL_PADDING)
+                .padding(start = HORIZONTAL_PADDING)
                 .weight(1f, true),
         )
         Text(
-            text = locationStatRowState.value ?: "",
+            text = value ?: "",
             fontSize = 18.sp,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(end = HORIZONTAL_PADDING),
+            modifier = Modifier.padding(start = HORIZONTAL_PADDING)
         )
-        if (locationStatRowState.accuracyVisible) {
+        if (accuracyVisible) {
             Text(
-                text = locationStatRowState.accuracy ?: "",
+                text = accuracy ?: "",
                 fontSize = 14.sp,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.padding(start = HORIZONTAL_PADDING)
             )
         }
     }
 }
 
+@ThemePreviews
 @Composable
-@Preview(showBackground = true)
 fun LocationStatRowPreview() {
-    LocationStatRow(
-        locationStatRowState = LocationStatRowState(
-            Icons.TwoTone.Adjust,
-            "Accuracy",
-            "100.0",
-            "± 10.0",
-            true
-        )
-    )
+    PositionalTheme {
+        Surface {
+            LocationStatRow(
+                icon = Icons.TwoTone.Adjust,
+                name = "Accuracy",
+                value = "100.0",
+                accuracy = "± 10.0",
+                accuracyVisible = true
+            )
+        }
+    }
 }
 
 private val HORIZONTAL_PADDING = 16.dp
