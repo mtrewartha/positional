@@ -103,15 +103,15 @@ private fun LocationContent(
         if (locationPermissionsState.allPermissionsGranted) {
             AnimatedVisibility(
                 visible = state == null,
-                enter = fadeIn() + slideInVertically(), // TODO: Make these enter/exit animations look nicer
-                exit = fadeOut() + slideOutVertically() // TODO: Make these enter/exit animations look nicer
+                enter = fadeIn() + slideInVertically(initialOffsetY = { it / 24 }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { -it / 24 })
             ) {
                 LocationLoadingContent()
             }
             AnimatedVisibility(
                 visible = state != null,
-                enter = fadeIn() + slideInVertically(), // TODO: Make these enter/exit animations look nicer
-                exit = fadeOut() + slideOutVertically() // TODO: Make these enter/exit animations look nicer
+                enter = fadeIn() + slideInVertically(initialOffsetY = { it / 24 }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 24 })
             ) {
                 if (state == null) return@AnimatedVisibility
                 LocationLoadedContent(
