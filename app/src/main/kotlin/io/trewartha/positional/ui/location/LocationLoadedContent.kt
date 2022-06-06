@@ -7,11 +7,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.FileCopy
+import androidx.compose.material.icons.twotone.Help
+import androidx.compose.material.icons.twotone.ScreenLockPortrait
+import androidx.compose.material.icons.twotone.Share
+import androidx.compose.material.icons.twotone.Smartphone
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.trewartha.positional.R
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
@@ -48,10 +60,45 @@ fun LocationLoadedContent(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            ShareButton(onShareClick)
-            CopyButton(onCopyClick)
-            ScreenLockButton(state.screenLockEnabled, onScreenLockCheckedChange)
-            HelpButton(onHelpClick)
+            IconButton(onClick = onShareClick) {
+                Icon(
+                    imageVector = Icons.TwoTone.Share,
+                    contentDescription = stringResource(R.string.location_share_button_content_description),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+            IconButton(onClick = onCopyClick) {
+                Icon(
+                    imageVector = Icons.TwoTone.FileCopy,
+                    contentDescription = stringResource(R.string.location_coordinates_copy_content_description),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+            IconToggleButton(
+                checked = state.screenLockEnabled,
+                onCheckedChange = onScreenLockCheckedChange
+            ) {
+                Icon(
+                    imageVector = if (state.screenLockEnabled)
+                        Icons.TwoTone.Smartphone
+                    else
+                        Icons.TwoTone.ScreenLockPortrait,
+                    contentDescription = stringResource(
+                        if (state.screenLockEnabled)
+                            R.string.location_screen_lock_button_content_description_on
+                        else
+                            R.string.location_screen_lock_button_content_description_off
+                    ),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+            IconButton(onClick = onHelpClick) {
+                Icon(
+                    imageVector = Icons.TwoTone.Help,
+                    contentDescription = stringResource(R.string.location_help_button_content_description),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
         StatsColumn(
             accuracy = state.accuracy,
