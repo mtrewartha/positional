@@ -1,5 +1,6 @@
 package io.trewartha.positional.ui.location
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -25,6 +26,7 @@ import io.trewartha.positional.ui.utils.ForViewModel
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -36,11 +38,13 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
@@ -80,6 +84,7 @@ class LocationViewModel @Inject constructor(
             emit(DEFAULT_COORDINATES_FORMAT)
         }
 
+    @SuppressLint("MissingPermission") // The linter doesn't know this is handled in a Flow.catch
     private val locationFlow: Flow<Location> =
         callbackFlow {
             var firstLocationUpdateTrace: Trace? =
@@ -107,22 +112,21 @@ class LocationViewModel @Inject constructor(
                 }
             }
 
-            try {
-                val locationRequest = LocationRequest.create()
-                    .setPriority(LOCATION_UPDATE_PRIORITY)
-                    .setInterval(LOCATION_UPDATE_INTERVAL_MS)
-                Timber.i("Requesting location updates: $locationRequest")
-                if (firstLocationUpdateTrace == null) {
-                    firstLocationUpdateTrace?.start()
-                }
+            val locationRequest = LocationRequest.create()
+                .setPriority(LOCATION_UPDATE_PRIORITY)
+                .setInterval(LOCATION_UPDATE_INTERVAL_MS)
+            Timber.i("Requesting location updates: $locationRequest")
+            if (firstLocationUpdateTrace == null) {
+                firstLocationUpdateTrace?.start()
+            }
+
+            suspendCancellableCoroutine<Exception?> { continuation ->
                 fusedLocationProviderClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
                     Looper.getMainLooper()
-                )
-            } catch (e: SecurityException) {
-                Timber.w(e, "Location permissions denied, no location updates will be received")
-            }
+                ).addOnCompleteListener { continuation.resume(it.exception) {} }
+            }?.let { throw it }
 
             awaitClose {
                 Timber.i("Suspending location updates")
@@ -134,9 +138,15 @@ class LocationViewModel @Inject constructor(
             Timber.i("Location update received")
         }.retry { throwable ->
             if (throwable is SecurityException) {
+                Timber.w("Waiting for location permissions to be granted")
                 delay(1.seconds)
                 true
-            } else throw throwable
+            } else {
+                Timber.w(throwable, "Waiting for location permissions to be granted")
+                throw throwable
+            }
+        }.onCompletion {
+            Timber.i("Location flow completed")
         }
 
     private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
