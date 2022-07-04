@@ -10,7 +10,6 @@ buildscript {
         classpath(Plugins.firebaseCrashlytics)
         classpath(Plugins.firebasePerf)
         classpath(Plugins.googleServices)
-        classpath(Plugins.gradleVersions)
         classpath(Plugins.hilt)
         classpath(Plugins.kotlin)
     }
