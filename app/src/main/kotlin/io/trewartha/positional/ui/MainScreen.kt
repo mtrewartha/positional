@@ -1,6 +1,8 @@
 package io.trewartha.positional.ui
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,7 +18,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.insets.navigationBarsPadding
 import io.trewartha.positional.ui.Screen.BottomNavigable.Compass
 import io.trewartha.positional.ui.Screen.BottomNavigable.Location
 import io.trewartha.positional.ui.Screen.BottomNavigable.Settings
@@ -31,7 +32,9 @@ fun MainScreen(
 ) {
     Scaffold(
         bottomBar = {
-            NavigationBar(modifier = Modifier.navigationBarsPadding()) { // TODO: Handle window insets in the new way (see Accompanist page for why this isn't the correct way anymore)
+            NavigationBar(
+                modifier = Modifier.navigationBarsPadding(),
+            ) {
                 val navBackStackEntry by navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
                 listOf(
@@ -41,8 +44,6 @@ fun MainScreen(
                     Settings
                 ).forEach { screen ->
                     NavigationBarItem(
-                        icon = { Icon(painterResource(screen.navIconRes), null) },
-                        label = { Text(stringResource(screen.navLabelRes)) },
                         selected = currentRoute == screen.route,
                         onClick = {
                             navHostController.navigate(screen.route) {
@@ -58,7 +59,9 @@ fun MainScreen(
                                 // Restore state when reselecting a previously selected item
                                 restoreState = true
                             }
-                        }
+                        },
+                        icon = { Icon(painterResource(screen.navIconRes), null) },
+                        label = { Text(stringResource(screen.navLabelRes)) },
                     )
                 }
             }
@@ -68,6 +71,7 @@ fun MainScreen(
             navHostController,
             startDestination = Location.route,
             modifier = Modifier
+                .statusBarsPadding()
                 .padding(bottom = contentPadding.calculateBottomPadding())
         ) {
             composable(Location.route) { LocationScreen(navController = navHostController) }

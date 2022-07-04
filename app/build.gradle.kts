@@ -118,6 +118,7 @@ dependencies {
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.googleAccompanistInsetsUI)
     implementation(Dependencies.googleAccompanistPermissions)
+    implementation(Dependencies.googleAccompanistPlaceholder)
     implementation(Dependencies.googleAccompanistSystemUIController)
     implementation(Dependencies.guava)
     implementation(Dependencies.hiltAndroid)

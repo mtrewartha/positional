@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
+import io.trewartha.positional.ui.utils.placeholder
 
 
 @Composable
@@ -26,12 +27,14 @@ fun LocationStatRow(
     name: String,
     value: String?,
     accuracy: String?,
-    accuracyVisible: Boolean
+    accuracyVisible: Boolean,
+    placeholdersVisible: Boolean,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .placeholder(visible = placeholdersVisible),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -51,14 +54,18 @@ fun LocationStatRow(
             text = value ?: "",
             fontSize = 18.sp,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(start = HORIZONTAL_PADDING)
+            modifier = Modifier
+                .padding(start = HORIZONTAL_PADDING)
+                .placeholder(placeholdersVisible)
         )
         if (accuracyVisible) {
             Text(
                 text = accuracy ?: "",
                 fontSize = 14.sp,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = HORIZONTAL_PADDING)
+                modifier = Modifier
+                    .padding(start = HORIZONTAL_PADDING)
+                    .placeholder(placeholdersVisible)
             )
         }
     }
@@ -74,7 +81,25 @@ fun LocationStatRowPreview() {
                 name = "Accuracy",
                 value = "100.0",
                 accuracy = "± 10.0",
-                accuracyVisible = true
+                accuracyVisible = true,
+                placeholdersVisible = false
+            )
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun LocationStatRowPlaceholderPreview() {
+    PositionalTheme {
+        Surface {
+            LocationStatRow(
+                icon = Icons.TwoTone.Adjust,
+                name = "Accuracy",
+                value = "100.0",
+                accuracy = "± 10.0",
+                accuracyVisible = true,
+                placeholdersVisible = true
             )
         }
     }

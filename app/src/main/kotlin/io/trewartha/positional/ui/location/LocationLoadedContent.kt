@@ -18,6 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,10 +29,11 @@ import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.AutoSizeText
+import io.trewartha.positional.ui.utils.placeholder
 
 @Composable
 fun LocationLoadedContent(
-    state: LocationState,
+    state: LocationState?,
     onShareClick: () -> Unit,
     onCopyClick: () -> Unit,
     onScreenLockCheckedChange: (Boolean) -> Unit,
@@ -49,10 +51,19 @@ fun LocationLoadedContent(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            AutoSizeText(
-                text = state.coordinates,
-                maxLines = state.maxLines
-            )
+            if (state == null) {
+                Text(
+                    text = "",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .placeholder(visible = true)
+                )
+            } else {
+                AutoSizeText(
+                    text = state.coordinates,
+                    maxLines = state.maxLines,
+                )
+            }
         }
         Row(
             modifier = Modifier
@@ -75,16 +86,17 @@ fun LocationLoadedContent(
                 )
             }
             IconToggleButton(
-                checked = state.screenLockEnabled,
-                onCheckedChange = onScreenLockCheckedChange
+                checked = state?.screenLockEnabled ?: false,
+                onCheckedChange = onScreenLockCheckedChange,
+                enabled = state != null
             ) {
                 Icon(
-                    imageVector = if (state.screenLockEnabled)
+                    imageVector = if (state?.screenLockEnabled == true)
                         Icons.TwoTone.Smartphone
                     else
                         Icons.TwoTone.ScreenLockPortrait,
                     contentDescription = stringResource(
-                        if (state.screenLockEnabled)
+                        if (state?.screenLockEnabled == true)
                             R.string.location_screen_lock_button_content_description_on
                         else
                             R.string.location_screen_lock_button_content_description_off
@@ -100,17 +112,7 @@ fun LocationLoadedContent(
                 )
             }
         }
-        StatsColumn(
-            accuracy = state.accuracy,
-            bearing = state.bearing,
-            bearingAccuracy = state.bearingAccuracy,
-            elevation = state.elevation,
-            elevationAccuracy = state.elevationAccuracy,
-            speed = state.speed,
-            speedAccuracy = state.speedAccuracy,
-            showAccuracies = state.showAccuracies,
-            updatedAt = state.updatedAt
-        )
+        StatsColumn(state?.stats)
     }
 }
 
@@ -126,15 +128,17 @@ private fun Preview() {
                     maxLines = 2,
                     screenLockEnabled = false,
                     coordinatesForCopy = "Coordinates for copy",
-                    accuracy = "123.4",
-                    bearing = "123.4",
-                    bearingAccuracy = "± 56.7",
-                    elevation = "123.4",
-                    elevationAccuracy = "± 56.7",
-                    speed = "123.4",
-                    speedAccuracy = "± 56.7",
-                    showAccuracies = true,
-                    updatedAt = "12:00:00 PM"
+                    stats = LocationState.Stats(
+                        accuracy = "123.4",
+                        bearing = "123.4",
+                        bearingAccuracy = "± 56.7",
+                        elevation = "123.4",
+                        elevationAccuracy = "± 56.7",
+                        speed = "123.4",
+                        speedAccuracy = "± 56.7",
+                        showAccuracies = true,
+                        updatedAt = "12:00:00 PM"
+                    ),
                 ),
                 onShareClick = {},
                 onCopyClick = {},

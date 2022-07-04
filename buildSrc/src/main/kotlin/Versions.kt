@@ -34,7 +34,7 @@ object Versions {
     object Dependencies {
         const val androidXActivityCompose = "1.5.0-rc01"
         const val androidXCompose = "1.2.0-beta03"
-        const val androidXComposeMaterial3 = "1.0.0-alpha13"
+        const val androidXComposeMaterial3 = "1.0.0-alpha14"
         const val androidXFragment = "1.5.0-rc01"
         const val androidXHilt = "1.0.0"
         const val androidXLegacySupportV4 = "1.0.0"

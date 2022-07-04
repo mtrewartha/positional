@@ -7,7 +7,6 @@ import androidx.compose.material.icons.twotone.Adjust
 import androidx.compose.material.icons.twotone.Explore
 import androidx.compose.material.icons.twotone.Speed
 import androidx.compose.material.icons.twotone.Terrain
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,57 +16,54 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
+import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 
 @Composable
-fun StatsColumn(
-    accuracy: String,
-    bearing: String,
-    bearingAccuracy: String?,
-    elevation: String,
-    elevationAccuracy: String?,
-    speed: String,
-    speedAccuracy: String?,
-    showAccuracies: Boolean,
-    updatedAt: String,
-) {
+fun StatsColumn(stats: LocationState.Stats?) {
     Column {
+        val accuracyVisible = stats?.showAccuracies ?: false
+        val placeholdersVisible = stats == null
         val dividerIndent = 16.dp
         LocationStatRow(
             icon = Icons.TwoTone.Adjust,
             name = stringResource(R.string.location_label_accuracy),
-            value = accuracy,
+            value = stats?.accuracy,
             accuracy = null,
-            accuracyVisible = showAccuracies
+            accuracyVisible = accuracyVisible,
+            placeholdersVisible = placeholdersVisible
         )
         Divider(modifier = Modifier.padding(horizontal = dividerIndent))
         LocationStatRow(
             icon = Icons.TwoTone.Explore,
             name = stringResource(R.string.location_label_bearing),
-            value = bearing,
-            accuracy = bearingAccuracy,
-            accuracyVisible = showAccuracies
+            value = stats?.bearing,
+            accuracy = stats?.bearingAccuracy,
+            accuracyVisible = accuracyVisible,
+            placeholdersVisible = placeholdersVisible
         )
         Divider(modifier = Modifier.padding(horizontal = dividerIndent))
         LocationStatRow(
             icon = Icons.TwoTone.Terrain,
             name = stringResource(R.string.location_label_elevation),
-            value = elevation,
-            accuracy = elevationAccuracy,
-            accuracyVisible = showAccuracies
+            value = stats?.elevation,
+            accuracy = stats?.elevationAccuracy,
+            accuracyVisible = accuracyVisible,
+            placeholdersVisible = placeholdersVisible
         )
         Divider(modifier = Modifier.padding(horizontal = dividerIndent))
         LocationStatRow(
             icon = Icons.TwoTone.Speed,
             name = stringResource(R.string.location_label_speed),
-            value = speed,
-            accuracy = speedAccuracy,
-            accuracyVisible = showAccuracies
+            value = stats?.speed,
+            accuracy = stats?.speedAccuracy,
+            accuracyVisible = accuracyVisible,
+            placeholdersVisible = placeholdersVisible
         )
         Text(
-            text = updatedAt,
+            text = stats?.updatedAt ?: "",
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 24.dp)
@@ -83,15 +79,17 @@ private fun Preview() {
     PositionalTheme {
         Surface {
             StatsColumn(
-                accuracy = "123.4",
-                bearing = "123.4",
-                bearingAccuracy = null,
-                elevation = "123.4",
-                elevationAccuracy = null,
-                speed = "123.4",
-                speedAccuracy = null,
-                showAccuracies = true,
-                updatedAt = "Updated at 12:00:00 PM"
+                LocationState.Stats(
+                    accuracy = "123.4",
+                    bearing = "123.4",
+                    bearingAccuracy = null,
+                    elevation = "123.4",
+                    elevationAccuracy = null,
+                    speed = "123.4",
+                    speedAccuracy = null,
+                    showAccuracies = true,
+                    updatedAt = "Updated at 12:00:00 PM"
+                )
             )
         }
     }

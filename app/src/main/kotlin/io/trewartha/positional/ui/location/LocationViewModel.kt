@@ -23,15 +23,14 @@ import io.trewartha.positional.domain.entities.CoordinatesFormat
 import io.trewartha.positional.domain.entities.Units
 import io.trewartha.positional.location.LocationFormatter
 import io.trewartha.positional.ui.utils.ForViewModel
+import io.trewartha.positional.ui.utils.mutableSharedViewModelEventFlow
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
@@ -209,15 +208,17 @@ class LocationViewModel @Inject constructor(
             coordinates = coordinates,
             maxLines = maxLines,
             coordinatesForCopy = coordinatesForCopy,
-            accuracy = accuracy,
-            bearing = bearing,
-            bearingAccuracy = bearingAccuracy,
-            elevation = elevation,
-            elevationAccuracy = elevationAccuracy,
-            speed = speed,
-            speedAccuracy = speedAccuracy,
-            showAccuracies = showAccuracies,
-            updatedAt = updatedAt,
+            stats = LocationState.Stats(
+                accuracy = accuracy,
+                bearing = bearing,
+                bearingAccuracy = bearingAccuracy,
+                elevation = elevation,
+                elevationAccuracy = elevationAccuracy,
+                speed = speed,
+                speedAccuracy = speedAccuracy,
+                showAccuracies = showAccuracies,
+                updatedAt = updatedAt,
+            ),
             screenLockEnabled = screenLockEnabled,
         )
     }.stateIn(
@@ -228,7 +229,7 @@ class LocationViewModel @Inject constructor(
 
     val events: Flow<LocationEvent>
         get() = _events
-    private val _events = MutableSharedFlow<LocationEvent>()
+    private val _events = mutableSharedViewModelEventFlow<LocationEvent>()
 
     fun onCopyClick() {
         viewModelScope.launch {

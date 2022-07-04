@@ -5,15 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.view.WindowManager
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +32,7 @@ import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.activity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 
 @Composable
 fun LocationScreen(
@@ -90,30 +88,20 @@ private fun LocationContent(
 
     val window = activity?.window
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        val locationPermissions = remember {
-            listOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        }
-        val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
-        if (locationPermissionsState.allPermissionsGranted) {
-            AnimatedVisibility(
-                visible = state == null,
-                enter = fadeIn() + slideInVertically(initialOffsetY = { it / 24 }),
-                exit = fadeOut() + slideOutVertically(targetOffsetY = { -it / 24 })
-            ) {
-                LocationLoadingContent()
+    Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            val locationPermissions = remember {
+                listOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                )
             }
-            AnimatedVisibility(
-                visible = state != null,
-                enter = fadeIn() + slideInVertically(initialOffsetY = { it / 24 }),
-                exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 24 })
-            ) {
-                if (state == null) return@AnimatedVisibility
+            val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
+            if (locationPermissionsState.allPermissionsGranted) {
                 LocationLoadedContent(
                     state = state,
                     onShareClick = onShareClick,
@@ -121,21 +109,16 @@ private fun LocationContent(
                     onScreenLockCheckedChange = onScreenLockCheckedChange,
                     onHelpClick = onHelpClick
                 )
+            } else if (locationPermissionsState.revokedPermissions.size == locationPermissions.size) {
+                LocationPermissionRequiredContent(
+                    locationPermissionsState = locationPermissionsState,
+                    onNavigateToSettings = onNavigateToSettings
+                )
+            } else {
+                TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
             }
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        } else if (locationPermissionsState.revokedPermissions.size == locationPermissions.size) {
-            LocationPermissionRequiredContent(
-                locationPermissionsState = locationPermissionsState,
-                onNavigateToSettings = onNavigateToSettings
-            )
-        } else {
-            TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
         }
     }
-
     LaunchedEffect(events) {
         events.collect {
             when (it) {
@@ -143,22 +126,32 @@ private fun LocationContent(
                     onNavigateToHelp()
                 is LocationEvent.NavigateToSettings ->
                     onNavigateToSettings()
-                is LocationEvent.ShowCoordinatesCopyErrorSnackbar ->
-                    snackbarHostState.showSnackbar(coordinatesCopyErrorMessage)
-                is LocationEvent.ShowCoordinatesCopySuccessBothSnackbar ->
-                    snackbarHostState.showSnackbar(coordinatesCopySuccessBothMessage)
-                is LocationEvent.ShowCoordinatesCopySuccessLatitudeSnackbar ->
-                    snackbarHostState.showSnackbar(coordinatesCopySuccessLatitudeMessage)
-                is LocationEvent.ShowCoordinatesCopySuccessLongitudeSnackbar ->
-                    snackbarHostState.showSnackbar(coordinatesCopySuccessLongitudeMessage)
-                is LocationEvent.ShowCoordinatesShareErrorSnackbar ->
-                    snackbarHostState.showSnackbar(coordinatesShareErrorMessage)
+                is LocationEvent.ShowCoordinatesCopyErrorSnackbar -> launch {
+                    snackbarHostState.showSnackbarWithDismissButton(coordinatesCopyErrorMessage)
+                }
+                is LocationEvent.ShowCoordinatesCopySuccessBothSnackbar -> launch {
+                    snackbarHostState
+                        .showSnackbarWithDismissButton(coordinatesCopySuccessBothMessage)
+                }
+                is LocationEvent.ShowCoordinatesCopySuccessLatitudeSnackbar -> launch {
+                    snackbarHostState
+                        .showSnackbarWithDismissButton(coordinatesCopySuccessLatitudeMessage)
+                }
+                is LocationEvent.ShowCoordinatesCopySuccessLongitudeSnackbar -> launch {
+                    snackbarHostState
+                        .showSnackbarWithDismissButton(coordinatesCopySuccessLongitudeMessage)
+                }
+                is LocationEvent.ShowCoordinatesShareErrorSnackbar -> launch {
+                    snackbarHostState.showSnackbarWithDismissButton(coordinatesShareErrorMessage)
+                }
                 is LocationEvent.ShowCoordinatesShareSheet ->
                     activity?.let { a -> showCoordinatesShareSheet(a, it) }
-                is LocationEvent.ShowScreenLockedSnackbar ->
-                    snackbarHostState.showSnackbar(screenLockedMessage)
-                is LocationEvent.ShowScreenUnlockedSnackbar ->
-                    snackbarHostState.showSnackbar(screenUnlockedMessage)
+                is LocationEvent.ShowScreenLockedSnackbar -> launch {
+                    snackbarHostState.showSnackbarWithDismissButton(screenLockedMessage)
+                }
+                is LocationEvent.ShowScreenUnlockedSnackbar -> launch {
+                    snackbarHostState.showSnackbarWithDismissButton(screenUnlockedMessage)
+                }
             }
         }
     }
@@ -189,6 +182,11 @@ private fun Context.navigateToSettings(packageName: String) {
         Uri.fromParts("package", packageName, null)
     )
     startActivity(settingsIntent)
+}
+
+private suspend fun SnackbarHostState.showSnackbarWithDismissButton(message: String) {
+    currentSnackbarData?.dismiss()
+    showSnackbar(message, withDismissAction = true)
 }
 
 @ThemePreviews

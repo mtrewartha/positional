@@ -61,8 +61,6 @@
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_elevation">Elevation</string>
     <string name="location_label_speed">Speed</string>
-    <string name="location_loading_headline">Getting your location…</string>
-    <string name="location_loading_body">This shouldn\'t take too long.</string>
     <string name="location_permission_required_button_ok" translatable="false">@string/common_ok</string>
     <string name="location_permission_required_button_privacy_policy">Here is our simple privacy policy.</string>
     <string name="location_permission_required_body">Positional is private by design. Your location is never shared with anyone unless you explicitly share it.</string>

@@ -56,6 +56,8 @@ object Dependencies {
         "com.google.accompanist:accompanist-insets-ui:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistPermissions =
         "com.google.accompanist:accompanist-permissions:${Versions.Dependencies.googleAccompanist}"
+    const val googleAccompanistPlaceholder =
+        "com.google.accompanist:accompanist-placeholder:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistSystemUIController =
         "com.google.accompanist:accompanist-systemuicontroller:${Versions.Dependencies.googleAccompanist}"
     const val guava =
