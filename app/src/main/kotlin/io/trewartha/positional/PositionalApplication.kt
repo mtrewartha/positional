@@ -6,9 +6,8 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
-import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.HiltAndroidApp
-import io.trewartha.positional.utils.FirebaseCrashlyticsTree
+import io.trewartha.positional.utils.log.FirebaseCrashlyticsTree
 import timber.log.Timber
 
 @HiltAndroidApp
@@ -24,8 +23,6 @@ class PositionalApplication : Application() {
         }
 
         FirebasePerformance.getInstance().isPerformanceCollectionEnabled = !BuildConfig.DEBUG
-
-        AndroidThreeTen.init(this)
 
         val logTree = if (BuildConfig.DEBUG) Timber.DebugTree()
         else FirebaseCrashlyticsTree(firebaseCrashlytics)

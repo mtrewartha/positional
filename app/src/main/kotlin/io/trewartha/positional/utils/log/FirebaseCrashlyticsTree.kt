@@ -1,4 +1,4 @@
-package io.trewartha.positional.utils
+package io.trewartha.positional.utils.log
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber

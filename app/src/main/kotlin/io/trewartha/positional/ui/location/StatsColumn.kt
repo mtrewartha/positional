@@ -47,9 +47,9 @@ fun StatsColumn(stats: LocationState.Stats?) {
         Divider(modifier = Modifier.padding(horizontal = dividerIndent))
         LocationStatRow(
             icon = Icons.TwoTone.Terrain,
-            name = stringResource(R.string.location_label_elevation),
-            value = stats?.elevation,
-            accuracy = stats?.elevationAccuracy,
+            name = stringResource(R.string.location_label_altitude),
+            value = stats?.altitude,
+            accuracy = stats?.altitudeAccuracy,
             accuracyVisible = accuracyVisible,
             placeholdersVisible = placeholdersVisible
         )
@@ -83,8 +83,8 @@ private fun Preview() {
                     accuracy = "123.4",
                     bearing = "123.4",
                     bearingAccuracy = null,
-                    elevation = "123.4",
-                    elevationAccuracy = null,
+                    altitude = "123.4",
+                    altitudeAccuracy = null,
                     speed = "123.4",
                     speedAccuracy = null,
                     showAccuracies = true,

@@ -1,4 +1,4 @@
-package io.trewartha.positional.location
+package io.trewartha.positional.ui.utils
 
 object DistanceUtils {
 

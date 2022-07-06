@@ -1,20 +1,20 @@
-package io.trewartha.positional.ui.utils
+package io.trewartha.positional.ui.utils.format
 
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.trewartha.positional.R
-import org.threeten.bp.Instant
 import java.text.DateFormat.SHORT
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.datetime.Instant
 
-class DateTimeFormatter @Inject constructor(
+class AndroidDateTimeFormatter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val sharedPreferences: SharedPreferences,
-) {
+) : DateTimeFormatter {
 
     private val timeFormatKey by lazy { context.getString(R.string.settings_time_format_key) }
     private val timeFormatValue12Hour by lazy {
@@ -28,22 +28,22 @@ class DateTimeFormatter @Inject constructor(
         SimpleDateFormat("HH:mm:ss", Locale.getDefault())
     }
 
-    fun getFormattedDate(instant: Instant?): String? = if (instant == null) {
+    override fun getFormattedDate(instant: Instant?): String? = if (instant == null) {
         context.getString(R.string.sun_date_unknown)
     } else {
-        simpleDateFormat.format(Date(instant.toEpochMilli()))
+        simpleDateFormat.format(Date(instant.toEpochMilliseconds()))
     }
 
-    fun getFormattedTime(instant: Instant, includeSeconds: Boolean = false): String = when {
+    override fun getFormattedTime(instant: Instant, includeSeconds: Boolean): String = when {
         use12HourTime() -> if (includeSeconds) {
-            timeFormat12HourWithSeconds.format(Date(instant.toEpochMilli()))
+            timeFormat12HourWithSeconds.format(Date(instant.toEpochMilliseconds()))
         } else {
-            timeFormat12Hour.format(Date(instant.toEpochMilli()))
+            timeFormat12Hour.format(Date(instant.toEpochMilliseconds()))
         }
         else -> if (includeSeconds) {
-            timeFormat24HourWithSeconds.format(Date(instant.toEpochMilli()))
+            timeFormat24HourWithSeconds.format(Date(instant.toEpochMilliseconds()))
         } else {
-            timeFormat24Hour.format(Date(instant.toEpochMilli()))
+            timeFormat24Hour.format(Date(instant.toEpochMilliseconds()))
         }
     }
 

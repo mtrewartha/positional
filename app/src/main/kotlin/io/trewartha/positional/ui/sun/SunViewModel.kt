@@ -1,7 +1,6 @@
 package io.trewartha.positional.ui.sun
 
 import android.app.Application
-import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -14,18 +13,15 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.utils.DateTimeFormatter
-import org.threeten.bp.Instant
+import io.trewartha.positional.ui.utils.format.DateTimeFormatter
 import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Instant
 
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
 class SunViewModel @Inject constructor(
     app: Application,
@@ -33,7 +29,7 @@ class SunViewModel @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient
 ) : AndroidViewModel(app) {
 
-    val sunState: LiveData<SunState> = callbackFlow<Location> {
+    val sunState: LiveData<SunState> = callbackFlow {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 Timber.d("Received location update")
@@ -93,10 +89,10 @@ class SunViewModel @Inject constructor(
     private val formatUpdatedAt = app.getString(R.string.location_updated_at)
 
     private fun formatDate(epochMillis: Long?): String? =
-        epochMillis?.let { dateTimeFormatter.getFormattedDate(Instant.ofEpochMilli(it)) }
+        epochMillis?.let { dateTimeFormatter.getFormattedDate(Instant.fromEpochMilliseconds(it)) }
 
     private fun formatTime(epochMillis: Long?): String? =
-        epochMillis?.let { dateTimeFormatter.getFormattedTime(Instant.ofEpochMilli(it)) }
+        epochMillis?.let { dateTimeFormatter.getFormattedTime(Instant.fromEpochMilliseconds(it)) }
 
     data class SunState(
         val date: String?,

@@ -44,6 +44,8 @@ object Dependencies {
         "androidx.preference:preference-ktx:${Versions.Dependencies.androidXPreference}"
     const val androidXWindow =
         "androidx.window:window:${Versions.Dependencies.androidXWindow}"
+    const val cashAppTurbine =
+        "app.cash.turbine:turbine:${Versions.Dependencies.cashAppTurbine}"
     const val firebaseBoM =
         "com.google.firebase:firebase-bom:${Versions.Dependencies.firebaseBoM}"
     const val firebaseAnalytics =
@@ -68,18 +70,22 @@ object Dependencies {
         "com.google.dagger:hilt-compiler:${Versions.Dependencies.hilt}"
     const val hiltNavigationFragment =
         "androidx.hilt:hilt-navigation-fragment:${Versions.Dependencies.androidXHilt}"
-    const val kotestAssertionsCoreJvm =
-        "io.kotest:kotest-assertions-core-jvm:${Versions.Dependencies.kotest}"
-    const val kotestPropertyJvm =
-        "io.kotest:kotest-property-jvm:${Versions.Dependencies.kotest}"
+    const val kotestAssertionsCore =
+        "io.kotest:kotest-assertions-core:${Versions.Dependencies.kotest}"
+    const val kotestProperty =
+        "io.kotest:kotest-property:${Versions.Dependencies.kotest}"
     const val kotestRunnerJUnit5 =
-        "io.kotest:kotest-runner-junit5-jvm:${Versions.Dependencies.kotest}"
+        "io.kotest:kotest-runner-junit5:${Versions.Dependencies.kotest}"
     const val kotlinReflect =
         "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
     const val kotlinxCoroutinesAndroid =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Dependencies.kotlinxCoroutines}"
     const val kotlinxCoroutinesCore =
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Dependencies.kotlinxCoroutines}"
+    const val kotlinxCoroutinesPlayServices =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.Dependencies.kotlinxCoroutines}"
+    const val kotlinxDatetime =
+        "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Dependencies.kotlinxDatetime}"
     const val markwon =
         "io.noties.markwon:core:${Versions.Dependencies.markwon}"
     const val pageIndicatorView =
@@ -88,8 +94,6 @@ object Dependencies {
         "com.google.android.gms:play-services-location:${Versions.Dependencies.playServicesLocation}"
     const val sunriseSunset =
         "ca.rmen:lib-sunrise-sunset:${Versions.Dependencies.sunriseSunset}"
-    const val threeTenAbp =
-        "com.jakewharton.threetenabp:threetenabp:${Versions.Dependencies.threeTenAbp}"
     const val timber =
         "com.jakewharton.timber:timber:${Versions.Dependencies.timber}"
 }

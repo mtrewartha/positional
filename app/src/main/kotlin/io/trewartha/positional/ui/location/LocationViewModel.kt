@@ -1,35 +1,24 @@
 package io.trewartha.positional.ui.location
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.SharedPreferences
-import android.location.Location
-import android.os.Looper
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationAvailability
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.firebase.perf.FirebasePerformance
-import com.google.firebase.perf.metrics.Trace
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
 import io.trewartha.positional.domain.entities.CoordinatesFormat
 import io.trewartha.positional.domain.entities.Units
-import io.trewartha.positional.location.LocationFormatter
+import io.trewartha.positional.ui.utils.format.LocationFormatter
+import io.trewartha.positional.domain.entities.Locator
 import io.trewartha.positional.ui.utils.ForViewModel
 import io.trewartha.positional.ui.utils.mutableSharedViewModelEventFlow
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -37,20 +26,15 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
     private val app: Application,
     private val clipboardManager: ClipboardManager,
-    private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val locationFormatter: LocationFormatter,
+    locator: Locator,
     private val prefs: SharedPreferences
 ) : AndroidViewModel(app) {
 
@@ -81,71 +65,6 @@ class LocationViewModel @Inject constructor(
             CoordinatesFormat.valueOf(it!!.uppercase())
         }.catch {
             emit(DEFAULT_COORDINATES_FORMAT)
-        }
-
-    @SuppressLint("MissingPermission") // The linter doesn't know this is handled in a Flow.catch
-    private val locationFlow: Flow<Location> =
-        callbackFlow {
-            var firstLocationUpdateTrace: Trace? =
-                FirebasePerformance.getInstance().newTrace("first_location")
-            val locationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    val location = locationResult.lastLocation
-                    trySend(location)
-                    if (firstLocationUpdateTrace != null) {
-                        val accuracyCounter = when (location.accuracy) {
-                            in 0.0f.rangeTo(5.0f) -> COUNTER_ACCURACY_VERY_HIGH
-                            in 5.0f.rangeTo(10.0f) -> COUNTER_ACCURACY_HIGH
-                            in 10.0f.rangeTo(15.0f) -> COUNTER_ACCURACY_MEDIUM
-                            in 15.0f.rangeTo(20.0f) -> COUNTER_ACCURACY_LOW
-                            else -> COUNTER_ACCURACY_VERY_LOW
-                        }
-                        firstLocationUpdateTrace?.incrementMetric(accuracyCounter, 1L)
-                        firstLocationUpdateTrace?.stop()
-                        firstLocationUpdateTrace = null
-                    }
-                }
-
-                override fun onLocationAvailability(locationAvailability: LocationAvailability) {
-                    Timber.d("Location availability changed to $locationAvailability")
-                }
-            }
-
-            val locationRequest = LocationRequest.create()
-                .setPriority(LOCATION_UPDATE_PRIORITY)
-                .setInterval(LOCATION_UPDATE_INTERVAL_MS)
-            Timber.i("Requesting location updates: $locationRequest")
-            if (firstLocationUpdateTrace == null) {
-                firstLocationUpdateTrace?.start()
-            }
-
-            suspendCancellableCoroutine<Exception?> { continuation ->
-                fusedLocationProviderClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.getMainLooper()
-                ).addOnCompleteListener { continuation.resume(it.exception) {} }
-            }?.let { throw it }
-
-            awaitClose {
-                Timber.i("Suspending location updates")
-                fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-            }
-        }.onStart {
-            Timber.i("Starting location flow")
-        }.onEach {
-            Timber.i("Location update received")
-        }.retry { throwable ->
-            if (throwable is SecurityException) {
-                Timber.w("Waiting for location permissions to be granted")
-                delay(1.seconds)
-                true
-            } else {
-                Timber.w(throwable, "Waiting for location permissions to be granted")
-                throw throwable
-            }
-        }.onCompletion {
-            Timber.i("Location flow completed")
         }
 
     private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
@@ -187,7 +106,7 @@ class LocationViewModel @Inject constructor(
 
     val state: StateFlow<LocationState?> = combine(
         accuracyVisibilityFlow,
-        locationFlow,
+        locator.locationFlow,
         coordinatesFormatFlow,
         screenLockEnabledFlow,
         unitsFlow,
@@ -198,8 +117,8 @@ class LocationViewModel @Inject constructor(
             locationFormatter.getCoordinatesForCopy(location, coordinatesFormat)
         val bearing = locationFormatter.getBearing(location)
         val bearingAccuracy = locationFormatter.getBearingAccuracy(location)
-        val elevation = locationFormatter.getElevation(location, units)
-        val elevationAccuracy = locationFormatter.getElevationAccuracy(location, units)
+        val altitude = locationFormatter.getAltitude(location, units)
+        val altitudeAccuracy = locationFormatter.getAltitudeAccuracy(location, units)
         val speed = locationFormatter.getSpeed(location, units)
         val speedAccuracy = locationFormatter.getSpeedAccuracy(location, units)
         val updatedAt = locationFormatter.getTimestamp(location)
@@ -212,8 +131,8 @@ class LocationViewModel @Inject constructor(
                 accuracy = accuracy,
                 bearing = bearing,
                 bearingAccuracy = bearingAccuracy,
-                elevation = elevation,
-                elevationAccuracy = elevationAccuracy,
+                altitude = altitude,
+                altitudeAccuracy = altitudeAccuracy,
                 speed = speed,
                 speedAccuracy = speedAccuracy,
                 showAccuracies = showAccuracies,
@@ -313,16 +232,9 @@ class LocationViewModel @Inject constructor(
     }
 
     companion object {
-        private const val COUNTER_ACCURACY_VERY_HIGH = "accuracy_very_high"
-        private const val COUNTER_ACCURACY_HIGH = "accuracy_high"
-        private const val COUNTER_ACCURACY_MEDIUM = "accuracy_medium"
-        private const val COUNTER_ACCURACY_LOW = "accuracy_low"
-        private const val COUNTER_ACCURACY_VERY_LOW = "accuracy_very_low"
         private val DEFAULT_COORDINATES_FORMAT = CoordinatesFormat.DD
         private const val DEFAULT_SCREEN_LOCK = false
         private const val DEFAULT_SHOW_ACCURACIES = true
         private val DEFAULT_UNITS = Units.METRIC
-        private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
-        private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 }

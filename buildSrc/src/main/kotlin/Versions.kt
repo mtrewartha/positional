@@ -42,18 +42,19 @@ object Versions {
         const val androidXNavigation = "2.5.0-rc01"
         const val androidXPreference = "1.2.0"
         const val androidXWindow = "1.1.0-alpha02"
+        const val cashAppTurbine = "0.8.0"
         const val firebaseBoM = "30.1.0"
         const val googleAccompanist = "0.24.10-beta"
         const val guava = "31.1-android"
         const val hilt = "2.42"
         const val kotlin = Versions.kotlin
         const val kotlinxCoroutines = "1.6.2"
-        const val kotest = "5.3.0"
+        const val kotlinxDatetime = "0.4.0"
+        const val kotest = "5.3.2"
         const val markwon = "4.6.2"
         const val pageIndicatorView = "v.1.0.3"
         const val playServicesLocation = "19.0.1"
         const val sunriseSunset = "1.1.1"
-        const val threeTenAbp = "1.4.0"
         const val timber = "5.0.1"
     }
 
@@ -62,7 +63,6 @@ object Versions {
         const val firebaseCrashlytics = "2.9.0"
         const val firebasePerf = "1.4.1"
         const val googleServices = "4.3.10"
-        const val gradleVersions = "0.42.0"
         const val hilt = Versions.Dependencies.hilt
         const val kotlin = Versions.kotlin
     }

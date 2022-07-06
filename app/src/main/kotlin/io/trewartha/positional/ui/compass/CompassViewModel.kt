@@ -10,36 +10,38 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
-import io.trewartha.positional.compass.Compass
-import io.trewartha.positional.compass.CompassAccuracy
-import io.trewartha.positional.compass.CompassMode
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.ProducerScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import io.trewartha.positional.domain.entities.AndroidSensorCompass
+import io.trewartha.positional.domain.entities.Compass
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.roundToInt
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 @Suppress("UnstableApiUsage")
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
 class CompassViewModel @Inject constructor(
     private val app: Application,
-    private val compass: Compass,
+    private val compass: AndroidSensorCompass,
     private val prefs: SharedPreferences,
     private val windowManager: WindowManager
 ) : AndroidViewModel(app) {
 
     val accelerometerAccuracy: LiveData<String> by lazy {
-        compass.accelerometerAccuracy
+        compass.accelerometerAccuracyFlow
             .map { getAccuracyText(it) }
             .asLiveData()
     }
 
     val azimuth: LiveData<String> by lazy {
-        compass.azimuth
+        compass.azimuthFlow
             .mapNotNull { it }
             .map {
                 val azimuth = (adjustAzimuthForDisplayRotation(it).roundToInt() + 360) % 360
@@ -51,7 +53,7 @@ class CompassViewModel @Inject constructor(
     }
 
     val compassRotation: LiveData<Float> by lazy {
-        compass.azimuth
+        compass.azimuthFlow
             .mapNotNull { it }
             .map { -((adjustAzimuthForDisplayRotation(it) + 360f) % 360f) }
             .onStart { emit(0f) }
@@ -59,7 +61,7 @@ class CompassViewModel @Inject constructor(
     }
 
     val declination: LiveData<String> by lazy {
-        (compass.magneticDeclination as Flow<Float?>)
+        (compass.magneticDeclinationFlow as Flow<Float?>)
             .onStart { emit(null) }
             .map {
                 if (it == null) {
@@ -72,7 +74,7 @@ class CompassViewModel @Inject constructor(
     }
 
     val magnetometerAccuracy: LiveData<String> by lazy {
-        compass.magnetometerAccuracy
+        compass.magnetometerAccuracyFlow
             .map { getAccuracyText(it) }
             .asLiveData()
     }
@@ -91,15 +93,15 @@ class CompassViewModel @Inject constructor(
             }
         }.map {
             when (it) {
-                compassModePrefValueMagneticNorth -> CompassMode.MAGNETIC_NORTH
-                compassModePrefValueTrueNorth -> CompassMode.TRUE_NORTH
-                else -> CompassMode.TRUE_NORTH
+                compassModePrefValueMagneticNorth -> Compass.Mode.MAGNETIC_NORTH
+                compassModePrefValueTrueNorth -> Compass.Mode.TRUE_NORTH
+                else -> Compass.Mode.TRUE_NORTH
             }
         }.map {
             app.getString(
                 when (it) {
-                    CompassMode.MAGNETIC_NORTH -> R.string.compass_mode_magnetic_north
-                    CompassMode.TRUE_NORTH -> R.string.compass_mode_true_north
+                    Compass.Mode.MAGNETIC_NORTH -> R.string.compass_mode_magnetic_north
+                    Compass.Mode.TRUE_NORTH -> R.string.compass_mode_true_north
                 }
             )
         }.asLiveData()
@@ -137,7 +139,8 @@ class CompassViewModel @Inject constructor(
     }
 
     private fun adjustAzimuthForDisplayRotation(azimuth: Float): Float {
-        return when (val displayRotation = windowManager.defaultDisplay.rotation) { // TODO: Handle window orientation in some new Compose-friendly way
+        return when (val displayRotation =
+            windowManager.defaultDisplay.rotation) { // TODO: Handle window orientation in some new Compose-friendly way
             Surface.ROTATION_0 -> azimuth
             Surface.ROTATION_90 -> azimuth - 270f
             Surface.ROTATION_180 -> azimuth - 180f
@@ -146,14 +149,14 @@ class CompassViewModel @Inject constructor(
         }
     }
 
-    private fun getAccuracyText(compassAccuracy: CompassAccuracy?): String {
+    private fun getAccuracyText(compassAccuracy: Compass.Accuracy?): String {
         return app.getString(
             when (compassAccuracy) {
-                CompassAccuracy.UNUSABLE -> R.string.compass_accuracy_no_contact
-                CompassAccuracy.UNRELIABLE -> R.string.compass_accuracy_unreliable
-                CompassAccuracy.LOW -> R.string.compass_accuracy_low
-                CompassAccuracy.MEDIUM -> R.string.compass_accuracy_medium
-                CompassAccuracy.HIGH -> R.string.compass_accuracy_high
+                Compass.Accuracy.UNUSABLE -> R.string.compass_accuracy_no_contact
+                Compass.Accuracy.UNRELIABLE -> R.string.compass_accuracy_unreliable
+                Compass.Accuracy.LOW -> R.string.compass_accuracy_low
+                Compass.Accuracy.MEDIUM -> R.string.compass_accuracy_medium
+                Compass.Accuracy.HIGH -> R.string.compass_accuracy_high
                 null -> R.string.compass_accuracy_unknown
             }
         )
