@@ -30,6 +30,14 @@
     <string name="compass_accuracy_title">Accuracy </string>
     <string name="compass_accuracy_unknown">@string/common_dash</string>
     <string name="compass_accuracy_unreliable">Unreliable</string>
+    <string name="compass_direction_east">E</string>
+    <string name="compass_direction_north">N</string>
+    <string name="compass_direction_northeast">NE</string>
+    <string name="compass_direction_northwest">NW</string>
+    <string name="compass_direction_south">S</string>
+    <string name="compass_direction_southeast">SE</string>
+    <string name="compass_direction_southwest">SW</string>
+    <string name="compass_direction_west">W</string>
     <string name="compass_magnetic_field_strength_label">Field Strength</string>
     <string name="compass_magnetic_field_strength_value">%d μT</string>
     <string name="compass_mode_label">Mode</string>
