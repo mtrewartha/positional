@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.trewartha.positional.R
 import io.trewartha.positional.domain.entities.Compass
@@ -47,7 +46,6 @@ import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.placeholder
-import kotlin.math.roundToInt
 
 @Composable
 fun CompassScreen(
@@ -178,34 +176,38 @@ private fun SensorsPresentContent(
         Icon(
             imageVector = Icons.Rounded.North,
             contentDescription = null,
-            modifier = Modifier.size(48.dp),
-            tint = MaterialTheme.colorScheme.tertiary
+            modifier = Modifier.size(48.dp)
         )
-        ConstraintLayout(
-            modifier = Modifier
-                .widthIn(min = 128.dp)
-                .placeholder(visible = placeholdersVisible)
-        ) {
-            val (degreesText, symbolText) = createRefs()
-            Text(
-                text = "${azimuthDegrees.roundToInt() % 360}",
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier.constrainAs(degreesText) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
+        Text(
+            text = stringResource(
+                when {
+                    AZIMUTH_NORTHWEST_MIN <= azimuthDegrees &&
+                            azimuthDegrees < AZIMUTH_NORTHWEST_MAX ->
+                        R.string.compass_direction_northwest
+                    AZIMUTH_NORTHEAST_MIN <= azimuthDegrees &&
+                            azimuthDegrees < AZIMUTH_NORTHEAST_MAX ->
+                        R.string.compass_direction_northeast
+                    AZIMUTH_SOUTHWEST_MIN <= azimuthDegrees &&
+                            azimuthDegrees < AZIMUTH_SOUTHWEST_MAX ->
+                        R.string.compass_direction_southwest
+                    AZIMUTH_SOUTHEAST_MIN <= azimuthDegrees &&
+                            azimuthDegrees < AZIMUTH_SOUTHEAST_MAX ->
+                        R.string.compass_direction_southeast
+                    AZIMUTH_EAST_MIN <= azimuthDegrees &&
+                            azimuthDegrees < AZIMUTH_EAST_MAX ->
+                        R.string.compass_direction_east
+                    AZIMUTH_SOUTH_MIN <= azimuthDegrees &&
+                            azimuthDegrees < AZIMUTH_SOUTH_MAX ->
+                        R.string.compass_direction_south
+                    AZIMUTH_WEST_MIN <= azimuthDegrees &&
+                            azimuthDegrees < AZIMUTH_WEST_MAX ->
+                        R.string.compass_direction_west
+                    else ->
+                        R.string.compass_direction_north
                 }
-            )
-            Text(
-                text = "°",
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier.constrainAs(symbolText) {
-                    top.linkTo(degreesText.top)
-                    start.linkTo(degreesText.end)
-                }
-            )
-        }
+            ),
+            style = MaterialTheme.typography.displayLarge
+        )
         Compass(
             azimuthDegrees = azimuthDegrees,
             modifier = Modifier
@@ -217,6 +219,23 @@ private fun SensorsPresentContent(
         StatsColumn(state = state)
     }
 }
+
+private const val AZIMUTH_NORTH_MIN = 337.5f
+private const val AZIMUTH_NORTH_MAX = 22.5f
+private const val AZIMUTH_EAST_MIN = 67.5f
+private const val AZIMUTH_EAST_MAX = 112.5f
+private const val AZIMUTH_SOUTH_MIN = 157.5f
+private const val AZIMUTH_SOUTH_MAX = 202.5f
+private const val AZIMUTH_WEST_MIN = 247.5f
+private const val AZIMUTH_WEST_MAX = 292.5f
+private const val AZIMUTH_NORTHEAST_MIN = AZIMUTH_NORTH_MAX
+private const val AZIMUTH_NORTHEAST_MAX = AZIMUTH_EAST_MIN
+private const val AZIMUTH_SOUTHEAST_MIN = AZIMUTH_EAST_MAX
+private const val AZIMUTH_SOUTHEAST_MAX = AZIMUTH_SOUTH_MIN
+private const val AZIMUTH_SOUTHWEST_MIN = AZIMUTH_SOUTH_MAX
+private const val AZIMUTH_SOUTHWEST_MAX = AZIMUTH_WEST_MIN
+private const val AZIMUTH_NORTHWEST_MIN = AZIMUTH_WEST_MAX
+private const val AZIMUTH_NORTHWEST_MAX = AZIMUTH_NORTH_MIN
 
 @ThemePreviews
 @WindowSizePreviews
