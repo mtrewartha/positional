@@ -35,6 +35,7 @@ object Versions {
         const val androidXActivityCompose = "1.5.0-rc01"
         const val androidXCompose = "1.2.0-beta03"
         const val androidXComposeMaterial3 = "1.0.0-alpha14"
+        const val androidXConstraintLayoutCompose = "1.0.0-beta02"
         const val androidXFragment = "1.5.0-rc01"
         const val androidXHilt = "1.0.0"
         const val androidXLegacySupportV4 = "1.0.0"
@@ -45,6 +46,7 @@ object Versions {
         const val cashAppTurbine = "0.8.0"
         const val firebaseBoM = "30.1.0"
         const val googleAccompanist = "0.24.10-beta"
+        const val googleMaterial = "1.7.0-alpha02"
         const val guava = "31.1-android"
         const val hilt = "2.42"
         const val kotlin = Versions.kotlin

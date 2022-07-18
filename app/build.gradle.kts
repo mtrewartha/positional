@@ -92,7 +92,6 @@ tasks.withType<Test> {
 dependencies {
     kapt(Dependencies.hiltCompiler)
 
-    implementation(files("libs/worldwind.jar"))
     implementation(project(":domain"))
     implementation(Dependencies.androidXActivityCompose)
     implementation(Dependencies.androidXComposeFoundation)
@@ -102,6 +101,7 @@ dependencies {
     implementation(Dependencies.androidXComposeMaterialIconsExtended)
     implementation(Dependencies.androidXComposeUI)
     implementation(Dependencies.androidXComposeUITooling)
+    implementation(Dependencies.androidXConstraintLayoutCompose)
     implementation(Dependencies.androidXFragmentKtx)
     implementation(Dependencies.androidXHiltCompiler)
     implementation(Dependencies.androidXHiltNavigationCompose)
@@ -121,6 +121,7 @@ dependencies {
     implementation(Dependencies.googleAccompanistPermissions)
     implementation(Dependencies.googleAccompanistPlaceholder)
     implementation(Dependencies.googleAccompanistSystemUIController)
+    implementation(Dependencies.googleMaterial)
     implementation(Dependencies.guava)
     implementation(Dependencies.hiltAndroid)
     implementation(Dependencies.hiltNavigationFragment)

@@ -20,6 +20,8 @@ object Dependencies {
         "androidx.compose.ui:ui-test-junit4:${Versions.Dependencies.androidXCompose}"
     const val androidXComposeUITooling =
         "androidx.compose.ui:ui-tooling:${Versions.Dependencies.androidXCompose}"
+    const val androidXConstraintLayoutCompose =
+        "androidx.constraintlayout:constraintlayout-compose:${Versions.Dependencies.androidXConstraintLayoutCompose}"
     const val androidXFragmentKtx =
         "androidx.fragment:fragment-ktx:${Versions.Dependencies.androidXFragment}"
     const val androidXHiltCompiler =
@@ -62,6 +64,8 @@ object Dependencies {
         "com.google.accompanist:accompanist-placeholder:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistSystemUIController =
         "com.google.accompanist:accompanist-systemuicontroller:${Versions.Dependencies.googleAccompanist}"
+    const val googleMaterial =
+        "com.google.android.material:material:${Versions.Dependencies.googleMaterial}"
     const val guava =
         "com.google.guava:guava:${Versions.Dependencies.guava}"
     const val hiltAndroid =

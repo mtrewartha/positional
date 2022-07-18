@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.FileCopy
-import androidx.compose.material.icons.twotone.Help
-import androidx.compose.material.icons.twotone.ScreenLockPortrait
-import androidx.compose.material.icons.twotone.Share
-import androidx.compose.material.icons.twotone.Smartphone
+import androidx.compose.material.icons.rounded.FileCopy
+import androidx.compose.material.icons.rounded.Help
+import androidx.compose.material.icons.rounded.ScreenLockPortrait
+import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
@@ -73,14 +73,14 @@ fun LocationLoadedContent(
         ) {
             IconButton(onClick = onShareClick) {
                 Icon(
-                    imageVector = Icons.TwoTone.Share,
+                    imageVector = Icons.Rounded.Share,
                     contentDescription = stringResource(R.string.location_share_button_content_description),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
             IconButton(onClick = onCopyClick) {
                 Icon(
-                    imageVector = Icons.TwoTone.FileCopy,
+                    imageVector = Icons.Rounded.FileCopy,
                     contentDescription = stringResource(R.string.location_coordinates_copy_content_description),
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -92,9 +92,9 @@ fun LocationLoadedContent(
             ) {
                 Icon(
                     imageVector = if (state?.screenLockEnabled == true)
-                        Icons.TwoTone.Smartphone
+                        Icons.Rounded.Smartphone
                     else
-                        Icons.TwoTone.ScreenLockPortrait,
+                        Icons.Rounded.ScreenLockPortrait,
                     contentDescription = stringResource(
                         if (state?.screenLockEnabled == true)
                             R.string.location_screen_lock_button_content_description_on
@@ -106,7 +106,7 @@ fun LocationLoadedContent(
             }
             IconButton(onClick = onHelpClick) {
                 Icon(
-                    imageVector = Icons.TwoTone.Help,
+                    imageVector = Icons.Rounded.Help,
                     contentDescription = stringResource(R.string.location_help_button_content_description),
                     tint = MaterialTheme.colorScheme.primary
                 )

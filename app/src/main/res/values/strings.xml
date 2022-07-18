@@ -16,27 +16,29 @@
     <string name="bottom_navigation_settings">Settings</string>
 
     <!-- Compass -->
-    <string name="compass_declination">%d°</string>
-    <string name="compass_declination_label">Declination:</string>
+    <string name="compass_accuracy_warning_body">The sensors used to determine your direction currently have low accuracy. Moving your device in a figure eight pattern may help.</string>
+    <string name="compass_accuracy_warning_title">Low Compass Accuracy</string>
+    <string name="compass_declination">%.2f°</string>
+    <string name="compass_declination_label">Declination</string>
     <string name="compass_degrees">%d°</string>
     <string name="compass_degrees_content_description">Current bearing %d degrees</string>
     <string name="compass_degrees_content_description_unknown">Current bearing unknown</string>
-    <string name="compass_accuracy_accelerometer_label">Accelerometer:</string>
     <string name="compass_accuracy_high">High</string>
     <string name="compass_accuracy_low">Low</string>
-    <string name="compass_accuracy_magnetometer_label">Magnetometer:</string>
     <string name="compass_accuracy_medium">Medium</string>
-    <string name="compass_accuracy_no_contact">Unusable</string>
+    <string name="compass_accuracy_unusable">Unusable</string>
     <string name="compass_accuracy_title">Accuracy </string>
     <string name="compass_accuracy_unknown">@string/common_dash</string>
     <string name="compass_accuracy_unreliable">Unreliable</string>
-    <string name="compass_mode_title">Mode</string>
-    <string name="compass_mode_magnetic_north">Magnetic North</string>
-    <string name="compass_mode_true_north">True North</string>
-    <string name="compass_missing_accelerometer_body">Missing Accelerometer</string>
-    <string name="compass_missing_hardware_caption">Unfortunately, this device does not have the sensors required to use the compass.</string>
-    <string name="compass_missing_magnetometer_body">Missing Magnetometer</string>
-    <string name="compass_missing_both_sensors_body">Missing Accelerometer or Magnetometer</string>
+    <string name="compass_magnetic_field_strength_label">Field Strength</string>
+    <string name="compass_magnetic_field_strength_value">%d μT</string>
+    <string name="compass_mode_label">Mode</string>
+    <string name="compass_mode_value_magnetic_north">Magnetic North</string>
+    <string name="compass_mode_value_true_north">True North</string>
+    <string name="compass_missing_hardware_body">The compass has been disabled.</string>
+    <string name="compass_missing_hardware_body_details">Most compass apps, like Positional, use a magnetometer that detects Earth\'s magnetic field just like a real compass uses a magnetic needle. We also use an accelerometer to determine how the device is oriented in the magnetic field (e.g. right side up or upside down). Unfortunately, your device is missing at least one of those sensors.</string>
+    <string name="compass_missing_hardware_button_why">Why?</string>
+    <string name="compass_missing_hardware_title">Missing Hardware</string>
 
     <!-- Location -->
     <string name="location_accuracy">± %s</string>

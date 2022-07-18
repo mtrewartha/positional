@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Adjust
+import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,7 +22,7 @@ import io.trewartha.positional.ui.utils.placeholder
 
 
 @Composable
-fun LocationStatRow(
+fun StatRow(
     icon: ImageVector,
     name: String,
     value: String?,
@@ -76,8 +76,8 @@ fun LocationStatRow(
 fun LocationStatRowPreview() {
     PositionalTheme {
         Surface {
-            LocationStatRow(
-                icon = Icons.TwoTone.Adjust,
+            StatRow(
+                icon = Icons.Rounded.Adjust,
                 name = "Accuracy",
                 value = "100.0",
                 accuracy = "± 10.0",
@@ -93,8 +93,8 @@ fun LocationStatRowPreview() {
 fun LocationStatRowPlaceholderPreview() {
     PositionalTheme {
         Surface {
-            LocationStatRow(
-                icon = Icons.TwoTone.Adjust,
+            StatRow(
+                icon = Icons.Rounded.Adjust,
                 name = "Accuracy",
                 value = "100.0",
                 accuracy = "± 10.0",

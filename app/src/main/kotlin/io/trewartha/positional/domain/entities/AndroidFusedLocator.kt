@@ -1,6 +1,5 @@
 package io.trewartha.positional.domain.entities
 
-import android.os.Build
 import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
@@ -23,8 +22,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.tasks.await
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 
 class AndroidFusedLocator @Inject constructor(
     coroutineDispatcher: CoroutineDispatcher,
@@ -50,6 +47,7 @@ class AndroidFusedLocator @Inject constructor(
         val locationRequest = LocationRequest.create()
             .setPriority(LOCATION_UPDATE_PRIORITY)
             .setInterval(LOCATION_UPDATE_INTERVAL_MS)
+            .setFastestInterval(LOCATION_UPDATE_INTERVAL_MS)
         try {
             Timber.i("Requesting location updates: $locationRequest")
             fusedLocationProviderClient.requestLocationUpdates(
@@ -65,7 +63,7 @@ class AndroidFusedLocator @Inject constructor(
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         }
     }.map { androidLocation ->
-        androidLocation.toDomainLocation()
+        AndroidFusedLocation(androidLocation)
     }.onStart {
         Timber.i("Starting location flow")
     }.onEach {
@@ -83,96 +81,8 @@ class AndroidFusedLocator @Inject constructor(
         Timber.i("Location flow completed")
     }.flowOn(coroutineDispatcher)
 
-    private val android.location.Location.domainLatitude: Double
-        get() = latitude
-
-    private val android.location.Location.domainLongitude: Double
-        get() = longitude
-
-    private val android.location.Location.domainHorizontalAccuracyMeters: Double?
-        get() {
-            return if (
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                hasAccuracy()
-            ) accuracy.toDouble()
-            else null
-        }
-
-    private val android.location.Location.domainAltitudeMeters: Double?
-        get() {
-            return if (hasAltitude()) altitude
-            else null
-        }
-
-    private val android.location.Location.domainAltitudeAccuracyMeters: Double?
-        get() {
-            return if (
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                hasVerticalAccuracy() &&
-                verticalAccuracyMeters >= 0
-            ) verticalAccuracyMeters.toDouble()
-            else null
-        }
-
-    private val android.location.Location.domainBearingDegrees: Double?
-        get() {
-            return if (
-                hasBearing() &&
-                speed >= MIN_SPEED_THRESHOLD
-            ) bearing.toDouble()
-            else null
-        }
-
-    private val android.location.Location.domainBearingAccuracyDegrees: Double?
-        get() {
-            return if (
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                hasBearingAccuracy() &&
-                speed >= MIN_SPEED_THRESHOLD
-            ) bearingAccuracyDegrees.toDouble()
-            else null
-        }
-
-    private val android.location.Location.domainSpeedMetersPerSecond: Double?
-        get() {
-            return if (hasSpeed() && speed >= MIN_SPEED_THRESHOLD) speed.toDouble()
-            else null
-        }
-
-    private val android.location.Location.domainSpeedAccuracyMetersPerSecond: Double?
-        get() {
-            return if (
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                hasSpeedAccuracy() &&
-                speedAccuracyMetersPerSecond > 0
-            ) speed.toDouble()
-            else null
-        }
-
-    private val android.location.Location.domainTimestamp: Instant
-        get() {
-            return if (time > 0) Instant.fromEpochMilliseconds(time)
-            else Clock.System.now()
-        }
-
-    private fun android.location.Location.toDomainLocation(): Location {
-        return Location(
-            latitude = domainLatitude,
-            longitude = domainLongitude,
-            horizontalAccuracyMeters = domainHorizontalAccuracyMeters,
-            bearingDegrees = domainBearingDegrees,
-            bearingAccuracyDegrees = domainBearingAccuracyDegrees,
-            altitudeMeters = domainAltitudeMeters,
-            altitudeAccuracyMeters = domainAltitudeAccuracyMeters,
-            speedMetersPerSecond = domainSpeedMetersPerSecond,
-            speedAccuracyMetersPerSecond = domainSpeedAccuracyMetersPerSecond,
-            timestamp = domainTimestamp,
-        )
-    }
-
     companion object {
         private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
         private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
-        private const val MIN_SPEED_THRESHOLD = 0.3f
     }
 }

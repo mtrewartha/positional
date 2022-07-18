@@ -1,5 +1,11 @@
 package io.trewartha.positional.ui
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Explore
+import androidx.compose.material.icons.rounded.MyLocation
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.WbSunny
+import androidx.compose.ui.graphics.vector.ImageVector
 import io.trewartha.positional.R
 
 sealed class Screen {
@@ -12,30 +18,30 @@ sealed class Screen {
 
     sealed class BottomNavigable : Screen() {
 
-        abstract val navIconRes: Int
+        abstract val navIcon: ImageVector
         abstract val navLabelRes: Int
 
         object Compass : BottomNavigable() {
             override val route = "compass"
-            override val navIconRes = R.drawable.ic_twotone_explore_24px
+            override val navIcon = Icons.Rounded.Explore
             override val navLabelRes = R.string.bottom_navigation_compass
         }
 
         object Location : BottomNavigable() {
             override val route = "location"
-            override val navIconRes = R.drawable.ic_twotone_my_location_24px
+            override val navIcon = Icons.Rounded.MyLocation
             override val navLabelRes = R.string.bottom_navigation_location
         }
 
         object Settings : BottomNavigable() {
             override val route = "settings"
-            override val navIconRes = R.drawable.ic_twotone_settings_24px
+            override val navIcon = Icons.Rounded.Settings
             override val navLabelRes = R.string.bottom_navigation_settings
         }
 
         object Sun : BottomNavigable() {
             override val route = "sun"
-            override val navIconRes = R.drawable.ic_twotone_wb_sunny_24px
+            override val navIcon = Icons.Rounded.WbSunny
             override val navLabelRes = R.string.bottom_navigation_sun
         }
     }

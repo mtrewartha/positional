@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Close
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +44,7 @@ private fun LocationHelpContent(
             SmallTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navigateBack() }) {
-                        Icon(Icons.TwoTone.Close, stringResource(R.string.common_close))
+                        Icon(Icons.Rounded.Close, stringResource(R.string.common_close))
                     }
                 },
                 title = {

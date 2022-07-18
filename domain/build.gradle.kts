@@ -9,6 +9,7 @@ java {
 }
 
 dependencies {
+    api(files("libs/worldwind.jar")) // TODO: Make this an implementation dependency
     api(Dependencies.kotlinxCoroutinesCore)
     api(Dependencies.kotlinxDatetime)
 

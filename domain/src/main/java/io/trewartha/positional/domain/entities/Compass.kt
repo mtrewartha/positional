@@ -6,14 +6,20 @@ interface Compass {
 
     enum class Accuracy { UNUSABLE, UNRELIABLE, LOW, MEDIUM, HIGH }
 
-    val hasAccelerometer: Boolean
-    val hasMagnetometer: Boolean
-
+    /**
+     * A [Flow] that emits the [Accuracy] of the accelerometer over time or `null` if no
+     * accelerometer is present
+     */
     val accelerometerAccuracyFlow: Flow<Accuracy?>
+
+    /**
+     * A [Flow] that emits the [Accuracy] of the magnetometer over time or `null` if no magnetometer
+     * is in use
+     */
     val magnetometerAccuracyFlow: Flow<Accuracy?>
 
-    val azimuthFlow: Flow<Float?>
-    val magneticDeclinationFlow: Flow<Float>
-
-    enum class Mode { MAGNETIC_NORTH, TRUE_NORTH }
+    /**
+     * TODO: A [Flow] that emits a [FloatArray]...
+     */
+    val rotationMatrixFlow: Flow<FloatArray>
 }

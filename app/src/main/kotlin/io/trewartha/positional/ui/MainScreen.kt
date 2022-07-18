@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -23,6 +22,7 @@ import io.trewartha.positional.ui.Screen.BottomNavigable.Location
 import io.trewartha.positional.ui.Screen.BottomNavigable.Settings
 import io.trewartha.positional.ui.Screen.BottomNavigable.Sun
 import io.trewartha.positional.ui.Screen.Help
+import io.trewartha.positional.ui.compass.CompassScreen
 import io.trewartha.positional.ui.location.LocationScreen
 import io.trewartha.positional.ui.location.help.LocationHelpScreen
 
@@ -45,7 +45,8 @@ fun MainScreen(
                 ).forEach { screen ->
                     NavigationBarItem(
                         selected = currentRoute == screen.route,
-                        onClick = {
+                        onClick = onClick@{
+                            if (currentRoute == screen.route) return@onClick
                             navHostController.navigate(screen.route) {
                                 // Pop up to the start destination of the graph to
                                 // avoid building up a large stack of destinations
@@ -60,7 +61,7 @@ fun MainScreen(
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(painterResource(screen.navIconRes), null) },
+                        icon = { Icon(imageVector = screen.navIcon, null) },
                         label = { Text(stringResource(screen.navLabelRes)) },
                     )
                 }
@@ -75,6 +76,7 @@ fun MainScreen(
                 .padding(bottom = contentPadding.calculateBottomPadding())
         ) {
             composable(Location.route) { LocationScreen(navController = navHostController) }
+            composable(Compass.route) { CompassScreen() }
             composable(Help.route) { LocationHelpScreen(navController = navHostController) }
         }
     }

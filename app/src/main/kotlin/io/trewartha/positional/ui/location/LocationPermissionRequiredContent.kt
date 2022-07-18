@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.PrivacyTip
+import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +48,7 @@ fun LocationPermissionRequiredContent(
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            imageVector = Icons.TwoTone.PrivacyTip,
+            imageVector = Icons.Rounded.PrivacyTip,
             contentDescription = null,
             modifier = Modifier.size(96.dp),
             tint = MaterialTheme.colorScheme.primary

@@ -3,10 +3,10 @@ package io.trewartha.positional.ui.location
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Adjust
-import androidx.compose.material.icons.twotone.Explore
-import androidx.compose.material.icons.twotone.Speed
-import androidx.compose.material.icons.twotone.Terrain
+import androidx.compose.material.icons.rounded.Adjust
+import androidx.compose.material.icons.rounded.Explore
+import androidx.compose.material.icons.rounded.Height
+import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,8 +27,8 @@ fun StatsColumn(stats: LocationState.Stats?) {
         val accuracyVisible = stats?.showAccuracies ?: false
         val placeholdersVisible = stats == null
         val dividerIndent = 16.dp
-        LocationStatRow(
-            icon = Icons.TwoTone.Adjust,
+        StatRow(
+            icon = Icons.Rounded.Adjust,
             name = stringResource(R.string.location_label_accuracy),
             value = stats?.accuracy,
             accuracy = null,
@@ -36,8 +36,8 @@ fun StatsColumn(stats: LocationState.Stats?) {
             placeholdersVisible = placeholdersVisible
         )
         Divider(modifier = Modifier.padding(horizontal = dividerIndent))
-        LocationStatRow(
-            icon = Icons.TwoTone.Explore,
+        StatRow(
+            icon = Icons.Rounded.Explore,
             name = stringResource(R.string.location_label_bearing),
             value = stats?.bearing,
             accuracy = stats?.bearingAccuracy,
@@ -45,8 +45,8 @@ fun StatsColumn(stats: LocationState.Stats?) {
             placeholdersVisible = placeholdersVisible
         )
         Divider(modifier = Modifier.padding(horizontal = dividerIndent))
-        LocationStatRow(
-            icon = Icons.TwoTone.Terrain,
+        StatRow(
+            icon = Icons.Rounded.Height,
             name = stringResource(R.string.location_label_altitude),
             value = stats?.altitude,
             accuracy = stats?.altitudeAccuracy,
@@ -54,8 +54,8 @@ fun StatsColumn(stats: LocationState.Stats?) {
             placeholdersVisible = placeholdersVisible
         )
         Divider(modifier = Modifier.padding(horizontal = dividerIndent))
-        LocationStatRow(
-            icon = Icons.TwoTone.Speed,
+        StatRow(
+            icon = Icons.Rounded.Speed,
             name = stringResource(R.string.location_label_speed),
             value = stats?.speed,
             accuracy = stats?.speedAccuracy,

@@ -2,15 +2,16 @@ package io.trewartha.positional.domain.entities
 
 import kotlinx.datetime.Instant
 
-data class Location(
-    val latitude: Double,
-    val longitude: Double,
-    val horizontalAccuracyMeters: Double?,
-    val bearingDegrees: Double?,
-    val bearingAccuracyDegrees: Double?,
-    val altitudeMeters: Double?,
-    val altitudeAccuracyMeters: Double?,
-    val speedMetersPerSecond: Double?,
-    val speedAccuracyMetersPerSecond: Double?,
+interface Location {
+    val latitude: Double
+    val longitude: Double
+    val horizontalAccuracyMeters: Float?
+    val bearingDegrees: Float?
+    val bearingAccuracyDegrees: Float?
+    val altitudeMeters: Double?
+    val altitudeAccuracyMeters: Float?
+    val speedMetersPerSecond: Float?
+    val speedAccuracyMetersPerSecond: Float?
     val timestamp: Instant
-)
+    val magneticDeclinationDegrees: Float
+}

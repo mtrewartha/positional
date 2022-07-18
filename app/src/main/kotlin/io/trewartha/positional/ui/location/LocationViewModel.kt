@@ -10,13 +10,16 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
 import io.trewartha.positional.domain.entities.CoordinatesFormat
-import io.trewartha.positional.domain.entities.Units
-import io.trewartha.positional.ui.utils.format.LocationFormatter
 import io.trewartha.positional.domain.entities.Locator
+import io.trewartha.positional.domain.entities.Units
+import io.trewartha.positional.domain.utils.flow.throttleFirst
 import io.trewartha.positional.ui.utils.ForViewModel
+import io.trewartha.positional.ui.utils.format.LocationFormatter
 import io.trewartha.positional.ui.utils.mutableSharedViewModelEventFlow
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -106,7 +109,7 @@ class LocationViewModel @Inject constructor(
 
     val state: StateFlow<LocationState?> = combine(
         accuracyVisibilityFlow,
-        locator.locationFlow,
+        locator.locationFlow.throttleFirst(LOCATION_FLOW_PERIOD),
         coordinatesFormatFlow,
         screenLockEnabledFlow,
         unitsFlow,
@@ -236,5 +239,6 @@ class LocationViewModel @Inject constructor(
         private const val DEFAULT_SCREEN_LOCK = false
         private const val DEFAULT_SHOW_ACCURACIES = true
         private val DEFAULT_UNITS = Units.METRIC
+        private val LOCATION_FLOW_PERIOD = 2.seconds
     }
 }
