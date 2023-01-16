@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -129,7 +131,7 @@ class LocationViewModel @Inject constructor(
                 LocationEvent.NavigateToGeoActivity(
                     currentLocation.latitude,
                     currentLocation.longitude,
-                    currentLocation.timestamp,
+                    currentLocation.timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
                 )
             )
         }

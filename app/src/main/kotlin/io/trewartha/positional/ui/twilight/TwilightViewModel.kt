@@ -9,11 +9,13 @@ import io.trewartha.positional.domain.location.GetLocationUseCase
 import io.trewartha.positional.domain.twilight.GetDailyTwilightsUseCase
 import io.trewartha.positional.ui.utils.ForViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.datetime.Instant
+import kotlinx.coroutines.flow.update
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
@@ -24,29 +26,28 @@ class TwilightViewModel @Inject constructor(
     private val getDailyTwilightTimes: GetDailyTwilightsUseCase,
 ) : ViewModel() {
 
-    /**
-     * The current instant in time
-     */
-    val currentInstant: Flow<Instant>
-        get() = lastLocationInstant
+    private val today: LocalDate
+        get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 
     /**
-     * The date and time at which the twilight times were updated
+     * The currently selected date
      */
-    val updateDateTime: Flow<Instant>
-        get() = lastLocationInstant
+    val date: Flow<LocalDate>
+        get() = _date
+    private val _date = MutableStateFlow(today)
 
     /**
      * Today's twilight times at the device's current location
      */
-    val todaysTwilightTimes: Flow<DailyTwilights>
-        get() = combine(currentInstant, currentLocation) { instant, location ->
-            val localDate = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
-            getDailyTwilightTimes(localDate, location.latitude, location.longitude)
+    val dateTwilights: Flow<DailyTwilights>
+        get() = combine(date, location) { date, location ->
+            getDailyTwilightTimes(date, location.latitude, location.longitude)
         }
 
-    private val currentLocation: Flow<Location> =
-        getLocationUseCase().shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
+    fun setDate(date: LocalDate) {
+        _date.update { date }
+    }
 
-    private val lastLocationInstant = currentLocation.map { it.timestamp }
+    private val location: Flow<Location> =
+        getLocationUseCase().shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
 }

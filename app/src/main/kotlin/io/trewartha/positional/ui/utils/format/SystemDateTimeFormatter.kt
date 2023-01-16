@@ -1,6 +1,15 @@
 package io.trewartha.positional.ui.utils.format
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atDate
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -16,18 +25,30 @@ class SystemDateTimeFormatter @Inject constructor() : DateTimeFormatter {
     private val simpleTimeFormatWithSeconds =
         SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM)
 
-    override fun formatDate(instant: Instant): String =
-        simpleDateFormat.format(Date(instant.toEpochMilliseconds()))
+    override fun formatDate(localDate: LocalDate): String =
+        simpleDateFormat.format(localDate.toJavaDate())
 
-    override fun formatDateTime(instant: Instant): String =
-        simpleDateTimeFormat.format(Date(instant.toEpochMilliseconds()))
+    override fun formatDateTime(localDateTime: LocalDateTime): String =
+        simpleDateTimeFormat.format(localDateTime.toJavaDate())
 
-    override fun formatTime(instant: Instant, includeSeconds: Boolean): String {
-        val date = Date(instant.toEpochMilliseconds())
+    override fun formatTime(localTime: LocalTime, includeSeconds: Boolean): String {
+        val timeZone = TimeZone.currentSystemDefault()
+        val today = Clock.System.now().toLocalDateTime(timeZone).date
+        val javaDate = localTime.atDate(today).toInstant(timeZone).toJavaDate()
         return if (includeSeconds) {
-            simpleTimeFormatWithSeconds.format(date)
+            simpleTimeFormatWithSeconds.format(javaDate)
         } else {
-            simpleTimeFormat.format(date)
+            simpleTimeFormat.format(javaDate)
         }
     }
+
+    private fun LocalDate.toInstant(): Instant =
+        atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
+
+    private fun LocalDate.toJavaDate(): Date = toInstant().toJavaDate()
+
+    private fun LocalDateTime.toJavaDate(): Date =
+        toInstant(TimeZone.currentSystemDefault()).toJavaDate()
+
+    private fun Instant.toJavaDate(): Date = Date(toEpochMilliseconds())
 }

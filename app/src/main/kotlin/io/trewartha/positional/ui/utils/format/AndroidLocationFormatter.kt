@@ -11,6 +11,8 @@ import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.units.Units
 import io.trewartha.positional.ui.utils.DistanceUtils
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.Locale
@@ -169,7 +171,10 @@ class AndroidLocationFormatter @Inject constructor(
         String.format(
             locale,
             formatUpdatedAt,
-            dateTimeFormatter.formatTime(location.timestamp, includeSeconds = true)
+            dateTimeFormatter.formatTime(
+                location.timestamp.toLocalDateTime(TimeZone.currentSystemDefault()).time,
+                includeSeconds = true
+            )
         )
 
     private fun getDDCoords(lat: Double, lon: Double): Pair<String, Int> {

@@ -1,15 +1,15 @@
 package io.trewartha.positional.domain.twilight
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 
 class FakeTwilightRepository : TwilightRepository {
 
-    override fun getSunrise(date: LocalDate, latitude: Double, longitude: Double): Instant? {
+    override fun getSunrise(date: LocalDate, latitude: Double, longitude: Double): LocalTime? {
         TODO("Not yet implemented")
     }
 
-    override fun getSunset(date: LocalDate, latitude: Double, longitude: Double): Instant? {
+    override fun getSunset(date: LocalDate, latitude: Double, longitude: Double): LocalTime? {
         TODO("Not yet implemented")
     }
 
@@ -17,7 +17,7 @@ class FakeTwilightRepository : TwilightRepository {
         date: LocalDate,
         latitude: Double,
         longitude: Double
-    ): Instant? {
+    ): LocalTime? {
         TODO("Not yet implemented")
     }
 
@@ -25,7 +25,7 @@ class FakeTwilightRepository : TwilightRepository {
         date: LocalDate,
         latitude: Double,
         longitude: Double
-    ): Instant? {
+    ): LocalTime? {
         TODO("Not yet implemented")
     }
 
@@ -33,7 +33,7 @@ class FakeTwilightRepository : TwilightRepository {
         date: LocalDate,
         latitude: Double,
         longitude: Double
-    ): Instant? {
+    ): LocalTime? {
         TODO("Not yet implemented")
     }
 
@@ -41,7 +41,7 @@ class FakeTwilightRepository : TwilightRepository {
         date: LocalDate,
         latitude: Double,
         longitude: Double
-    ): Instant? {
+    ): LocalTime? {
         TODO("Not yet implemented")
     }
 
@@ -49,7 +49,7 @@ class FakeTwilightRepository : TwilightRepository {
         date: LocalDate,
         latitude: Double,
         longitude: Double
-    ): Instant? {
+    ): LocalTime? {
         TODO("Not yet implemented")
     }
 
@@ -57,7 +57,7 @@ class FakeTwilightRepository : TwilightRepository {
         date: LocalDate,
         latitude: Double,
         longitude: Double
-    ): Instant? {
+    ): LocalTime? {
         TODO("Not yet implemented")
     }
 }

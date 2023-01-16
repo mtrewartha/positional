@@ -36,21 +36,22 @@ import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
 import io.trewartha.positional.ui.utils.placeholder
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun TwilightView(viewModel: TwilightViewModel = hiltViewModel()) {
-    val today by viewModel.currentInstant.collectAsState(initial = null)
-    val todaysTwilightTimes by viewModel.todaysTwilightTimes.collectAsState(initial = null)
-    val updateDateTime by viewModel.updateDateTime.collectAsState(initial = null)
-    TwilightView(today, todaysTwilightTimes, updateDateTime)
+    val date by viewModel.date.collectAsState(initial = null)
+    val dateTwilights by viewModel.dateTwilights.collectAsState(initial = null)
+    TwilightView(date, dateTwilights)
 }
 
 @Composable
 private fun TwilightView(
-    date: Instant?,
-    datesTwilights: DailyTwilights?,
-    updateDateTime: Instant?
+    date: LocalDate?,
+    dateTwilights: DailyTwilights?
 ) {
     Scaffold { contentPadding ->
         Column(
@@ -69,8 +70,8 @@ private fun TwilightView(
                     .fillMaxWidth()
             ) { page ->
                 val (timeOfDay, twilights) = when (page) {
-                    0 -> TimeOfDay.MORNING to datesTwilights?.morningTwilights
-                    else -> TimeOfDay.EVENING to datesTwilights?.eveningTwilights
+                    0 -> TimeOfDay.MORNING to dateTwilights?.morningTwilights
+                    else -> TimeOfDay.EVENING to dateTwilights?.eveningTwilights
                 }
                 DateTwilights(
                     date = date,
@@ -81,25 +82,9 @@ private fun TwilightView(
             }
             HorizontalPagerIndicator(
                 pagerState = pagerState,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(16.dp),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 activeColor = MaterialTheme.colorScheme.onSurface,
                 inactiveColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-            )
-            Text(
-                text = updateDateTime
-                    ?.let {
-                        stringResource(
-                            R.string.twilight_body_updated_date_time,
-                            LocalDateTimeFormatter.current.formatTime(it)
-                        )
-                    }
-                    .orEmpty(),
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .defaultMinSize(minWidth = 64.dp)
-                    .placeholder(visible = updateDateTime == null)
             )
         }
     }
@@ -107,7 +92,7 @@ private fun TwilightView(
 
 @Composable
 private fun DateTwilights(
-    date: Instant?,
+    date: LocalDate?,
     timeOfDay: TimeOfDay,
     twilights: Twilights?,
     modifier: Modifier = Modifier
@@ -189,7 +174,7 @@ private fun DateTwilights(
 }
 
 @Composable
-private fun TwilightRow(label: String, value: Instant?, modifier: Modifier = Modifier) {
+private fun TwilightRow(label: String, value: LocalTime?, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
@@ -216,11 +201,7 @@ private enum class TimeOfDay { MORNING, EVENING }
 @Composable
 private fun LoadingPreview() {
     PositionalTheme {
-        TwilightView(
-            date = null,
-            datesTwilights = null,
-            updateDateTime = null
-        )
+        TwilightView(date = null, dateTwilights = null)
     }
 }
 
@@ -231,22 +212,21 @@ private fun LoadedPreview() {
     PositionalTheme {
         CompositionLocalProvider(LocalDateTimeFormatter provides SystemDateTimeFormatter()) {
             TwilightView(
-                date = Clock.System.now(),
-                datesTwilights = DailyTwilights(
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+                dateTwilights = DailyTwilights(
                     morningTwilights = Twilights(
-                        horizonTwilight = Clock.System.now(),
-                        civilTwilight = Clock.System.now(),
+                        horizonTwilight = LocalTime(11, 0, 0),
+                        civilTwilight = LocalTime(12, 0, 0),
                         nauticalTwilight = null,
                         astronomicalTwilight = null,
                     ),
                     eveningTwilights = Twilights(
-                        horizonTwilight = Clock.System.now(),
-                        civilTwilight = Clock.System.now(),
+                        horizonTwilight = LocalTime(11, 0, 0),
+                        civilTwilight = LocalTime(12, 0, 0),
                         nauticalTwilight = null,
                         astronomicalTwilight = null,
                     )
-                ),
-                updateDateTime = Clock.System.now()
+                )
             )
         }
     }

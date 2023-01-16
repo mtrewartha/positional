@@ -1,12 +1,14 @@
 package io.trewartha.positional.ui.utils.format
 
-import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 
 interface DateTimeFormatter {
 
-    fun formatDate(instant: Instant): String
+    fun formatDate(localDate: LocalDate): String
 
-    fun formatDateTime(instant: Instant): String
+    fun formatDateTime(localDateTime: LocalDateTime): String
 
-    fun formatTime(instant: Instant, includeSeconds: Boolean = false): String
+    fun formatTime(localTime: LocalTime, includeSeconds: Boolean = false): String
 }

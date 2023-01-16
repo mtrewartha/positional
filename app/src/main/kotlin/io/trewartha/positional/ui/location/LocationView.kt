@@ -36,7 +36,7 @@ import io.trewartha.positional.ui.utils.activity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun LocationView(
@@ -54,8 +54,8 @@ fun LocationView(
         onHelpClick = viewModel::onHelpClick,
         onLaunchClick = viewModel::onLaunchClick,
         onNavigateToHelp = { navController.navigate(Screen.Help.route) },
-        onNavigateToMap = { lat, lon, instant ->
-            context.navigateToMap(lat, lon, dateTimeFormatter.formatDateTime(instant))
+        onNavigateToMap = { lat, lon, localDateTime ->
+            context.navigateToMap(lat, lon, dateTimeFormatter.formatDateTime(localDateTime))
         },
         onNavigateToSettings = { context.navigateToSettings(packageName) },
         onScreenLockCheckedChange = viewModel::onScreenLockCheckedChange,
@@ -71,7 +71,7 @@ private fun LocationView(
     onHelpClick: () -> Unit,
     onLaunchClick: () -> Unit,
     onNavigateToHelp: () -> Unit,
-    onNavigateToMap: (Double, Double, Instant) -> Unit,
+    onNavigateToMap: (Double, Double, LocalDateTime) -> Unit,
     onNavigateToSettings: () -> Unit,
     onScreenLockCheckedChange: (Boolean) -> Unit,
     onShareClick: () -> Unit,
@@ -132,7 +132,7 @@ private fun LocationView(
         events.collect {
             when (it) {
                 is LocationEvent.NavigateToGeoActivity ->
-                    onNavigateToMap(it.latitude, it.longitude, it.instant)
+                    onNavigateToMap(it.latitude, it.longitude, it.localDateTime)
                 is LocationEvent.NavigateToLocationHelp ->
                     onNavigateToHelp()
                 is LocationEvent.NavigateToSettings ->
