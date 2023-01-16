@@ -1,8 +1,6 @@
 package io.trewartha.positional
 
 import android.app.Application
-import android.content.Context
-import androidx.preference.PreferenceManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.perf.FirebasePerformance
@@ -27,13 +25,5 @@ class PositionalApplication : Application() {
         val logTree = if (BuildConfig.DEBUG) Timber.DebugTree()
         else FirebaseCrashlyticsTree(firebaseCrashlytics)
         Timber.plant(logTree)
-
-        PreferenceManager.setDefaultValues(
-            this,
-            getString(R.string.settings_filename),
-            Context.MODE_PRIVATE,
-            R.xml.settings,
-            true
-        )
     }
 }

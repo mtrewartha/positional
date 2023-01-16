@@ -22,6 +22,8 @@ object Dependencies {
         "androidx.compose.ui:ui-tooling:${Versions.Dependencies.androidXCompose}"
     const val androidXConstraintLayoutCompose =
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Dependencies.androidXConstraintLayoutCompose}"
+    const val androidXDataStore =
+        "androidx.datastore:datastore:${Versions.Dependencies.androidXDataStore}"
     const val androidXFragmentKtx =
         "androidx.fragment:fragment-ktx:${Versions.Dependencies.androidXFragment}"
     const val androidXHiltCompiler =
@@ -58,14 +60,22 @@ object Dependencies {
         "com.google.firebase:firebase-perf-ktx"
     const val googleAccompanistInsetsUI =
         "com.google.accompanist:accompanist-insets-ui:${Versions.Dependencies.googleAccompanist}"
+    const val googleAccompanistPager =
+        "com.google.accompanist:accompanist-pager:${Versions.Dependencies.googleAccompanist}"
+    const val googleAccompanistPagerIndicators =
+        "com.google.accompanist:accompanist-pager-indicators:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistPermissions =
         "com.google.accompanist:accompanist-permissions:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistPlaceholder =
         "com.google.accompanist:accompanist-placeholder:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistSystemUIController =
         "com.google.accompanist:accompanist-systemuicontroller:${Versions.Dependencies.googleAccompanist}"
+    const val googleAndroidDesugarJdkLibs =
+        "com.android.tools:desugar_jdk_libs:${Versions.Dependencies.googleAndroidDesugarJdkLibs}"
     const val googleMaterial =
         "com.google.android.material:material:${Versions.Dependencies.googleMaterial}"
+    const val googleProtoBufKotlinLite =
+        "com.google.protobuf:protobuf-kotlin-lite:${Versions.Dependencies.googleProtoBuf}"
     const val guava =
         "com.google.guava:guava:${Versions.Dependencies.guava}"
     const val hiltAndroid =
@@ -97,7 +107,7 @@ object Dependencies {
     const val playServicesLocation =
         "com.google.android.gms:play-services-location:${Versions.Dependencies.playServicesLocation}"
     const val sunriseSunset =
-        "ca.rmen:lib-sunrise-sunset:${Versions.Dependencies.sunriseSunset}"
+        "com.luckycatlabs:SunriseSunsetCalculator:${Versions.Dependencies.sunriseSunset}"
     const val timber =
         "com.jakewharton.timber:timber:${Versions.Dependencies.timber}"
 }

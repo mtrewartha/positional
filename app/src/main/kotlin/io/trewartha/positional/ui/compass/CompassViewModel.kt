@@ -1,101 +1,64 @@
 package io.trewartha.positional.ui.compass
 
-import android.app.Application
-import android.content.SharedPreferences
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.trewartha.positional.R
-import io.trewartha.positional.domain.entities.Compass
-import io.trewartha.positional.domain.entities.Location
-import io.trewartha.positional.domain.entities.Locator
-import io.trewartha.positional.domain.utils.flow.throttleFirst
+import io.trewartha.positional.data.compass.CompassAccuracy
+import io.trewartha.positional.data.compass.CompassMode
+import io.trewartha.positional.data.compass.CompassReadings
+import io.trewartha.positional.domain.compass.CompassHardwareException
+import io.trewartha.positional.domain.compass.GetCompassDeclinationUseCase
+import io.trewartha.positional.domain.compass.GetCompassModeUseCase
+import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 import io.trewartha.positional.ui.utils.ForViewModel
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.minutes
-import kotlinx.coroutines.channels.ProducerScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 @HiltViewModel
 class CompassViewModel @Inject constructor(
-    application: Application,
-    compass: Compass?,
-    locator: Locator,
-    private val prefs: SharedPreferences,
-) : AndroidViewModel(application) {
-
-    private val magneticDeclinationDegreesFlow: Flow<Float> =
-        (locator.locationFlow as Flow<Location?>)
-            .filterNotNull()
-            .throttleFirst(MAGNETIC_DECLINATION_LOCATION_THROTTLE_PERIOD)
-            .map { it.magneticDeclinationDegrees }
-
-    private val modeFlow: Flow<CompassMode> =
-        callbackFlow {
-            if (prefs.contains(prefsKeyCompassMode))
-                trySend(prefs.getString(prefsKeyCompassMode, null))
-            prefCompassModeListener = PrefCompassModeListener(this)
-            prefs.registerOnSharedPreferenceChangeListener(prefCompassModeListener)
-            awaitClose {
-                prefCompassModeListener
-                    ?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
-            }
-        }.map {
-            when (it) {
-                compassModePrefValueMagneticNorth -> CompassMode.MAGNETIC_NORTH
-                compassModePrefValueTrueNorth -> CompassMode.TRUE_NORTH
-                else -> CompassMode.TRUE_NORTH
-            }
-        }
+    getCompassDeclinationUseCase: GetCompassDeclinationUseCase,
+    getCompassModeUseCase: GetCompassModeUseCase,
+    getCompassReadingsUseCase: GetCompassReadingsUseCase,
+) : ViewModel() {
 
     private val sensorsMissingDetailsVisibleFlow = MutableStateFlow(false)
 
     val state: StateFlow<State> =
-        if (compass == null) {
-            sensorsMissingDetailsVisibleFlow.map { State.SensorsMissing(it) }
-        } else {
-            combine(
-                compass.rotationMatrixFlow,
-                compass.accelerometerAccuracyFlow,
-                compass.magnetometerAccuracyFlow,
-                magneticDeclinationDegreesFlow,
-                modeFlow
-            ) { rotationMatrix,
-                accelerometerAccuracy,
-                magnetometerAccuracy,
-                magneticDeclinationDegrees,
-                mode ->
-                State.SensorsPresent.Loaded(
-                    rotationMatrix = rotationMatrix,
-                    accelerometerAccuracy = accelerometerAccuracy,
-                    magnetometerAccuracy = magnetometerAccuracy,
-                    magneticDeclinationDegrees = magneticDeclinationDegrees,
-                    mode = mode,
-                )
+        combine<Float, CompassMode, CompassReadings, State>(
+            getCompassDeclinationUseCase(),
+            getCompassModeUseCase(),
+            getCompassReadingsUseCase(),
+        ) { declination, mode, readings ->
+            State.SensorsPresent.Loaded(
+                rotationMatrix = readings.rotationMatrix,
+                accelerometerAccuracy = readings.accelerometerAccuracy,
+                magnetometerAccuracy = readings.magnetometerAccuracy,
+                magneticDeclinationDegrees = declination,
+                mode = mode,
+            )
+        }.catch { throwable ->
+            if (throwable is CompassHardwareException) {
+                emit(State.SensorsMissing(detailsVisible = false))
+            } else {
+                throw throwable
+            }
+        }.combine(sensorsMissingDetailsVisibleFlow) { state, detailsVisible ->
+            if (state is State.SensorsMissing) {
+                state.copy(detailsVisible = detailsVisible)
+            } else {
+                state
             }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.ForViewModel,
-            initialValue = if (compass == null) State.SensorsMissing(detailsVisible = false)
-            else State.SensorsPresent.Loading
+            initialValue = State.SensorsPresent.Loading,
         )
-
-    private val compassModePrefValueMagneticNorth =
-        application.getString(R.string.settings_compass_mode_magnetic_value)
-    private val compassModePrefValueTrueNorth =
-        application.getString(R.string.settings_compass_mode_true_value)
-    private val prefsKeyCompassMode = application.getString(R.string.settings_compass_mode_key)
-    private var prefCompassModeListener: PrefCompassModeListener? = null
 
     fun onSensorsMissingWhyClick() {
         sensorsMissingDetailsVisibleFlow.update { true }
@@ -107,8 +70,8 @@ class CompassViewModel @Inject constructor(
             object Loading : SensorsPresent
             data class Loaded(
                 val rotationMatrix: FloatArray,
-                val accelerometerAccuracy: Compass.Accuracy?,
-                val magnetometerAccuracy: Compass.Accuracy?,
+                val accelerometerAccuracy: CompassAccuracy?,
+                val magnetometerAccuracy: CompassAccuracy?,
                 val magneticDeclinationDegrees: Float,
                 val mode: CompassMode,
             ) : SensorsPresent {
@@ -135,22 +98,7 @@ class CompassViewModel @Inject constructor(
                     result = 31 * result + mode.hashCode()
                     return result
                 }
-
             }
         }
-    }
-
-    private inner class PrefCompassModeListener(
-        val producerScope: ProducerScope<String?>
-    ) : SharedPreferences.OnSharedPreferenceChangeListener {
-        override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
-            if (key == prefsKeyCompassMode) {
-                producerScope.trySend(sharedPrefs.getString(key, null))
-            }
-        }
-    }
-
-    companion object {
-        private val MAGNETIC_DECLINATION_LOCATION_THROTTLE_PERIOD = 5.minutes
     }
 }

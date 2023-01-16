@@ -39,10 +39,10 @@ sealed class Screen {
             override val navLabelRes = R.string.bottom_navigation_settings
         }
 
-        object Sun : BottomNavigable() {
-            override val route = "sun"
+        object Twilight : BottomNavigable() {
+            override val route = "twilight"
             override val navIcon = Icons.Rounded.WbSunny
-            override val navLabelRes = R.string.bottom_navigation_sun
+            override val navLabelRes = R.string.bottom_navigation_twilight
         }
     }
 }

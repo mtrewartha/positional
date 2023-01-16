@@ -1,8 +1,8 @@
 package io.trewartha.positional.ui.utils.format
 
-import io.trewartha.positional.domain.entities.CoordinatesFormat
-import io.trewartha.positional.domain.entities.Location
-import io.trewartha.positional.domain.entities.Units
+import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.units.Units
 
 interface LocationFormatter {
 

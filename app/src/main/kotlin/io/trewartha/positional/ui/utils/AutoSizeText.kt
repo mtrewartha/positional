@@ -112,21 +112,21 @@ fun AutoSizeText(
         Text(
             text,
             Modifier,
-            color,
-            TextUnit.Unspecified,
-            fontStyle,
-            fontWeight,
-            fontFamily,
-            letterSpacing,
-            textDecoration,
-            textAlign,
-            lineHeight,
-            overflow,
-            softWrap,
-            maxLines,
-            inlineContent,
-            onTextLayout,
-            combinedTextStyle,
+            color = color,
+            fontSize = TextUnit.Unspecified,
+            fontStyle = fontStyle,
+            fontWeight = fontWeight,
+            fontFamily = fontFamily,
+            letterSpacing = letterSpacing,
+            textDecoration = textDecoration,
+            textAlign = textAlign,
+            lineHeight = lineHeight,
+            overflow = overflow,
+            softWrap = softWrap,
+            maxLines = maxLines,
+            inlineContent = inlineContent,
+            onTextLayout = onTextLayout,
+            style = combinedTextStyle,
         )
     }
 }
@@ -141,11 +141,11 @@ private fun BoxWithConstraintsScope.shouldShrink(
     val textDelegate = TextDelegate(
         text,
         textStyle,
-        maxLines,
-        true,
-        TextOverflow.Clip,
-        LocalDensity.current,
-        LocalFontFamilyResolver.current,
+        maxLines = maxLines,
+        softWrap = true,
+        overflow = TextOverflow.Clip,
+        density = LocalDensity.current,
+        fontFamilyResolver = LocalFontFamilyResolver.current
     )
 
     val textLayoutResult = textDelegate.layout(

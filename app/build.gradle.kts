@@ -8,9 +8,7 @@ plugins {
 }
 
 android {
-    sourceSets.forEach {
-        it.java.setSrcDirs(listOf("src/${it.name}/kotlin"))
-    }
+    sourceSets.forEach { it.java.setSrcDirs(listOf("src/${it.name}/kotlin")) }
 
     signingConfigs {
         create("release") {
@@ -53,16 +51,20 @@ android {
     compileOptions {
         sourceCompatibility = Versions.Compatibility.source
         targetCompatibility = Versions.Compatibility.target
+        isCoreLibraryDesugaringEnabled = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.Dependencies.androidXCompose
+        kotlinCompilerExtensionVersion = Versions.Dependencies.androidXComposeCompiler
     }
     kotlinOptions {
         jvmTarget = Versions.Compatibility.target.toString()
         freeCompilerArgs = freeCompilerArgs +
                 "-Xinline-classes" +
                 "-Xjvm-default=all" +
+                "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi" +
+                "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi" +
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
+                "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi" +
                 "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi" +
                 "-opt-in=kotlin.ExperimentalStdlibApi" +
                 "-opt-in=kotlin.RequiresOptIn" +
@@ -76,6 +78,7 @@ android {
             excludes += "DebugProbesKt.bin"
         }
     }
+    namespace = "io.trewartha.positional"
 }
 
 repositories {
@@ -92,6 +95,8 @@ tasks.withType<Test> {
 dependencies {
     kapt(Dependencies.hiltCompiler)
 
+    coreLibraryDesugaring(Dependencies.googleAndroidDesugarJdkLibs)
+
     implementation(project(":domain"))
     implementation(Dependencies.androidXActivityCompose)
     implementation(Dependencies.androidXComposeFoundation)
@@ -102,6 +107,7 @@ dependencies {
     implementation(Dependencies.androidXComposeUI)
     implementation(Dependencies.androidXComposeUITooling)
     implementation(Dependencies.androidXConstraintLayoutCompose)
+    implementation(Dependencies.androidXDataStore)
     implementation(Dependencies.androidXFragmentKtx)
     implementation(Dependencies.androidXHiltCompiler)
     implementation(Dependencies.androidXHiltNavigationCompose)
@@ -118,6 +124,8 @@ dependencies {
     implementation(Dependencies.firebaseAnalytics)
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.googleAccompanistInsetsUI)
+    implementation(Dependencies.googleAccompanistPager)
+    implementation(Dependencies.googleAccompanistPagerIndicators)
     implementation(Dependencies.googleAccompanistPermissions)
     implementation(Dependencies.googleAccompanistPlaceholder)
     implementation(Dependencies.googleAccompanistSystemUIController)

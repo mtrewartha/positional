@@ -3,127 +3,74 @@ package io.trewartha.positional.ui.location
 import android.app.Application
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.SharedPreferences
-import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.R
-import io.trewartha.positional.domain.entities.CoordinatesFormat
-import io.trewartha.positional.domain.entities.Locator
-import io.trewartha.positional.domain.entities.Units
+import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.units.Units
+import io.trewartha.positional.domain.location.GetLocationUseCase
+import io.trewartha.positional.domain.settings.SettingsRepository
 import io.trewartha.positional.domain.utils.flow.throttleFirst
 import io.trewartha.positional.ui.utils.ForViewModel
 import io.trewartha.positional.ui.utils.format.LocationFormatter
 import io.trewartha.positional.ui.utils.mutableSharedViewModelEventFlow
-import timber.log.Timber
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.ProducerScope
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
     private val app: Application,
     private val clipboardManager: ClipboardManager,
     private val locationFormatter: LocationFormatter,
-    locator: Locator,
-    private val prefs: SharedPreferences
+    getLocationUseCase: GetLocationUseCase,
+    private val settingsRepository: SettingsRepository
 ) : AndroidViewModel(app) {
 
-    private val accuracyVisibilityFlow: Flow<Boolean> =
-        callbackFlow {
-            if (prefs.contains(prefsKeyShowAccuracies))
-                trySend(prefs.getBoolean(prefsKeyShowAccuracies, DEFAULT_SHOW_ACCURACIES))
-            prefShowAccuraciesListener = PrefShowAccuraciesListener(this)
-            prefs.registerOnSharedPreferenceChangeListener(prefShowAccuraciesListener)
-            awaitClose {
-                prefShowAccuraciesListener
-                    ?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
-            }
-        }
+    private val accuracyVisibility: Flow<Boolean> =
+        settingsRepository.hideAccuracies.map { !it }
 
-    private val coordinatesFormatFlow: Flow<CoordinatesFormat> =
-        callbackFlow {
-            if (prefs.contains(prefsKeyCoordinatesFormat))
-                trySend(prefs.getString(prefsKeyCoordinatesFormat, null))
-            prefCoordinatesFormatListener = PrefCoordinatesFormatListener(this)
-            prefs.registerOnSharedPreferenceChangeListener(prefCoordinatesFormatListener)
-            awaitClose {
-                prefCoordinatesFormatListener?.let {
-                    prefs.unregisterOnSharedPreferenceChangeListener(it)
-                }
-            }
-        }.map {
-            CoordinatesFormat.valueOf(it!!.uppercase())
-        }.catch {
-            emit(DEFAULT_COORDINATES_FORMAT)
-        }
+    private val coordinatesFormat: Flow<CoordinatesFormat> =
+        settingsRepository.coordinatesFormat
 
-    private val prefsKeyCoordinatesFormat = app.getString(R.string.settings_coordinates_format_key)
-    private val prefsKeyScreenLock = app.getString(R.string.settings_screen_lock_key)
-    private val prefsKeyShowAccuracies = app.getString(R.string.settings_show_accuracies_key)
-    private val prefsKeyUnits = app.getString(R.string.settings_units_key)
-    private var prefCoordinatesFormatListener: PrefCoordinatesFormatListener? = null
-    private var prefScreenLockListener: PrefScreenLockListener? = null
-    private var prefShowAccuraciesListener: PrefShowAccuraciesListener? = null
-    private var prefUnitsListener: PrefUnitsListener? = null
+    private val location: StateFlow<Location?> = getLocationUseCase()
+        .throttleFirst(LOCATION_FLOW_PERIOD)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
 
-    private val unitsFlow: Flow<Units> =
-        callbackFlow {
-            if (prefs.contains(prefsKeyUnits))
-                trySend(prefs.getString(prefsKeyUnits, null))
-            prefUnitsListener = PrefUnitsListener(this)
-            prefs.registerOnSharedPreferenceChangeListener(prefUnitsListener)
-            awaitClose {
-                prefUnitsListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
-            }
-        }.map {
-            Units.valueOf(it!!.uppercase())
-        }.catch {
-            emit(DEFAULT_UNITS)
-        }
+    private val units: Flow<Units> = settingsRepository.units
 
-    private val screenLockEnabledFlow: StateFlow<Boolean> =
-        callbackFlow {
-            prefScreenLockListener = PrefScreenLockListener(this)
-            prefs.registerOnSharedPreferenceChangeListener(prefScreenLockListener)
-            awaitClose {
-                prefScreenLockListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
-            }
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(),
-            prefs.getBoolean(prefsKeyScreenLock, DEFAULT_SCREEN_LOCK)
-        )
+    private val screenLockEnabledFlow: StateFlow<Boolean> = settingsRepository.screenLockEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     val state: StateFlow<LocationState?> = combine(
-        accuracyVisibilityFlow,
-        locator.locationFlow.throttleFirst(LOCATION_FLOW_PERIOD),
-        coordinatesFormatFlow,
+        accuracyVisibility,
+        location.filterNotNull(),
+        coordinatesFormat,
         screenLockEnabledFlow,
-        unitsFlow,
+        units,
     ) { showAccuracies, location, coordinatesFormat, screenLockEnabled, units ->
         val accuracy = locationFormatter.getCoordinatesAccuracy(location, units)
         val (coordinates, maxLines) = locationFormatter.getCoordinates(location, coordinatesFormat)
         val coordinatesForCopy =
             locationFormatter.getCoordinatesForCopy(location, coordinatesFormat)
         val bearing = locationFormatter.getBearing(location)
-        val bearingAccuracy = locationFormatter.getBearingAccuracy(location)
+        val bearingAccuracy =
+            if (showAccuracies) locationFormatter.getBearingAccuracy(location) else null
         val altitude = locationFormatter.getAltitude(location, units)
-        val altitudeAccuracy = locationFormatter.getAltitudeAccuracy(location, units)
+        val altitudeAccuracy =
+            if (showAccuracies) locationFormatter.getAltitudeAccuracy(location, units) else null
         val speed = locationFormatter.getSpeed(location, units)
-        val speedAccuracy = locationFormatter.getSpeedAccuracy(location, units)
+        val speedAccuracy =
+            if (showAccuracies) locationFormatter.getSpeedAccuracy(location, units) else null
         val updatedAt = locationFormatter.getTimestamp(location)
 
         LocationState(
@@ -175,10 +122,22 @@ class LocationViewModel @Inject constructor(
         viewModelScope.launch { _events.emit(LocationEvent.NavigateToLocationHelp) }
     }
 
+    fun onLaunchClick() {
+        viewModelScope.launch {
+            val currentLocation = location.value ?: return@launch
+            _events.emit(
+                LocationEvent.NavigateToGeoActivity(
+                    currentLocation.latitude,
+                    currentLocation.longitude,
+                    currentLocation.timestamp,
+                )
+            )
+        }
+    }
+
     fun onScreenLockCheckedChange(checked: Boolean) {
         viewModelScope.launch {
-            Timber.i("Screen lock checked change = $checked")
-            prefs.edit { putBoolean(prefsKeyScreenLock, checked) }
+            settingsRepository.setScreenLockEnabled(checked)
             val event = if (checked)
                 LocationEvent.ShowScreenLockedSnackbar
             else
@@ -198,47 +157,7 @@ class LocationViewModel @Inject constructor(
         }
     }
 
-    private inner class PrefCoordinatesFormatListener(
-        val producerScope: ProducerScope<String?>
-    ) : SharedPreferences.OnSharedPreferenceChangeListener {
-        override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
-            if (key == prefsKeyCoordinatesFormat)
-                producerScope.trySend(sharedPrefs.getString(key, null))
-        }
-    }
-
-    private inner class PrefScreenLockListener(
-        val producerScope: ProducerScope<Boolean>
-    ) : SharedPreferences.OnSharedPreferenceChangeListener {
-        override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
-            if (key == prefsKeyScreenLock)
-                producerScope.trySend(sharedPrefs.getBoolean(key, DEFAULT_SCREEN_LOCK))
-        }
-    }
-
-    private inner class PrefShowAccuraciesListener(
-        val producerScope: ProducerScope<Boolean>
-    ) : SharedPreferences.OnSharedPreferenceChangeListener {
-        override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
-            if (key == prefsKeyShowAccuracies)
-                producerScope.trySend(sharedPrefs.getBoolean(key, DEFAULT_SHOW_ACCURACIES))
-        }
-    }
-
-    private inner class PrefUnitsListener(
-        val producerScope: ProducerScope<String?>
-    ) : SharedPreferences.OnSharedPreferenceChangeListener {
-        override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
-            if (key == prefsKeyUnits)
-                producerScope.trySend(sharedPrefs.getString(key, null))
-        }
-    }
-
     companion object {
-        private val DEFAULT_COORDINATES_FORMAT = CoordinatesFormat.DD
-        private const val DEFAULT_SCREEN_LOCK = false
-        private const val DEFAULT_SHOW_ACCURACIES = true
-        private val DEFAULT_UNITS = Units.METRIC
         private val LOCATION_FLOW_PERIOD = 2.seconds
     }
 }

@@ -1,6 +1,14 @@
 package io.trewartha.positional.ui.location
 
+import kotlinx.datetime.Instant
+
 sealed interface LocationEvent {
+
+    data class NavigateToGeoActivity(
+        val latitude: Double,
+        val longitude: Double,
+        val instant: Instant
+    ) : LocationEvent
 
     object NavigateToLocationHelp : LocationEvent
 

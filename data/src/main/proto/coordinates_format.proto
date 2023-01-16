@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "io.trewartha.positional.data.settings";
+option java_outer_classname = "CoordinatesFormatProto";
+
+enum CoordinatesFormat {
+  DD = 0;
+  DDM = 1;
+  DMS = 2;
+  MGRS = 3;
+  UTM = 4;
+}

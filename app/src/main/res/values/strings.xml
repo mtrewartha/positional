@@ -2,18 +2,20 @@
     <string name="app_name" tools:override="true">Positional</string>
 
     <!-- Common Text -->
+    <string name="common_cancel">Cancel</string>
     <string name="common_close">Close</string>
     <string name="common_dash" translatable="false">—</string>
     <string name="common_do_not_ask_again">DON\'T ASK AGAIN</string>
     <string name="common_exit">Exit</string>
     <string name="common_ok">OK</string>
     <string name="common_privacy_policy">Privacy policy</string>
+    <string name="common_save">Save</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_navigation_compass">Compass</string>
     <string name="bottom_navigation_location">Location</string>
-    <string name="bottom_navigation_sun">Sun</string>
     <string name="bottom_navigation_settings">Settings</string>
+    <string name="bottom_navigation_twilight">Twilight</string>
 
     <!-- Compass -->
     <string name="compass_accuracy_warning_body">The sensors used to determine your direction currently have low accuracy. Moving your device in a figure eight pattern may help.</string>
@@ -71,6 +73,8 @@
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_altitude">Altitude</string>
     <string name="location_label_speed">Speed</string>
+    <string name="location_launch_button_content_description">Open in maps app</string>
+    <string name="location_launch_label">My Location on %s (Exported from Positional)</string>
     <string name="location_permission_required_button_ok" translatable="false">@string/common_ok</string>
     <string name="location_permission_required_button_privacy_policy">Here is our simple privacy policy.</string>
     <string name="location_permission_required_body">Positional is private by design. Your location is never shared with anyone unless you explicitly share it.</string>
@@ -95,84 +99,77 @@
     <string name="location_updated_at">Updated at %s</string>
     <string name="location_updating">Device is acquiring location…</string>
 
-    <!-- Sun -->
-    <string name="sun_label">Sun</string>
-    <string name="sun_astronomical_content_description_dawn">Astronomical dawn</string>
-    <string name="sun_astronomical_content_description_dusk">Astronomical dusk</string>
-    <string name="sun_astronomical_label">Astronomical</string>
-    <string name="sun_astronomical_tooltip_dawn">Astronomical dawn is the morning moment when the sun\'s center is 18° below the horizon.</string>
-    <string name="sun_astronomical_tooltip_dusk">Astronomical dusk is the evening moment when the sun\'s center is 18° below the horizon.</string>
-    <string name="sun_civil_content_description_dawn">Civil dawn</string>
-    <string name="sun_civil_content_description_dusk">Civil dusk</string>
-    <string name="sun_civil_label">Civil</string>
-    <string name="sun_civil_tooltip_dawn">Civil dawn is the morning moment when the sun\'s center is 6° below the horizon.</string>
-    <string name="sun_civil_tooltip_dusk">Civil dusk is the evening moment when the sun\'s center is 6° below the horizon.</string>
-    <string name="sun_dawn_label">Dawn</string>
-    <string name="sun_dusk_label">Dusk</string>
-    <string name="sun_nautical_content_description_dawn">Nautical dawn</string>
-    <string name="sun_nautical_content_description_dusk">Nautical dusk</string>
-    <string name="sun_nautical_label">Nautical</string>
-    <string name="sun_nautical_tooltip_dawn">Nautical dawn is the morning moment when the sun\'s center is 12° below the horizon.</string>
-    <string name="sun_nautical_tooltip_dusk">Nautical dusk is the evening moment when the sun\'s center is 12° below the horizon.</string>
-    <string name="sun_sunrise_label">Sunrise</string>
-    <string name="sun_sunrise_tooltip">Sunrise is the morning moment when the sun\'s center is visible on the horizon.</string>
-    <string name="sun_sunset_label">Sunset</string>
-    <string name="sun_sunset_tooltip">Sunset is the evening moment when the sun\'s center is no longer visible on the horizon.</string>
-    <string name="sun_date_unknown">@string/common_dash</string>
-    <string name="sun_time_unknown">@string/common_dash</string>
 
     <!-- Settings -->
-    <string name="settings_compass_mode_dialog_title">Compass Mode</string>
-    <string name="settings_compass_mode_key">compassMode</string>
-    <string name="settings_compass_mode_magnetic_label">Magnetic North</string>
-    <string name="settings_compass_mode_magnetic_value">magneticNorth</string>
-    <string name="settings_compass_mode_title">Compass mode</string>
-    <string name="settings_compass_mode_true_label">True North</string>
-    <string name="settings_compass_mode_true_value">trueNorth</string>
-    <string name="settings_filename">Positional</string>
-    <string name="settings_coordinates_format_dialog_title">Location Format</string>
-    <string name="settings_coordinates_format_key">coordsFormat</string>
-    <string name="settings_coordinates_format_title">Coordinates format</string>
-    <string name="settings_coordinates_format_dd_label">Decimal degrees</string>
-    <string name="settings_coordinates_format_dd_value">dd</string>
-    <string name="settings_coordinates_format_ddm_label">Degrees, decimal minutes</string>
-    <string name="settings_coordinates_format_ddm_value">ddm</string>
-    <string name="settings_coordinates_format_dms_label">Degrees, minutes, seconds</string>
-    <string name="settings_coordinates_format_dms_value">dms</string>
-    <string name="settings_coordinates_format_mgrs_label">MGRS</string>
-    <string name="settings_coordinates_format_mgrs_value">mgrs</string>
-    <string name="settings_coordinates_format_utm_label">UTM</string>
-    <string name="settings_coordinates_format_utm_value">utm</string>
-    <string name="settings_privacy_policy_key">privacyPolicy</string>
     <string name="settings_privacy_policy_summary">Learn more about how Positional respects your privacy and uses your data</string>
     <string name="settings_privacy_policy_title" translatable="false">@string/common_privacy_policy</string>
-    <string name="settings_root_title">Settings</string>
-    <string name="settings_screen_lock_key">screenLock</string>
-    <string name="settings_screen_lock_content_description">lock screen</string>
-    <string name="settings_show_accuracies_key">showAccuracies</string>
-    <string name="settings_show_accuracies_summary">Android 8 (Oreo) and above only</string>
+
+    <string name="settings_compass_mode_dialog_title">Compass mode</string>
+    <string name="settings_compass_mode_title">Compass mode</string>
+    <string name="settings_compass_mode_value_magnetic_name">Magnetic North</string>
+    <string name="settings_compass_mode_value_true_name">True North</string>
+
+    <string name="settings_coordinates_format_dialog_title">Coordinates format</string>
+    <string name="settings_coordinates_format_title">Coordinates format</string>
+    <string name="settings_coordinates_format_value_dd_name">Decimal degrees</string>
+    <string name="settings_coordinates_format_value_ddm_name">Degrees &amp; decimal minutes</string>
+    <string name="settings_coordinates_format_value_dms_name">Degrees, minutes, &amp; seconds</string>
+    <string name="settings_coordinates_format_value_mgrs_name">MGRS</string>
+    <string name="settings_coordinates_format_value_utm_name">UTM</string>
+
+    <string name="settings_show_accuracies_description">Show or hide accuracies of measurements</string>
     <string name="settings_show_accuracies_title">Show accuracies</string>
-    <string name="settings_theme_system_label">System</string>
-    <string name="settings_theme_system_value">system</string>
-    <string name="settings_theme_light_label">Light</string>
-    <string name="settings_theme_light_value">light</string>
-    <string name="settings_theme_dialog_title">@string/settings_theme_title</string>
-    <string name="settings_theme_key">theme</string>
+
+    <string name="settings_theme_dialog_dialog_title">Theme</string>
+    <string name="settings_theme_dialog_title">Select a theme</string>
+    <string name="settings_theme_dialog_text">If your device runs Android 13 or higher, we\'ll use the accent colors from your device\'s theme.</string>
+    <string name="settings_theme_dialog_confirm" translatable="false">@string/common_save</string>
+    <string name="settings_theme_dialog_dismiss" translatable="false">@string/common_cancel</string>
     <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_dark_label">Dark</string>
-    <string name="settings_theme_dark_value">dark</string>
+    <string name="settings_theme_value_dark_name">Dark</string>
+    <string name="settings_theme_value_device_name">Device</string>
+    <string name="settings_theme_value_light_name">Light</string>
+
     <string name="settings_units_dialog_title">Units of measurement</string>
-    <string name="settings_units_key">useMetricUnits</string>
-    <string name="settings_units_label_imperial">Imperial</string>
-    <string name="settings_units_label_metric">Metric</string>
     <string name="settings_units_title">Units of measurement</string>
-    <string name="settings_units_value_imperial">imperial</string>
-    <string name="settings_units_value_metric">metric</string>
-    <string name="settings_time_format_dialog_title">Time Format</string>
-    <string name="settings_time_format_key">timeFormat</string>
-    <string name="settings_time_format_title">Time format</string>
-    <string name="settings_time_format_12hr_label">12-hour</string>
-    <string name="settings_time_format_12hr_value">12hr</string>
-    <string name="settings_time_format_24hr_label">24-hour</string>
-    <string name="settings_time_format_24hr_value">24hr</string>
+    <string name="settings_units_value_imperial_name">Imperial</string>
+    <string name="settings_units_value_metric_name">Metric</string>
+
+    <!-- Twilight -->
+    <string name="twilight_label">Daily Twilight Times</string>
+    <string name="twilight_body_evening_astronomical">Astronomical dusk</string>
+    <string name="twilight_body_evening_civil">Civil dusk</string>
+    <string name="twilight_body_evening_nautical">Nautical dusk</string>
+    <string name="twilight_body_evening_horizon">Sunset</string>
+    <string name="twilight_body_morning_astronomical">Astronomical dawn</string>
+    <string name="twilight_body_morning_civil">Civil dawn</string>
+    <string name="twilight_body_morning_nautical">Nautical dawn</string>
+    <string name="twilight_body_morning_horizon">Sunrise</string>
+    <string name="twilight_body_none">None</string>
+    <string name="twilight_body_updated_date_time">Updated at %s</string>
+    <string name="twilight_title_evening">Dusk</string>
+    <string name="twilight_title_morning">Dawn</string>
+    <string name="twilight_astronomical_content_description_dawn">Astronomical dawn</string>
+    <string name="twilight_astronomical_content_description_dusk">Astronomical dusk</string>
+    <string name="twilight_astronomical_label">Astronomical</string>
+    <string name="twilight_astronomical_tooltip_dawn">Astronomical dawn is when the sun has risen to 18° below the horizon.</string>
+    <string name="twilight_astronomical_tooltip_dusk">Astronomical dusk is when the sun has set to 18° below the horizon.</string>
+    <string name="twilight_civil_content_description_dawn">Civil dawn</string>
+    <string name="twilight_civil_content_description_dusk">Civil dusk</string>
+    <string name="twilight_civil_label">Civil</string>
+    <string name="twilight_civil_tooltip_dawn">Civil dawn is when the sun has risen to 6° below the horizon.</string>
+    <string name="twilight_civil_tooltip_dusk">Civil dusk is when the sun has set to 6° below the horizon.</string>
+    <string name="twilight_dawn_label">Dawn</string>
+    <string name="twilight_dusk_label">Dusk</string>
+    <string name="twilight_nautical_content_description_dawn">Nautical dawn</string>
+    <string name="twilight_nautical_content_description_dusk">Nautical dusk</string>
+    <string name="twilight_nautical_label">Nautical</string>
+    <string name="twilight_nautical_tooltip_dawn">Nautical dawn is when the sun has risen to 12° below the horizon.</string>
+    <string name="twilight_nautical_tooltip_dusk">Nautical dusk is when the sun has set to 12° below the horizon.</string>
+    <string name="twilight_sunrise_label">Sunrise</string>
+    <string name="twilight_sunrise_tooltip">Sunrise is when the sun has risen above the horizon.</string>
+    <string name="twilight_sunset_label">Sunset</string>
+    <string name="twilight_sunset_tooltip">Sunset is when the sun has set below the horizon.</string>
+    <string name="twilight_date_unknown">@string/common_dash</string>
+    <string name="twilight_time_unknown">@string/common_dash</string>
 </resources>

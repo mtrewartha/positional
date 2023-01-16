@@ -1,50 +1,16 @@
 package io.trewartha.positional.ui
 
-import android.app.Application
-import android.content.SharedPreferences
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.trewartha.positional.R
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.ProducerScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.map
+import io.trewartha.positional.data.ui.Theme
+import io.trewartha.positional.domain.settings.SettingsRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    app: Application,
-    private val prefs: SharedPreferences
-) : AndroidViewModel(app) {
+    settingsRepository: SettingsRepository
+) : ViewModel() {
 
-    val theme: LiveData<Theme> by lazy {
-        callbackFlow {
-            if (prefs.contains(prefsKeyTheme))
-                trySend(prefs.getString(prefsKeyTheme, null))
-            prefThemeListener = PrefThemeListener(this)
-            prefs.registerOnSharedPreferenceChangeListener(prefThemeListener)
-            awaitClose {
-                prefThemeListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
-            }
-        }.map { prefString ->
-            prefString?.uppercase()?.let { it -> Theme.valueOf(it) } ?: Theme.SYSTEM
-        }.asLiveData()
-    }
-
-    private val prefsKeyTheme = app.getString(R.string.settings_theme_key)
-    private var prefThemeListener: PrefThemeListener? = null
-
-    private inner class PrefThemeListener(
-        val producerScope: ProducerScope<String?>
-    ) : SharedPreferences.OnSharedPreferenceChangeListener {
-        override fun onSharedPreferenceChanged(sharedPrefs: SharedPreferences, key: String) {
-            if (key == prefsKeyTheme)
-                producerScope.trySend(sharedPrefs.getString(key, null))
-        }
-    }
+    val theme: Flow<Theme> = settingsRepository.theme
 }

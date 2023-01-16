@@ -24,12 +24,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
-import io.trewartha.positional.domain.entities.Compass
+import io.trewartha.positional.data.compass.CompassAccuracy
+import io.trewartha.positional.data.compass.CompassMode
+import io.trewartha.positional.ui.location.StatRow
 import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
-import io.trewartha.positional.ui.location.StatRow
 
 @Composable
 fun StatsColumn(state: CompassViewModel.State.SensorsPresent) {
@@ -41,10 +42,10 @@ fun StatsColumn(state: CompassViewModel.State.SensorsPresent) {
                 ?: (null to null)
         AnimatedVisibility(
             visible = !placeholdersVisible &&
-                    (accelerometerAccuracy == null ||
-                            magnetometerAccuracy == null ||
-                            accelerometerAccuracy <= Compass.Accuracy.LOW ||
-                            magnetometerAccuracy <= Compass.Accuracy.LOW),
+                (accelerometerAccuracy == null ||
+                    magnetometerAccuracy == null ||
+                    accelerometerAccuracy <= CompassAccuracy.LOW ||
+                    magnetometerAccuracy <= CompassAccuracy.LOW),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -80,7 +81,7 @@ fun StatsColumn(state: CompassViewModel.State.SensorsPresent) {
                 CompassMode.MAGNETIC_NORTH ->
                     stringResource(R.string.compass_mode_value_magnetic_north)
                 CompassMode.TRUE_NORTH ->
-                    stringResource(R.string.compass_mode_value_magnetic_north)
+                    stringResource(R.string.compass_mode_value_true_north)
             },
             accuracy = null,
             accuracyVisible = false,
@@ -109,7 +110,7 @@ private fun StatsColumnLoadedPreview() {
             StatsColumn(
                 CompassViewModel.State.SensorsPresent.Loaded(
                     rotationMatrix = FloatArray(9),
-                    accelerometerAccuracy = Compass.Accuracy.HIGH,
+                    accelerometerAccuracy = CompassAccuracy.HIGH,
                     magnetometerAccuracy = null,
                     magneticDeclinationDegrees = 10f,
                     mode = CompassMode.TRUE_NORTH

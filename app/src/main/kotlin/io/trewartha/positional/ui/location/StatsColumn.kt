@@ -66,7 +66,7 @@ fun StatsColumn(stats: LocationState.Stats?) {
             text = stats?.updatedAt ?: "",
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
-                .padding(top = 12.dp, bottom = 24.dp)
+                .padding(top = 12.dp)
                 .align(Alignment.CenterHorizontally)
         )
     }
