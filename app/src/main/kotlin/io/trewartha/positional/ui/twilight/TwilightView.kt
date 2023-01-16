@@ -181,7 +181,7 @@ private fun TwilightRow(label: String, value: LocalTime?, modifier: Modifier = M
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(

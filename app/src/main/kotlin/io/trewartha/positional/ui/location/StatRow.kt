@@ -20,7 +20,6 @@ import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.utils.placeholder
 
-
 @Composable
 fun StatRow(
     icon: ImageVector,
@@ -44,16 +43,14 @@ fun StatRow(
         )
         Text(
             text = name,
-            fontSize = 18.sp,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .padding(start = HORIZONTAL_PADDING)
                 .weight(1f, true),
         )
         Text(
             text = value ?: "",
-            fontSize = 18.sp,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .padding(start = HORIZONTAL_PADDING)
                 .placeholder(placeholdersVisible)
@@ -62,7 +59,7 @@ fun StatRow(
             Text(
                 text = accuracy ?: "",
                 fontSize = 14.sp,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .padding(start = HORIZONTAL_PADDING)
                     .placeholder(placeholdersVisible)
