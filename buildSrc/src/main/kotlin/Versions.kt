@@ -35,7 +35,7 @@ object Versions {
         const val androidXActivityCompose = "1.6.1"
         const val androidXCompose = "1.4.0-alpha03"
         const val androidXComposeCompiler = "1.4.0-alpha02"
-        const val androidXComposeMaterial3 = "1.1.0-alpha03"
+        const val androidXComposeMaterial3 = "1.1.0-alpha04"
         const val androidXConstraintLayoutCompose = "1.1.0-alpha05"
         const val androidXDataStore = "1.1.0-alpha01"
         const val androidXFragment = "1.5.4"

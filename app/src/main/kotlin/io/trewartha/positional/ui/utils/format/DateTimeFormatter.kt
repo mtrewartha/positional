@@ -10,5 +10,7 @@ interface DateTimeFormatter {
 
     fun formatDateTime(localDateTime: LocalDateTime): String
 
+    fun formatFullDayOfWeek(localDate: LocalDate): String
+
     fun formatTime(localTime: LocalTime, includeSeconds: Boolean = false): String
 }

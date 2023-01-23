@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.material.icons.rounded.MyLocation
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.WbSunny
+import androidx.compose.material.icons.rounded.WbTwilight
 import androidx.compose.ui.graphics.vector.ImageVector
 import io.trewartha.positional.R
 
@@ -41,7 +41,7 @@ sealed class Screen {
 
         object Twilight : BottomNavigable() {
             override val route = "twilight"
-            override val navIcon = Icons.Rounded.WbSunny
+            override val navIcon = Icons.Rounded.WbTwilight
             override val navLabelRes = R.string.bottom_navigation_twilight
         }
     }
