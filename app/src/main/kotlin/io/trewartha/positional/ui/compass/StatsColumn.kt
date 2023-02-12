@@ -1,6 +1,7 @@
 package io.trewartha.positional.ui.compass
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,15 +27,21 @@ import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassMode
-import io.trewartha.positional.ui.location.StatRow
 import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
+import io.trewartha.positional.ui.location.StatRow
 
 @Composable
-fun StatsColumn(state: CompassViewModel.State.SensorsPresent) {
-    Column {
+fun StatsColumn(
+    state: CompassViewModel.State.SensorsPresent,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         val placeholdersVisible = state is CompassViewModel.State.SensorsPresent.Loading
         val (accelerometerAccuracy, magnetometerAccuracy) =
             (state as? CompassViewModel.State.SensorsPresent.Loaded)
@@ -42,10 +49,10 @@ fun StatsColumn(state: CompassViewModel.State.SensorsPresent) {
                 ?: (null to null)
         AnimatedVisibility(
             visible = !placeholdersVisible &&
-                (accelerometerAccuracy == null ||
-                    magnetometerAccuracy == null ||
-                    accelerometerAccuracy <= CompassAccuracy.LOW ||
-                    magnetometerAccuracy <= CompassAccuracy.LOW),
+                    (accelerometerAccuracy == null ||
+                            magnetometerAccuracy == null ||
+                            accelerometerAccuracy <= CompassAccuracy.LOW ||
+                            magnetometerAccuracy <= CompassAccuracy.LOW),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -72,7 +79,7 @@ fun StatsColumn(state: CompassViewModel.State.SensorsPresent) {
                 }
             }
         }
-        val dividerIndent = 16.dp
+        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = Icons.Rounded.North,
             name = stringResource(R.string.compass_mode_label),
@@ -87,7 +94,7 @@ fun StatsColumn(state: CompassViewModel.State.SensorsPresent) {
             accuracyVisible = false,
             placeholdersVisible = placeholdersVisible
         )
-        Divider(modifier = Modifier.padding(horizontal = dividerIndent))
+        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = ImageVector.vectorResource(R.drawable.ic_angle_acute_24px),
             name = stringResource(R.string.compass_declination_label),

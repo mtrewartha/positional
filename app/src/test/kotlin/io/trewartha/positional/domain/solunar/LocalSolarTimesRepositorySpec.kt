@@ -1,4 +1,4 @@
-package io.trewartha.positional.domain.twilight
+package io.trewartha.positional.domain.solunar
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -12,9 +12,9 @@ private val JUN_1_2000 = LocalDate(2000, Month.JUNE, 1)
 private val SEP_1_2000 = LocalDate(2000, Month.SEPTEMBER, 1)
 private val DEC_1_2000 = LocalDate(2000, Month.DECEMBER, 1)
 
-class LibraryTwilightRepositorySpec : BehaviorSpec({
+class LocalSolarTimesRepositorySpec : BehaviorSpec({
 
-    lateinit var subject: LibraryTwilightRepository
+    lateinit var subject: LocalSolarTimesRepository
 
     val dates = listOf(JAN_1_2000, MAR_1_2000, JUN_1_2000, SEP_1_2000, DEC_1_2000)
 
@@ -23,13 +23,13 @@ class LibraryTwilightRepositorySpec : BehaviorSpec({
     val longitude = -92.1005
 
     beforeTest {
-        subject = LibraryTwilightRepository()
+        subject = LocalSolarTimesRepository()
     }
 
     given("a date at a specific location") {
         `when`("astronomical dawn is calculated") {
             val astronomicalDawns = dates.associateWith { date ->
-                subject.getMorningAstronomicalTwilight(date, latitude, longitude)
+                subject.getAstronomicalDawn(date, latitude, longitude)
             }
             then("then it is correct") {
                 astronomicalDawns[JAN_1_2000]!!.shouldBe(LocalTime(6, 3))
@@ -41,7 +41,7 @@ class LibraryTwilightRepositorySpec : BehaviorSpec({
         }
         `when`("nautical dawn is calculated") {
             val nauticalDawns = dates.associateWith { date ->
-                subject.getMorningNauticalTwilight(date, latitude, longitude)
+                subject.getNauticalDawn(date, latitude, longitude)
             }
             then("then it is correct") {
                 nauticalDawns[JAN_1_2000]!!.shouldBe(LocalTime(6, 40))
@@ -53,7 +53,7 @@ class LibraryTwilightRepositorySpec : BehaviorSpec({
         }
         `when`("civil dawn is calculated") {
             val civilDawns = dates.associateWith { date ->
-                subject.getMorningCivilTwilight(date, latitude, longitude)
+                subject.getCivilDawn(date, latitude, longitude)
             }
             then("then it is correct") {
                 civilDawns[JAN_1_2000]!!.shouldBe(LocalTime(7, 18))
@@ -89,7 +89,7 @@ class LibraryTwilightRepositorySpec : BehaviorSpec({
         }
         `when`("civil dusk is calculated") {
             val civilDusks = dates.associateWith { date ->
-                subject.getEveningCivilTwilight(date, latitude, longitude)
+                subject.getCivilDusk(date, latitude, longitude)
             }
             then("then it is correct") {
                 civilDusks[JAN_1_2000]!!.shouldBe(LocalTime(17, 6))
@@ -101,7 +101,7 @@ class LibraryTwilightRepositorySpec : BehaviorSpec({
         }
         `when`("nautical dusk is calculated") {
             val nauticalDusks = dates.associateWith { date ->
-                subject.getEveningNauticalTwilight(date, latitude, longitude)
+                subject.getNauticalDusk(date, latitude, longitude)
             }
             then("then it is correct") {
                 nauticalDusks[JAN_1_2000]!!.shouldBe(LocalTime(17, 44))
@@ -113,7 +113,7 @@ class LibraryTwilightRepositorySpec : BehaviorSpec({
         }
         `when`("astronomical dusk is calculated") {
             val astronomicalDusks = dates.associateWith { date ->
-                subject.getEveningAstronomicalTwilight(date, latitude, longitude)
+                subject.getAstronomicalDusk(date, latitude, longitude)
             }
             then("then it is correct") {
                 astronomicalDusks[JAN_1_2000]!!.shouldBe(LocalTime(18, 21))

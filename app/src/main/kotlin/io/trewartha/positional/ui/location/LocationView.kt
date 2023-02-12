@@ -23,12 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.Screen
+import io.trewartha.positional.ui.NavDestination.LocationInfo
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
@@ -51,9 +52,8 @@ fun LocationView(
         state = state,
         events = viewModel.events,
         onCopyClick = viewModel::onCopyClick,
-        onHelpClick = viewModel::onHelpClick,
         onLaunchClick = viewModel::onLaunchClick,
-        onNavigateToHelp = { navController.navigate(Screen.Help.route) },
+        onNavigateToInfo = { navController.navigate(LocationInfo.route) },
         onNavigateToMap = { lat, lon, localDateTime ->
             context.navigateToMap(lat, lon, dateTimeFormatter.formatDateTime(localDateTime))
         },
@@ -68,9 +68,8 @@ private fun LocationView(
     state: LocationState?,
     events: Flow<LocationEvent>,
     onCopyClick: () -> Unit,
-    onHelpClick: () -> Unit,
     onLaunchClick: () -> Unit,
-    onNavigateToHelp: () -> Unit,
+    onNavigateToInfo: () -> Unit,
     onNavigateToMap: (Double, Double, LocalDateTime) -> Unit,
     onNavigateToSettings: () -> Unit,
     onScreenLockCheckedChange: (Boolean) -> Unit,
@@ -100,7 +99,7 @@ private fun LocationView(
     val window = activity?.window
 
     Scaffold(
-        topBar = { LocationTopAppBar(state, onHelpClick, onScreenLockCheckedChange) },
+        topBar = { LocationTopAppBar(state, onNavigateToInfo, onScreenLockCheckedChange) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { contentPadding ->
         Box(
@@ -116,7 +115,8 @@ private fun LocationView(
                     state = state,
                     onCopyClick = onCopyClick,
                     onLaunchClick = onLaunchClick,
-                    onShareClick = onShareClick
+                    onShareClick = onShareClick,
+                    modifier = Modifier.padding(16.dp)
                 )
             } else if (locationPermissionsState.revokedPermissions.size == locationPermissions.size) {
                 LocationPermissionRequiredContent(
@@ -133,8 +133,6 @@ private fun LocationView(
             when (it) {
                 is LocationEvent.NavigateToGeoActivity ->
                     onNavigateToMap(it.latitude, it.longitude, it.localDateTime)
-                is LocationEvent.NavigateToLocationHelp ->
-                    onNavigateToHelp()
                 is LocationEvent.NavigateToSettings ->
                     onNavigateToSettings()
                 is LocationEvent.ShowCoordinatesCopyErrorSnackbar -> launch {
@@ -222,9 +220,8 @@ private fun Preview() {
         state = null,
         events = emptyFlow(),
         onCopyClick = {},
-        onHelpClick = {},
         onLaunchClick = {},
-        onNavigateToHelp = {},
+        onNavigateToInfo = {},
         onNavigateToMap = { _, _, _ -> },
         onNavigateToSettings = {},
         onScreenLockCheckedChange = {},

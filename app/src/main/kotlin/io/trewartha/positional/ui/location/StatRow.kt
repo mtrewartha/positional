@@ -1,8 +1,8 @@
 package io.trewartha.positional.ui.location
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Adjust
@@ -32,8 +32,8 @@ fun StatRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
             .placeholder(visible = placeholdersVisible),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -44,25 +44,19 @@ fun StatRow(
         Text(
             text = name,
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(start = HORIZONTAL_PADDING)
-                .weight(1f, true),
+            modifier = Modifier.weight(1f, true),
         )
         Text(
             text = value ?: "",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier
-                .padding(start = HORIZONTAL_PADDING)
-                .placeholder(placeholdersVisible)
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.placeholder(placeholdersVisible)
         )
         if (accuracyVisible) {
             Text(
                 text = accuracy ?: "",
                 fontSize = 14.sp,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(start = HORIZONTAL_PADDING)
-                    .placeholder(placeholdersVisible)
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.placeholder(placeholdersVisible)
             )
         }
     }
@@ -102,5 +96,4 @@ fun LocationStatRowPlaceholderPreview() {
     }
 }
 
-private val HORIZONTAL_PADDING = 16.dp
-private val ICON_SIZE = 24.dp
+private val ICON_SIZE = 20.dp

@@ -14,8 +14,8 @@ import io.trewartha.positional.domain.location.AndroidFusedLocationRepository
 import io.trewartha.positional.domain.location.LocationRepository
 import io.trewartha.positional.domain.settings.DataStoreSettingsRepository
 import io.trewartha.positional.domain.settings.SettingsRepository
-import io.trewartha.positional.domain.twilight.LibraryTwilightRepository
-import io.trewartha.positional.domain.twilight.TwilightRepository
+import io.trewartha.positional.domain.solunar.LocalSolarTimesRepository
+import io.trewartha.positional.domain.solunar.SolarTimesRepository
 import kotlinx.coroutines.Dispatchers
 
 @Module
@@ -41,5 +41,5 @@ class RepositoryModule {
     ): SettingsRepository = DataStoreSettingsRepository(settingsDataStore)
 
     @Provides
-    fun twilightRepository(): TwilightRepository = LibraryTwilightRepository()
+    fun solarTimesRepository(): SolarTimesRepository = LocalSolarTimesRepository()
 }

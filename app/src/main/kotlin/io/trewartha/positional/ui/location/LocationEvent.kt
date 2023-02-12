@@ -10,8 +10,6 @@ sealed interface LocationEvent {
         val localDateTime: LocalDateTime
     ) : LocationEvent
 
-    object NavigateToLocationHelp : LocationEvent
-
     object NavigateToSettings : LocationEvent
 
     object ShowScreenLockedSnackbar : LocationEvent

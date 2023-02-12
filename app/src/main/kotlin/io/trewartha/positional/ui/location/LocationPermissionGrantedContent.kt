@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
@@ -39,14 +38,13 @@ fun LocationPermissionGrantedContent(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .weight(1f, fill = true)
                 .fillMaxSize()
-                .padding(16.dp)
         ) {
             if (state == null) {
                 Text(
@@ -69,8 +67,7 @@ fun LocationPermissionGrantedContent(
             onLaunchClick = onLaunchClick,
             onShareClick = onShareClick
         )
-        Divider(modifier = Modifier.padding(horizontal = 16.dp))
-        StatsColumn(state?.stats)
+        StatsColumn(stats = state?.stats)
     }
 }
 

@@ -16,16 +16,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import io.trewartha.positional.ui.Screen.BottomNavigable.Compass
-import io.trewartha.positional.ui.Screen.BottomNavigable.Location
-import io.trewartha.positional.ui.Screen.BottomNavigable.Settings
-import io.trewartha.positional.ui.Screen.BottomNavigable.Twilight
-import io.trewartha.positional.ui.Screen.Help
+import io.trewartha.positional.ui.NavDestination.BottomNavDestination.Compass
+import io.trewartha.positional.ui.NavDestination.BottomNavDestination.Location
+import io.trewartha.positional.ui.NavDestination.BottomNavDestination.Settings
+import io.trewartha.positional.ui.NavDestination.BottomNavDestination.Solunar
+import io.trewartha.positional.ui.NavDestination.LocationInfo
+import io.trewartha.positional.ui.NavDestination.SolunarInfo
 import io.trewartha.positional.ui.compass.CompassView
 import io.trewartha.positional.ui.location.LocationView
-import io.trewartha.positional.ui.location.help.LocationHelpView
+import io.trewartha.positional.ui.location.info.LocationInfoView
 import io.trewartha.positional.ui.settings.SettingsView
-import io.trewartha.positional.ui.twilight.TwilightView
+import io.trewartha.positional.ui.solunar.SolunarView
+import io.trewartha.positional.ui.solunar.info.SolunarInfoView
 
 @Composable
 fun MainView(
@@ -36,7 +38,7 @@ fun MainView(
             NavigationBar {
                 val navBackStackEntry by navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
-                listOf(Location, Compass, Twilight, Settings).forEach { screen ->
+                listOf(Location, Compass, Solunar, Settings).forEach { screen ->
                     NavigationBarItem(
                         selected = currentRoute == screen.route,
                         onClick = onClick@{
@@ -68,11 +70,12 @@ fun MainView(
                 .padding(contentPadding)
                 .consumeWindowInsets(WindowInsets.safeContent)
         ) {
-            composable(Location.route) { LocationView(navController = navHostController) }
             composable(Compass.route) { CompassView() }
-            composable(Twilight.route) { TwilightView() }
+            composable(Location.route) { LocationView(navController = navHostController) }
+            composable(LocationInfo.route) { LocationInfoView(navController = navHostController) }
             composable(Settings.route) { SettingsView() }
-            composable(Help.route) { LocationHelpView(navController = navHostController) }
+            composable(Solunar.route) { SolunarView(navController = navHostController) }
+            composable(SolunarInfo.route) { SolunarInfoView(navController = navHostController) }
         }
     }
 }

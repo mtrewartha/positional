@@ -1,6 +1,8 @@
 package io.trewartha.positional.ui.location
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Adjust
@@ -22,11 +24,17 @@ import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 
 @Composable
-fun StatsColumn(stats: LocationState.Stats?) {
-    Column {
+fun StatsColumn(
+    stats: LocationState.Stats?,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         val accuracyVisible = stats?.showAccuracies ?: false
         val placeholdersVisible = stats == null
-        val dividerIndent = 16.dp
+        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = Icons.Rounded.Adjust,
             name = stringResource(R.string.location_label_accuracy),
@@ -35,7 +43,7 @@ fun StatsColumn(stats: LocationState.Stats?) {
             accuracyVisible = accuracyVisible,
             placeholdersVisible = placeholdersVisible
         )
-        Divider(modifier = Modifier.padding(horizontal = dividerIndent))
+        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = Icons.Rounded.Explore,
             name = stringResource(R.string.location_label_bearing),
@@ -44,7 +52,7 @@ fun StatsColumn(stats: LocationState.Stats?) {
             accuracyVisible = accuracyVisible,
             placeholdersVisible = placeholdersVisible
         )
-        Divider(modifier = Modifier.padding(horizontal = dividerIndent))
+        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = Icons.Rounded.Height,
             name = stringResource(R.string.location_label_altitude),
@@ -53,7 +61,7 @@ fun StatsColumn(stats: LocationState.Stats?) {
             accuracyVisible = accuracyVisible,
             placeholdersVisible = placeholdersVisible
         )
-        Divider(modifier = Modifier.padding(horizontal = dividerIndent))
+        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = Icons.Rounded.Speed,
             name = stringResource(R.string.location_label_speed),
@@ -62,6 +70,7 @@ fun StatsColumn(stats: LocationState.Stats?) {
             accuracyVisible = accuracyVisible,
             placeholdersVisible = placeholdersVisible
         )
+        Divider(modifier = Modifier.fillMaxWidth())
         Text(
             text = stats?.updatedAt ?: "",
             style = MaterialTheme.typography.bodySmall,

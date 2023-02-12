@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.twilight
+package io.trewartha.positional.ui.solunar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -39,7 +39,7 @@ private fun SunriseSunsetTime(value: LocalTime?, modifier: Modifier = Modifier) 
     Text(
         text = value
             ?.let { LocalDateTimeFormatter.current.formatTime(it) }
-            ?: stringResource(R.string.twilight_time_none),
+            ?: stringResource(R.string.solunar_text_time_none),
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.headlineMedium,
         modifier = modifier.defaultMinSize(minWidth = 64.dp)

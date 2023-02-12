@@ -8,41 +8,45 @@ import androidx.compose.material.icons.rounded.WbTwilight
 import androidx.compose.ui.graphics.vector.ImageVector
 import io.trewartha.positional.R
 
-sealed class Screen {
+sealed interface NavDestination {
 
-    abstract val route: String
+    val route: String
 
-    object Help : Screen() {
-        override val route = "help"
+    object LocationInfo : NavDestination {
+        override val route = "location/info"
     }
 
-    sealed class BottomNavigable : Screen() {
+    object SolunarInfo : NavDestination {
+        override val route = "solunar/info"
+    }
 
-        abstract val navIcon: ImageVector
-        abstract val navLabelRes: Int
+    sealed interface BottomNavDestination : NavDestination {
 
-        object Compass : BottomNavigable() {
+        val navIcon: ImageVector
+        val navLabelRes: Int
+
+        object Compass : BottomNavDestination {
             override val route = "compass"
             override val navIcon = Icons.Rounded.Explore
             override val navLabelRes = R.string.bottom_navigation_compass
         }
 
-        object Location : BottomNavigable() {
+        object Location : BottomNavDestination {
             override val route = "location"
             override val navIcon = Icons.Rounded.MyLocation
             override val navLabelRes = R.string.bottom_navigation_location
         }
 
-        object Settings : BottomNavigable() {
+        object Settings : BottomNavDestination {
             override val route = "settings"
             override val navIcon = Icons.Rounded.Settings
             override val navLabelRes = R.string.bottom_navigation_settings
         }
 
-        object Twilight : BottomNavigable() {
-            override val route = "twilight"
+        object Solunar : BottomNavDestination {
+            override val route = "solunar"
             override val navIcon = Icons.Rounded.WbTwilight
-            override val navLabelRes = R.string.bottom_navigation_twilight
+            override val navLabelRes = R.string.bottom_navigation_solunar
         }
     }
 }

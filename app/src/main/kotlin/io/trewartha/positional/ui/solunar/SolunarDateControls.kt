@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.twilight
+package io.trewartha.positional.ui.solunar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +10,7 @@ import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,14 +19,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
+import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.utils.placeholder
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun DateControls(
+fun SolunarDateControls(
+    selectedDate: LocalDate?,
     onPreviousDayClick: () -> Unit,
-    date: LocalDate?,
     onNextDayClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -36,34 +39,34 @@ fun DateControls(
     ) {
         IconButton(
             onClick = onPreviousDayClick,
-            enabled = date != null,
+            enabled = selectedDate != null,
             modifier = Modifier.weight(1f, fill = true)
         ) {
             Icon(
                 imageVector = Icons.Rounded.NavigateBefore,
                 contentDescription = stringResource(
-                    R.string.twilight_button_previous_day_content_description
+                    R.string.solunar_button_previous_day_content_description
                 )
             )
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.weight(1f, fill = true)
+            modifier = Modifier
+                .weight(1f, fill = true)
+                .placeholder(visible = selectedDate == null)
         ) {
             val minTextWidth = 128.dp
             Text(
-                text = date?.let { LocalDateTimeFormatter.current.formatFullDayOfWeek(it) } ?: "",
-                modifier = Modifier
-                    .placeholder(visible = date == null)
-                    .widthIn(min = minTextWidth),
+                text = selectedDate?.let { LocalDateTimeFormatter.current.formatFullDayOfWeek(it) }
+                    ?: "",
+                modifier = Modifier.widthIn(min = minTextWidth),
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = date?.let { LocalDateTimeFormatter.current.formatDate(it) } ?: "",
+                text = selectedDate?.let { LocalDateTimeFormatter.current.formatDate(it) } ?: "",
                 modifier = Modifier
-                    .placeholder(visible = date == null)
                     .widthIn(min = minTextWidth),
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
@@ -71,14 +74,42 @@ fun DateControls(
         }
         IconButton(
             onClick = onNextDayClick,
-            enabled = date != null,
+            enabled = selectedDate != null,
             modifier = Modifier.weight(1f, fill = true)
         ) {
             Icon(
                 imageVector = Icons.Rounded.NavigateNext,
                 contentDescription = stringResource(
-                    R.string.twilight_button_next_day_content_description
+                    R.string.solunar_button_next_day_content_description
                 )
+            )
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+private fun LoadingPreview() {
+    PositionalTheme {
+        Surface {
+            SolunarDateControls(
+                selectedDate = null,
+                onPreviousDayClick = {},
+                onNextDayClick = {}
+            )
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+private fun LoadedPreview() {
+    PositionalTheme {
+        Surface {
+            SolunarDateControls(
+                selectedDate = LocalDate(2020, 1, 1),
+                onPreviousDayClick = {},
+                onNextDayClick = {}
             )
         }
     }

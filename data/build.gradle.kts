@@ -1,5 +1,3 @@
-import com.google.protobuf.gradle.id
-
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
@@ -7,8 +5,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 dependencies {

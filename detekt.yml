@@ -73,18 +73,18 @@ comments:
     allowParamOnConstructorProperties: true
   UndocumentedPublicClass:
     active: true
-    excludes: [ '**/androidApp/**', '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    excludes: [ ]
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
     searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: true
-    excludes: [ '**/androidApp/**', '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    excludes: [ ]
     ignoreAnnotated: [ 'Composable' ]
   UndocumentedPublicProperty:
     active: true
-    excludes: [ '**/androidApp/**', '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    excludes: [ ]
 
 complexity:
   active: true
@@ -576,6 +576,7 @@ style:
     ignoreLocalVariableDeclaration: false
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotated: [ 'Preview', 'ThemePreviews', 'WindowSizePreviews' ]
     ignoreAnnotation: false
     ignoreNamedArgument: true
     ignoreEnums: false
@@ -676,7 +677,7 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected|serialVersionUID)'
-    ignoreAnnotated: ['Preview','ThemePreviews']
+    ignoreAnnotated: [ 'Preview', 'ThemePreviews', 'WindowSizePreviews' ]
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseArrayLiteralsInAnnotations:

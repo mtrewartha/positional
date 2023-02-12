@@ -1,7 +1,7 @@
 package io.trewartha.positional.ui.location
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.HelpOutline
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBar
@@ -14,7 +14,7 @@ import io.trewartha.positional.ui.IconToggleButton
 @Composable
 fun LocationTopAppBar(
     state: LocationState?,
-    onHelpClick: () -> Unit,
+    onInfoClick: () -> Unit,
     onScreenLockCheckedChange: (Boolean) -> Unit
 ) {
     TopAppBar(
@@ -34,10 +34,10 @@ fun LocationTopAppBar(
                     ),
                 )
             }
-            IconButton(onClick = onHelpClick) {
+            IconButton(onClick = onInfoClick) {
                 Icon(
-                    imageVector = Icons.Rounded.HelpOutline,
-                    contentDescription = stringResource(R.string.location_help_button_content_description),
+                    imageVector = Icons.Rounded.Info,
+                    contentDescription = stringResource(R.string.location_info_button_content_description),
                 )
             }
         }

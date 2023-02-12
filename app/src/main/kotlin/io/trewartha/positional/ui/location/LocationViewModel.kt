@@ -120,10 +120,6 @@ class LocationViewModel @Inject constructor(
         }
     }
 
-    fun onHelpClick() {
-        viewModelScope.launch { _events.emit(LocationEvent.NavigateToLocationHelp) }
-    }
-
     fun onLaunchClick() {
         viewModelScope.launch {
             val currentLocation = location.value ?: return@launch

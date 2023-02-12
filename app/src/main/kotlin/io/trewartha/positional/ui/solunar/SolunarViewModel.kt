@@ -1,12 +1,12 @@
-package io.trewartha.positional.ui.twilight
+package io.trewartha.positional.ui.solunar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.location.Location
-import io.trewartha.positional.data.twilight.DailyTwilights
+import io.trewartha.positional.data.solunar.SolarTimes
 import io.trewartha.positional.domain.location.GetLocationUseCase
-import io.trewartha.positional.domain.twilight.GetDailyTwilightsUseCase
+import io.trewartha.positional.domain.solunar.GetSolarTimesUseCase
 import io.trewartha.positional.ui.utils.ForViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -33,9 +33,9 @@ import kotlin.time.Duration.Companion.seconds
  * View model for the Twilight view
  */
 @HiltViewModel
-class TwilightViewModel @Inject constructor(
+class SolunarViewModel @Inject constructor(
     getLocationUseCase: GetLocationUseCase,
-    private val getDailyTwilightTimes: GetDailyTwilightsUseCase,
+    private val getDailyTwilightTimes: GetSolarTimesUseCase,
 ) : ViewModel() {
 
     private val today: LocalDate
@@ -51,7 +51,7 @@ class TwilightViewModel @Inject constructor(
     /**
      * Twilight times on the selected date at the device's current location
      */
-    val selectedDateTwilights: Flow<DailyTwilights>
+    val selectedDateTwilights: Flow<SolarTimes>
         get() = combine(selectedDate, location) { date, location ->
             getDailyTwilightTimes(date, location.latitude, location.longitude)
         }

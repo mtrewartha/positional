@@ -102,8 +102,6 @@ object Dependencies {
         "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Dependencies.kotlinxDatetime}"
     const val markwon =
         "io.noties.markwon:core:${Versions.Dependencies.markwon}"
-    const val pageIndicatorView =
-        "com.github.romandanylyk:pageindicatorview:${Versions.Dependencies.pageIndicatorView}"
     const val playServicesLocation =
         "com.google.android.gms:play-services-location:${Versions.Dependencies.playServicesLocation}"
     const val sunriseSunset =

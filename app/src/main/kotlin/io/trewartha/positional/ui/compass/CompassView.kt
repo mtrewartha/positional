@@ -219,7 +219,10 @@ private fun SensorsPresentContent(
                 .padding(horizontal = 16.dp)
                 .placeholder(visible = placeholdersVisible)
         )
-        StatsColumn(state = state)
+        StatsColumn(
+            state = state,
+            Modifier.padding(horizontal = 16.dp)
+        )
     }
 }
 

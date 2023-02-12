@@ -11,8 +11,8 @@ import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 import io.trewartha.positional.domain.location.GetLocationUseCase
 import io.trewartha.positional.domain.location.LocationRepository
 import io.trewartha.positional.domain.settings.SettingsRepository
-import io.trewartha.positional.domain.twilight.GetDailyTwilightsUseCase
-import io.trewartha.positional.domain.twilight.TwilightRepository
+import io.trewartha.positional.domain.solunar.GetSolarTimesUseCase
+import io.trewartha.positional.domain.solunar.SolarTimesRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -40,6 +40,6 @@ class UseCaseModule {
 
     @Provides
     fun getSolarTimesUseCase(
-        twilightRepository: TwilightRepository
-    ): GetDailyTwilightsUseCase = GetDailyTwilightsUseCase(twilightRepository)
+        solarTimesRepository: SolarTimesRepository
+    ): GetSolarTimesUseCase = GetSolarTimesUseCase(solarTimesRepository)
 }

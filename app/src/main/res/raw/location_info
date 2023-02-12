@@ -1,0 +1,61 @@
+### How is this data calculated?
+Positional shows you 5 different aspects of your location:
+
+- Coordinates
+- Accuracy
+- Bearing
+- Altitude
+- Speed
+
+Positional does not actually calculate any of these; it simply asks Google Play Services and your
+Android device for them and then displays them to you as they flow in. For your privacy, Positional
+**never** records your location.
+
+### Coordinates
+This is your position on Earth, shown in whatever coordinate format you have selected. You can
+adjust the format in Settings. The following formats are available:
+
+- Decimal degrees
+- Degrees with decimal minutes
+- Degrees, minutes, and seconds
+- MGRS
+- UTM
+
+These coordinates are determined using Google Play Services' "fused" approach, using data from
+various sources like GNSS (e.g. GPS, Galileo, BDS, GLONASS, IRNSS, or QZSS), cell towers, and Wi-Fi
+networks.
+
+### Accuracy
+This is the accuracy of the coordinates above. It varies depending on the coordinates source (for
+more info about sources, see above) and the current environment your Android device is located in.
+For example, when you're outside with a clear view of the sky, you'll most likely have great GPS
+reception and see great accuracies. When you're deep inside of a building surrounded by concrete,
+steel, or other materials that interfere with GPS, cell, and WiFi signals, you'll most likely have
+poor reception and see worse accuracies. Lower numbers are better for accuracy.
+
+If you are _really_ interested in the technical meaning of this field, here is the documentation for
+this data in Android, which is exactly what Positional uses:
+
+>... the estimated horizontal accuracy radius in meters of this location at the 68th percentile
+confidence level. This means that there is a 68% chance that the true location of the device is
+within a distance of this uncertainty of the reported location. Another way of putting this is that
+if a circle with a radius equal to this accuracy is drawn around the reported location, there is a
+68% chance that the true location falls within this circle. This accuracy value is only valid for
+horizontal positioning, and not vertical positioning.
+
+### Bearing
+This is the direction you are moving, regardless of orientation of your Android device. To minimize
+distraction, speed and bearing are not shown when speed is 0.3 m/s (roughly 0.67 mph) or lower. This
+is because accuracies are often poor enough for devices to think they are moving when they are not.
+
+### Altitude
+This is your current altitude above the WGS-84 ellipsoid (a rough approximation of Earth's surface).
+
+### Speed
+This is your current ground speed (not air speed). To minimize distraction, speed and bearing are
+not shown when speed is 0.3 m/s (roughly 0.67 mph) or lower. This is because accuracies are often
+poor enough for devices to think they are moving when they are not.
+
+### Other Accuracies
+If your device is running Android 8.0 or higher, Positional will also show you accuracies for each
+of the position aspects listed at the top. You can hide these accuracies in Settings.

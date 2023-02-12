@@ -1,0 +1,17 @@
+### How are these times calculated?
+The times are calculated using equations that model the earth's orbit and the moon's orbit. Your
+current location and the date at your location are used as inputs into those equations. The times
+shown are for the same time zone your Android device is set to.
+
+### Sunrise & Sunset
+Sunrise is when the sun is coming up from below the horizon. Sunset is when the sun is going down
+below the horizon.
+
+### Dawn & Dusk
+Dawn is when the sun is rising and dusk is when the sun is setting. There are three types of dawn
+and dusk times that Positional shows you. They differ in how many degrees below the horizon the sun
+is:
+
+- **Civil** dawn and dusk: 6° below
+- **Nautical** dawn and dusk: 12° below
+- **Astronomical** dawn and dusk: 18° below

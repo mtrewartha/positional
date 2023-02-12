@@ -29,7 +29,6 @@ android {
         versionName = Versions.Application.name
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     buildTypes {
@@ -136,7 +135,6 @@ dependencies {
     implementation(Dependencies.kotlinxCoroutinesAndroid)
     implementation(Dependencies.kotlinxCoroutinesPlayServices)
     implementation(Dependencies.markwon)
-    implementation(Dependencies.pageIndicatorView)
     implementation(Dependencies.playServicesLocation)
     implementation(Dependencies.sunriseSunset)
     implementation(Dependencies.timber)

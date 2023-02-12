@@ -15,7 +15,7 @@
     <string name="bottom_navigation_compass">Compass</string>
     <string name="bottom_navigation_location">Location</string>
     <string name="bottom_navigation_settings">Settings</string>
-    <string name="bottom_navigation_twilight">Twilight</string>
+    <string name="bottom_navigation_solunar">Solunar</string>
 
     <!-- Compass -->
     <string name="compass_accuracy_warning_body">The sensors used to determine your direction currently have low accuracy. Moving your device in a figure eight pattern may help.</string>
@@ -66,9 +66,8 @@
     <string name="location_coordinates_copy_longitude">Longitude only</string>
     <string name="location_coordinates_copy_title">Which coordinates would you like to copy?</string>
     <string name="location_coordinates_copy_tooltip">Copy coordinates</string>
-    <string name="location_help_button_content_description">Help</string>
-    <string name="location_help_button_tooltip">Help</string>
-    <string name="location_help_toolbar_title">Location Help</string>
+    <string name="location_info_button_content_description">Info</string>
+    <string name="location_info_button_tooltip">Info</string>
     <string name="location_label_accuracy">Accuracy</string>
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_altitude">Altitude</string>
@@ -98,7 +97,6 @@
     <string name="location_speed_metric">%s km/h</string>
     <string name="location_updated_at">Updated at %s</string>
     <string name="location_updating">Device is acquiring location…</string>
-
 
     <!-- Settings -->
     <string name="settings_privacy_policy_summary">Learn more about how Positional respects your privacy and uses your data</string>
@@ -135,14 +133,17 @@
     <string name="settings_units_value_imperial_name">Imperial</string>
     <string name="settings_units_value_metric_name">Metric</string>
 
-    <!-- Twilight -->
-    <string name="twilight_button_next_day_content_description">Next day</string>
-    <string name="twilight_button_previous_day_content_description">Previous day</string>
-    <string name="twilight_button_today">Jump to today</string>
-    <string name="twilight_label_astronomical">Astronomical</string>
-    <string name="twilight_label_civil">Civil</string>
-    <string name="twilight_label_nautical">Nautical</string>
-    <string name="twilight_label_sunrise">Sunrise</string>
-    <string name="twilight_label_sunset">Sunset</string>
-    <string name="twilight_time_none">@string/common_dash</string>
+    <!-- Solunar -->
+    <string name="solunar_button_info_content_description">Info</string>
+    <string name="solunar_button_next_day_content_description">Next day</string>
+    <string name="solunar_button_previous_day_content_description">Previous day</string>
+    <string name="solunar_button_today">Jump to today</string>
+    <string name="solunar_label_dawn_dusk_astronomical">Astronomical</string>
+    <string name="solunar_label_dawn_dusk_civil">Civil</string>
+    <string name="solunar_label_dawn_dusk_nautical">Nautical</string>
+    <string name="solunar_text_time_none">@string/common_dash</string>
+    <string name="solunar_title_dawn">Dawn</string>
+    <string name="solunar_title_dusk">Dusk</string>
+    <string name="solunar_title_sunrise">Sunrise</string>
+    <string name="solunar_title_sunset">Sunset</string>
 </resources>
