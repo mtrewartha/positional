@@ -1,18 +1,27 @@
 package io.trewartha.positional.ui.settings
 
+//import com.google.accompanist.navigation.animation.composable
 import android.os.Build
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
+import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.ui.Theme
@@ -66,6 +75,8 @@ private fun SettingsView(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ThemeSetting(
                 value = theme,
@@ -94,7 +105,14 @@ private fun SettingsView(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            // onNavigateToPrivacyPolicy()
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+            TextButton(onClick = onNavigateToPrivacyPolicy) {
+                Text(text = stringResource(id = R.string.settings_privacy_policy_title))
+            }
         }
     }
 }
@@ -102,19 +120,21 @@ private fun SettingsView(
 @ThemePreviews
 @Composable
 private fun LoadingPreviews() {
-    SettingsView(
-        compassMode = null,
-        onCompassModeChange = {},
-        coordinatesFormat = null,
-        onCoordinatesFormatChange = {},
-        showAccuracies = null,
-        onShowAccuraciesChange = {},
-        theme = null,
-        onThemeChange = {},
-        units = null,
-        onUnitsChange = {},
-        onNavigateToPrivacyPolicy = {}
-    )
+    PositionalTheme {
+        SettingsView(
+            compassMode = null,
+            onCompassModeChange = {},
+            coordinatesFormat = null,
+            onCoordinatesFormatChange = {},
+            showAccuracies = null,
+            onShowAccuraciesChange = {},
+            theme = null,
+            onThemeChange = {},
+            units = null,
+            onUnitsChange = {},
+            onNavigateToPrivacyPolicy = {}
+        )
+    }
 }
 
 @ThemePreviews
