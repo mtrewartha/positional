@@ -1,23 +1,11 @@
 package io.trewartha.positional.ui.compass
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material.icons.rounded.North
-import androidx.compose.material.icons.rounded.Warning
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -27,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassMode
-import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
@@ -40,46 +27,9 @@ fun StatsColumn(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         val placeholdersVisible = state is CompassViewModel.State.SensorsPresent.Loading
-        val (accelerometerAccuracy, magnetometerAccuracy) =
-            (state as? CompassViewModel.State.SensorsPresent.Loaded)
-                ?.let { it.accelerometerAccuracy to it.magnetometerAccuracy }
-                ?: (null to null)
-        AnimatedVisibility(
-            visible = !placeholdersVisible &&
-                    (accelerometerAccuracy == null ||
-                            magnetometerAccuracy == null ||
-                            accelerometerAccuracy <= CompassAccuracy.LOW ||
-                            magnetometerAccuracy <= CompassAccuracy.LOW),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.padding(16.dp)) {
-                    Icon(
-                        imageVector = Icons.Rounded.Warning,
-                        contentDescription = null,
-                        modifier = Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column {
-                        Text(
-                            text = stringResource(R.string.compass_accuracy_warning_title),
-                            style = MaterialTheme.typography.titleSmall
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = stringResource(R.string.compass_accuracy_warning_body),
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                }
-            }
-        }
-        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = Icons.Rounded.North,
             name = stringResource(R.string.compass_mode_label),
@@ -91,10 +41,9 @@ fun StatsColumn(
                     stringResource(R.string.compass_mode_value_true_north)
             },
             accuracy = null,
-            accuracyVisible = false,
-            placeholdersVisible = placeholdersVisible
+            showAccuracy = false,
+            showPlaceholder = placeholdersVisible
         )
-        Divider(modifier = Modifier.fillMaxWidth())
         StatRow(
             icon = ImageVector.vectorResource(R.drawable.ic_angle_acute_24px),
             name = stringResource(R.string.compass_declination_label),
@@ -102,8 +51,46 @@ fun StatsColumn(
                 ?.magneticDeclinationDegrees
                 ?.let { stringResource(R.string.compass_declination, it) },
             accuracy = null,
-            accuracyVisible = false,
-            placeholdersVisible = placeholdersVisible
+            showAccuracy = false,
+            showPlaceholder = placeholdersVisible
+        )
+        StatRow(
+            icon = Icons.Rounded.Adjust,
+            name = stringResource(R.string.compass_label_accelerometer_accuracy),
+            value = stringResource(
+                when (
+                    (state as? CompassViewModel.State.SensorsPresent.Loaded)?.accelerometerAccuracy
+                ) {
+                    CompassAccuracy.HIGH -> R.string.compass_accuracy_high
+                    CompassAccuracy.MEDIUM -> R.string.compass_accuracy_medium
+                    CompassAccuracy.LOW -> R.string.compass_accuracy_low
+                    CompassAccuracy.UNRELIABLE -> R.string.compass_accuracy_unreliable
+                    CompassAccuracy.UNUSABLE -> R.string.compass_accuracy_unusable
+                    null -> R.string.compass_accuracy_unknown
+                }
+            ),
+            accuracy = null,
+            showAccuracy = false,
+            showPlaceholder = placeholdersVisible
+        )
+        StatRow(
+            icon = Icons.Rounded.Adjust,
+            name = stringResource(R.string.compass_label_magnetometer_accuracy),
+            value = stringResource(
+                when (
+                    (state as? CompassViewModel.State.SensorsPresent.Loaded)?.magnetometerAccuracy
+                ) {
+                    CompassAccuracy.HIGH -> R.string.compass_accuracy_high
+                    CompassAccuracy.MEDIUM -> R.string.compass_accuracy_medium
+                    CompassAccuracy.LOW -> R.string.compass_accuracy_low
+                    CompassAccuracy.UNRELIABLE -> R.string.compass_accuracy_unreliable
+                    CompassAccuracy.UNUSABLE -> R.string.compass_accuracy_unusable
+                    null -> R.string.compass_accuracy_unknown
+                }
+            ),
+            accuracy = null,
+            showAccuracy = false,
+            showPlaceholder = placeholdersVisible
         )
     }
 }

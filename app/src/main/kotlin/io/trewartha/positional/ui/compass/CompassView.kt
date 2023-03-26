@@ -9,7 +9,6 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,18 +20,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Memory
 import androidx.compose.material.icons.rounded.North
+import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,31 +44,54 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.navigation.animation.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassMode
+import io.trewartha.positional.ui.IconButton
+import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.placeholder
 
-@Composable
-fun CompassView(
-    viewModel: CompassViewModel = hiltViewModel()
+fun NavGraphBuilder.compassView(
+    onNavigateToInfo: () -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
-    CompassView(
-        state = state,
-        onSensorsMissingWhyClick = viewModel::onSensorsMissingWhyClick,
-    )
+    composable(Compass.route) {
+        val viewModel: CompassViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
+        CompassView(
+            state = state,
+            onSensorsMissingWhyClick = viewModel::onSensorsMissingWhyClick,
+            onNavigateToInfo = onNavigateToInfo
+        )
+    }
 }
 
 @Composable
 private fun CompassView(
     state: CompassViewModel.State,
     onSensorsMissingWhyClick: () -> Unit,
+    onNavigateToInfo: () -> Unit,
 ) {
-    Scaffold { contentPadding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                actions = {
+                    IconButton(onClick = onNavigateToInfo) {
+                        Icon(
+                            Icons.Rounded.Info,
+                            stringResource(R.string.compass_button_info_content_description),
+                        )
+                    }
+                }
+            )
+        }
+    ) { contentPadding ->
         when (state) {
             is CompassViewModel.State.SensorsMissing ->
                 SensorsMissingContent(
@@ -98,7 +125,7 @@ private fun SensorsMissingContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Image(
+            Icon(
                 imageVector = Icons.Rounded.Memory,
                 contentDescription = null,
                 modifier = Modifier.size(36.dp)
@@ -145,6 +172,10 @@ private fun SensorsPresentContent(
     state: CompassViewModel.State.SensorsPresent,
     modifier: Modifier = Modifier
 ) {
+    var showAccuracyHelpDialog by remember { mutableStateOf(false) }
+    if (showAccuracyHelpDialog) {
+        AccuracyHelpDialog(onDismissRequest = { showAccuracyHelpDialog = false })
+    }
     Column(
         modifier = modifier
             .padding(vertical = 16.dp)
@@ -152,21 +183,22 @@ private fun SensorsPresentContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val placeholdersVisible = state is CompassViewModel.State.SensorsPresent.Loading
-        val remappedRotationMatrix = remember { FloatArray(9) }
-        val orientation = remember { FloatArray(3) }
+        val remappedRotationMatrix = remember { FloatArray(ROTATION_MATRIX_SIZE) }
+        val orientation = remember { FloatArray(ORIENTATION_VECTOR_SIZE) }
         val azimuthDegrees = if (state is CompassViewModel.State.SensorsPresent.Loaded) {
-            val (newXAxis, newYAxis) = when (LocalContext.current.display?.rotation
-                ?: Surface.ROTATION_0) {
+            val (newXAxis, newYAxis) = when (
+                val rotation = LocalContext.current.display?.rotation ?: Surface.ROTATION_0
+            ) {
                 Surface.ROTATION_0 -> SensorManager.AXIS_X to SensorManager.AXIS_Y
                 Surface.ROTATION_90 -> SensorManager.AXIS_Y to SensorManager.AXIS_MINUS_X
                 Surface.ROTATION_180 -> SensorManager.AXIS_MINUS_Y to SensorManager.AXIS_MINUS_X
                 Surface.ROTATION_270 -> SensorManager.AXIS_MINUS_Y to SensorManager.AXIS_X
-                else -> throw IllegalStateException()
+                else -> error("Unexpected rotation: $rotation")
             }
             remapCoordinateSystem(state.rotationMatrix, newXAxis, newYAxis, remappedRotationMatrix)
             getOrientation(remappedRotationMatrix, orientation)
             val degreesToMagneticNorth =
-                (Math.toDegrees(orientation[0].toDouble()).toFloat() + 360f) % 360f
+                (Math.toDegrees(orientation[0].toDouble()).toFloat() + DEGREES_360) % DEGREES_360
             when (state.mode) {
                 CompassMode.MAGNETIC_NORTH ->
                     degreesToMagneticNorth
@@ -219,11 +251,25 @@ private fun SensorsPresentContent(
                 .padding(horizontal = 16.dp)
                 .placeholder(visible = placeholdersVisible)
         )
+
         StatsColumn(
             state = state,
-            Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
+}
+
+@Composable
+private fun AccuracyHelpDialog(onDismissRequest: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        icon = { Icon(imageVector = Icons.Rounded.Warning, contentDescription = null) },
+        title = { Text(stringResource(R.string.compass_dialog_accuracy_help_title)) },
+        text = { Text(stringResource(R.string.compass_dialog_accuracy_help_text)) },
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.common_ok)) }
+        },
+    )
 }
 
 private const val AZIMUTH_NORTH_MIN = 337.5f
@@ -242,6 +288,9 @@ private const val AZIMUTH_SOUTHWEST_MIN = AZIMUTH_SOUTH_MAX
 private const val AZIMUTH_SOUTHWEST_MAX = AZIMUTH_WEST_MIN
 private const val AZIMUTH_NORTHWEST_MIN = AZIMUTH_WEST_MAX
 private const val AZIMUTH_NORTHWEST_MAX = AZIMUTH_NORTH_MIN
+private const val DEGREES_360 = 360f
+private const val ROTATION_MATRIX_SIZE = 9
+private const val ORIENTATION_VECTOR_SIZE = 3
 
 @ThemePreviews
 @WindowSizePreviews

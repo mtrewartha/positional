@@ -37,7 +37,7 @@ fun LocationTopAppBar(
             IconButton(onClick = onInfoClick) {
                 Icon(
                     imageVector = Icons.Rounded.Info,
-                    contentDescription = stringResource(R.string.location_info_button_content_description),
+                    contentDescription = stringResource(R.string.location_button_info_content_description),
                 )
             }
         }

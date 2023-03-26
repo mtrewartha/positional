@@ -34,7 +34,9 @@ object Dependencies {
         "androidx.legacy:legacy-support-v4:${Versions.Dependencies.androidXLegacySupportV4}"
     const val androidXLifecycleLiveDataKtx =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.Dependencies.androidXLifecycle}"
-    const val androidXLifecycleRuntime =
+    const val androidXLifecycleRuntimeCompose =
+        "androidx.lifecycle:lifecycle-runtime-compose:${Versions.Dependencies.androidXLifecycle}"
+    const val androidXLifecycleRuntimeKtx =
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.Dependencies.androidXLifecycle}"
     const val androidXLifecycleViewModelCompose =
         "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Dependencies.androidXLifecycle}"
@@ -60,6 +62,8 @@ object Dependencies {
         "com.google.firebase:firebase-perf-ktx"
     const val googleAccompanistInsetsUI =
         "com.google.accompanist:accompanist-insets-ui:${Versions.Dependencies.googleAccompanist}"
+    const val googleAccompanistNavigationAnimation =
+        "com.google.accompanist:accompanist-navigation-animation:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistPager =
         "com.google.accompanist:accompanist-pager:${Versions.Dependencies.googleAccompanist}"
     const val googleAccompanistPagerIndicators =

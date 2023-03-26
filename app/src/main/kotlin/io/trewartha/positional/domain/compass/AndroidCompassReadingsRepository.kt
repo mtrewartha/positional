@@ -7,10 +7,14 @@ import android.hardware.SensorManager
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassReadings
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 import javax.inject.Inject
 
 class AndroidCompassReadingsRepository @Inject constructor(
@@ -20,14 +24,25 @@ class AndroidCompassReadingsRepository @Inject constructor(
     private val accelerometer: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
+    private val togglingFlow = flow<CompassAccuracy> {
+        while (currentCoroutineContext().isActive) {
+            emit(CompassAccuracy.LOW)
+            delay(2000)
+            emit(CompassAccuracy.HIGH)
+            delay(2000)
+        }
+    }
+
     private val accelerometerAccuracyFlow: Flow<CompassAccuracy> =
-        sensorManager.getAccuracyFlow(accelerometer)
+//        sensorManager.getAccuracyFlow(accelerometer)
+        togglingFlow
 
     private val magnetometer: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
     private val magnetometerAccuracyFlow: Flow<CompassAccuracy> =
-        sensorManager.getAccuracyFlow(magnetometer)
+//        sensorManager.getAccuracyFlow(magnetometer)
+        togglingFlow
 
     private val rotationMatrixFlow: Flow<FloatArray> =
         callbackFlow {

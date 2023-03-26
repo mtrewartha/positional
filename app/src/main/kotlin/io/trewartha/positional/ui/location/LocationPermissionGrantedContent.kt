@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FileCopy
 import androidx.compose.material.icons.rounded.Launch
@@ -21,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
+import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
@@ -38,7 +38,7 @@ fun LocationPermissionGrantedContent(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -65,9 +65,11 @@ fun LocationPermissionGrantedContent(
             state = state,
             onCopyClick = onCopyClick,
             onLaunchClick = onLaunchClick,
-            onShareClick = onShareClick
+            onShareClick = onShareClick,
+            modifier = Modifier.fillMaxWidth()
         )
-        StatsColumn(stats = state?.stats)
+        Divider(modifier = Modifier.fillMaxWidth())
+        StatsColumn(stats = state?.stats, modifier = Modifier.fillMaxWidth())
     }
 }
 
@@ -77,11 +79,10 @@ private fun ButtonRow(
     onCopyClick: () -> Unit,
     onLaunchClick: () -> Unit,
     onShareClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {

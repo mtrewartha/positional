@@ -11,37 +11,40 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.navigation.animation.composable
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.data.units.Units
+import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 
-@Composable
-fun SettingsView(
-    viewModel: SettingsViewModel = hiltViewModel()
+fun NavGraphBuilder.settingsView(
+    onNavigateToPrivacyPolicy: () -> Unit
 ) {
-    val compassMode by viewModel.compassMode.collectAsState(initial = null)
-    val coordinatesFormat by viewModel.coordinatesFormat.collectAsState(initial = null)
-    val showAccuracies by viewModel.showAccuracies.collectAsState(initial = null)
-    val theme by viewModel.theme.collectAsState(initial = null)
-    val units by viewModel.units.collectAsState(initial = null)
-    SettingsView(
-        compassMode = compassMode,
-        onCompassModeChange = viewModel::onCompassModeChange,
-        coordinatesFormat = coordinatesFormat,
-        onCoordinatesFormatChange = viewModel::onCoordinatesFormatChange,
-        showAccuracies = showAccuracies,
-        onShowAccuraciesChange = viewModel::onShowAccuraciesChange,
-        theme = theme,
-        onThemeChange = viewModel::onThemeChange,
-        units = units,
-        onUnitsChange = viewModel::onUnitsChange,
-        onNavigateToPrivacyPolicy = {
-            TODO()
-        }
-    )
+    composable(Settings.route) {
+        val viewModel: SettingsViewModel = hiltViewModel()
+        val compassMode by viewModel.compassMode.collectAsState(initial = null)
+        val coordinatesFormat by viewModel.coordinatesFormat.collectAsState(initial = null)
+        val showAccuracies by viewModel.showAccuracies.collectAsState(initial = null)
+        val theme by viewModel.theme.collectAsState(initial = null)
+        val units by viewModel.units.collectAsState(initial = null)
+        SettingsView(
+            compassMode = compassMode,
+            onCompassModeChange = viewModel::onCompassModeChange,
+            coordinatesFormat = coordinatesFormat,
+            onCoordinatesFormatChange = viewModel::onCoordinatesFormatChange,
+            showAccuracies = showAccuracies,
+            onShowAccuraciesChange = viewModel::onShowAccuraciesChange,
+            theme = theme,
+            onThemeChange = viewModel::onThemeChange,
+            units = units,
+            onUnitsChange = viewModel::onUnitsChange,
+            onNavigateToPrivacyPolicy = onNavigateToPrivacyPolicy
+        )
+    }
 }
 
 @Composable

@@ -18,13 +18,14 @@
     <string name="bottom_navigation_solunar">Solunar</string>
 
     <!-- Compass -->
-    <string name="compass_accuracy_warning_body">The sensors used to determine your direction currently have low accuracy. Moving your device in a figure eight pattern may help.</string>
-    <string name="compass_accuracy_warning_title">Low Compass Accuracy</string>
+    <string name="compass_button_info_content_description">Info</string>
     <string name="compass_declination">%.2f°</string>
     <string name="compass_declination_label">Declination</string>
     <string name="compass_degrees">%d°</string>
     <string name="compass_degrees_content_description">Current bearing %d degrees</string>
     <string name="compass_degrees_content_description_unknown">Current bearing unknown</string>
+    <string name="compass_dialog_accuracy_help_text">The sensors used to determine your direction currently have low accuracy. Moving your device in a figure eight pattern may help.</string>
+    <string name="compass_dialog_accuracy_help_title">Low Compass Accuracy</string>
     <string name="compass_accuracy_high">High</string>
     <string name="compass_accuracy_low">Low</string>
     <string name="compass_accuracy_medium">Medium</string>
@@ -40,6 +41,8 @@
     <string name="compass_direction_southeast">SE</string>
     <string name="compass_direction_southwest">SW</string>
     <string name="compass_direction_west">W</string>
+    <string name="compass_label_accelerometer_accuracy">Accelerometer accuracy</string>
+    <string name="compass_label_magnetometer_accuracy">Magnetometer accuracy</string>
     <string name="compass_magnetic_field_strength_label">Field Strength</string>
     <string name="compass_magnetic_field_strength_value">%d μT</string>
     <string name="compass_mode_label">Mode</string>
@@ -57,6 +60,8 @@
     <string name="location_altitude_imperial">%s ft</string>
     <string name="location_altitude_metric">%s m</string>
     <string name="location_bearing">%d°</string>
+    <string name="location_button_info_content_description">Info</string>
+    <string name="location_button_info_tooltip">Info</string>
     <string name="location_coordinate_decimal">%.5f</string>
     <string name="location_coordinate_utm">%7.0f</string>
     <string name="location_coordinates_copy_label">Location</string>
@@ -66,8 +71,6 @@
     <string name="location_coordinates_copy_longitude">Longitude only</string>
     <string name="location_coordinates_copy_title">Which coordinates would you like to copy?</string>
     <string name="location_coordinates_copy_tooltip">Copy coordinates</string>
-    <string name="location_info_button_content_description">Info</string>
-    <string name="location_info_button_tooltip">Info</string>
     <string name="location_label_accuracy">Accuracy</string>
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_altitude">Altitude</string>

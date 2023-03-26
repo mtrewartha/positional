@@ -60,6 +60,7 @@ android {
         freeCompilerArgs = freeCompilerArgs +
                 "-Xinline-classes" +
                 "-Xjvm-default=all" +
+                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi" +
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi" +
                 "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi" +
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
@@ -111,7 +112,8 @@ dependencies {
     implementation(Dependencies.androidXHiltCompiler)
     implementation(Dependencies.androidXHiltNavigationCompose)
     implementation(Dependencies.androidXLegacySupportV4)
-    implementation(Dependencies.androidXLifecycleRuntime)
+    implementation(Dependencies.androidXLifecycleRuntimeCompose)
+    implementation(Dependencies.androidXLifecycleRuntimeKtx)
     implementation(Dependencies.androidXLifecycleLiveDataKtx)
     implementation(Dependencies.androidXLifecycleViewModelCompose)
     implementation(Dependencies.androidXLifecycleViewModelKtx)
@@ -123,6 +125,7 @@ dependencies {
     implementation(Dependencies.firebaseAnalytics)
     implementation(Dependencies.firebasePerf)
     implementation(Dependencies.googleAccompanistInsetsUI)
+    implementation(Dependencies.googleAccompanistNavigationAnimation)
     implementation(Dependencies.googleAccompanistPager)
     implementation(Dependencies.googleAccompanistPagerIndicators)
     implementation(Dependencies.googleAccompanistPermissions)

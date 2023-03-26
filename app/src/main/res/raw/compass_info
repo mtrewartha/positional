@@ -1,0 +1,23 @@
+### How are these readings calculated?
+Sensor readings from your Android device's magnetometer and accelerometer are combined to determine
+which direction your Android device is pointed in relation to magnetic north. If the compass is set
+to true north mode, magnetic declination is also taken into account. See below for more details.
+
+### How are magnetic north and true north different?
+Earth's magnetic and true north poles aren't always aligned. In fact, the magnetic north pole drifts
+over time as the earth's magnetic field changes. In contrast, the true north pole is based on the
+imaginary axis that the earth rotates about, which means that it's much more stable. Positional can
+show your compass reading in relation to either magnetic north or true north.
+
+### What is magnetic declination?
+It is the angle between magnetic north and true north. Earth's magnetic field is not uniform and it
+changes over time. When the compass is set to true north mode, the current magnetic declination at
+your location is added to the magnetic north reading so that the compass shows you readings relative
+to true north instead of magnetic north.
+
+### Why are my accuracies low, unreliable, or unusable?
+The overall compass accuracy depends on the current accuracy of your Android device's magnetometer
+and accelerometer. Readings from both sensors are combined to determine which direction you are
+facing. To improve the accuracy of your sensors, you can move your device in a figure eight pattern,
+rotating your wrist as you go. Magnets or any objects that affect the magnetic field around your
+device can also decrease accuracy.

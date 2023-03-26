@@ -3,9 +3,6 @@ package io.trewartha.positional.ui.location
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
-import android.net.Uri
-import android.provider.Settings
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +13,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -26,41 +22,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.NavDestination.LocationInfo
+import io.trewartha.positional.ui.NavDestination.Location
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
-import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.utils.activity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 
-@Composable
-fun LocationView(
-    navController: NavController,
-    viewModel: LocationViewModel = hiltViewModel()
+fun NavGraphBuilder.locationView(
+    onNavigateToInfo: () -> Unit,
+    onNavigateToMap: (Double, Double, LocalDateTime) -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val dateTimeFormatter = LocalDateTimeFormatter.current
-    val packageName = LocalContext.current.packageName
-    val state by viewModel.state.collectAsState()
-    LocationView(
-        state = state,
-        events = viewModel.events,
-        onCopyClick = viewModel::onCopyClick,
-        onLaunchClick = viewModel::onLaunchClick,
-        onNavigateToInfo = { navController.navigate(LocationInfo.route) },
-        onNavigateToMap = { lat, lon, localDateTime ->
-            context.navigateToMap(lat, lon, dateTimeFormatter.formatDateTime(localDateTime))
-        },
-        onNavigateToSettings = { context.navigateToSettings(packageName) },
-        onScreenLockCheckedChange = viewModel::onScreenLockCheckedChange,
-        onShareClick = viewModel::onShareClick
-    )
+    composable(Location.route) {
+        val viewModel: LocationViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
+        LocationView(
+            state = state,
+            events = viewModel.events,
+            onCopyClick = viewModel::onCopyClick,
+            onLaunchClick = viewModel::onLaunchClick,
+            onNavigateToInfo = onNavigateToInfo,
+            onNavigateToMap = onNavigateToMap,
+            onNavigateToSettings = onNavigateToSettings,
+            onScreenLockCheckedChange = viewModel::onScreenLockCheckedChange,
+            onShareClick = viewModel::onShareClick
+        )
+    }
 }
 
 @Composable
@@ -183,28 +178,6 @@ private fun showCoordinatesShareSheet(
         },
         null
     )
-}
-
-private fun Context.navigateToMap(
-    latitude: Double,
-    longitude: Double,
-    dateTime: String
-) {
-    val label = getString(R.string.location_launch_label, dateTime)
-    val geoUri = Uri.Builder()
-        .scheme("geo")
-        .path("$latitude,$longitude")
-        .appendQueryParameter("q", "$latitude,$longitude($label)")
-        .build()
-    startActivity(Intent(ACTION_VIEW, geoUri))
-}
-
-private fun Context.navigateToSettings(packageName: String) {
-    val settingsIntent = Intent(
-        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.fromParts("package", packageName, null)
-    )
-    startActivity(settingsIntent)
 }
 
 private suspend fun SnackbarHostState.showSnackbarWithDismissButton(message: String) {

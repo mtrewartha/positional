@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material3.Icon
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.trewartha.positional.ui.PositionalTheme
@@ -26,13 +28,14 @@ fun StatRow(
     name: String,
     value: String?,
     accuracy: String?,
-    accuracyVisible: Boolean,
-    placeholdersVisible: Boolean,
+    showAccuracy: Boolean,
+    showPlaceholder: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .placeholder(visible = placeholdersVisible),
+            .placeholder(visible = showPlaceholder),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -48,15 +51,21 @@ fun StatRow(
         )
         Text(
             text = value ?: "",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.placeholder(placeholdersVisible)
+            modifier = Modifier
+                .placeholder(showPlaceholder)
+                .sizeIn(minWidth = 72.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.End
         )
-        if (accuracyVisible) {
+        if (showAccuracy) {
             Text(
                 text = accuracy ?: "",
                 fontSize = 14.sp,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.placeholder(placeholdersVisible)
+                modifier = Modifier
+                    .placeholder(showPlaceholder)
+                    .sizeIn(minWidth = 36.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.End
             )
         }
     }
@@ -72,8 +81,8 @@ fun LocationStatRowPreview() {
                 name = "Accuracy",
                 value = "100.0",
                 accuracy = "± 10.0",
-                accuracyVisible = true,
-                placeholdersVisible = false
+                showAccuracy = true,
+                showPlaceholder = false
             )
         }
     }
@@ -89,8 +98,8 @@ fun LocationStatRowPlaceholderPreview() {
                 name = "Accuracy",
                 value = "100.0",
                 accuracy = "± 10.0",
-                accuracyVisible = true,
-                placeholdersVisible = true
+                showAccuracy = true,
+                showPlaceholder = true
             )
         }
     }

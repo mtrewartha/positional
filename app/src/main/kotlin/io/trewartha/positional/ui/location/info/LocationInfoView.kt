@@ -13,25 +13,35 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.navigation.animation.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.Markdown
+import io.trewartha.positional.ui.NavDestination.LocationInfo
 import io.trewartha.positional.ui.PositionalTheme
 
-@Composable
-fun LocationInfoView(navController: NavController) {
-    LocationInfoView(navigateBack = { navController.popBackStack() })
+fun NavController.navigateToLocationInfo() {
+    navigate(LocationInfo.route)
+}
+
+fun NavGraphBuilder.locationInfoView(
+    onNavigateUp: () -> Unit
+) {
+    composable(LocationInfo.route) {
+        LocationInfoView(onNavigateUp = onNavigateUp)
+    }
 }
 
 @Composable
 private fun LocationInfoView(
-    navigateBack: () -> Unit
+    onNavigateUp: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { navigateBack() }) {
+                    IconButton(onClick = onNavigateUp) {
                         Icon(Icons.Rounded.Close, stringResource(R.string.common_close))
                     }
                 }
@@ -52,6 +62,6 @@ private fun LocationInfoView(
 @Composable
 fun Preview() {
     PositionalTheme {
-        LocationInfoView(navigateBack = {})
+        LocationInfoView(onNavigateUp = {})
     }
 }

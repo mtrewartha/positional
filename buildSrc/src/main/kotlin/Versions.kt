@@ -32,19 +32,19 @@ object Versions {
     }
 
     object Dependencies {
-        const val androidXActivityCompose = "1.6.1"
-        const val androidXCompose = "1.4.0-beta01"
-        const val androidXComposeCompiler = "1.4.2"
-        const val androidXComposeMaterial3 = "1.1.0-alpha06"
-        const val androidXConstraintLayoutCompose = "1.1.0-alpha07"
-        const val androidXDataStore = "1.1.0-alpha01"
-        const val androidXFragment = "1.5.4"
+        const val androidXActivityCompose = "1.7.0"
+        const val androidXCompose = "1.4.0"
+        const val androidXComposeCompiler = "1.4.4"
+        const val androidXComposeMaterial3 = "1.1.0-beta01"
+        const val androidXConstraintLayoutCompose = "1.1.0-alpha09"
+        const val androidXDataStore = "1.1.0-alpha03"
+        const val androidXFragment = "1.5.6"
         const val androidXHilt = "1.0.0"
         const val androidXLegacySupportV4 = "1.0.0"
-        const val androidXLifecycle = "2.5.1"
-        const val androidXNavigation = "2.5.3"
+        const val androidXLifecycle = "2.6.1"
+        const val androidXNavigation = "2.6.0-alpha08"
         const val androidXPreference = "1.2.0"
-        const val androidXWindow = "1.1.0-alpha04"
+        const val androidXWindow = "1.1.0-beta01"
         const val cashAppTurbine = "0.12.1"
         const val firebaseBoM = "31.2.0"
         const val googleAccompanist = "0.29.1-alpha"
@@ -54,7 +54,7 @@ object Versions {
         const val guava = "31.1-android"
         const val hilt = "2.45"
         const val kotlin = Versions.kotlin
-        const val kotlinxCoroutines = "1.6.4"
+        const val kotlinxCoroutines = "1.7.0-Beta"
         const val kotlinxDatetime = "0.4.0"
         const val kotest = "5.5.4"
         const val markwon = "4.6.2"
@@ -64,7 +64,7 @@ object Versions {
     }
 
     object Plugins {
-        const val android = "7.4.1"
+        const val android = "7.4.2"
         const val firebaseCrashlytics = "2.9.2"
         const val firebasePerf = "1.4.2"
         const val googleProtoBuf = "0.9.1"

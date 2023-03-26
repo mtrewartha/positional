@@ -16,18 +16,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.navigation.animation.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.data.solunar.SolarTimes
 import io.trewartha.positional.ui.IconButton
-import io.trewartha.positional.ui.NavDestination.SolunarInfo
+import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
@@ -38,23 +39,27 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-@Composable
-fun SolunarView(
-    navController: NavController,
-    viewModel: SolunarViewModel = hiltViewModel()
+fun NavGraphBuilder.solunarView(
+    onNavigateToInfo: () -> Unit
 ) {
-    val todaysDate by viewModel.todaysDate.collectAsState(initial = null)
-    val selectedDate by viewModel.selectedDate.collectAsState(initial = null)
-    val selectedDateTwilights by viewModel.selectedDateTwilights.collectAsState(initial = null)
-    SolunarView(
-        todaysDate = todaysDate,
-        selectedDate = selectedDate,
-        selectedDateTwilights = selectedDateTwilights,
-        onNavigateToInfo = { navController.navigate(SolunarInfo.route) },
-        onSelectedDateDecrement = viewModel::onSelectedDateDecrement,
-        onSelectedDateIncrement = viewModel::onSelectedDateIncrement,
-        onJumpToTodayClick = viewModel::onSelectedDateChangedToToday
-    )
+    composable(NavDestination.Solunar.route) {
+        val viewModel: SolunarViewModel = hiltViewModel()
+        val todaysDate by viewModel.todaysDate
+            .collectAsStateWithLifecycle(initialValue = null)
+        val selectedDate by viewModel.selectedDate
+            .collectAsStateWithLifecycle(initialValue = null)
+        val selectedDateTwilights by viewModel.selectedDateTwilights
+            .collectAsStateWithLifecycle(initialValue = null)
+        SolunarView(
+            todaysDate = todaysDate,
+            selectedDate = selectedDate,
+            selectedDateTwilights = selectedDateTwilights,
+            onNavigateToInfo = onNavigateToInfo,
+            onSelectedDateDecrement = viewModel::onSelectedDateDecrement,
+            onSelectedDateIncrement = viewModel::onSelectedDateIncrement,
+            onJumpToTodayClick = viewModel::onSelectedDateChangedToToday
+        )
+    }
 }
 
 @Composable
@@ -82,29 +87,26 @@ private fun SolunarView(
             )
         }
     ) { contentPadding ->
-        val outerPadding = 16.dp
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
+                .padding(horizontal = 16.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(outerPadding)
+                verticalArrangement = Arrangement.spacedBy(36.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                // TODO: Do these need to be cards? Maybe the content is better off just sitting on the surface behind like the other screens
-                SunriseSunsetCard(
+                SunriseSunsetColumn(
                     sunrise = selectedDateTwilights?.sunrise,
                     sunset = selectedDateTwilights?.sunset,
                     showPlaceholders = selectedDateTwilights == null,
                     modifier = Modifier.fillMaxWidth()
                 )
-                DawnDuskCard(
+                DawnDuskColumn(
                     astronomicalDawn = selectedDateTwilights?.astronomicalDawn,
                     nauticalDawn = selectedDateTwilights?.nauticalDawn,
                     civilDawn = selectedDateTwilights?.civilDawn,
@@ -115,16 +117,14 @@ private fun SolunarView(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-            // TODO: Move controls and jump button to bottom sheet once Compose M3 lib supports it
+            Spacer(modifier = Modifier.height(48.dp))
             SolunarDateControls(
                 selectedDate = selectedDate,
                 onPreviousDayClick = onSelectedDateDecrement,
                 onNextDayClick = onSelectedDateIncrement,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             OutlinedButton(
                 onClick = onJumpToTodayClick,
                 enabled = todaysDate != null && todaysDate != selectedDate

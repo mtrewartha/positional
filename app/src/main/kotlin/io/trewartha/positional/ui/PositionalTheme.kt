@@ -1,7 +1,6 @@
 package io.trewartha.positional.ui
 
 import android.os.Build
-import android.os.Build.VERSION_CODES
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -26,7 +25,7 @@ fun PositionalTheme(
     }
     MaterialTheme(
         colorScheme = run {
-            if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (useDarkTheme) dynamicDarkColorScheme(LocalContext.current)
                 else dynamicLightColorScheme(LocalContext.current)
             } else {
