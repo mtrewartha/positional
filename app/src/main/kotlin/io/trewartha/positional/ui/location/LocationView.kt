@@ -4,11 +4,11 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,12 +20,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -89,23 +92,28 @@ private fun LocationView(
     onScreenLockCheckedChange: (Boolean) -> Unit,
     onShareClick: () -> Unit,
 ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
+        topBar = {
+            LocationTopAppBar(
+                state = state,
+                onInfoClick = onNavigateToInfo,
+                onScreenLockCheckedChange = onScreenLockCheckedChange,
+                scrollBehavior = scrollBehavior,
+            )
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .verticalScroll(rememberScrollState())
                 .padding(contentPadding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Bottom
         ) {
-            LocationTopAppBar(
-                state = state,
-                onInfoClick = onNavigateToInfo,
-                onScreenLockCheckedChange = onScreenLockCheckedChange,
-            )
             if (locationPermissionsState.allPermissionsGranted) {
                 LocationPermissionGrantedContent(
                     state = state,
@@ -197,7 +205,8 @@ private fun LocationTopAppBar(
     state: LocationState?,
     onInfoClick: () -> Unit,
     onScreenLockCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         title = {},
@@ -223,7 +232,8 @@ private fun LocationTopAppBar(
                     contentDescription = stringResource(R.string.location_button_info_content_description),
                 )
             }
-        }
+        },
+        scrollBehavior = scrollBehavior
     )
 }
 

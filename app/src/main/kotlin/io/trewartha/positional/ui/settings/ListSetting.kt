@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -70,11 +71,13 @@ fun <T> ListSetting(
         )
     }
     Surface(
+        modifier = modifier,
         onClick = { if (values != null && value != null) showValuesDialog = true }
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = modifier.padding(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(
+                dimensionResource(R.dimen.settings_row_arrangement_spacing)
+            )
         ) {
             Icon(
                 imageVector = icon,

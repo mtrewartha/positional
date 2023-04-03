@@ -1,22 +1,28 @@
 package io.trewartha.positional.ui.settings
 
 import android.os.Build
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
@@ -69,13 +75,25 @@ private fun SettingsView(
     onUnitsChange: (Units) -> Unit,
     onNavigateToPrivacyPolicy: () -> Unit
 ) {
-    Scaffold { contentPadding ->
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Scaffold(
+        topBar = {
+            LargeTopAppBar(
+                title = { Text(text = stringResource(R.string.settings_title)) },
+                scrollBehavior = scrollBehavior
+            )
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(contentPadding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
-                .padding(contentPadding),
+                .padding(dimensionResource(R.dimen.standard_padding)),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             ThemeSetting(
                 value = theme,
@@ -104,11 +122,6 @@ private fun SettingsView(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
             TextButton(onClick = onNavigateToPrivacyPolicy) {
                 Text(text = stringResource(id = R.string.settings_privacy_policy_title))
             }

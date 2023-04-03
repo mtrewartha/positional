@@ -11,13 +11,11 @@ import io.trewartha.positional.domain.compass.GetCompassDeclinationUseCase
 import io.trewartha.positional.domain.compass.GetCompassModeUseCase
 import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 import io.trewartha.positional.ui.utils.ForViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,8 +24,6 @@ class CompassViewModel @Inject constructor(
     getCompassModeUseCase: GetCompassModeUseCase,
     getCompassReadingsUseCase: GetCompassReadingsUseCase,
 ) : ViewModel() {
-
-    private val sensorsMissingDetailsVisibleFlow = MutableStateFlow(false)
 
     val state: StateFlow<State> =
         combine<Float, CompassMode, CompassReadings, State>(
@@ -44,15 +40,9 @@ class CompassViewModel @Inject constructor(
             )
         }.catch { throwable ->
             if (throwable is CompassHardwareException) {
-                emit(State.SensorsMissing(detailsVisible = false))
+                emit(State.SensorsMissing)
             } else {
                 throw throwable
-            }
-        }.combine(sensorsMissingDetailsVisibleFlow) { state, detailsVisible ->
-            if (state is State.SensorsMissing) {
-                state.copy(detailsVisible = detailsVisible)
-            } else {
-                state
             }
         }.stateIn(
             scope = viewModelScope,
@@ -60,12 +50,8 @@ class CompassViewModel @Inject constructor(
             initialValue = State.SensorsPresent.Loading,
         )
 
-    fun onSensorsMissingWhyClick() {
-        sensorsMissingDetailsVisibleFlow.update { true }
-    }
-
     sealed interface State {
-        data class SensorsMissing(val detailsVisible: Boolean) : State
+        object SensorsMissing : State
         sealed interface SensorsPresent : State {
             object Loading : SensorsPresent
             data class Loaded(

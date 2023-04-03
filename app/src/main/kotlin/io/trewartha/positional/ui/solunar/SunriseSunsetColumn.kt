@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
+import io.trewartha.positional.ui.utils.AutoShrinkingText
 import io.trewartha.positional.ui.utils.placeholder
 import kotlinx.datetime.LocalTime
 
@@ -51,9 +51,10 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
+            AutoShrinkingText(
                 text = stringResource(R.string.solunar_title_sunrise),
                 style = MaterialTheme.typography.headlineSmall,
+                maxLines = 1
             )
             Divider()
         }
@@ -63,9 +64,10 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
+            AutoShrinkingText(
                 text = stringResource(R.string.solunar_title_sunset),
                 style = MaterialTheme.typography.headlineSmall,
+                maxLines = 1
             )
             Divider()
         }
@@ -100,12 +102,13 @@ private fun SunriseSunsetTime(
     showPlaceholder: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Text(
+    AutoShrinkingText(
         text = localTime?.let { LocalDateTimeFormatter.current.formatTime(it) }
             ?: stringResource(R.string.solunar_text_time_none),
         modifier = modifier.placeholder(visible = showPlaceholder),
         style = MaterialTheme.typography.bodyLarge,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        maxLines = 1
     )
 }
 

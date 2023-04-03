@@ -3,7 +3,6 @@ package io.trewartha.positional.ui.solunar.info
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -49,7 +48,6 @@ private fun SolunarInfoView(
         topBar = {
             TopAppBar(
                 title = {},
-                modifier = Modifier.statusBarsPadding(),
                 navigationIcon = {
                     IconButton(onClick = onNavigateUp) {
                         Icon(Icons.Rounded.Close, stringResource(R.string.common_close))

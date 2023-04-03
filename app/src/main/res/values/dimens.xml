@@ -14,4 +14,6 @@
     <dimen name="location_stat_row_gap_horizontal">16dp</dimen>
     <dimen name="location_stat_row_gap_vertical">24dp</dimen>
     <dimen name="location_stat_row_image_size">24dp</dimen>
+
+    <dimen name="settings_row_arrangement_spacing">16dp</dimen>
 </resources>

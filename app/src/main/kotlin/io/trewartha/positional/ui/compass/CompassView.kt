@@ -4,11 +4,6 @@ import android.hardware.SensorManager
 import android.hardware.SensorManager.getOrientation
 import android.hardware.SensorManager.remapCoordinateSystem
 import android.view.Surface
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Memory
@@ -30,10 +27,10 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +38,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -67,7 +66,6 @@ fun NavGraphBuilder.compassView(
         val state by viewModel.state.collectAsStateWithLifecycle()
         CompassView(
             state = state,
-            onSensorsMissingWhyClick = viewModel::onSensorsMissingWhyClick,
             onNavigateToInfo = onNavigateToInfo
         )
     }
@@ -76,14 +74,25 @@ fun NavGraphBuilder.compassView(
 @Composable
 private fun CompassView(
     state: CompassViewModel.State,
-    onSensorsMissingWhyClick: () -> Unit,
     onNavigateToInfo: () -> Unit,
 ) {
+    var showMissingSensorDialog by remember { mutableStateOf(false) }
+    if (showMissingSensorDialog) {
+        AlertDialog(
+            onDismissRequest = { showMissingSensorDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showMissingSensorDialog = false }) {
+                    Text(stringResource(R.string.compass_missing_hardware_dialog_confirm))
+                }
+            },
+            text = { Text(stringResource(R.string.compass_missing_hardware_dialog_text)) }
+        )
+    }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
-                modifier = Modifier.statusBarsPadding(),
                 actions = {
                     IconButton(onClick = onNavigateToInfo) {
                         Icon(
@@ -99,14 +108,21 @@ private fun CompassView(
         when (state) {
             is CompassViewModel.State.SensorsMissing ->
                 SensorsMissingContent(
-                    state = state,
-                    onWhyClick = onSensorsMissingWhyClick,
-                    modifier = Modifier.padding(contentPadding)
+                    onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding)
+                        .padding(dimensionResource(R.dimen.standard_padding))
                 )
             is CompassViewModel.State.SensorsPresent ->
                 SensorsPresentContent(
                     state = state,
-                    modifier = Modifier.padding(contentPadding)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding)
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .verticalScroll(rememberScrollState())
+                        .padding(dimensionResource(R.dimen.standard_padding))
                 )
         }
     }
@@ -114,17 +130,16 @@ private fun CompassView(
 
 @Composable
 private fun SensorsMissingContent(
-    state: CompassViewModel.State.SensorsMissing,
     onWhyClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
-                .widthIn(max = 296.dp)
+                .widthIn(max = 384.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -151,22 +166,6 @@ private fun SensorsMissingContent(
                 Text(text = stringResource(id = R.string.compass_missing_hardware_button_why))
             }
             Spacer(modifier = Modifier.height(12.dp))
-            AnimatedVisibility(
-                visible = state.detailsVisible,
-                enter = fadeIn(animationSpec = spring(stiffness = Spring.StiffnessVeryLow)) +
-                        expandVertically(
-                            animationSpec = spring(
-                                stiffness = Spring.StiffnessMediumLow,
-                                dampingRatio = Spring.DampingRatioLowBouncy
-                            ),
-                            expandFrom = Alignment.Top
-                        ),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.compass_missing_hardware_body_details),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
         }
     }
 }
@@ -181,9 +180,7 @@ private fun SensorsPresentContent(
         AccuracyHelpDialog(onDismissRequest = { showAccuracyHelpDialog = false })
     }
     Column(
-        modifier = modifier
-            .padding(vertical = 16.dp)
-            .fillMaxSize(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val placeholdersVisible = state is CompassViewModel.State.SensorsPresent.Loading
@@ -301,12 +298,7 @@ private const val ORIENTATION_VECTOR_SIZE = 3
 @Composable
 private fun SensorsMissingPreview() {
     PositionalTheme {
-        Surface {
-            SensorsMissingContent(
-                state = CompassViewModel.State.SensorsMissing(detailsVisible = true),
-                onWhyClick = {},
-            )
-        }
+        SensorsMissingContent(onWhyClick = {},)
     }
 }
 
@@ -315,21 +307,19 @@ private fun SensorsMissingPreview() {
 @Composable
 private fun SensorsPresentLoadedPreview() {
     PositionalTheme {
-        Surface {
-            SensorsPresentContent(
-                state = CompassViewModel.State.SensorsPresent.Loaded(
-                    rotationMatrix = FloatArray(9).apply {
-                        // Set the identity rotation matrix
-                        set(0, 1f)
-                        set(4, 1f)
-                        set(8, 1f)
-                    },
-                    accelerometerAccuracy = CompassAccuracy.HIGH,
-                    magnetometerAccuracy = null,
-                    magneticDeclinationDegrees = 5f,
-                    mode = CompassMode.TRUE_NORTH,
-                )
+        SensorsPresentContent(
+            state = CompassViewModel.State.SensorsPresent.Loaded(
+                rotationMatrix = FloatArray(9).apply {
+                    // Set the identity rotation matrix
+                    set(0, 1f)
+                    set(4, 1f)
+                    set(8, 1f)
+                },
+                accelerometerAccuracy = CompassAccuracy.HIGH,
+                magnetometerAccuracy = null,
+                magneticDeclinationDegrees = 5f,
+                mode = CompassMode.TRUE_NORTH,
             )
-        }
+        )
     }
 }

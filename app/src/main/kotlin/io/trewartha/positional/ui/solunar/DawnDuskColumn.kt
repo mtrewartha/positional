@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
+import io.trewartha.positional.ui.utils.AutoShrinkingText
 import io.trewartha.positional.ui.utils.placeholder
 import kotlinx.datetime.LocalTime
 
@@ -71,9 +71,10 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
+            AutoShrinkingText(
                 text = stringResource(R.string.solunar_title_dawn),
                 style = MaterialTheme.typography.headlineSmall,
+                maxLines = 1
             )
             Divider()
         }
@@ -83,9 +84,10 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
+            AutoShrinkingText(
                 text = stringResource(R.string.solunar_title_dusk),
                 style = MaterialTheme.typography.headlineSmall,
+                maxLines = 1
             )
             Divider()
         }
@@ -110,12 +112,13 @@ private fun DawnDuskRow(
             showPlaceholder = showPlaceholders,
             modifier = Modifier.weight(1f, fill = true)
         )
-        Text(
+        AutoShrinkingText(
             text = label,
             modifier = Modifier.weight(1f, fill = true),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1
         )
         TwilightTime(
             time = dusk,
@@ -131,14 +134,15 @@ private fun TwilightTime(
     showPlaceholder: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Text(
+    AutoShrinkingText(
         text = time?.let { LocalDateTimeFormatter.current.formatTime(it) }
             ?: stringResource(R.string.solunar_text_time_none),
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.bodyLarge,
         modifier = modifier
             .defaultMinSize(minWidth = 64.dp)
-            .placeholder(showPlaceholder)
+            .placeholder(showPlaceholder),
+        maxLines = 1,
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.bodyLarge
     )
 }
 
