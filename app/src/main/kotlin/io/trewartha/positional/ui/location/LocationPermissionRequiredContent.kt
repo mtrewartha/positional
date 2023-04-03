@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.PrivacyTip
+import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,17 +36,15 @@ import io.trewartha.positional.ui.utils.activity
 fun LocationPermissionRequiredContent(
     locationPermissionsState: MultiplePermissionsState,
     onNavigateToSettings: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
-            .requiredWidthIn(max = 384.dp)
-            .padding(24.dp),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            imageVector = Icons.Rounded.PrivacyTip,
+            imageVector = Icons.Rounded.LocationOn,
             contentDescription = null,
             modifier = Modifier.size(96.dp),
             tint = MaterialTheme.colorScheme.primary
@@ -56,19 +52,23 @@ fun LocationPermissionRequiredContent(
         Spacer(modifier = Modifier.height(36.dp))
         Text(
             text = stringResource(id = R.string.location_permission_required_title),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(id = R.string.location_permission_required_body),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.height(12.dp))
         val activity = LocalContext.current.activity
         TextButton(onClick = { activity?.showPrivacyPolicy() }) {
-            Text(text = stringResource(id = R.string.location_permission_required_button_privacy_policy))
+            Text(
+                text = stringResource(id = R.string.location_permission_required_button_privacy_policy),
+                textAlign = TextAlign.Center
+            )
         }
         Spacer(modifier = Modifier.height(12.dp))
         Button(

@@ -78,7 +78,7 @@
     <string name="location_launch_button_content_description">Open in maps app</string>
     <string name="location_launch_label">My Location on %s (Exported from Positional)</string>
     <string name="location_permission_required_button_ok" translatable="false">@string/common_ok</string>
-    <string name="location_permission_required_button_privacy_policy">Here is our simple privacy policy.</string>
+    <string name="location_permission_required_button_privacy_policy" translatable="false">@string/common_privacy_policy</string>
     <string name="location_permission_required_body">Positional is private by design. Your location is never shared with anyone unless you explicitly share it.</string>
     <string name="location_permission_required_title">Location Permission is Required</string>
     <string name="location_permission_without_rationale_title">Let\'s get started!</string>
@@ -114,7 +114,7 @@
     <string name="settings_coordinates_format_value_dms_name">Degrees, minutes, &amp; seconds</string>
     <string name="settings_coordinates_format_value_mgrs_name">MGRS</string>
     <string name="settings_coordinates_format_value_utm_name">UTM</string>
-    
+
     <string name="settings_privacy_policy_title" translatable="false">@string/common_privacy_policy</string>
 
     <string name="settings_show_accuracies_description">Show or hide accuracies of measurements</string>

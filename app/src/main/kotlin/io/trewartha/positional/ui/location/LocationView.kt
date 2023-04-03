@@ -4,10 +4,12 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -18,18 +20,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +42,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.IconToggleButton
 import io.trewartha.positional.ui.NavDestination.Location
+import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.activity
@@ -88,47 +89,46 @@ private fun LocationView(
     onScreenLockCheckedChange: (Boolean) -> Unit,
     onShareClick: () -> Unit,
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
-        topBar = {
-            LocationTopAppBar(
-                state = state,
-                scrollBehavior = scrollBehavior,
-                onInfoClick = onNavigateToInfo,
-                onScreenLockCheckedChange = onScreenLockCheckedChange,
-                modifier = Modifier.statusBarsPadding()
-            )
-        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
-        if (locationPermissionsState.allPermissionsGranted) {
-            LocationPermissionGrantedContent(
-                state = state,
-                onCopyClick = onCopyClick,
-                onLaunchClick = onLaunchClick,
-                onShareClick = onShareClick,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .verticalScroll(rememberScrollState())
-                    .padding(dimensionResource(R.dimen.standard_padding))
-            )
-        } else if (
-            with(locationPermissionsState) { revokedPermissions.size == permissions.size }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(contentPadding)
         ) {
-            LocationPermissionRequiredContent(
-                locationPermissionsState = locationPermissionsState,
-                onNavigateToSettings = onNavigateToSettings,
-                modifier = Modifier
-                    .padding(contentPadding)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .verticalScroll(rememberScrollState())
+            LocationTopAppBar(
+                state = state,
+                onInfoClick = onNavigateToInfo,
+                onScreenLockCheckedChange = onScreenLockCheckedChange,
             )
-        } else {
-            TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
+            if (locationPermissionsState.allPermissionsGranted) {
+                LocationPermissionGrantedContent(
+                    state = state,
+                    onCopyClick = onCopyClick,
+                    onLaunchClick = onLaunchClick,
+                    onShareClick = onShareClick,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(dimensionResource(R.dimen.standard_padding))
+                )
+            } else if (
+                with(locationPermissionsState) { revokedPermissions.size == permissions.size }
+            ) {
+                LocationPermissionRequiredContent(
+                    locationPermissionsState = locationPermissionsState,
+                    onNavigateToSettings = onNavigateToSettings,
+                    modifier = Modifier
+                        .widthIn(max = 384.dp)
+                        .padding(dimensionResource(R.dimen.standard_padding))
+                )
+            } else {
+                TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
+            }
         }
     }
 
@@ -195,13 +195,13 @@ private fun LocationView(
 @Composable
 private fun LocationTopAppBar(
     state: LocationState?,
-    scrollBehavior: TopAppBarScrollBehavior,
     onInfoClick: () -> Unit,
     onScreenLockCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = {},
+        modifier = modifier,
         actions = {
             IconToggleButton(
                 checked = state?.screenLockEnabled ?: false,
@@ -223,8 +223,7 @@ private fun LocationTopAppBar(
                     contentDescription = stringResource(R.string.location_button_info_content_description),
                 )
             }
-        },
-        scrollBehavior = scrollBehavior,
+        }
     )
 }
 
@@ -251,92 +250,98 @@ private suspend fun SnackbarHostState.showSnackbarWithDismissButton(message: Str
 @WindowSizePreviews
 @Composable
 private fun PermissionNotGrantedPreview() {
-    LocationView(
-        state = null,
-        locationPermissionsState = object : MultiplePermissionsState {
-            override val allPermissionsGranted: Boolean = false
-            override val permissions: List<PermissionState> = emptyList()
-            override val revokedPermissions: List<PermissionState> = emptyList()
-            override val shouldShowRationale: Boolean = false
-            override fun launchMultiplePermissionRequest() {
-                // Don't do anything
-            }
-        },
-        events = emptyFlow(),
-        onCopyClick = {},
-        onLaunchClick = {},
-        onNavigateToInfo = {},
-        onNavigateToMap = { _, _, _ -> },
-        onNavigateToSettings = {},
-        onScreenLockCheckedChange = {},
-        onShareClick = {}
-    )
+    PositionalTheme {
+        LocationView(
+            state = null,
+            locationPermissionsState = object : MultiplePermissionsState {
+                override val allPermissionsGranted: Boolean = false
+                override val permissions: List<PermissionState> = emptyList()
+                override val revokedPermissions: List<PermissionState> = emptyList()
+                override val shouldShowRationale: Boolean = false
+                override fun launchMultiplePermissionRequest() {
+                    // Don't do anything
+                }
+            },
+            events = emptyFlow(),
+            onCopyClick = {},
+            onLaunchClick = {},
+            onNavigateToInfo = {},
+            onNavigateToMap = { _, _, _ -> },
+            onNavigateToSettings = {},
+            onScreenLockCheckedChange = {},
+            onShareClick = {}
+        )
+    }
 }
 
 @ThemePreviews
 @WindowSizePreviews
 @Composable
 private fun LoadingPreview() {
-    LocationView(
-        state = null,
-        locationPermissionsState = object : MultiplePermissionsState {
-            override val allPermissionsGranted: Boolean = true
-            override val permissions: List<PermissionState> = emptyList()
-            override val revokedPermissions: List<PermissionState> = emptyList()
-            override val shouldShowRationale: Boolean = false
-            override fun launchMultiplePermissionRequest() {
-                // Don't do anything
-            }
-        },
-        events = emptyFlow(),
-        onCopyClick = {},
-        onLaunchClick = {},
-        onNavigateToInfo = {},
-        onNavigateToMap = { _, _, _ -> },
-        onNavigateToSettings = {},
-        onScreenLockCheckedChange = {},
-        onShareClick = {}
-    )
+    PositionalTheme {
+        LocationView(
+            state = null,
+            locationPermissionsState = object : MultiplePermissionsState {
+                override val allPermissionsGranted: Boolean = true
+                override val permissions: List<PermissionState> = emptyList()
+                override val revokedPermissions: List<PermissionState> = emptyList()
+                override val shouldShowRationale: Boolean = false
+                override fun launchMultiplePermissionRequest() {
+                    // Don't do anything
+                }
+            },
+            events = emptyFlow(),
+            onCopyClick = {},
+            onLaunchClick = {},
+            onNavigateToInfo = {},
+            onNavigateToMap = { _, _, _ -> },
+            onNavigateToSettings = {},
+            onScreenLockCheckedChange = {},
+            onShareClick = {}
+        )
+    }
 }
 
 @ThemePreviews
 @WindowSizePreviews
 @Composable
 private fun LoadedPreview() {
-    LocationView(
-        state = LocationState(
-            coordinates = "123.456789\n123.456789",
-            maxLines = 2,
-            screenLockEnabled = false,
-            coordinatesForCopy = "Coordinates for copy",
-            stats = LocationState.Stats(
-                accuracy = "123.4",
-                bearing = "123.4",
-                bearingAccuracy = "± 56.7",
-                altitude = "123.4",
-                altitudeAccuracy = "± 56.7",
-                speed = "123.4",
-                speedAccuracy = "± 56.7",
-                showAccuracies = true,
-                updatedAt = "12:00:00 PM"
+    PositionalTheme {
+        LocationView(
+            state = LocationState(
+                coordinates = "123.456789\n123.456789",
+                maxLines = 2,
+                screenLockEnabled = false,
+                coordinatesForCopy = "Coordinates for copy",
+                stats = LocationState.Stats(
+                    accuracy = "123.4",
+                    bearing = "123.4",
+                    bearingAccuracy = "± 56.7",
+                    altitude = "123.4",
+                    altitudeAccuracy = "± 56.7",
+                    speed = "123.4",
+                    speedAccuracy = "± 56.7",
+                    showAccuracies = true,
+                    updatedAt = "12:00:00 PM"
+                ),
             ),
-        ),
-        locationPermissionsState = object : MultiplePermissionsState {
-            override val allPermissionsGranted: Boolean = true
-            override val permissions: List<PermissionState> = emptyList()
-            override val revokedPermissions: List<PermissionState> = emptyList()
-            override val shouldShowRationale: Boolean = false
-            override fun launchMultiplePermissionRequest() {
-                // Don't do anything
-            }
-        },
-        events = emptyFlow(),
-        onCopyClick = {},
-        onLaunchClick = {},
-        onNavigateToInfo = {},
-        onNavigateToMap = { _, _, _ -> },
-        onNavigateToSettings = {},
-        onScreenLockCheckedChange = {},
-        onShareClick = {}
-    )
+            locationPermissionsState = object : MultiplePermissionsState {
+                override val allPermissionsGranted: Boolean = true
+                override val permissions: List<PermissionState> = emptyList()
+                override val revokedPermissions: List<PermissionState> = emptyList()
+                override val shouldShowRationale: Boolean = false
+                override fun launchMultiplePermissionRequest() {
+                    // Don't do anything
+                }
+            },
+            events = emptyFlow(),
+            onCopyClick = {},
+            onLaunchClick = {},
+            onNavigateToInfo = {},
+            onNavigateToMap = { _, _, _ -> },
+            onNavigateToSettings = {},
+            onScreenLockCheckedChange = {},
+            onShareClick = {}
+        )
+    }
 }
