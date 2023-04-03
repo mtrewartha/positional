@@ -80,7 +80,7 @@
     <string name="location_permission_required_button_ok" translatable="false">@string/common_ok</string>
     <string name="location_permission_required_button_privacy_policy">Here is our simple privacy policy.</string>
     <string name="location_permission_required_body">Positional is private by design. Your location is never shared with anyone unless you explicitly share it.</string>
-    <string name="location_permission_required_title">Location Permission Required</string>
+    <string name="location_permission_required_title">Location Permission is Required</string>
     <string name="location_permission_without_rationale_title">Let\'s get started!</string>
     <string name="location_permission_without_rationale_message">In order to show your location, Positional needs permission. Your location is never recorded. For more details, check out the simple privacy policy.</string>
     <string name="location_screen_lock_button_content_description_off">Lock screen (currently off)</string>

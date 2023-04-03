@@ -1,6 +1,11 @@
 package io.trewartha.positional.ui.solunar.info
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
@@ -10,7 +15,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -37,25 +44,32 @@ fun NavGraphBuilder.solunarInfoView(
 private fun SolunarInfoView(
     onNavigateUp: () -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
+                modifier = Modifier.statusBarsPadding(),
                 navigationIcon = {
                     IconButton(onClick = onNavigateUp) {
                         Icon(Icons.Rounded.Close, stringResource(R.string.common_close))
                     }
                 },
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+                scrollBehavior = scrollBehavior
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
         val infoMarkdownContent = LocalContext.current.resources
             .openRawResource(R.raw.solunar_info).reader().readText()
         Markdown(
             content = infoMarkdownContent,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = contentPadding
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .verticalScroll(rememberScrollState())
+                .padding(dimensionResource(R.dimen.standard_padding))
         )
     }
 }

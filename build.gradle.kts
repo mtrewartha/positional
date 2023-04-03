@@ -3,7 +3,6 @@ buildscript {
         google()
         gradlePluginPortal()
         mavenCentral()
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
     }
     dependencies {
         classpath(Plugins.androidGradle)

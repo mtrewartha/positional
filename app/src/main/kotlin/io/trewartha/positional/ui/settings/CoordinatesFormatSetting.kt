@@ -2,7 +2,6 @@ package io.trewartha.positional.ui.settings
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Pin
-import androidx.compose.material.icons.rounded._123
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

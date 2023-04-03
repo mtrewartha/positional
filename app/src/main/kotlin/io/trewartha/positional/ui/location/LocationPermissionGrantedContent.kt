@@ -1,7 +1,6 @@
 package io.trewartha.positional.ui.location
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +10,7 @@ import androidx.compose.material.icons.rounded.FileCopy
 import androidx.compose.material.icons.rounded.Launch
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +25,7 @@ import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
-import io.trewartha.positional.ui.utils.AutoSizeText
+import io.trewartha.positional.ui.utils.AutoShrinkingText
 import io.trewartha.positional.ui.utils.placeholder
 
 @Composable
@@ -38,28 +38,24 @@ fun LocationPermissionGrantedContent(
 ) {
     Column(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .weight(1f, fill = true)
-                .fillMaxSize()
-        ) {
-            if (state == null) {
-                Text(
-                    text = "",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .placeholder(visible = true)
-                )
-            } else {
-                AutoSizeText(
-                    text = state.coordinates,
-                    maxLines = state.maxLines,
-                    textAlign = TextAlign.Center
-                )
-            }
+        if (state == null) {
+            Text(
+                text = "",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .placeholder(visible = true)
+            )
+        } else {
+            AutoShrinkingText(
+                text = state.coordinates,
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = state.maxLines,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.displayLarge
+            )
         }
         ButtonRow(
             state = state,

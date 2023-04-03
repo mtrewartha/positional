@@ -4,22 +4,20 @@ object Dependencies {
 
     const val androidXActivityCompose =
         "androidx.activity:activity-compose:${Versions.Dependencies.androidXActivityCompose}"
-    const val androidXComposeFoundation =
-        "androidx.compose.foundation:foundation:${Versions.Dependencies.androidXCompose}"
+    const val androidXComposeBoM =
+        "androidx.compose:compose-bom:${Versions.Dependencies.androidXComposeBoM}"
     const val androidXComposeMaterial3 =
         "androidx.compose.material3:material3:${Versions.Dependencies.androidXComposeMaterial3}"
     const val androidXComposeMaterial3WindowSizeClass =
         "androidx.compose.material3:material3-window-size-class:${Versions.Dependencies.androidXComposeMaterial3}"
     const val androidXComposeMaterialIconsCore =
-        "androidx.compose.material:material-icons-core:${Versions.Dependencies.androidXCompose}"
+        "androidx.compose.material:material-icons-core"
     const val androidXComposeMaterialIconsExtended =
-        "androidx.compose.material:material-icons-extended:${Versions.Dependencies.androidXCompose}"
-    const val androidXComposeUI =
-        "androidx.compose.ui:ui:${Versions.Dependencies.androidXCompose}"
+        "androidx.compose.material:material-icons-extended"
     const val androidXComposeUITestJUnit4 =
-        "androidx.compose.ui:ui-test-junit4:${Versions.Dependencies.androidXCompose}"
+        "androidx.compose.ui:ui-test-junit4"
     const val androidXComposeUITooling =
-        "androidx.compose.ui:ui-tooling:${Versions.Dependencies.androidXCompose}"
+        "androidx.compose.ui:ui-tooling"
     const val androidXConstraintLayoutCompose =
         "androidx.constraintlayout:constraintlayout-compose:${Versions.Dependencies.androidXConstraintLayoutCompose}"
     const val androidXDataStore =

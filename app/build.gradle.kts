@@ -75,7 +75,12 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += "DebugProbesKt.bin"
+            excludes.addAll(
+                listOf(
+                    "DebugProbesKt.bin",
+                    "META-INF/versions/9/previous-compilation-data.bin"
+                )
+            )
         }
     }
     namespace = "io.trewartha.positional"
@@ -99,12 +104,11 @@ dependencies {
 
     implementation(project(":domain"))
     implementation(Dependencies.androidXActivityCompose)
-    implementation(Dependencies.androidXComposeFoundation)
+    implementation(platform(Dependencies.androidXComposeBoM))
     implementation(Dependencies.androidXComposeMaterial3)
     implementation(Dependencies.androidXComposeMaterial3WindowSizeClass)
     implementation(Dependencies.androidXComposeMaterialIconsCore)
     implementation(Dependencies.androidXComposeMaterialIconsExtended)
-    implementation(Dependencies.androidXComposeUI)
     implementation(Dependencies.androidXComposeUITooling)
     implementation(Dependencies.androidXConstraintLayoutCompose)
     implementation(Dependencies.androidXDataStore)

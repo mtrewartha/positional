@@ -1,13 +1,11 @@
+@file:SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 package io.trewartha.positional.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -75,13 +73,11 @@ fun MainView(
         AnimatedNavHost(
             navHostController,
             startDestination = Location.route,
-            enterTransition = { slideInHorizontally { it / 2 } + fadeIn() },
-            exitTransition = { slideOutHorizontally { -it / 2 } + fadeOut() },
-            popEnterTransition = { slideInHorizontally { -it / 2 } + fadeIn() },
-            popExitTransition = { slideOutHorizontally { it / 2 } + fadeOut() },
-            modifier = Modifier
-                .padding(contentPadding)
-                .consumeWindowInsets(WindowInsets.safeContent)
+            enterTransition = { fadeIn() },
+            exitTransition = { fadeOut() },
+            popEnterTransition = { fadeIn() },
+            popExitTransition = { fadeOut() },
+            modifier = Modifier.padding(bottom = contentPadding.calculateBottomPadding())
         ) {
             compassView(onNavigateToInfo = { navHostController.navigateToCompassInfo() })
             compassInfoView(onNavigateUp = { navHostController.popBackStack() })

@@ -1,6 +1,5 @@
 package io.trewartha.positional.ui.settings
 
-//import com.google.accompanist.navigation.animation.composable
 import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -74,8 +73,8 @@ private fun SettingsView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(contentPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ThemeSetting(

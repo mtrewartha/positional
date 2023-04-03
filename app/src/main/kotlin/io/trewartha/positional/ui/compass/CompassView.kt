@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
@@ -58,7 +60,7 @@ import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.placeholder
 
 fun NavGraphBuilder.compassView(
-    onNavigateToInfo: () -> Unit
+    onNavigateToInfo: () -> Unit,
 ) {
     composable(Compass.route) {
         val viewModel: CompassViewModel = hiltViewModel()
@@ -81,6 +83,7 @@ private fun CompassView(
         topBar = {
             TopAppBar(
                 title = {},
+                modifier = Modifier.statusBarsPadding(),
                 actions = {
                     IconButton(onClick = onNavigateToInfo) {
                         Icon(
@@ -88,9 +91,10 @@ private fun CompassView(
                             stringResource(R.string.compass_button_info_content_description),
                         )
                     }
-                }
+                },
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
         when (state) {
             is CompassViewModel.State.SensorsMissing ->
