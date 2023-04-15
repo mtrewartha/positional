@@ -48,12 +48,16 @@ android {
     productFlavors {
     }
     compileOptions {
-        sourceCompatibility = Versions.Compatibility.source
-        targetCompatibility = Versions.Compatibility.target
+        sourceCompatibility(Versions.Compatibility.source)
+        targetCompatibility(Versions.Compatibility.target)
         isCoreLibraryDesugaringEnabled = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.Dependencies.androidXComposeCompiler
+    }
+    kotlin {
+        jvmToolchain(Versions.Compatibility.source)
     }
     kotlinOptions {
         jvmTarget = Versions.Compatibility.target.toString()
@@ -73,7 +77,7 @@ android {
                 "-opt-in=kotlinx.coroutines.DelicateCoroutinesApi" +
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes.addAll(
                 listOf(

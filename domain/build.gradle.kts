@@ -4,8 +4,12 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    setSourceCompatibility(Versions.Compatibility.source)
+    setTargetCompatibility(Versions.Compatibility.target)
+}
+
+kotlin {
+    jvmToolchain(Versions.Compatibility.source)
 }
 
 dependencies {

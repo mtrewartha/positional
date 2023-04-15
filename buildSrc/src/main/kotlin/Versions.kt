@@ -2,7 +2,7 @@ import org.gradle.api.JavaVersion
 
 object Versions {
 
-    const val kotlin = "1.8.10"
+    const val kotlin = "1.8.20"
 
     object Android {
         const val compileSdk = 33
@@ -27,28 +27,28 @@ object Versions {
     }
 
     object Compatibility {
-        val source: JavaVersion = JavaVersion.VERSION_11
-        val target: JavaVersion = JavaVersion.VERSION_11
+        val source = 17
+        val target = 17
     }
 
     object Dependencies {
         const val androidXActivityCompose = "1.7.0"
-        const val androidXComposeBoM = "2023.03.00"
-        const val androidXComposeCompiler = "1.4.4"
+        const val androidXComposeBoM = "2023.04.00"
+        const val androidXComposeCompiler = "1.4.5"
         const val androidXComposeMaterial3 = "1.1.0-beta01"
-        const val androidXComposeUITestJUnit4 = "1.4.0"
+        const val androidXComposeUITestJUnit4 = "1.4.1"
         const val androidXConstraintLayoutCompose = "1.0.1"
-        const val androidXDataStore = "1.1.0-alpha03"
+        const val androidXDataStore = "1.1.0-alpha04"
         const val androidXFragment = "1.5.6"
         const val androidXHilt = "1.0.0"
         const val androidXLegacySupportV4 = "1.0.0"
         const val androidXLifecycle = "2.6.1"
         const val androidXNavigation = "2.5.3"
         const val androidXPreference = "1.2.0"
-        const val androidXWindow = "1.1.0-beta01"
+        const val androidXWindow = "1.1.0-beta02"
         const val cashAppTurbine = "0.12.1"
-        const val firebaseBoM = "31.2.0"
-        const val googleAccompanist = "0.30.0"
+        const val firebaseBoM = "31.5.0"
+        const val googleAccompanist = "0.30.1"
         const val googleAndroidDesugarJdkLibs = "1.2.2"
         const val googleMaterial = "1.8.0"
         const val googleProtoBuf = "3.21.9"
@@ -65,7 +65,7 @@ object Versions {
     }
 
     object Plugins {
-        const val android = "7.4.2"
+        const val android = "8.0.0"
         const val firebaseCrashlytics = "2.9.2"
         const val firebasePerf = "1.4.2"
         const val googleProtoBuf = "0.9.1"

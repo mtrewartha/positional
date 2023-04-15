@@ -15,7 +15,7 @@ object Dependencies {
     const val androidXComposeMaterialIconsExtended =
         "androidx.compose.material:material-icons-extended"
     const val androidXComposeUITestJUnit4 =
-        "androidx.compose.ui:ui-test-junit4"
+        "androidx.compose.ui:ui-test-junit4:${Versions.Dependencies.androidXComposeUITestJUnit4}"
     const val androidXComposeUITooling =
         "androidx.compose.ui:ui-tooling"
     const val androidXConstraintLayoutCompose =
