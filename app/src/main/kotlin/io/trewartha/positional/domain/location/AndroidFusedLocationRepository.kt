@@ -7,8 +7,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import io.trewartha.positional.data.location.Location
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
@@ -23,6 +21,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class AndroidFusedLocationRepository @Inject constructor(
     coroutineDispatcher: CoroutineDispatcher,
@@ -45,10 +45,10 @@ class AndroidFusedLocationRepository @Inject constructor(
                 Timber.d("Location availability changed to $locationAvailability")
             }
         }
-        val locationRequest = LocationRequest.create()
-            .setPriority(LOCATION_UPDATE_PRIORITY)
-            .setInterval(LOCATION_UPDATE_INTERVAL_MS)
-            .setFastestInterval(LOCATION_UPDATE_INTERVAL_MS)
+        val locationRequest = LocationRequest
+            .Builder(LOCATION_UPDATE_PRIORITY, LOCATION_UPDATE_INTERVAL_MS)
+            .setMinUpdateIntervalMillis(LOCATION_UPDATE_INTERVAL_MS)
+            .build()
         try {
             Timber.i("Requesting location updates: $locationRequest")
             fusedLocationProviderClient.requestLocationUpdates(
