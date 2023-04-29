@@ -111,13 +111,13 @@ private fun CompassView(
     ) { contentPadding ->
         when (state) {
             is CompassViewModel.State.SensorsMissing ->
-        SensorsMissingContent(
-            onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .padding(dimensionResource(R.dimen.standard_padding))
-        )
+                SensorsMissingContent(
+                    onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding)
+                        .padding(dimensionResource(R.dimen.standard_padding))
+                )
             is CompassViewModel.State.SensorsPresent ->
                 SensorsPresentContent(
                     state = state,
@@ -253,14 +253,9 @@ private fun SensorsPresentContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(horizontal = 16.dp)
                 .placeholder(visible = placeholdersVisible)
         )
-
-        StatsColumn(
-            state = state,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        StatsColumn(state = state)
     }
 }
 
