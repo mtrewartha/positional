@@ -2,6 +2,7 @@ package io.trewartha.positional.di.activityretained
 
 import android.content.Context
 import android.view.WindowManager
+import androidx.core.os.LocaleListCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import dagger.Module
@@ -14,6 +15,7 @@ import io.trewartha.positional.data.settings.SettingsProto
 import io.trewartha.positional.settings.SettingsSerializer
 import io.trewartha.positional.ui.utils.format.DateTimeFormatter
 import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
+import java.util.Locale
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
@@ -23,6 +25,9 @@ class ActivityRetainedModule {
     fun dateTimeFormatter(
         systemDateTimeFormatter: SystemDateTimeFormatter
     ): DateTimeFormatter = systemDateTimeFormatter
+
+    @Provides
+    fun locale(): Locale = checkNotNull(LocaleListCompat.getDefault()[0])
 
     @Provides
     @ActivityRetainedScoped

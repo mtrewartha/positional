@@ -25,6 +25,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -35,16 +36,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.R
+import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.units.Units
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.IconToggleButton
-import io.trewartha.positional.ui.NavDestination.Location
+import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
@@ -52,6 +55,7 @@ import io.trewartha.positional.ui.utils.activity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 
 fun NavGraphBuilder.locationView(
@@ -59,15 +63,18 @@ fun NavGraphBuilder.locationView(
     onNavigateToMap: (Double, Double, LocalDateTime) -> Unit,
     onNavigateToSettings: () -> Unit,
 ) {
-    composable(Location.route) {
-        val viewModel: LocationViewModel = hiltViewModel()
-        val state by viewModel.state.collectAsStateWithLifecycle()
+    composable(NavDestination.Location.route) {
         val locationPermissions = remember { listOf(Manifest.permission.ACCESS_FINE_LOCATION) }
         val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
+        val viewModel: LocationViewModel = hiltViewModel()
+        val locationState by viewModel.locationState.collectAsState()
+        val screenLockEnabled by viewModel.screenLockEnabled.collectAsState()
+
         LocationView(
-            state = state,
-            locationPermissionsState = locationPermissionsState,
+            locationState = locationState,
+            screenLockEnabled = screenLockEnabled,
             events = viewModel.events,
+            locationPermissionsState = locationPermissionsState,
             onCopyClick = viewModel::onCopyClick,
             onLaunchClick = viewModel::onLaunchClick,
             onNavigateToInfo = onNavigateToInfo,
@@ -81,7 +88,8 @@ fun NavGraphBuilder.locationView(
 
 @Composable
 private fun LocationView(
-    state: LocationState?,
+    locationState: LocationState?,
+    screenLockEnabled: Boolean?,
     locationPermissionsState: MultiplePermissionsState,
     events: Flow<LocationEvent>,
     onCopyClick: () -> Unit,
@@ -97,7 +105,7 @@ private fun LocationView(
     Scaffold(
         topBar = {
             LocationTopAppBar(
-                state = state,
+                screenLockEnabled = screenLockEnabled,
                 onInfoClick = onNavigateToInfo,
                 onScreenLockCheckedChange = onScreenLockCheckedChange,
                 scrollBehavior = scrollBehavior,
@@ -116,7 +124,7 @@ private fun LocationView(
         ) {
             if (locationPermissionsState.allPermissionsGranted) {
                 LocationPermissionGrantedContent(
-                    state = state,
+                    locationState = locationState,
                     onCopyClick = onCopyClick,
                     onLaunchClick = onLaunchClick,
                     onShareClick = onShareClick,
@@ -142,16 +150,12 @@ private fun LocationView(
 
     val activity = LocalContext.current.activity
     val window = activity?.window
-    val coordinatesCopyErrorMessage =
-        stringResource(R.string.location_snackbar_coordinates_copy_error)
     val coordinatesCopySuccessBothMessage =
         stringResource(R.string.location_snackbar_coordinates_copy_success_both)
     val coordinatesCopySuccessLatitudeMessage =
         stringResource(R.string.location_snackbar_coordinates_copy_success_latitude)
     val coordinatesCopySuccessLongitudeMessage =
         stringResource(R.string.location_snackbar_coordinates_copy_success_longitude)
-    val coordinatesShareErrorMessage =
-        stringResource(R.string.location_snackbar_coordinates_share_error)
     val screenLockedMessage =
         stringResource(R.string.location_snackbar_screen_locked)
     val screenUnlockedMessage =
@@ -163,9 +167,6 @@ private fun LocationView(
                     onNavigateToMap(it.latitude, it.longitude, it.localDateTime)
                 is LocationEvent.NavigateToSettings ->
                     onNavigateToSettings()
-                is LocationEvent.ShowCoordinatesCopyErrorSnackbar -> launch {
-                    snackbarHostState.showSnackbarWithDismissButton(coordinatesCopyErrorMessage)
-                }
                 is LocationEvent.ShowCoordinatesCopySuccessBothSnackbar -> launch {
                     snackbarHostState
                         .showSnackbarWithDismissButton(coordinatesCopySuccessBothMessage)
@@ -177,9 +178,6 @@ private fun LocationView(
                 is LocationEvent.ShowCoordinatesCopySuccessLongitudeSnackbar -> launch {
                     snackbarHostState
                         .showSnackbarWithDismissButton(coordinatesCopySuccessLongitudeMessage)
-                }
-                is LocationEvent.ShowCoordinatesShareErrorSnackbar -> launch {
-                    snackbarHostState.showSnackbarWithDismissButton(coordinatesShareErrorMessage)
                 }
                 is LocationEvent.ShowCoordinatesShareSheet ->
                     activity?.let { a -> showCoordinatesShareSheet(a, it) }
@@ -193,8 +191,8 @@ private fun LocationView(
         }
     }
 
-    DisposableEffect(state?.screenLockEnabled) {
-        if (state?.screenLockEnabled == true) window?.addFlags(FLAG_KEEP_SCREEN_ON)
+    DisposableEffect(screenLockEnabled) {
+        if (screenLockEnabled == true) window?.addFlags(FLAG_KEEP_SCREEN_ON)
         else window?.clearFlags(FLAG_KEEP_SCREEN_ON)
         onDispose { window?.clearFlags(FLAG_KEEP_SCREEN_ON) }
     }
@@ -202,7 +200,7 @@ private fun LocationView(
 
 @Composable
 private fun LocationTopAppBar(
-    state: LocationState?,
+    screenLockEnabled: Boolean?,
     onInfoClick: () -> Unit,
     onScreenLockCheckedChange: (Boolean) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
@@ -213,13 +211,13 @@ private fun LocationTopAppBar(
         modifier = modifier,
         actions = {
             IconToggleButton(
-                checked = state?.screenLockEnabled ?: false,
+                checked = screenLockEnabled ?: false,
                 onCheckedChange = onScreenLockCheckedChange,
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ScreenLockPortrait,
                     contentDescription = stringResource(
-                        if (state?.screenLockEnabled == true)
+                        if (screenLockEnabled == true)
                             R.string.location_screen_lock_button_content_description_on
                         else
                             R.string.location_screen_lock_button_content_description_off
@@ -262,7 +260,8 @@ private suspend fun SnackbarHostState.showSnackbarWithDismissButton(message: Str
 private fun PermissionNotGrantedPreview() {
     PositionalTheme {
         LocationView(
-            state = null,
+            locationState = null,
+            screenLockEnabled = null,
             locationPermissionsState = object : MultiplePermissionsState {
                 override val allPermissionsGranted: Boolean = false
                 override val permissions: List<PermissionState> = emptyList()
@@ -290,7 +289,8 @@ private fun PermissionNotGrantedPreview() {
 private fun LoadingPreview() {
     PositionalTheme {
         LocationView(
-            state = null,
+            locationState = null,
+            screenLockEnabled = null,
             locationPermissionsState = object : MultiplePermissionsState {
                 override val allPermissionsGranted: Boolean = true
                 override val permissions: List<PermissionState> = emptyList()
@@ -318,23 +318,25 @@ private fun LoadingPreview() {
 private fun LoadedPreview() {
     PositionalTheme {
         LocationView(
-            state = LocationState(
-                coordinates = "123.456789\n123.456789",
-                maxLines = 2,
-                screenLockEnabled = false,
-                coordinatesForCopy = "Coordinates for copy",
-                stats = LocationState.Stats(
-                    accuracy = "123.4",
-                    bearing = "123.4",
-                    bearingAccuracy = "± 56.7",
-                    altitude = "123.4",
-                    altitudeAccuracy = "± 56.7",
-                    speed = "123.4",
-                    speedAccuracy = "± 56.7",
-                    showAccuracies = true,
-                    updatedAt = "12:00:00 PM"
+            locationState = LocationState(
+                location = Location(
+                    latitude = 123.456789,
+                    longitude = 123.456789,
+                    horizontalAccuracyMeters = 123.45678f,
+                    bearingDegrees = 123.45678f,
+                    bearingAccuracyDegrees = 123.45678f,
+                    altitudeMeters = 123.45678,
+                    altitudeAccuracyMeters = 123.45678f,
+                    speedMetersPerSecond = 123.45678f,
+                    speedAccuracyMetersPerSecond = 123.45678f,
+                    timestamp = Instant.DISTANT_PAST,
+                    magneticDeclinationDegrees = 123.45678f
                 ),
+                coordinatesFormat = CoordinatesFormat.DD,
+                units = Units.METRIC,
+                showAccuracies = true
             ),
+            screenLockEnabled = true,
             locationPermissionsState = object : MultiplePermissionsState {
                 override val allPermissionsGranted: Boolean = true
                 override val permissions: List<PermissionState> = emptyList()

@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -85,7 +84,12 @@ private fun CompassView(
                     Text(stringResource(R.string.compass_missing_hardware_dialog_confirm))
                 }
             },
-            text = { Text(stringResource(R.string.compass_missing_hardware_dialog_text)) }
+            text = {
+                Text(
+                    stringResource(R.string.compass_missing_hardware_dialog_text),
+                    modifier = Modifier.verticalScroll(rememberScrollState())
+                )
+            }
         )
     }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -107,13 +111,13 @@ private fun CompassView(
     ) { contentPadding ->
         when (state) {
             is CompassViewModel.State.SensorsMissing ->
-                SensorsMissingContent(
-                    onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(contentPadding)
-                        .padding(dimensionResource(R.dimen.standard_padding))
-                )
+        SensorsMissingContent(
+            onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(dimensionResource(R.dimen.standard_padding))
+        )
             is CompassViewModel.State.SensorsPresent ->
                 SensorsPresentContent(
                     state = state,
@@ -298,7 +302,7 @@ private const val ORIENTATION_VECTOR_SIZE = 3
 @Composable
 private fun SensorsMissingPreview() {
     PositionalTheme {
-        SensorsMissingContent(onWhyClick = {},)
+        SensorsMissingContent(onWhyClick = {})
     }
 }
 

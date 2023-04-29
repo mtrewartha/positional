@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.trewartha.positional.ui.PositionalTheme
@@ -46,8 +47,10 @@ fun StatRow(
         )
         Text(
             text = name,
-            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.weight(1f, true),
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = value ?: "",

@@ -38,6 +38,7 @@ import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
+import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -166,7 +167,8 @@ private fun LoadingPreview() {
 @Composable
 private fun LoadedPreview() {
     PositionalTheme {
-        CompositionLocalProvider(LocalDateTimeFormatter provides SystemDateTimeFormatter()) {
+        val locale = LocalLocale.current
+        CompositionLocalProvider(LocalDateTimeFormatter provides SystemDateTimeFormatter(locale)) {
             val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
             SolunarView(
                 todaysDate = today,

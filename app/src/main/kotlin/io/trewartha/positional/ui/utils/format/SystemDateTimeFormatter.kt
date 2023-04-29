@@ -1,6 +1,5 @@
 package io.trewartha.positional.ui.utils.format
 
-import androidx.core.os.LocaleListCompat
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -15,13 +14,14 @@ import java.text.SimpleDateFormat
 import java.text.SimpleDateFormat.MEDIUM
 import java.text.SimpleDateFormat.SHORT
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
-class SystemDateTimeFormatter @Inject constructor() : DateTimeFormatter {
+class SystemDateTimeFormatter @Inject constructor(locale: Locale) : DateTimeFormatter {
 
     private val dateFormat = SimpleDateFormat.getDateInstance(MEDIUM)
     private val dateTimeFormat = SimpleDateFormat.getDateTimeInstance(MEDIUM, SHORT)
-    private val fullDayOfWeekFormat = SimpleDateFormat("EEEE", LocaleListCompat.getDefault()[0])
+    private val fullDayOfWeekFormat = SimpleDateFormat("EEEE", locale)
     private val timeFormat = SimpleDateFormat.getTimeInstance(SHORT)
     private val timeFormatWithSeconds = SimpleDateFormat.getTimeInstance(MEDIUM)
 

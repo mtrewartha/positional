@@ -55,16 +55,19 @@
     <string name="compass_missing_hardware_title">Missing Hardware</string>
 
     <!-- Location -->
-    <string name="location_accuracy">± %s</string>
-    <string name="location_accuracy_imperial">%s ft</string>
-    <string name="location_accuracy_metric">%s m</string>
-    <string name="location_altitude_imperial">%s ft</string>
-    <string name="location_altitude_metric">%s m</string>
-    <string name="location_bearing">%d°</string>
+    <string name="location_accuracy_imperial">± %.0f</string>
+    <string name="location_accuracy_metric">± %.1f</string>
+    <string name="location_altitude_imperial">%.0f ft</string>
+    <string name="location_altitude_metric">%.1f m</string>
+    <string name="location_bearing">%.0f°</string>
+    <string name="location_bearing_accuracy">± %.0f°</string>
     <string name="location_button_info_content_description">Info</string>
     <string name="location_button_info_tooltip">Info</string>
-    <string name="location_coordinate_decimal">%.5f</string>
-    <string name="location_coordinate_utm">%7.0f</string>
+    <string name="location_coordinates_copy_format_dd">%1$s, %2$s</string>
+    <string name="location_coordinates_copy_format_ddm">%1$s, %2$s</string>
+    <string name="location_coordinates_copy_format_dms">%1$s, %2$s</string>
+    <string name="location_coordinates_copy_format_mgrs">%1$s %2$s %3$s</string>
+    <string name="location_coordinates_copy_format_utm">%1$s %2$s %3$s</string>
     <string name="location_coordinates_copy_label">Location</string>
     <string name="location_coordinates_copy_both">Latitude and longitude</string>
     <string name="location_coordinates_copy_content_description">Copy coordinates</string>
@@ -72,6 +75,8 @@
     <string name="location_coordinates_copy_longitude">Longitude only</string>
     <string name="location_coordinates_copy_title">Which coordinates would you like to copy?</string>
     <string name="location_coordinates_copy_tooltip">Copy coordinates</string>
+    <string name="location_horizontal_accuracy_imperial">± %.0f ft</string>
+    <string name="location_horizontal_accuracy_metric">± %.1f m</string>
     <string name="location_label_accuracy">Accuracy</string>
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_altitude">Altitude</string>
@@ -97,8 +102,8 @@
     <string name="location_snackbar_coordinates_share_error">Hold tight, still trying to get your coordinates…</string>
     <string name="location_snackbar_screen_locked">Screen locked on while showing coordinates</string>
     <string name="location_snackbar_screen_unlocked">Screen unlocked</string>
-    <string name="location_speed_imperial">%s mph</string>
-    <string name="location_speed_metric">%s km/h</string>
+    <string name="location_speed_imperial">%.0f mph</string>
+    <string name="location_speed_metric">%.0f km/h</string>
     <string name="location_updated_at">Updated at %s</string>
     <string name="location_updating">Device is acquiring location…</string>
 

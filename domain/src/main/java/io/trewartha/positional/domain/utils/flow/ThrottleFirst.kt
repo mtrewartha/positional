@@ -1,9 +1,9 @@
 package io.trewartha.positional.domain.utils.flow
 
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 fun <T> Flow<T>.throttleFirst(period: Duration): Flow<T> {
     require(period.isPositive()) { "period must be positive" }

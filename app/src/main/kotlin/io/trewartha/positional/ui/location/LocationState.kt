@@ -1,26 +1,14 @@
 package io.trewartha.positional.ui.location
 
 import androidx.compose.runtime.Immutable
+import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.units.Units
 
 @Immutable
 data class LocationState(
-    val coordinates: String,
-    val maxLines: Int,
-    val coordinatesForCopy: String,
-    val stats: Stats,
-    val screenLockEnabled: Boolean,
-) {
-
-    @Immutable
-    data class Stats(
-        val accuracy: String,
-        val bearing: String,
-        val bearingAccuracy: String?,
-        val altitude: String,
-        val altitudeAccuracy: String?,
-        val speed: String,
-        val speedAccuracy: String?,
-        val showAccuracies: Boolean,
-        val updatedAt: String,
-    )
-}
+    val location: Location?,
+    val coordinatesFormat: CoordinatesFormat,
+    val units: Units,
+    val showAccuracies: Boolean,
+)

@@ -17,61 +17,217 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
+import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.units.Units
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
+import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun StatsColumn(
-    stats: LocationState.Stats?,
+    state: LocationState?,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        val showAccuracies = stats?.showAccuracies ?: false
-        val placeholdersVisible = stats == null
-        StatRow(
-            icon = Icons.Rounded.Adjust,
-            name = stringResource(R.string.location_label_accuracy),
-            value = stats?.accuracy,
-            accuracy = null,
-            showAccuracy = showAccuracies,
-            showPlaceholder = placeholdersVisible
+        val location = state?.location
+        val units = state?.units
+        val showAccuracies = state?.showAccuracies
+        val placeholdersVisible = state?.location == null
+        AccuracyRow(
+            horizontalAccuracyMeters = location?.horizontalAccuracyMeters,
+            units = units,
+            showAccuracies = showAccuracies,
+            placeholdersVisible = placeholdersVisible
         )
-        StatRow(
-            icon = Icons.Rounded.Explore,
-            name = stringResource(R.string.location_label_bearing),
-            value = stats?.bearing,
-            accuracy = stats?.bearingAccuracy,
-            showAccuracy = showAccuracies,
-            showPlaceholder = placeholdersVisible
+        BearingRow(
+            bearingDegrees = location?.bearingDegrees,
+            bearingAccuracyDegrees = location?.bearingAccuracyDegrees,
+            showAccuracies = showAccuracies,
+            placeholdersVisible = placeholdersVisible
         )
-        StatRow(
-            icon = Icons.Rounded.Height,
-            name = stringResource(R.string.location_label_altitude),
-            value = stats?.altitude,
-            accuracy = stats?.altitudeAccuracy,
-            showAccuracy = showAccuracies,
-            showPlaceholder = placeholdersVisible
+        AltitudeRow(
+            altitudeMeters = location?.altitudeMeters,
+            altitudeAccuracyMeters = location?.altitudeAccuracyMeters,
+            units = units,
+            showAccuracies = showAccuracies,
+            placeholdersVisible = placeholdersVisible
         )
-        StatRow(
-            icon = Icons.Rounded.Speed,
-            name = stringResource(R.string.location_label_speed),
-            value = stats?.speed,
-            accuracy = stats?.speedAccuracy,
-            showAccuracy = showAccuracies,
-            showPlaceholder = placeholdersVisible
+        SpeedRow(
+            speedMetersPerSecond = location?.speedMetersPerSecond,
+            speedAccuracyMetersPerSecond = location?.speedAccuracyMetersPerSecond,
+            units = units,
+            showAccuracies = showAccuracies,
+            placeholdersVisible = placeholdersVisible
         )
-        Text(
-            text = stats?.updatedAt ?: "",
-            style = MaterialTheme.typography.bodySmall,
+        UpdatedAtText(
+            timestamp = location?.timestamp,
             modifier = Modifier
                 .padding(top = 12.dp)
                 .align(Alignment.CenterHorizontally)
         )
     }
+}
+
+@Composable
+private fun AccuracyRow(
+    horizontalAccuracyMeters: Float?,
+    units: Units?,
+    showAccuracies: Boolean?,
+    placeholdersVisible: Boolean,
+    modifier: Modifier = Modifier
+) {
+    StatRow(
+        icon = Icons.Rounded.Adjust,
+        name = stringResource(R.string.location_label_accuracy),
+        value = if (horizontalAccuracyMeters == null || units == null) {
+            null
+        } else {
+            stringResource(
+                when (units) {
+                    Units.METRIC -> R.string.location_horizontal_accuracy_metric
+                    Units.IMPERIAL -> R.string.location_horizontal_accuracy_imperial
+                },
+                horizontalAccuracyMeters
+            )
+        },
+        accuracy = null,
+        showAccuracy = showAccuracies ?: false,
+        showPlaceholder = placeholdersVisible,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun AltitudeRow(
+    altitudeMeters: Double?,
+    altitudeAccuracyMeters: Float?,
+    units: Units?,
+    showAccuracies: Boolean?,
+    placeholdersVisible: Boolean,
+    modifier: Modifier = Modifier
+) {
+    StatRow(
+        icon = Icons.Rounded.Height,
+        name = stringResource(R.string.location_label_altitude),
+        value = if (altitudeMeters == null || units == null) {
+            null
+        } else {
+            stringResource(
+                when (units) {
+                    Units.METRIC -> R.string.location_altitude_metric
+                    Units.IMPERIAL -> R.string.location_altitude_imperial
+                },
+                altitudeMeters
+            )
+        },
+        accuracy = if (altitudeAccuracyMeters == null || units == null) {
+            null
+        } else {
+            stringResource(
+                when (units) {
+                    Units.METRIC -> R.string.location_accuracy_metric
+                    Units.IMPERIAL -> R.string.location_accuracy_imperial
+                },
+                altitudeAccuracyMeters
+            )
+        },
+        showAccuracy = showAccuracies ?: false,
+        showPlaceholder = placeholdersVisible,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun BearingRow(
+    bearingDegrees: Float?,
+    bearingAccuracyDegrees: Float?,
+    showAccuracies: Boolean?,
+    placeholdersVisible: Boolean,
+    modifier: Modifier = Modifier
+) {
+    StatRow(
+        icon = Icons.Rounded.Explore,
+        name = stringResource(R.string.location_label_bearing),
+        value = if (bearingDegrees == null) {
+            null
+        } else {
+            stringResource(R.string.location_bearing, bearingDegrees)
+        },
+        accuracy = if (bearingAccuracyDegrees == null) {
+            null
+        } else {
+            stringResource(R.string.location_bearing_accuracy, bearingAccuracyDegrees)
+        },
+        showAccuracy = showAccuracies ?: false,
+        showPlaceholder = placeholdersVisible,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SpeedRow(
+    speedMetersPerSecond: Float?,
+    speedAccuracyMetersPerSecond: Float?,
+    units: Units?,
+    showAccuracies: Boolean?,
+    placeholdersVisible: Boolean,
+    modifier: Modifier = Modifier
+) {
+    StatRow(
+        icon = Icons.Rounded.Speed,
+        name = stringResource(R.string.location_label_speed),
+        value = if (speedMetersPerSecond == null || units == null) {
+            null
+        } else {
+            stringResource(
+                when (units) {
+                    Units.METRIC -> R.string.location_speed_metric
+                    Units.IMPERIAL -> R.string.location_speed_imperial
+                },
+                speedMetersPerSecond
+            )
+        },
+        accuracy = if (speedAccuracyMetersPerSecond == null || units == null) {
+            null
+        } else {
+            stringResource(
+                when (units) {
+                    Units.METRIC -> R.string.location_accuracy_metric
+                    Units.IMPERIAL -> R.string.location_accuracy_imperial
+                },
+                speedAccuracyMetersPerSecond
+            )
+        },
+        showAccuracy = showAccuracies ?: false,
+        showPlaceholder = placeholdersVisible,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
+    val localTimestamp = timestamp?.toLocalDateTime(TimeZone.currentSystemDefault())?.time
+    Text(
+        text = localTimestamp
+            ?.let {
+                stringResource(
+                    R.string.location_updated_at,
+                    LocalDateTimeFormatter.current.formatTime(it)
+                )
+            }
+            ?: "",
+        style = MaterialTheme.typography.bodySmall,
+        modifier = modifier
+    )
 }
 
 @ThemePreviews
@@ -81,16 +237,23 @@ private fun Preview() {
     PositionalTheme {
         Surface {
             StatsColumn(
-                LocationState.Stats(
-                    accuracy = "123",
-                    bearing = "123",
-                    bearingAccuracy = "± 3",
-                    altitude = "123",
-                    altitudeAccuracy = "± 300",
-                    speed = "123",
-                    speedAccuracy = "± 300",
-                    showAccuracies = true,
-                    updatedAt = "Updated at 12:00:00 PM"
+                LocationState(
+                    location = Location(
+                        latitude = 123.456789,
+                        longitude = 234.567890,
+                        horizontalAccuracyMeters = 3456.789f,
+                        bearingDegrees = 123.456f,
+                        bearingAccuracyDegrees = 1.23f,
+                        altitudeMeters = 12345.678,
+                        altitudeAccuracyMeters = 123.456f,
+                        speedMetersPerSecond = 123.456f,
+                        speedAccuracyMetersPerSecond = 12.345f,
+                        timestamp = Clock.System.now(),
+                        magneticDeclinationDegrees = 12.345f
+                    ),
+                    coordinatesFormat = CoordinatesFormat.DD,
+                    units = Units.METRIC,
+                    showAccuracies = true
                 )
             )
         }
