@@ -2,7 +2,6 @@ package io.trewartha.positional.ui.location
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material.icons.rounded.Explore
@@ -42,6 +41,11 @@ fun StatsColumn(
         val units = state?.units
         val showAccuracies = state?.showAccuracies
         val placeholdersVisible = state?.location == null
+        UpdatedAtText(
+            timestamp = location?.timestamp,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        )
         AccuracyRow(
             horizontalAccuracyMeters = location?.horizontalAccuracyMeters,
             units = units,
@@ -67,12 +71,6 @@ fun StatsColumn(
             units = units,
             showAccuracies = showAccuracies,
             placeholdersVisible = placeholdersVisible
-        )
-        UpdatedAtText(
-            timestamp = location?.timestamp,
-            modifier = Modifier
-                .padding(top = 12.dp)
-                .align(Alignment.CenterHorizontally)
         )
     }
 }
