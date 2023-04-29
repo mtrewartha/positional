@@ -24,7 +24,6 @@ import io.trewartha.positional.R
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.units.Units
-import io.trewartha.positional.ui.Divider
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
@@ -63,7 +62,6 @@ fun LocationPermissionGrantedContent(
             onShareClick = onShareClick,
             modifier = Modifier.fillMaxWidth()
         )
-        Divider(modifier = Modifier.fillMaxWidth())
         StatsColumn(state = locationState, modifier = Modifier.fillMaxWidth())
     }
 }
