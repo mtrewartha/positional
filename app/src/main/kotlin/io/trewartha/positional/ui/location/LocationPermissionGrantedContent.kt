@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FileCopy
 import androidx.compose.material.icons.rounded.Launch
@@ -28,6 +29,7 @@ import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
+import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.format.coordinates.DecimalDegreesFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.DegreesDecimalMinutesFormatter
@@ -36,6 +38,8 @@ import io.trewartha.positional.ui.utils.format.coordinates.MgrsFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.UtmFormatter
 import io.trewartha.positional.ui.utils.placeholder
 import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun LocationPermissionGrantedContent(
@@ -50,18 +54,27 @@ fun LocationPermissionGrantedContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Coordinates(
-            coordinates = locationState?.location?.let { Coordinates(it.latitude, it.longitude) },
-            format = locationState?.coordinatesFormat,
-            modifier = Modifier.fillMaxWidth()
-        )
-        ButtonRow(
-            location = locationState?.location,
-            onCopyClick = onCopyClick,
-            onLaunchClick = onLaunchClick,
-            onShareClick = onShareClick,
-            modifier = Modifier.fillMaxWidth()
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f, fill = true),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
+        ) {
+            Coordinates(
+                coordinates = locationState?.location
+                    ?.let { Coordinates(it.latitude, it.longitude) },
+                format = locationState?.coordinatesFormat,
+                modifier = Modifier.fillMaxWidth()
+            )
+            UpdatedAtText(timestamp = locationState?.location?.timestamp)
+            ButtonRow(
+                location = locationState?.location,
+                onCopyClick = onCopyClick,
+                onLaunchClick = onLaunchClick,
+                onShareClick = onShareClick
+            )
+        }
         StatsColumn(state = locationState, modifier = Modifier.fillMaxWidth())
     }
 }
@@ -94,7 +107,7 @@ private fun Coordinates(
             Text(
                 text = formattedCoordinate ?: "",
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .widthIn(min = 256.dp)
                     .placeholder(visible = formattedCoordinate == null),
                 style = style,
                 textAlign = TextAlign.Center
@@ -113,7 +126,7 @@ private fun ButtonRow(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onLaunchClick, enabled = location != null) {
@@ -137,10 +150,66 @@ private fun ButtonRow(
     }
 }
 
+@Composable
+private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
+    val localTimestamp = timestamp?.toLocalDateTime(TimeZone.currentSystemDefault())?.time
+    Text(
+        text = localTimestamp
+            ?.let {
+                stringResource(
+                    R.string.location_updated_at,
+                    LocalDateTimeFormatter.current.formatTime(it)
+                )
+            }
+            ?: "",
+        style = MaterialTheme.typography.bodySmall,
+        modifier = modifier
+            .widthIn(min = 128.dp)
+            .placeholder(visible = timestamp == null)
+    )
+}
+
 @ThemePreviews
 @WindowSizePreviews
 @Composable
-private fun Preview() {
+private fun LoadingStatePreview() {
+    PositionalTheme {
+        Surface {
+            LocationPermissionGrantedContent(
+                locationState = null,
+                onCopyClick = {},
+                onLaunchClick = {},
+                onShareClick = {}
+            )
+        }
+    }
+}
+
+@ThemePreviews
+@WindowSizePreviews
+@Composable
+private fun LocatingPreview() {
+    PositionalTheme {
+        Surface {
+            LocationPermissionGrantedContent(
+                locationState = LocationState(
+                    location = null,
+                    coordinatesFormat = CoordinatesFormat.DD,
+                    units = Units.METRIC,
+                    showAccuracies = true
+                ),
+                onCopyClick = {},
+                onLaunchClick = {},
+                onShareClick = {}
+            )
+        }
+    }
+}
+
+@ThemePreviews
+@WindowSizePreviews
+@Composable
+private fun LocatedPreview() {
     PositionalTheme {
         Surface {
             LocationPermissionGrantedContent(

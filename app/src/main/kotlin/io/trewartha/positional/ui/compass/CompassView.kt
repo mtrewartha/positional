@@ -20,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Memory
-import androidx.compose.material.icons.rounded.North
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -185,7 +184,8 @@ private fun SensorsPresentContent(
     }
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         val placeholdersVisible = state is CompassViewModel.State.SensorsPresent.Loading
         val remappedRotationMatrix = remember { FloatArray(ROTATION_MATRIX_SIZE) }
@@ -213,39 +213,11 @@ private fun SensorsPresentContent(
         } else {
             0f
         }
-        Icon(
-            imageVector = Icons.Rounded.North,
-            contentDescription = null,
-            modifier = Modifier.size(48.dp)
-        )
-        Text(
-            text = stringResource(
-                when {
-                    AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
-                        R.string.compass_direction_northwest
-                    AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
-                        R.string.compass_direction_northeast
-                    AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
-                        R.string.compass_direction_southwest
-                    AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
-                        R.string.compass_direction_southeast
-                    AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
-                        R.string.compass_direction_east
-                    AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
-                        R.string.compass_direction_south
-                    AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
-                        R.string.compass_direction_west
-                    else ->
-                        R.string.compass_direction_north
-                }
-            ),
-            style = MaterialTheme.typography.displayLarge
-        )
         Compass(
             azimuthDegrees = azimuthDegrees,
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
+                .weight(1f, fill = true)
+                .widthIn(max = 400.dp)
                 .placeholder(visible = placeholdersVisible)
         )
         StatsColumn(state = state)
@@ -265,22 +237,6 @@ private fun AccuracyHelpDialog(onDismissRequest: () -> Unit) {
     )
 }
 
-private const val AZIMUTH_N_MIN = 337.5f
-private const val AZIMUTH_N_MAX = 22.5f
-private const val AZIMUTH_E_MIN = 67.5f
-private const val AZIMUTH_E_MAX = 112.5f
-private const val AZIMUTH_S_MIN = 157.5f
-private const val AZIMUTH_S_MAX = 202.5f
-private const val AZIMUTH_W_MIN = 247.5f
-private const val AZIMUTH_W_MAX = 292.5f
-private const val AZIMUTH_NE_MIN = AZIMUTH_N_MAX
-private const val AZIMUTH_NE_MAX = AZIMUTH_E_MIN
-private const val AZIMUTH_SE_MIN = AZIMUTH_E_MAX
-private const val AZIMUTH_SE_MAX = AZIMUTH_S_MIN
-private const val AZIMUTH_SW_MIN = AZIMUTH_S_MAX
-private const val AZIMUTH_SW_MAX = AZIMUTH_W_MIN
-private const val AZIMUTH_NW_MIN = AZIMUTH_W_MAX
-private const val AZIMUTH_NW_MAX = AZIMUTH_N_MIN
 private const val DEGREES_360 = 360f
 private const val ROTATION_MATRIX_SIZE = 9
 private const val ORIENTATION_VECTOR_SIZE = 3
@@ -291,6 +247,15 @@ private const val ORIENTATION_VECTOR_SIZE = 3
 private fun SensorsMissingPreview() {
     PositionalTheme {
         SensorsMissingContent(onWhyClick = {})
+    }
+}
+
+@ThemePreviews
+@WindowSizePreviews
+@Composable
+private fun SensorsPresentLoadingPreview() {
+    PositionalTheme {
+        SensorsPresentContent(state = CompassViewModel.State.SensorsPresent.Loading)
     }
 }
 

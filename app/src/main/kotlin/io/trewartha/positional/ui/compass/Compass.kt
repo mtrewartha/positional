@@ -2,12 +2,17 @@ package io.trewartha.positional.ui.compass
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.North
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,10 +28,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.android.material.color.MaterialColors
+import io.trewartha.positional.R
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import kotlin.math.cos
@@ -57,48 +64,82 @@ fun Compass(
     majorTickPeriodDegrees: Int = 45,
     minorTickPeriodDegrees: Int = 15
 ) {
-    Box(
-        modifier = modifier.aspectRatio(1f),
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        ConstraintLayout(modifier = Modifier.widthIn(min = 64.dp)) {
-            val (degreesText, symbolText) = createRefs()
-            Text(
-                text = "${azimuthDegrees.roundToInt() % 360}",
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier.constrainAs(degreesText) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
+        Icon(
+            imageVector = Icons.Rounded.North,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp)
+        )
+        Text(
+            text = stringResource(
+                when {
+                    AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
+                        R.string.compass_direction_northwest
+                    AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
+                        R.string.compass_direction_northeast
+                    AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
+                        R.string.compass_direction_southwest
+                    AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
+                        R.string.compass_direction_southeast
+                    AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
+                        R.string.compass_direction_east
+                    AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
+                        R.string.compass_direction_south
+                    AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
+                        R.string.compass_direction_west
+                    else ->
+                        R.string.compass_direction_north
                 }
-            )
-            Text(
-                text = "°",
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier.constrainAs(symbolText) {
-                    top.linkTo(degreesText.top)
-                    start.linkTo(degreesText.end)
-                }
+            ),
+            style = MaterialTheme.typography.displayLarge
+        )
+        Box(
+            modifier = Modifier.aspectRatio(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            ConstraintLayout(modifier = Modifier.widthIn(min = 64.dp)) {
+                val (degreesText, symbolText) = createRefs()
+                Text(
+                    text = "${azimuthDegrees.roundToInt() % 360}",
+                    style = MaterialTheme.typography.displayLarge,
+                    modifier = Modifier.constrainAs(degreesText) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                )
+                Text(
+                    text = "°",
+                    style = MaterialTheme.typography.displayLarge,
+                    modifier = Modifier.constrainAs(symbolText) {
+                        top.linkTo(degreesText.top)
+                        start.linkTo(degreesText.end)
+                    }
+                )
+            }
+            CompassRose(
+                azimuthDegrees = azimuthDegrees,
+                northTickColor = northTickColor,
+                cardinalTickColor = cardinalTickColor,
+                majorTickColor = majorTickColor,
+                minorTickColor = minorTickColor,
+                northTickLength = northTickLength,
+                cardinalTickLength = cardinalTickLength,
+                majorTickLength = majorTickLength,
+                minorTickLength = minorTickLength,
+                northTickWidth = northTickWidth,
+                cardinalTickWidth = cardinalTickWidth,
+                majorTickWidth = majorTickWidth,
+                minorTickWidth = minorTickWidth,
+                majorTickPeriodDegrees = majorTickPeriodDegrees,
+                minorTickPeriodDegrees = minorTickPeriodDegrees,
             )
         }
-        CompassRose(
-            azimuthDegrees = azimuthDegrees,
-            northTickColor = northTickColor,
-            cardinalTickColor = cardinalTickColor,
-            majorTickColor = majorTickColor,
-            minorTickColor = minorTickColor,
-            northTickLength = northTickLength,
-            cardinalTickLength = cardinalTickLength,
-            majorTickLength = majorTickLength,
-            minorTickLength = minorTickLength,
-            northTickWidth = northTickWidth,
-            cardinalTickWidth = cardinalTickWidth,
-            majorTickWidth = majorTickWidth,
-            minorTickWidth = minorTickWidth,
-            majorTickPeriodDegrees = majorTickPeriodDegrees,
-            minorTickPeriodDegrees = minorTickPeriodDegrees,
-        )
     }
 }
 
@@ -223,6 +264,23 @@ private fun DrawScope.drawTick(center: Offset, degrees: Int, tickStyle: TickStyl
         cap = StrokeCap.Round
     )
 }
+
+private const val AZIMUTH_N_MIN = 337.5f
+private const val AZIMUTH_N_MAX = 22.5f
+private const val AZIMUTH_E_MIN = 67.5f
+private const val AZIMUTH_E_MAX = 112.5f
+private const val AZIMUTH_S_MIN = 157.5f
+private const val AZIMUTH_S_MAX = 202.5f
+private const val AZIMUTH_W_MIN = 247.5f
+private const val AZIMUTH_W_MAX = 292.5f
+private const val AZIMUTH_NE_MIN = AZIMUTH_N_MAX
+private const val AZIMUTH_NE_MAX = AZIMUTH_E_MIN
+private const val AZIMUTH_SE_MIN = AZIMUTH_E_MAX
+private const val AZIMUTH_SE_MAX = AZIMUTH_S_MIN
+private const val AZIMUTH_SW_MIN = AZIMUTH_S_MAX
+private const val AZIMUTH_SW_MAX = AZIMUTH_W_MIN
+private const val AZIMUTH_NW_MIN = AZIMUTH_W_MAX
+private const val AZIMUTH_NW_MAX = AZIMUTH_N_MIN
 
 @ThemePreviews
 @Composable

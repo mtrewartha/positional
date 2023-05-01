@@ -4,12 +4,9 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -33,7 +30,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -114,37 +110,34 @@ private fun LocationView(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Bottom
+        if (locationPermissionsState.allPermissionsGranted) {
+            LocationPermissionGrantedContent(
+                locationState = locationState,
+                onCopyClick = onCopyClick,
+                onLaunchClick = onLaunchClick,
+                onShareClick = onShareClick,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .verticalScroll(rememberScrollState())
+                    .padding(dimensionResource(R.dimen.standard_padding))
+            )
+        } else if (
+            with(locationPermissionsState) { revokedPermissions.size == permissions.size }
         ) {
-            if (locationPermissionsState.allPermissionsGranted) {
-                LocationPermissionGrantedContent(
-                    locationState = locationState,
-                    onCopyClick = onCopyClick,
-                    onLaunchClick = onLaunchClick,
-                    onShareClick = onShareClick,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(dimensionResource(R.dimen.standard_padding))
-                )
-            } else if (
-                with(locationPermissionsState) { revokedPermissions.size == permissions.size }
-            ) {
-                LocationPermissionRequiredContent(
-                    locationPermissionsState = locationPermissionsState,
-                    onNavigateToSettings = onNavigateToSettings,
-                    modifier = Modifier
-                        .widthIn(max = 384.dp)
-                        .padding(dimensionResource(R.dimen.standard_padding))
-                )
-            } else {
-                TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
-            }
+            LocationPermissionRequiredContent(
+                locationPermissionsState = locationPermissionsState,
+                onNavigateToSettings = onNavigateToSettings,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .verticalScroll(rememberScrollState())
+                    .padding(dimensionResource(R.dimen.standard_padding))
+            )
+        } else {
+            TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
         }
     }
 

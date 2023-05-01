@@ -41,11 +41,6 @@ fun StatsColumn(
         val units = state?.units
         val showAccuracies = state?.showAccuracies
         val placeholdersVisible = state?.location == null
-        UpdatedAtText(
-            timestamp = location?.timestamp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        )
         AccuracyRow(
             horizontalAccuracyMeters = location?.horizontalAccuracyMeters,
             units = units,
@@ -207,23 +202,6 @@ private fun SpeedRow(
         },
         showAccuracy = showAccuracies ?: false,
         showPlaceholder = placeholdersVisible,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
-    val localTimestamp = timestamp?.toLocalDateTime(TimeZone.currentSystemDefault())?.time
-    Text(
-        text = localTimestamp
-            ?.let {
-                stringResource(
-                    R.string.location_updated_at,
-                    LocalDateTimeFormatter.current.formatTime(it)
-                )
-            }
-            ?: "",
-        style = MaterialTheme.typography.bodySmall,
         modifier = modifier
     )
 }
