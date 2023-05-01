@@ -221,26 +221,19 @@ private fun SensorsPresentContent(
         Text(
             text = stringResource(
                 when {
-                    AZIMUTH_NORTHWEST_MIN <= azimuthDegrees &&
-                            azimuthDegrees < AZIMUTH_NORTHWEST_MAX ->
+                    AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
                         R.string.compass_direction_northwest
-                    AZIMUTH_NORTHEAST_MIN <= azimuthDegrees &&
-                            azimuthDegrees < AZIMUTH_NORTHEAST_MAX ->
+                    AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
                         R.string.compass_direction_northeast
-                    AZIMUTH_SOUTHWEST_MIN <= azimuthDegrees &&
-                            azimuthDegrees < AZIMUTH_SOUTHWEST_MAX ->
+                    AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
                         R.string.compass_direction_southwest
-                    AZIMUTH_SOUTHEAST_MIN <= azimuthDegrees &&
-                            azimuthDegrees < AZIMUTH_SOUTHEAST_MAX ->
+                    AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
                         R.string.compass_direction_southeast
-                    AZIMUTH_EAST_MIN <= azimuthDegrees &&
-                            azimuthDegrees < AZIMUTH_EAST_MAX ->
+                    AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
                         R.string.compass_direction_east
-                    AZIMUTH_SOUTH_MIN <= azimuthDegrees &&
-                            azimuthDegrees < AZIMUTH_SOUTH_MAX ->
+                    AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
                         R.string.compass_direction_south
-                    AZIMUTH_WEST_MIN <= azimuthDegrees &&
-                            azimuthDegrees < AZIMUTH_WEST_MAX ->
+                    AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
                         R.string.compass_direction_west
                     else ->
                         R.string.compass_direction_north
@@ -272,22 +265,22 @@ private fun AccuracyHelpDialog(onDismissRequest: () -> Unit) {
     )
 }
 
-private const val AZIMUTH_NORTH_MIN = 337.5f
-private const val AZIMUTH_NORTH_MAX = 22.5f
-private const val AZIMUTH_EAST_MIN = 67.5f
-private const val AZIMUTH_EAST_MAX = 112.5f
-private const val AZIMUTH_SOUTH_MIN = 157.5f
-private const val AZIMUTH_SOUTH_MAX = 202.5f
-private const val AZIMUTH_WEST_MIN = 247.5f
-private const val AZIMUTH_WEST_MAX = 292.5f
-private const val AZIMUTH_NORTHEAST_MIN = AZIMUTH_NORTH_MAX
-private const val AZIMUTH_NORTHEAST_MAX = AZIMUTH_EAST_MIN
-private const val AZIMUTH_SOUTHEAST_MIN = AZIMUTH_EAST_MAX
-private const val AZIMUTH_SOUTHEAST_MAX = AZIMUTH_SOUTH_MIN
-private const val AZIMUTH_SOUTHWEST_MIN = AZIMUTH_SOUTH_MAX
-private const val AZIMUTH_SOUTHWEST_MAX = AZIMUTH_WEST_MIN
-private const val AZIMUTH_NORTHWEST_MIN = AZIMUTH_WEST_MAX
-private const val AZIMUTH_NORTHWEST_MAX = AZIMUTH_NORTH_MIN
+private const val AZIMUTH_N_MIN = 337.5f
+private const val AZIMUTH_N_MAX = 22.5f
+private const val AZIMUTH_E_MIN = 67.5f
+private const val AZIMUTH_E_MAX = 112.5f
+private const val AZIMUTH_S_MIN = 157.5f
+private const val AZIMUTH_S_MAX = 202.5f
+private const val AZIMUTH_W_MIN = 247.5f
+private const val AZIMUTH_W_MAX = 292.5f
+private const val AZIMUTH_NE_MIN = AZIMUTH_N_MAX
+private const val AZIMUTH_NE_MAX = AZIMUTH_E_MIN
+private const val AZIMUTH_SE_MIN = AZIMUTH_E_MAX
+private const val AZIMUTH_SE_MAX = AZIMUTH_S_MIN
+private const val AZIMUTH_SW_MIN = AZIMUTH_S_MAX
+private const val AZIMUTH_SW_MAX = AZIMUTH_W_MIN
+private const val AZIMUTH_NW_MIN = AZIMUTH_W_MAX
+private const val AZIMUTH_NW_MAX = AZIMUTH_N_MIN
 private const val DEGREES_360 = 360f
 private const val ROTATION_MATRIX_SIZE = 9
 private const val ORIENTATION_VECTOR_SIZE = 3
