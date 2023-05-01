@@ -11,28 +11,24 @@ private const val TABLET_WIDTH_DP = 800
     name = "Phone Portrait",
     group = "Phone Size",
     widthDp = PHONE_WIDTH_DP,
-    heightDp = PHONE_HEIGHT_DP,
-    showBackground = true
+    heightDp = PHONE_HEIGHT_DP
 )
 @Preview(
     name = "Phone Landscape",
     group = "Phone Size",
     widthDp = PHONE_HEIGHT_DP,
-    heightDp = PHONE_WIDTH_DP,
-    showBackground = true
+    heightDp = PHONE_WIDTH_DP
 )
 @Preview(
     name = "Tablet Portrait",
     group = "Tablet Size",
     widthDp = TABLET_WIDTH_DP,
-    heightDp = TABLET_HEIGHT_DP,
-    showBackground = true
+    heightDp = TABLET_HEIGHT_DP
 )
 @Preview(
     name = "Tablet Landscape",
     group = "Tablet Size",
     widthDp = TABLET_HEIGHT_DP,
-    heightDp = TABLET_WIDTH_DP,
-    showBackground = true
+    heightDp = TABLET_WIDTH_DP
 )
 annotation class WindowSizePreviews
