@@ -1,4 +1,4 @@
-package io.trewartha.positional.settings
+package io.trewartha.positional.domain.settings
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer

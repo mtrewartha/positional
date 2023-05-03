@@ -1,6 +1,8 @@
 package io.trewartha.positional.domain.settings
 
+import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.settings.CompassModeProto
@@ -12,62 +14,64 @@ import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.data.units.Units
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class DataStoreSettingsRepository @Inject constructor(
-    private val settingsDataStore: DataStore<Settings>
-) : SettingsRepository {
+class DataStoreSettingsRepository(private val context: Context) : SettingsRepository {
+
+    private val Context.settingsDataStore: DataStore<Settings> by dataStore(
+        fileName = "settings.proto",
+        serializer = SettingsSerializer
+    )
 
     override val compassMode: Flow<CompassMode> =
-        settingsDataStore.data.map { it.compassMode.toData() }
+        context.settingsDataStore.data.map { it.compassMode.toData() }
 
     override val coordinatesFormat: Flow<CoordinatesFormat> =
-        settingsDataStore.data.map { it.coordinatesFormat.toData() }
+        context.settingsDataStore.data.map { it.coordinatesFormat.toData() }
 
     override val screenLockEnabled: Flow<Boolean> =
-        settingsDataStore.data.map { it.screenLockEnabled }
+        context.settingsDataStore.data.map { it.screenLockEnabled }
 
     override val hideAccuracies: Flow<Boolean> =
-        settingsDataStore.data.map { it.hideAccuracies }
+        context.settingsDataStore.data.map { it.hideAccuracies }
 
     override val theme: Flow<Theme> =
-        settingsDataStore.data.map { it.theme.toData() }
+        context.settingsDataStore.data.map { it.theme.toData() }
 
     override val units: Flow<Units> =
-        settingsDataStore.data.map { it.units.toData() }
+        context.settingsDataStore.data.map { it.units.toData() }
 
     override suspend fun setCompassMode(compassMode: CompassMode) {
-        settingsDataStore.updateData {
+        context.settingsDataStore.updateData {
             it.toBuilder().setCompassMode(compassMode.toProto()).build()
         }
     }
 
     override suspend fun setCoordinatesFormat(coordinatesFormat: CoordinatesFormat) {
-        settingsDataStore.updateData {
+        context.settingsDataStore.updateData {
             it.toBuilder().setCoordinatesFormat(coordinatesFormat.toProto()).build()
         }
     }
 
     override suspend fun setScreenLockEnabled(screenLockEnabled: Boolean) {
-        settingsDataStore.updateData {
+        context.settingsDataStore.updateData {
             it.toBuilder().setScreenLockEnabled(screenLockEnabled).build()
         }
     }
 
     override suspend fun setHideAccuracies(hideAccuracies: Boolean) {
-        settingsDataStore.updateData {
+        context.settingsDataStore.updateData {
             it.toBuilder().setHideAccuracies(hideAccuracies).build()
         }
     }
 
     override suspend fun setTheme(theme: Theme) {
-        settingsDataStore.updateData {
+        context.settingsDataStore.updateData {
             it.toBuilder().setTheme(theme.toProto()).build()
         }
     }
 
     override suspend fun setUnits(units: Units) {
-        settingsDataStore.updateData {
+        context.settingsDataStore.updateData {
             it.toBuilder().setUnits(units.toProto()).build()
         }
     }

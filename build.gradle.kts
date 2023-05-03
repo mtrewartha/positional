@@ -1,25 +1,16 @@
 buildscript {
-    repositories {
-        google()
-        gradlePluginPortal()
-        mavenCentral()
-    }
     dependencies {
-        classpath(Plugins.androidGradle)
-        classpath(Plugins.firebaseCrashlytics)
-        classpath(Plugins.firebasePerf)
-        classpath(Plugins.googleServices)
-        classpath(Plugins.hilt)
-        classpath(Plugins.kotlin)
+        classpath(libs.javapoet.get()) // https://github.com/google/dagger/issues/3068
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven(url = "https://jitpack.io")
-    }
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.protobuf) apply false
 }
 
 tasks.register("clean", Delete::class) {

@@ -1,34 +1,41 @@
+import org.jetbrains.kotlin.konan.properties.loadProperties
+
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.protobuf)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.android.application)
 }
+
+private val PROPERTIES_FILE_PATH = "upload_keystore.properties"
+private val PROPERTIES_KEY_ALIAS = "keyAlias"
+private val PROPERTIES_KEY_PASSWORD = "keyPassword"
+private val PROPERTIES_KEY_STORE_FILE = "storeFile"
+private val PROPERTIES_KEY_STORE_PASSWORD = "storePassword"
 
 android {
     sourceSets.forEach { it.java.setSrcDirs(listOf("src/${it.name}/kotlin")) }
 
     signingConfigs {
         create("release") {
-            val keyStoreConfig = KeyStore(rootProject)
-            storeFile = keyStoreConfig.file
-            storePassword = keyStoreConfig.password
-            keyAlias = keyStoreConfig.keyAlias
-            keyPassword = keyStoreConfig.keyPassword
+            val uploadKeystoreProperties = loadProperties(PROPERTIES_FILE_PATH)
+            storeFile = file(uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_FILE))
+            storePassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_PASSWORD)
+            keyAlias = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_ALIAS)
+            keyPassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_PASSWORD)
         }
     }
-    compileSdk = Versions.Android.compileSdk
+    compileSdk = libs.versions.android.sdk.compile.get().toInt()
     defaultConfig {
         applicationId = "io.trewartha.positional"
-        minSdk = Versions.Android.minSdk
-        targetSdk = Versions.Android.targetSdk
-
-        versionCode = Versions.Application.code
-        versionName = Versions.Application.name
+        minSdk = libs.versions.android.sdk.min.get().toInt()
+        targetSdk = libs.versions.android.sdk.target.get().toInt()
+        versionCode = 21021400
+        versionName = "2.14.0"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     buildTypes {
@@ -48,19 +55,12 @@ android {
     productFlavors {
     }
     compileOptions {
-        sourceCompatibility(Versions.Compatibility.source)
-        targetCompatibility(Versions.Compatibility.target)
         isCoreLibraryDesugaringEnabled = true
     }
-
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.Dependencies.androidXComposeCompiler
-    }
-    kotlin {
-        jvmToolchain(Versions.Compatibility.source)
+        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
     kotlinOptions {
-        jvmTarget = Versions.Compatibility.target.toString()
         freeCompilerArgs = freeCompilerArgs +
                 "-Xinline-classes" +
                 "-Xjvm-default=all" +
@@ -77,24 +77,7 @@ android {
                 "-opt-in=kotlinx.coroutines.DelicateCoroutinesApi" +
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
-    packaging {
-        resources {
-            excludes.addAll(
-                listOf(
-                    "DebugProbesKt.bin",
-                    "META-INF/versions/9/previous-compilation-data.bin"
-                )
-            )
-        }
-    }
     namespace = "io.trewartha.positional"
-}
-
-repositories {
-    google()
-    mavenCentral()
-    maven(url = "https://jitpack.io")
-    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 
 tasks.withType<Test> {
@@ -102,69 +85,66 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    kapt(Dependencies.hiltCompiler)
+    kapt(libs.hilt.compiler)
 
-    coreLibraryDesugaring(Dependencies.googleAndroidDesugarJdkLibs)
+    coreLibraryDesugaring(libs.android.desugarJdkLibs)
 
     implementation(project(":domain"))
-    implementation(Dependencies.androidXActivityCompose)
-    implementation(platform(Dependencies.androidXComposeBoM))
-    implementation(Dependencies.androidXComposeMaterial3)
-    implementation(Dependencies.androidXComposeMaterial3WindowSizeClass)
-    implementation(Dependencies.androidXComposeMaterialIconsCore)
-    implementation(Dependencies.androidXComposeMaterialIconsExtended)
-    implementation(Dependencies.androidXComposeUITooling)
-    implementation(Dependencies.androidXConstraintLayoutCompose)
-    implementation(Dependencies.androidXDataStore)
-    implementation(Dependencies.androidXFragmentKtx)
-    implementation(Dependencies.androidXHiltCompiler)
-    implementation(Dependencies.androidXHiltNavigationCompose)
-    implementation(Dependencies.androidXLegacySupportV4)
-    implementation(Dependencies.androidXLifecycleRuntimeCompose)
-    implementation(Dependencies.androidXLifecycleRuntimeKtx)
-    implementation(Dependencies.androidXLifecycleLiveDataKtx)
-    implementation(Dependencies.androidXLifecycleViewModelCompose)
-    implementation(Dependencies.androidXLifecycleViewModelKtx)
-    implementation(Dependencies.androidXNavigationCompose)
-    implementation(Dependencies.androidXPreferenceKtx)
-    implementation(Dependencies.androidXWindow)
-    implementation(platform(Dependencies.firebaseBoM))
-    implementation(Dependencies.firebaseCrashlytics)
-    implementation(Dependencies.firebaseAnalytics)
-    implementation(Dependencies.firebasePerf)
-    implementation(Dependencies.googleAccompanistInsetsUI)
-    implementation(Dependencies.googleAccompanistNavigationAnimation)
-    implementation(Dependencies.googleAccompanistPager)
-    implementation(Dependencies.googleAccompanistPagerIndicators)
-    implementation(Dependencies.googleAccompanistPermissions)
-    implementation(Dependencies.googleAccompanistPlaceholder)
-    implementation(Dependencies.googleAccompanistSystemUIController)
-    implementation(Dependencies.googleMaterial)
-    implementation(Dependencies.guava)
-    implementation(Dependencies.hiltAndroid)
-    implementation(Dependencies.hiltNavigationFragment)
-    implementation(Dependencies.kotlinxCoroutinesAndroid)
-    implementation(Dependencies.kotlinxCoroutinesPlayServices)
-    implementation(Dependencies.markwon)
-    implementation(Dependencies.playServicesLocation)
-    implementation(Dependencies.sunriseSunset)
-    implementation(Dependencies.timber)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.uiTooling)
+    implementation(libs.androidx.constraintLayout.compose)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.fragment)
+    implementation(libs.androidx.legacySupport.v4)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.liveData.ktx)
+    implementation(libs.androidx.lifecycle.viewModel.compose)
+    implementation(libs.androidx.lifecycle.viewModel.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.window)
+    implementation(libs.accompanist.insetsUi)
+    implementation(libs.accompanist.navigation.animation)
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.accompanist.placeholder)
+    implementation(libs.accompanist.systemUiController)
+    implementation(libs.guava)
+    implementation(libs.hilt.android)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.playServices)
+    implementation(libs.markwon)
+    implementation(libs.materialComponents)
+    implementation(libs.playServices.location)
+    implementation(libs.sunriseSunset)
+    implementation(libs.timber)
 
-    testImplementation(Dependencies.cashAppTurbine)
-    testImplementation(Dependencies.kotestAssertionsCore)
-    testImplementation(Dependencies.kotestProperty)
-    testImplementation(Dependencies.kotestRunnerJUnit5)
-    testImplementation(Dependencies.kotlinReflect)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlin.reflect)
 
-    androidTestImplementation(Dependencies.androidXComposeUITestJUnit4)
+    androidTestImplementation(libs.androidx.compose.uiTest.junit4)
+}
+
+hilt {
+    enableAggregatingTask = true
 }
 
 kapt {
     correctErrorTypes = true
 }
 
-hilt {
-    enableExperimentalClasspathAggregation = true
+kotlin {
+    jvmToolchain(libs.versions.java.get().toInt())
 }
-
-apply(plugin = "com.google.gms.google-services")
