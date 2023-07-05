@@ -126,7 +126,6 @@ private fun LocationView(
         }
     )
 
-    val infoSheetState = rememberModalBottomSheetState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var showInfoSheet by rememberSaveable { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -187,6 +186,7 @@ private fun LocationView(
         }
     }
     if (showInfoSheet) {
+        val infoSheetState = rememberModalBottomSheetState()
         LocationInfoSheet(
             onDismissRequest = { showInfoSheet = false },
             sheetState = infoSheetState,

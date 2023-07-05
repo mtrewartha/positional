@@ -25,8 +25,6 @@ import io.trewartha.positional.ui.NavDestination.Location
 import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.NavDestination.Solunar
 import io.trewartha.positional.ui.compass.compassView
-import io.trewartha.positional.ui.compass.info.compassInfoView
-import io.trewartha.positional.ui.compass.info.navigateToCompassInfo
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.location.Coordinates
 import io.trewartha.positional.ui.location.locationView
@@ -69,8 +67,7 @@ fun MainView(navHostController: NavHostController) {
             startDestination = Location.route,
             modifier = Modifier.padding(bottom = contentPadding.calculateBottomPadding())
         ) {
-            compassView(onNavigateToInfo = { navHostController.navigateToCompassInfo() })
-            compassInfoView(onNavigateUp = { navHostController.popBackStack() })
+            compassView()
             locationView(
                 onAndroidSettingsClick = { navigateToSettings(context) }
             ) { coordinates, timestamp ->

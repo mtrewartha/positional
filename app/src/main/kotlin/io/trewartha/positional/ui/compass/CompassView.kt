@@ -29,10 +29,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,24 +58,19 @@ import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.placeholder
 
-fun NavGraphBuilder.compassView(
-    onNavigateToInfo: () -> Unit,
-) {
+fun NavGraphBuilder.compassView() {
     composable(Compass.route) {
         val viewModel: CompassViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
         CompassView(
-            state = state,
-            onNavigateToInfo = onNavigateToInfo
+            state = state
         )
     }
 }
 
 @Composable
-private fun CompassView(
-    state: CompassViewModel.State,
-    onNavigateToInfo: () -> Unit,
-) {
+private fun CompassView(state: CompassViewModel.State) {
+    var showInfoSheet by rememberSaveable { mutableStateOf(false) }
     var showMissingSensorDialog by remember { mutableStateOf(false) }
     if (showMissingSensorDialog) {
         AlertDialog(
@@ -97,7 +94,7 @@ private fun CompassView(
             TopAppBar(
                 title = {},
                 actions = {
-                    IconButton(onClick = onNavigateToInfo) {
+                    IconButton(onClick = { showInfoSheet = true }) {
                         Icon(
                             Icons.Rounded.Info,
                             stringResource(R.string.compass_button_info_content_description),
@@ -128,6 +125,14 @@ private fun CompassView(
                         .padding(dimensionResource(R.dimen.standard_padding))
                 )
         }
+    }
+    if (showInfoSheet) {
+        val infoSheetState = rememberModalBottomSheetState()
+        CompassInfoSheet(
+            onDismissRequest = { showInfoSheet = false },
+            sheetState = infoSheetState,
+            windowInsets = WindowInsets(0)
+        )
     }
 }
 
