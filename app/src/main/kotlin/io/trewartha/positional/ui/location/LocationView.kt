@@ -19,12 +19,16 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
@@ -64,7 +68,6 @@ import kotlinx.datetime.Instant
 
 fun NavGraphBuilder.locationView(
     onAndroidSettingsClick: () -> Unit,
-    onInfoClick: () -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit
 ) {
     composable(NavDestination.Location.route) {
@@ -93,12 +96,10 @@ fun NavGraphBuilder.locationView(
                 onScreenLockToggle = { locked ->
                     viewModel.events.trySend(LocationEvent.LockToggle(locked))
                 },
-                onInfoClick = onInfoClick,
-                onMapClick = onMapClick,
-                onShareClick = { coordinates ->
-                    shareCoordinates(context, coordinatesFormatter, coordinates)
-                }
-            )
+                onMapClick = onMapClick
+            ) { coordinates ->
+                shareCoordinates(context, coordinatesFormatter, coordinates)
+            }
         }
     }
 }
@@ -109,7 +110,6 @@ private fun LocationView(
     state: LocationState,
     onAndroidSettingsClick: () -> Unit,
     onScreenLockToggle: (Boolean) -> Unit,
-    onInfoClick: () -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
 ) {
@@ -126,13 +126,15 @@ private fun LocationView(
         }
     )
 
+    val infoSheetState = rememberModalBottomSheetState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    var showInfoSheet by rememberSaveable { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
             LocationTopAppBar(
                 screenLockedOn = state.screenLockedOn,
-                onInfoClick = onInfoClick,
+                onInfoClick = { showInfoSheet = true },
                 onScreenLockToggle = {
                     coroutineScope.launch {
                         snackbarHostState.currentSnackbarData?.dismiss()
@@ -183,6 +185,13 @@ private fun LocationView(
         } else {
             TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
         }
+    }
+    if (showInfoSheet) {
+        LocationInfoSheet(
+            onDismissRequest = { showInfoSheet = false },
+            sheetState = infoSheetState,
+            windowInsets = WindowInsets(0)
+        )
     }
 }
 
@@ -292,10 +301,8 @@ private fun PermissionNotGrantedPreview() {
             ),
             onAndroidSettingsClick = {},
             onScreenLockToggle = {},
-            onInfoClick = {},
-            onMapClick = { _, _ -> },
-            onShareClick = {}
-        )
+            onMapClick = { _, _ -> }
+        ) {}
     }
 }
 
@@ -331,10 +338,8 @@ private fun LocatingPreview() {
             ),
             onAndroidSettingsClick = {},
             onScreenLockToggle = {},
-            onInfoClick = {},
-            onMapClick = { _, _ -> },
-            onShareClick = {}
-        )
+            onMapClick = { _, _ -> }
+        ) {}
     }
 }
 
@@ -373,9 +378,7 @@ private fun LocatedPreview() {
             ),
             onAndroidSettingsClick = {},
             onScreenLockToggle = {},
-            onInfoClick = {},
-            onMapClick = { _, _ -> },
-            onShareClick = {}
-        )
+            onMapClick = { _, _ -> }
+        ) {}
     }
 }
