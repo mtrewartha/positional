@@ -95,11 +95,7 @@
     <string name="location_permission_required_title">Location Permission is Required</string>
     <string name="location_permission_without_rationale_title">Let\'s get started!</string>
     <string name="location_permission_without_rationale_message">In order to show your location, Positional needs permission. Your location is never recorded. For more details, check out the simple privacy policy.</string>
-    <string name="location_snackbar_coordinates_copy_error">Hold tight, still trying to get your location…</string>
-    <string name="location_snackbar_coordinates_copy_success_both">Latitude and longitude copied</string>
-    <string name="location_snackbar_coordinates_copy_success_latitude">Latitude copied</string>
-    <string name="location_snackbar_coordinates_copy_success_longitude">Longitude copied</string>
-    <string name="location_snackbar_coordinates_share_error">Hold tight, still trying to get your coordinates…</string>
+    <string name="location_snackbar_coordinates_copied">Coordinates copied</string>
     <string name="location_snackbar_screen_locked">Screen locked on while showing coordinates</string>
     <string name="location_snackbar_screen_unlocked">Screen unlocked</string>
     <string name="location_speed_imperial">%.0f mph</string>

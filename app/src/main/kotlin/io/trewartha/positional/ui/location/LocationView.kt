@@ -24,6 +24,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
@@ -58,6 +59,7 @@ import io.trewartha.positional.ui.utils.format.coordinates.DegreesDecimalMinutes
 import io.trewartha.positional.ui.utils.format.coordinates.DegreesMinutesSecondsFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.MgrsFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.UtmFormatter
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 
 fun NavGraphBuilder.locationView(
@@ -73,7 +75,6 @@ fun NavGraphBuilder.locationView(
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         val context = LocalContext.current
-        val clipboardManager = LocalClipboardManager.current
         val locale = LocalLocale.current
         CompositionLocalProvider(
             LocalCoordinatesFormatter provides when (state.coordinatesFormat) {
@@ -93,26 +94,11 @@ fun NavGraphBuilder.locationView(
                     viewModel.events.trySend(LocationEvent.LockToggle(locked))
                 },
                 onInfoClick = onInfoClick,
-                onCopyClick = { coordinates ->
-                    copyCoordinates(coordinates, coordinatesFormatter, clipboardManager)
-                },
                 onMapClick = onMapClick,
                 onShareClick = { coordinates ->
                     shareCoordinates(context, coordinatesFormatter, coordinates)
                 }
             )
-            DisposableEffect(state.screenLockedOn) {
-                val window = context.activity?.window?.apply {
-                    if (state.screenLockedOn) {
-                        addFlags(FLAG_KEEP_SCREEN_ON)
-                    } else {
-                        clearFlags(FLAG_KEEP_SCREEN_ON)
-                    }
-                }
-                onDispose {
-                    window?.clearFlags(FLAG_KEEP_SCREEN_ON)
-                }
-            }
         }
     }
 }
@@ -124,10 +110,22 @@ private fun LocationView(
     onAndroidSettingsClick: () -> Unit,
     onScreenLockToggle: (Boolean) -> Unit,
     onInfoClick: () -> Unit,
-    onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
 ) {
+    // Snackbars
+    val coroutineScope = rememberCoroutineScope()
+    val coordinatesCopiedMessage = stringResource(R.string.location_snackbar_coordinates_copied)
+    val screenLockMessage = stringResource(
+        // This might look backwards, but it's not. We're setting the message to show *when the
+        // state changes from the current value*, not the message to show *for* the current value.
+        if (state.screenLockedOn) {
+            R.string.location_snackbar_screen_unlocked
+        } else {
+            R.string.location_snackbar_screen_locked
+        }
+    )
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -135,7 +133,13 @@ private fun LocationView(
             LocationTopAppBar(
                 screenLockedOn = state.screenLockedOn,
                 onInfoClick = onInfoClick,
-                onScreenLockToggle = onScreenLockToggle,
+                onScreenLockToggle = {
+                    coroutineScope.launch {
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        snackbarHostState.showSnackbar(screenLockMessage)
+                    }
+                    onScreenLockToggle(it)
+                },
                 scrollBehavior = scrollBehavior,
             )
         },
@@ -143,9 +147,17 @@ private fun LocationView(
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
         if (locationPermissionsState.allPermissionsGranted) {
+            val clipboardManager = LocalClipboardManager.current
+            val coordinatesFormatter = LocalCoordinatesFormatter.current
             LocationPermissionGrantedContent(
                 state = state,
-                onCopyClick = onCopyClick,
+                onCopyClick = { coordinates ->
+                    coroutineScope.launch {
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        snackbarHostState.showSnackbar(coordinatesCopiedMessage)
+                    }
+                    copyCoordinates(coordinates, coordinatesFormatter, clipboardManager)
+                },
                 onMapClick = onMapClick,
                 onShareClick = onShareClick,
                 modifier = Modifier
@@ -172,50 +184,6 @@ private fun LocationView(
             TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
         }
     }
-
-    val activity = LocalContext.current.activity
-    val window = activity?.window
-
-//    val coordinatesCopySuccessBothMessage =
-//        stringResource(R.string.location_snackbar_coordinates_copy_success_both)
-//    val coordinatesCopySuccessLatitudeMessage =
-//        stringResource(R.string.location_snackbar_coordinates_copy_success_latitude)
-//    val coordinatesCopySuccessLongitudeMessage =
-//        stringResource(R.string.location_snackbar_coordinates_copy_success_longitude)
-//    val screenLockedMessage =
-//        stringResource(R.string.location_snackbar_screen_locked)
-//    val screenUnlockedMessage =
-//        stringResource(R.string.location_snackbar_screen_unlocked)
-//    LaunchedEffect(events) {
-//        events.collect {
-//            when (it) {
-//                is LocationEvent.NavigateToGeoActivity ->
-//                    onNavigateToMap(it.latitude, it.longitude, it.localDateTime)
-//                is LocationEvent.NavigateToSettings ->
-//                    onNavigateToSettings()
-//                is LocationEvent.ShowCoordinatesCopySuccessBothSnackbar -> launch {
-//                    snackbarHostState
-//                        .showSnackbarWithDismissButton(coordinatesCopySuccessBothMessage)
-//                }
-//                is LocationEvent.ShowCoordinatesCopySuccessLatitudeSnackbar -> launch {
-//                    snackbarHostState
-//                        .showSnackbarWithDismissButton(coordinatesCopySuccessLatitudeMessage)
-//                }
-//                is LocationEvent.ShowCoordinatesCopySuccessLongitudeSnackbar -> launch {
-//                    snackbarHostState
-//                        .showSnackbarWithDismissButton(coordinatesCopySuccessLongitudeMessage)
-//                }
-//                is LocationEvent.ShowCoordinatesShareSheet ->
-//                    activity?.let { a -> showCoordinatesShareSheet(a, it) }
-//                is LocationEvent.ShowScreenLockedSnackbar -> launch {
-//                    snackbarHostState.showSnackbarWithDismissButton(screenLockedMessage)
-//                }
-//                is LocationEvent.ShowScreenUnlockedSnackbar -> launch {
-//                    snackbarHostState.showSnackbarWithDismissButton(screenUnlockedMessage)
-//                }
-//            }
-//        }
-//    }
 }
 
 @Composable
@@ -246,10 +214,11 @@ private fun LocationTopAppBar(
                 Icon(
                     imageVector = Icons.Rounded.ScreenLockPortrait,
                     contentDescription = stringResource(
-                        if (screenLockedOn == true)
+                        if (screenLockedOn == true) {
                             R.string.location_button_lock_content_description_on
-                        else
+                        } else {
                             R.string.location_button_lock_content_description_off
+                        }
                     ),
                 )
             }
@@ -291,11 +260,6 @@ private fun shareCoordinates(
     )
 }
 
-private suspend fun SnackbarHostState.showSnackbarWithDismissButton(message: String) {
-    currentSnackbarData?.dismiss()
-    showSnackbar(message, withDismissAction = true)
-}
-
 @ThemePreviews
 @WindowSizePreviews
 @Composable
@@ -329,7 +293,6 @@ private fun PermissionNotGrantedPreview() {
             onAndroidSettingsClick = {},
             onScreenLockToggle = {},
             onInfoClick = {},
-            onCopyClick = {},
             onMapClick = { _, _ -> },
             onShareClick = {}
         )
@@ -369,7 +332,6 @@ private fun LocatingPreview() {
             onAndroidSettingsClick = {},
             onScreenLockToggle = {},
             onInfoClick = {},
-            onCopyClick = {},
             onMapClick = { _, _ -> },
             onShareClick = {}
         )
@@ -412,7 +374,6 @@ private fun LocatedPreview() {
             onAndroidSettingsClick = {},
             onScreenLockToggle = {},
             onInfoClick = {},
-            onCopyClick = {},
             onMapClick = { _, _ -> },
             onShareClick = {}
         )
