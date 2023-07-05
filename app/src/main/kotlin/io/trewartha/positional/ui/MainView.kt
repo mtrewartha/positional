@@ -29,7 +29,6 @@ import io.trewartha.positional.ui.compass.info.compassInfoView
 import io.trewartha.positional.ui.compass.info.navigateToCompassInfo
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.location.Coordinates
-import io.trewartha.positional.ui.location.info.locationInfoView
 import io.trewartha.positional.ui.location.locationView
 import io.trewartha.positional.ui.settings.settingsView
 import io.trewartha.positional.ui.solunar.info.navigateToSolunarInfo
@@ -77,7 +76,6 @@ fun MainView(navHostController: NavHostController) {
             ) { coordinates, timestamp ->
                 navigateToMap(context, dateTimeFormatter, coordinates, timestamp)
             }
-            locationInfoView(onNavigateUp = { navHostController.popBackStack() })
             settingsView(onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) })
             solunarView(onNavigateToInfo = { navHostController.navigateToSolunarInfo() })
             solunarInfoView(onNavigateUp = { navHostController.popBackStack() })
