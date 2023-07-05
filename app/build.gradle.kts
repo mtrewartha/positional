@@ -112,7 +112,6 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.window)
     implementation(libs.accompanist.insetsUi)
-    implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.accompanist.permissions)

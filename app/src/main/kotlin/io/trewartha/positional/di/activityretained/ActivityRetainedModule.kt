@@ -10,11 +10,16 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.trewartha.positional.ui.utils.format.DateTimeFormatter
 import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
+import kotlinx.coroutines.Dispatchers
 import java.util.Locale
+import kotlin.coroutines.CoroutineContext
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 class ActivityRetainedModule {
+
+    @Provides
+    fun coroutineContext(): CoroutineContext = Dispatchers.Default
 
     @Provides
     fun dateTimeFormatter(

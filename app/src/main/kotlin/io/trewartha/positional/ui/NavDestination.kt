@@ -13,7 +13,6 @@ sealed interface NavDestination {
     val route: String
 
     sealed interface BottomNavDestination : NavDestination {
-
         val navIcon: ImageVector
         val navLabelRes: Int
     }

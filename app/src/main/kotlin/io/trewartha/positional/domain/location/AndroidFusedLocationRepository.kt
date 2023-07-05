@@ -3,7 +3,6 @@ package io.trewartha.positional.domain.location
 import android.hardware.GeomagneticField
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
-import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
@@ -11,6 +10,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import io.trewartha.positional.data.location.Location
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.delay
@@ -60,8 +60,8 @@ class AndroidFusedLocationRepository @Inject constructor(
             Timber.i("Requesting location updates: $locationRequest")
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,
+                coroutineDispatcher.asExecutor(),
                 locationCallback,
-                Looper.getMainLooper()
             ).await()
         } catch (securityException: SecurityException) {
             close(securityException)

@@ -1,44 +1,44 @@
 [versions]
-accompanist = "0.30.1"
+accompanist = "0.31.4-beta"
 android-desugarJdkLibs = "2.0.3"
-android-gradle = "8.1.0-beta01"
-android-sdk-compile = "33"
+android-gradle = "8.1.0-rc01"
+android-sdk-compile = "34"
 android-sdk-min = "21"
-android-sdk-target = "33"
-androidx-activity-compose = "1.7.1"
-androidx-compose-bom = "2023.04.01"
-androidx-compose-compiler = "1.4.6"
-androidx-compose-material3 = "1.1.0-rc01"
-androidx-compose-uitest-junit-4 = "1.4.2"
+android-sdk-target = "34"
+androidx-activity-compose = "1.7.2"
+androidx-compose = "1.5.0-beta03"
+androidx-compose-bom = "2023.06.01"
+androidx-compose-compiler = "1.4.8"
+androidx-compose-material3 = "1.2.0-alpha03"
 androidx-constraint-layout-compose = "1.0.1"
 androidx-data-store = "1.1.0-alpha04"
-androidx-fragment = "1.5.7"
+androidx-fragment = "1.6.0"
 androidx-hilt = "1.0.0"
 androidx-legacySupport-v4 = "1.0.0"
 androidx-lifecycle = "2.6.1"
-androidx-navigation = "2.5.3"
+androidx-navigation = "2.7.0-beta02"
 androidx-preference = "1.2.0"
-androidx-window = "1.1.0-beta02"
+androidx-window = "1.2.0-alpha03"
 firebase-bom = "31.5.0"
 firebase-crashlytics-gradle = "2.9.5"
 firebase-performance-gradle = "2.9.5"
 java = "17"
 javapoet = { strictly = "1.13.0" }
-guava = "31.1-android"
+guava = "32.0.1-android"
 google-services = "4.3.15"
-hilt = "2.46"
-kotest = "5.6.1"
-kotlin = "1.8.20"
-kotlinx-coroutines = "1.7.0-RC"
+hilt = "2.46.1"
+kotest = "5.6.2"
+kotlin = "1.8.22"
+kotlinx-coroutines = "1.7.2"
 kotlinx-datetime = "0.4.0"
 markwon = "4.6.2"
-materialComponents = "1.8.0"
+materialComponents = "1.9.0"
 play-services-location = "21.0.1"
-protobuf = "3.21.9"
+protobuf = "3.21.12"
 protobuf-plugin = "0.9.3"
 sunrise-sunset = "1.2"
 timber = "5.0.1"
-turbine = "0.12.3"
+turbine = "1.0.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
@@ -54,7 +54,6 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 
 [libraries]
 accompanist-insetsUi = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
@@ -67,7 +66,7 @@ androidx-compose-material-icons-core = { module = "androidx.compose.material:mat
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
 androidx-compose-material3-windowSizeClass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "androidx-compose-material3" }
-androidx-compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-compose-uitest-junit-4" }
+androidx-compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-compose" }
 androidx-compose-uiTooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-constraintLayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidx-constraint-layout-compose" }
 androidx-dataStore = { module = "androidx.datastore:datastore", version.ref = "androidx-data-store" }

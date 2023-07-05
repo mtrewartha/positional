@@ -12,9 +12,9 @@ interface SettingsRepository {
 
     val coordinatesFormat: Flow<CoordinatesFormat>
 
-    val screenLockEnabled: Flow<Boolean>
+    val lockScreenOn: Flow<Boolean>
 
-    val hideAccuracies: Flow<Boolean>
+    val showAccuracies: Flow<Boolean>
 
     val theme: Flow<Theme>
 
@@ -24,9 +24,9 @@ interface SettingsRepository {
 
     suspend fun setCoordinatesFormat(coordinatesFormat: CoordinatesFormat)
 
-    suspend fun setScreenLockEnabled(screenLockEnabled: Boolean)
+    suspend fun setLockScreenOn(lockScreenOn: Boolean)
 
-    suspend fun setHideAccuracies(hideAccuracies: Boolean)
+    suspend fun setShowAccuracies(showAccuracies: Boolean)
 
     suspend fun setTheme(theme: Theme)
 

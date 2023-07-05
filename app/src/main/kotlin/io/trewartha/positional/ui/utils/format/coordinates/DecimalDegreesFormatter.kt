@@ -27,9 +27,7 @@ class DecimalDegreesFormatter(
         )
 
     private fun formatLatitudeOrLongitude(latitudeOrLongitude: Double?) =
-        latitudeOrLongitude?.let { DECIMAL_DEGREES_FORMAT.format(locale, it) }
-
-    private companion object {
-        private const val DECIMAL_DEGREES_FORMAT = "%.5f"
-    }
+        latitudeOrLongitude?.let { FORMAT.format(locale, it) }
 }
+
+private const val FORMAT = "%3.5f°"

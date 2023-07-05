@@ -9,7 +9,6 @@ import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.data.units.Units
 import io.trewartha.positional.domain.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +21,7 @@ class SettingsViewModel @Inject constructor(
 
     val coordinatesFormat: Flow<CoordinatesFormat> = settingsRepository.coordinatesFormat
 
-    val showAccuracies: Flow<Boolean> = settingsRepository.hideAccuracies.map { !it }
+    val showAccuracies: Flow<Boolean> = settingsRepository.showAccuracies
 
     val theme: Flow<Theme> = settingsRepository.theme
 
@@ -37,7 +36,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onShowAccuraciesChange(showAccuracies: Boolean) {
-        viewModelScope.launch { settingsRepository.setHideAccuracies(!showAccuracies) }
+        viewModelScope.launch { settingsRepository.setShowAccuracies(!showAccuracies) }
     }
 
     fun onThemeChange(theme: Theme) {

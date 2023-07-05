@@ -7,64 +7,53 @@ import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.material.icons.rounded.Height
 import androidx.compose.material.icons.rounded.Speed
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.units.Units
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
-import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun StatsColumn(
-    state: LocationState?,
+    state: LocationState,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        val location = state?.location
-        val units = state?.units
-        val showAccuracies = state?.showAccuracies
-        val placeholdersVisible = state?.location == null
+        val placeholdersVisible = state.timestamp == null
         AccuracyRow(
-            horizontalAccuracyMeters = location?.horizontalAccuracyMeters,
-            units = units,
-            showAccuracies = showAccuracies,
+            horizontalAccuracyMeters = state.horizontalAccuracyMeters,
+            units = state.units,
+            showAccuracy = state.showAccuracies,
             placeholdersVisible = placeholdersVisible
         )
         BearingRow(
-            bearingDegrees = location?.bearingDegrees,
-            bearingAccuracyDegrees = location?.bearingAccuracyDegrees,
-            showAccuracies = showAccuracies,
+            bearingDegrees = state.bearingDegrees,
+            bearingAccuracyDegrees = state.bearingAccuracyDegrees,
+            showAccuracy = state.showAccuracies,
             placeholdersVisible = placeholdersVisible
         )
         AltitudeRow(
-            altitudeMeters = location?.altitudeMeters,
-            altitudeAccuracyMeters = location?.altitudeAccuracyMeters,
-            units = units,
-            showAccuracies = showAccuracies,
+            altitudeMeters = state.altitudeMeters,
+            altitudeAccuracyMeters = state.altitudeAccuracyMeters,
+            units = state.units,
+            showAccuracy = state.showAccuracies,
             placeholdersVisible = placeholdersVisible
         )
         SpeedRow(
-            speedMetersPerSecond = location?.speedMetersPerSecond,
-            speedAccuracyMetersPerSecond = location?.speedAccuracyMetersPerSecond,
-            units = units,
-            showAccuracies = showAccuracies,
+            speedMetersPerSecond = state.speedMetersPerSecond,
+            speedAccuracyMetersPerSecond = state.speedAccuracyMetersPerSecond,
+            units = state.units,
+            showAccuracy = state.showAccuracies,
             placeholdersVisible = placeholdersVisible
         )
     }
@@ -74,7 +63,7 @@ fun StatsColumn(
 private fun AccuracyRow(
     horizontalAccuracyMeters: Float?,
     units: Units?,
-    showAccuracies: Boolean?,
+    showAccuracy: Boolean?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -93,7 +82,7 @@ private fun AccuracyRow(
             )
         },
         accuracy = null,
-        showAccuracy = showAccuracies ?: false,
+        showAccuracy = showAccuracy ?: false,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
@@ -101,10 +90,10 @@ private fun AccuracyRow(
 
 @Composable
 private fun AltitudeRow(
-    altitudeMeters: Double?,
+    altitudeMeters: Float?,
     altitudeAccuracyMeters: Float?,
     units: Units?,
-    showAccuracies: Boolean?,
+    showAccuracy: Boolean?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -133,7 +122,7 @@ private fun AltitudeRow(
                 altitudeAccuracyMeters
             )
         },
-        showAccuracy = showAccuracies ?: false,
+        showAccuracy = showAccuracy ?: false,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
@@ -143,7 +132,7 @@ private fun AltitudeRow(
 private fun BearingRow(
     bearingDegrees: Float?,
     bearingAccuracyDegrees: Float?,
-    showAccuracies: Boolean?,
+    showAccuracy: Boolean?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -160,7 +149,7 @@ private fun BearingRow(
         } else {
             stringResource(R.string.location_bearing_accuracy, bearingAccuracyDegrees)
         },
-        showAccuracy = showAccuracies ?: false,
+        showAccuracy = showAccuracy ?: false,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
@@ -171,7 +160,7 @@ private fun SpeedRow(
     speedMetersPerSecond: Float?,
     speedAccuracyMetersPerSecond: Float?,
     units: Units?,
-    showAccuracies: Boolean?,
+    showAccuracy: Boolean?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -200,7 +189,7 @@ private fun SpeedRow(
                 speedAccuracyMetersPerSecond
             )
         },
-        showAccuracy = showAccuracies ?: false,
+        showAccuracy = showAccuracy ?: false,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
@@ -213,24 +202,24 @@ private fun Preview() {
     PositionalTheme {
         Surface {
             StatsColumn(
-                LocationState(
-                    location = Location(
+                state = LocationState(
+                    coordinates = Coordinates(
                         latitude = 123.456789,
-                        longitude = 234.567890,
-                        horizontalAccuracyMeters = 3456.789f,
-                        bearingDegrees = 123.456f,
-                        bearingAccuracyDegrees = 1.23f,
-                        altitudeMeters = 12345.678,
-                        altitudeAccuracyMeters = 123.456f,
-                        speedMetersPerSecond = 123.456f,
-                        speedAccuracyMetersPerSecond = 12.345f,
-                        timestamp = Clock.System.now(),
-                        magneticDeclinationDegrees = 12.345f
+                        longitude = 234.567890
                     ),
+                    horizontalAccuracyMeters = 3456.789f,
+                    bearingDegrees = 123.456f,
+                    bearingAccuracyDegrees = 1.23f,
+                    altitudeMeters = 12345.678f,
+                    altitudeAccuracyMeters = 123.456f,
+                    speedMetersPerSecond = 123.456f,
+                    speedAccuracyMetersPerSecond = 12.345f,
+                    timestamp = Clock.System.now(),
                     coordinatesFormat = CoordinatesFormat.DD,
                     units = Units.METRIC,
-                    showAccuracies = true
-                )
+                    showAccuracies = true,
+                    screenLockedOn = false
+                ),
             )
         }
     }

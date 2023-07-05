@@ -108,11 +108,11 @@ fun AutoShrinkingText(
                 } else {
                     textSize
                 }
-                textSize = existingTextSize * FONT_SIZE_REDUCTION_FACTOR
+                textSize = existingTextSize * TEXT_SIZE_SHRINK_FACTOR
             }
         },
         style = style,
     )
 }
 
-private const val FONT_SIZE_REDUCTION_FACTOR = 0.9f
+private const val TEXT_SIZE_SHRINK_FACTOR = 0.9f

@@ -11,8 +11,8 @@ option java_outer_classname = "SettingsProto";
 message Settings {
   CompassMode compass_mode = 1;
   CoordinatesFormat coordinates_format = 2;
-  bool screen_lock_enabled = 3;
-  bool hide_accuracies = 4;
+  bool lock_screen_on = 3;
+  bool show_accuracies = 4;
   Theme theme = 5 ;
   Units units = 6;
 }

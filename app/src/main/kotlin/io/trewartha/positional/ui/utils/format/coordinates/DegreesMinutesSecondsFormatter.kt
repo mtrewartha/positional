@@ -10,14 +10,8 @@ import java.util.Locale
 
 class DegreesMinutesSecondsFormatter(
     private val context: Context,
-    locale: Locale
+    private val locale: Locale
 ) : CoordinatesFormatter {
-
-    init {
-        require(locale == Locale.getDefault()) {
-            "This function can only format for the current default locale"
-        }
-    }
 
     override val format = CoordinatesFormat.DMS
 
@@ -35,23 +29,20 @@ class DegreesMinutesSecondsFormatter(
         )
 
     private fun formatLatitude(latitude: Double): String {
-        val dmsLat = replaceDelimiters(convert(latitude, FORMAT_SECONDS))
-        return if (latitude >= 0.0) {
-            "$dmsLat N"
-        } else {
-            "${dmsLat.replaceFirst("-".toRegex(), "")} S"
-        }
+        val components = convert(latitude, FORMAT_SECONDS).split(':')
+        val degrees = components[0].toInt()
+        val minutes = components[1].toInt()
+        val seconds = components[2].toFloat()
+        return FORMAT.format(locale, degrees, minutes, seconds)
     }
 
     private fun formatLongitude(longitude: Double): String {
-        val dmsLon = replaceDelimiters(convert(longitude, FORMAT_SECONDS))
-        return if (longitude >= 0.0) {
-            "$dmsLon E"
-        } else {
-            "${dmsLon.replaceFirst("-".toRegex(), "")} W"
-        }
+        val components = convert(longitude, FORMAT_SECONDS).split(':')
+        val degrees = components[0].toInt()
+        val minutes = components[1].toInt()
+        val seconds = components[2].toFloat()
+        return FORMAT.format(locale, degrees, minutes, seconds)
     }
-
-    private fun replaceDelimiters(string: String): String =
-        string.replaceFirst(":".toRegex(), "° ").replaceFirst(":".toRegex(), "' ") + "\""
 }
+
+private const val FORMAT = "%1\$3d° %2\$2d' %3\$2.2f\""

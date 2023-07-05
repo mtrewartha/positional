@@ -1,6 +1,8 @@
 package io.trewartha.positional.ui.location
 
-import androidx.compose.runtime.Immutable
+import io.trewartha.positional.data.location.Location
 
-@Immutable
 data class Coordinates(val latitude: Double, val longitude: Double)
+
+val Location.coordinates: Coordinates
+    get() = Coordinates(latitude, longitude)

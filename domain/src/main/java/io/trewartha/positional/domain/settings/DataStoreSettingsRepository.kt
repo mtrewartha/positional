@@ -28,11 +28,11 @@ class DataStoreSettingsRepository(private val context: Context) : SettingsReposi
     override val coordinatesFormat: Flow<CoordinatesFormat> =
         context.settingsDataStore.data.map { it.coordinatesFormat.toData() }
 
-    override val screenLockEnabled: Flow<Boolean> =
-        context.settingsDataStore.data.map { it.screenLockEnabled }
+    override val lockScreenOn: Flow<Boolean> =
+        context.settingsDataStore.data.map { it.lockScreenOn }
 
-    override val hideAccuracies: Flow<Boolean> =
-        context.settingsDataStore.data.map { it.hideAccuracies }
+    override val showAccuracies: Flow<Boolean> =
+        context.settingsDataStore.data.map { it.showAccuracies }
 
     override val theme: Flow<Theme> =
         context.settingsDataStore.data.map { it.theme.toData() }
@@ -52,15 +52,15 @@ class DataStoreSettingsRepository(private val context: Context) : SettingsReposi
         }
     }
 
-    override suspend fun setScreenLockEnabled(screenLockEnabled: Boolean) {
+    override suspend fun setLockScreenOn(lockScreenOn: Boolean) {
         context.settingsDataStore.updateData {
-            it.toBuilder().setScreenLockEnabled(screenLockEnabled).build()
+            it.toBuilder().setLockScreenOn(lockScreenOn).build()
         }
     }
 
-    override suspend fun setHideAccuracies(hideAccuracies: Boolean) {
+    override suspend fun setShowAccuracies(showAccuracies: Boolean) {
         context.settingsDataStore.updateData {
-            it.toBuilder().setHideAccuracies(hideAccuracies).build()
+            it.toBuilder().setShowAccuracies(showAccuracies).build()
         }
     }
 

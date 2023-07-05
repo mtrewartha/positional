@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FileCopy
-import androidx.compose.material.icons.rounded.Launch
+import androidx.compose.material.icons.rounded.Map
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.units.Units
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.PositionalTheme
@@ -31,6 +30,7 @@ import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
+import io.trewartha.positional.ui.utils.AutoShrinkingText
 import io.trewartha.positional.ui.utils.format.coordinates.DecimalDegreesFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.DegreesDecimalMinutesFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.DegreesMinutesSecondsFormatter
@@ -43,10 +43,10 @@ import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun LocationPermissionGrantedContent(
-    locationState: LocationState?,
-    onCopyClick: () -> Unit,
-    onLaunchClick: () -> Unit,
-    onShareClick: () -> Unit,
+    state: LocationState,
+    onCopyClick: (Coordinates?) -> Unit,
+    onMapClick: (Coordinates?, Instant?) -> Unit,
+    onShareClick: (Coordinates?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -62,20 +62,23 @@ fun LocationPermissionGrantedContent(
             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
         ) {
             Coordinates(
-                coordinates = locationState?.location
-                    ?.let { Coordinates(it.latitude, it.longitude) },
-                format = locationState?.coordinatesFormat,
+                coordinates = state.coordinates,
+                format = state.coordinatesFormat,
                 modifier = Modifier.fillMaxWidth()
             )
-            UpdatedAtText(timestamp = locationState?.location?.timestamp)
+            UpdatedAtText(timestamp = state.timestamp)
             ButtonRow(
-                location = locationState?.location,
+                coordinates = state.coordinates,
+                timestamp = state.timestamp,
                 onCopyClick = onCopyClick,
-                onLaunchClick = onLaunchClick,
+                onMapClick = onMapClick,
                 onShareClick = onShareClick
             )
         }
-        StatsColumn(state = locationState, modifier = Modifier.fillMaxWidth())
+        StatsColumn(
+            state = state,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -85,7 +88,6 @@ private fun Coordinates(
     format: CoordinatesFormat?,
     modifier: Modifier = Modifier
 ) {
-    val style = MaterialTheme.typography.displayLarge
     val context = LocalContext.current
     val locale = LocalLocale.current
     val formatter = remember(format) {
@@ -98,30 +100,26 @@ private fun Coordinates(
         }
     }
     val formattedCoordinates = formatter.formatForDisplay(coordinates)
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        for (formattedCoordinate in formattedCoordinates) {
-            Text(
-                text = formattedCoordinate ?: "",
-                modifier = Modifier
-                    .widthIn(min = 256.dp)
-                    .placeholder(visible = formattedCoordinate == null),
-                style = style,
-                textAlign = TextAlign.Center
-            )
-        }
+    val maxCoordinateLength = formattedCoordinates.maxOf { it?.length ?: 0 }
+    val joinedPaddedCoordinateLines = formattedCoordinates.joinToString("\n") { coordinate ->
+        coordinate.orEmpty().padStart(maxCoordinateLength)
     }
+    AutoShrinkingText(
+        text = joinedPaddedCoordinateLines,
+        modifier = modifier.placeholder(visible = coordinates == null),
+        textAlign = TextAlign.Center,
+        maxLines = formattedCoordinates.size,
+        style = MaterialTheme.typography.displayLarge,
+    )
 }
 
 @Composable
 private fun ButtonRow(
-    location: Location?,
-    onCopyClick: () -> Unit,
-    onLaunchClick: () -> Unit,
-    onShareClick: () -> Unit,
+    coordinates: Coordinates?,
+    timestamp: Instant?,
+    onCopyClick: (Coordinates?) -> Unit,
+    onMapClick: (Coordinates?, Instant?) -> Unit,
+    onShareClick: (Coordinates?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -129,19 +127,28 @@ private fun ButtonRow(
         horizontalArrangement = Arrangement.spacedBy(24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = onLaunchClick, enabled = location != null) {
+        IconButton(
+            onClick = { onMapClick(coordinates, timestamp) },
+            enabled = coordinates != null
+        ) {
             Icon(
-                Icons.Rounded.Launch,
-                stringResource(R.string.location_launch_button_content_description),
+                Icons.Rounded.Map,
+                stringResource(R.string.location_button_map_content_description),
             )
         }
-        IconButton(onClick = onShareClick, enabled = location != null) {
+        IconButton(
+            onClick = { onShareClick(coordinates) },
+            enabled = coordinates != null
+        ) {
             Icon(
                 Icons.Rounded.Share,
-                stringResource(R.string.location_share_button_content_description),
+                stringResource(R.string.location_button_share_content_description),
             )
         }
-        IconButton(onClick = onCopyClick, enabled = location != null) {
+        IconButton(
+            onClick = { onCopyClick(coordinates) },
+            enabled = coordinates != null
+        ) {
             Icon(
                 Icons.Rounded.FileCopy,
                 stringResource(R.string.location_coordinates_copy_content_description),
@@ -172,34 +179,27 @@ private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
 @ThemePreviews
 @WindowSizePreviews
 @Composable
-private fun LoadingStatePreview() {
-    PositionalTheme {
-        Surface {
-            LocationPermissionGrantedContent(
-                locationState = null,
-                onCopyClick = {},
-                onLaunchClick = {},
-                onShareClick = {}
-            )
-        }
-    }
-}
-
-@ThemePreviews
-@WindowSizePreviews
-@Composable
 private fun LocatingPreview() {
     PositionalTheme {
         Surface {
             LocationPermissionGrantedContent(
-                locationState = LocationState(
-                    location = null,
+                state = LocationState(
+                    coordinates = null,
                     coordinatesFormat = CoordinatesFormat.DD,
+                    horizontalAccuracyMeters = null,
+                    bearingDegrees = null,
+                    bearingAccuracyDegrees = null,
+                    altitudeMeters = null,
+                    altitudeAccuracyMeters = null,
+                    speedMetersPerSecond = null,
+                    speedAccuracyMetersPerSecond = null,
+                    timestamp = null,
                     units = Units.METRIC,
-                    showAccuracies = true
+                    showAccuracies = true,
+                    screenLockedOn = false
                 ),
                 onCopyClick = {},
-                onLaunchClick = {},
+                onMapClick = { _, _ -> },
                 onShareClick = {}
             )
         }
@@ -213,26 +213,26 @@ private fun LocatedPreview() {
     PositionalTheme {
         Surface {
             LocationPermissionGrantedContent(
-                locationState = LocationState(
-                    location = Location(
+                state = LocationState(
+                    coordinates = Coordinates(
                         latitude = 123.456789,
-                        longitude = 123.456789,
-                        horizontalAccuracyMeters = 123.45678f,
-                        bearingDegrees = 123.45678f,
-                        bearingAccuracyDegrees = 123.45678f,
-                        altitudeMeters = 123.45678,
-                        altitudeAccuracyMeters = 123.45678f,
-                        speedMetersPerSecond = 123.45678f,
-                        speedAccuracyMetersPerSecond = 123.45678f,
-                        timestamp = Instant.DISTANT_PAST,
-                        magneticDeclinationDegrees = 123.45678f
+                        longitude = 123.456789
                     ),
                     coordinatesFormat = CoordinatesFormat.DD,
+                    horizontalAccuracyMeters = 123.45678f,
+                    bearingDegrees = 123.45678f,
+                    bearingAccuracyDegrees = 123.45678f,
+                    altitudeMeters = 123.45678f,
+                    altitudeAccuracyMeters = 123.45678f,
+                    speedMetersPerSecond = 123.45678f,
+                    speedAccuracyMetersPerSecond = 123.45678f,
+                    timestamp = Instant.DISTANT_PAST,
                     units = Units.METRIC,
-                    showAccuracies = true
+                    showAccuracies = true,
+                    screenLockedOn = false
                 ),
                 onCopyClick = {},
-                onLaunchClick = {},
+                onMapClick = { _, _ -> },
                 onShareClick = {}
             )
         }

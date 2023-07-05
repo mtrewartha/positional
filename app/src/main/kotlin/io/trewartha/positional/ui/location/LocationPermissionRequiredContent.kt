@@ -37,7 +37,7 @@ import io.trewartha.positional.ui.utils.activity
 @Composable
 fun LocationPermissionRequiredContent(
     locationPermissionsState: MultiplePermissionsState,
-    onNavigateToSettings: () -> Unit,
+    onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -80,7 +80,7 @@ fun LocationPermissionRequiredContent(
             Button(
                 onClick = {
                     if (locationPermissionsState.shouldShowRationale) {
-                        onNavigateToSettings()
+                        onSettingsClick()
                     } else {
                         locationPermissionsState.launchMultiplePermissionRequest()
                     }
@@ -116,7 +116,7 @@ private fun Preview() {
 
                     override fun launchMultiplePermissionRequest() {}
                 },
-                onNavigateToSettings = {},
+                onSettingsClick = {},
             )
         }
     }

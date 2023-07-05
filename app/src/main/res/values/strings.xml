@@ -63,6 +63,13 @@
     <string name="location_bearing_accuracy">± %.0f°</string>
     <string name="location_button_info_content_description">Info</string>
     <string name="location_button_info_tooltip">Info</string>
+    <string name="location_button_map_content_description">Open in map app</string>
+    <string name="location_button_lock_content_description_off">Lock screen (currently off)</string>
+    <string name="location_button_lock_content_description_on">Lock screen (currently on)</string>
+    <string name="location_button_lock_tooltip_off">Lock screen (currently off)</string>
+    <string name="location_button_lock_tooltip_on">Lock screen (currently on)</string>
+    <string name="location_button_share_content_description">Share coordinates</string>
+    <string name="location_button_share_tooltip">Share coordinates</string>
     <string name="location_coordinates_copy_format_dd">%1$s, %2$s</string>
     <string name="location_coordinates_copy_format_ddm">%1$s, %2$s</string>
     <string name="location_coordinates_copy_format_dms">%1$s, %2$s</string>
@@ -81,7 +88,6 @@
     <string name="location_label_bearing">Bearing</string>
     <string name="location_label_altitude">Altitude</string>
     <string name="location_label_speed">Speed</string>
-    <string name="location_launch_button_content_description">Open in maps app</string>
     <string name="location_launch_label">My Location on %s (Exported from Positional)</string>
     <string name="location_permission_required_button_ok" translatable="false">@string/common_ok</string>
     <string name="location_permission_required_button_privacy_policy" translatable="false">@string/common_privacy_policy</string>
@@ -89,12 +95,6 @@
     <string name="location_permission_required_title">Location Permission is Required</string>
     <string name="location_permission_without_rationale_title">Let\'s get started!</string>
     <string name="location_permission_without_rationale_message">In order to show your location, Positional needs permission. Your location is never recorded. For more details, check out the simple privacy policy.</string>
-    <string name="location_screen_lock_button_content_description_off">Lock screen (currently off)</string>
-    <string name="location_screen_lock_button_content_description_on">Lock screen (currently on)</string>
-    <string name="location_screen_lock_button_tooltip_off">Lock screen (currently off)</string>
-    <string name="location_screen_lock_button_tooltip_on">Lock screen (currently on)</string>
-    <string name="location_share_button_content_description">Share coordinates</string>
-    <string name="location_share_button_tooltip">Share coordinates</string>
     <string name="location_snackbar_coordinates_copy_error">Hold tight, still trying to get your location…</string>
     <string name="location_snackbar_coordinates_copy_success_both">Latitude and longitude copied</string>
     <string name="location_snackbar_coordinates_copy_success_latitude">Latitude copied</string>

@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.Markdown
 import io.trewartha.positional.ui.NavDestination.LocationInfo

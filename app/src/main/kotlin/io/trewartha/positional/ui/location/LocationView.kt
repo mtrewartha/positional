@@ -20,26 +20,28 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.composable
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.R
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.units.Units
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.IconToggleButton
@@ -47,63 +49,93 @@ import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
+import io.trewartha.positional.ui.locals.LocalCoordinatesFormatter
+import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.activity
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.launch
+import io.trewartha.positional.ui.utils.format.coordinates.CoordinatesFormatter
+import io.trewartha.positional.ui.utils.format.coordinates.DecimalDegreesFormatter
+import io.trewartha.positional.ui.utils.format.coordinates.DegreesDecimalMinutesFormatter
+import io.trewartha.positional.ui.utils.format.coordinates.DegreesMinutesSecondsFormatter
+import io.trewartha.positional.ui.utils.format.coordinates.MgrsFormatter
+import io.trewartha.positional.ui.utils.format.coordinates.UtmFormatter
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 
 fun NavGraphBuilder.locationView(
-    onNavigateToInfo: () -> Unit,
-    onNavigateToMap: (Double, Double, LocalDateTime) -> Unit,
-    onNavigateToSettings: () -> Unit,
+    onAndroidSettingsClick: () -> Unit,
+    onInfoClick: () -> Unit,
+    onMapClick: (Coordinates?, Instant?) -> Unit
 ) {
     composable(NavDestination.Location.route) {
         val locationPermissions = remember { listOf(Manifest.permission.ACCESS_FINE_LOCATION) }
         val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
-        val viewModel: LocationViewModel = hiltViewModel()
-        val locationState by viewModel.locationState.collectAsState()
-        val screenLockEnabled by viewModel.screenLockEnabled.collectAsState()
 
-        LocationView(
-            locationState = locationState,
-            screenLockEnabled = screenLockEnabled,
-            events = viewModel.events,
-            locationPermissionsState = locationPermissionsState,
-            onCopyClick = viewModel::onCopyClick,
-            onLaunchClick = viewModel::onLaunchClick,
-            onNavigateToInfo = onNavigateToInfo,
-            onNavigateToMap = onNavigateToMap,
-            onNavigateToSettings = onNavigateToSettings,
-            onScreenLockCheckedChange = viewModel::onScreenLockCheckedChange,
-            onShareClick = viewModel::onShareClick
-        )
+        val viewModel: LocationViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
+
+        val context = LocalContext.current
+        val clipboardManager = LocalClipboardManager.current
+        val locale = LocalLocale.current
+        CompositionLocalProvider(
+            LocalCoordinatesFormatter provides when (state.coordinatesFormat) {
+                CoordinatesFormat.DD -> DecimalDegreesFormatter(context, locale)
+                CoordinatesFormat.DDM -> DegreesDecimalMinutesFormatter(context, locale)
+                CoordinatesFormat.DMS -> DegreesMinutesSecondsFormatter(context, locale)
+                CoordinatesFormat.MGRS -> MgrsFormatter(context)
+                CoordinatesFormat.UTM -> UtmFormatter(context, locale)
+            }
+        ) {
+            val coordinatesFormatter = LocalCoordinatesFormatter.current
+            LocationView(
+                locationPermissionsState = locationPermissionsState,
+                state = state,
+                onAndroidSettingsClick = onAndroidSettingsClick,
+                onScreenLockToggle = { locked ->
+                    viewModel.events.trySend(LocationEvent.LockToggle(locked))
+                },
+                onInfoClick = onInfoClick,
+                onCopyClick = { coordinates ->
+                    copyCoordinates(coordinates, coordinatesFormatter, clipboardManager)
+                },
+                onMapClick = onMapClick,
+                onShareClick = { coordinates ->
+                    shareCoordinates(context, coordinatesFormatter, coordinates)
+                }
+            )
+            DisposableEffect(state.screenLockedOn) {
+                val window = context.activity?.window?.apply {
+                    if (state.screenLockedOn) {
+                        addFlags(FLAG_KEEP_SCREEN_ON)
+                    } else {
+                        clearFlags(FLAG_KEEP_SCREEN_ON)
+                    }
+                }
+                onDispose {
+                    window?.clearFlags(FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        }
     }
 }
 
 @Composable
 private fun LocationView(
-    locationState: LocationState?,
-    screenLockEnabled: Boolean?,
     locationPermissionsState: MultiplePermissionsState,
-    events: Flow<LocationEvent>,
-    onCopyClick: () -> Unit,
-    onLaunchClick: () -> Unit,
-    onNavigateToInfo: () -> Unit,
-    onNavigateToMap: (Double, Double, LocalDateTime) -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onScreenLockCheckedChange: (Boolean) -> Unit,
-    onShareClick: () -> Unit,
+    state: LocationState,
+    onAndroidSettingsClick: () -> Unit,
+    onScreenLockToggle: (Boolean) -> Unit,
+    onInfoClick: () -> Unit,
+    onCopyClick: (Coordinates?) -> Unit,
+    onMapClick: (Coordinates?, Instant?) -> Unit,
+    onShareClick: (Coordinates?) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
             LocationTopAppBar(
-                screenLockEnabled = screenLockEnabled,
-                onInfoClick = onNavigateToInfo,
-                onScreenLockCheckedChange = onScreenLockCheckedChange,
+                screenLockedOn = state.screenLockedOn,
+                onInfoClick = onInfoClick,
+                onScreenLockToggle = onScreenLockToggle,
                 scrollBehavior = scrollBehavior,
             )
         },
@@ -112,9 +144,9 @@ private fun LocationView(
     ) { contentPadding ->
         if (locationPermissionsState.allPermissionsGranted) {
             LocationPermissionGrantedContent(
-                locationState = locationState,
+                state = state,
                 onCopyClick = onCopyClick,
-                onLaunchClick = onLaunchClick,
+                onMapClick = onMapClick,
                 onShareClick = onShareClick,
                 modifier = Modifier
                     .fillMaxSize()
@@ -128,7 +160,7 @@ private fun LocationView(
         ) {
             LocationPermissionRequiredContent(
                 locationPermissionsState = locationPermissionsState,
-                onNavigateToSettings = onNavigateToSettings,
+                onSettingsClick = onAndroidSettingsClick,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(contentPadding)
@@ -143,77 +175,81 @@ private fun LocationView(
 
     val activity = LocalContext.current.activity
     val window = activity?.window
-    val coordinatesCopySuccessBothMessage =
-        stringResource(R.string.location_snackbar_coordinates_copy_success_both)
-    val coordinatesCopySuccessLatitudeMessage =
-        stringResource(R.string.location_snackbar_coordinates_copy_success_latitude)
-    val coordinatesCopySuccessLongitudeMessage =
-        stringResource(R.string.location_snackbar_coordinates_copy_success_longitude)
-    val screenLockedMessage =
-        stringResource(R.string.location_snackbar_screen_locked)
-    val screenUnlockedMessage =
-        stringResource(R.string.location_snackbar_screen_unlocked)
-    LaunchedEffect(events) {
-        events.collect {
-            when (it) {
-                is LocationEvent.NavigateToGeoActivity ->
-                    onNavigateToMap(it.latitude, it.longitude, it.localDateTime)
-                is LocationEvent.NavigateToSettings ->
-                    onNavigateToSettings()
-                is LocationEvent.ShowCoordinatesCopySuccessBothSnackbar -> launch {
-                    snackbarHostState
-                        .showSnackbarWithDismissButton(coordinatesCopySuccessBothMessage)
-                }
-                is LocationEvent.ShowCoordinatesCopySuccessLatitudeSnackbar -> launch {
-                    snackbarHostState
-                        .showSnackbarWithDismissButton(coordinatesCopySuccessLatitudeMessage)
-                }
-                is LocationEvent.ShowCoordinatesCopySuccessLongitudeSnackbar -> launch {
-                    snackbarHostState
-                        .showSnackbarWithDismissButton(coordinatesCopySuccessLongitudeMessage)
-                }
-                is LocationEvent.ShowCoordinatesShareSheet ->
-                    activity?.let { a -> showCoordinatesShareSheet(a, it) }
-                is LocationEvent.ShowScreenLockedSnackbar -> launch {
-                    snackbarHostState.showSnackbarWithDismissButton(screenLockedMessage)
-                }
-                is LocationEvent.ShowScreenUnlockedSnackbar -> launch {
-                    snackbarHostState.showSnackbarWithDismissButton(screenUnlockedMessage)
-                }
-            }
-        }
-    }
 
-    DisposableEffect(screenLockEnabled) {
-        if (screenLockEnabled == true) window?.addFlags(FLAG_KEEP_SCREEN_ON)
-        else window?.clearFlags(FLAG_KEEP_SCREEN_ON)
-        onDispose { window?.clearFlags(FLAG_KEEP_SCREEN_ON) }
-    }
+//    val coordinatesCopySuccessBothMessage =
+//        stringResource(R.string.location_snackbar_coordinates_copy_success_both)
+//    val coordinatesCopySuccessLatitudeMessage =
+//        stringResource(R.string.location_snackbar_coordinates_copy_success_latitude)
+//    val coordinatesCopySuccessLongitudeMessage =
+//        stringResource(R.string.location_snackbar_coordinates_copy_success_longitude)
+//    val screenLockedMessage =
+//        stringResource(R.string.location_snackbar_screen_locked)
+//    val screenUnlockedMessage =
+//        stringResource(R.string.location_snackbar_screen_unlocked)
+//    LaunchedEffect(events) {
+//        events.collect {
+//            when (it) {
+//                is LocationEvent.NavigateToGeoActivity ->
+//                    onNavigateToMap(it.latitude, it.longitude, it.localDateTime)
+//                is LocationEvent.NavigateToSettings ->
+//                    onNavigateToSettings()
+//                is LocationEvent.ShowCoordinatesCopySuccessBothSnackbar -> launch {
+//                    snackbarHostState
+//                        .showSnackbarWithDismissButton(coordinatesCopySuccessBothMessage)
+//                }
+//                is LocationEvent.ShowCoordinatesCopySuccessLatitudeSnackbar -> launch {
+//                    snackbarHostState
+//                        .showSnackbarWithDismissButton(coordinatesCopySuccessLatitudeMessage)
+//                }
+//                is LocationEvent.ShowCoordinatesCopySuccessLongitudeSnackbar -> launch {
+//                    snackbarHostState
+//                        .showSnackbarWithDismissButton(coordinatesCopySuccessLongitudeMessage)
+//                }
+//                is LocationEvent.ShowCoordinatesShareSheet ->
+//                    activity?.let { a -> showCoordinatesShareSheet(a, it) }
+//                is LocationEvent.ShowScreenLockedSnackbar -> launch {
+//                    snackbarHostState.showSnackbarWithDismissButton(screenLockedMessage)
+//                }
+//                is LocationEvent.ShowScreenUnlockedSnackbar -> launch {
+//                    snackbarHostState.showSnackbarWithDismissButton(screenUnlockedMessage)
+//                }
+//            }
+//        }
+//    }
 }
 
 @Composable
 private fun LocationTopAppBar(
-    screenLockEnabled: Boolean?,
+    screenLockedOn: Boolean?,
     onInfoClick: () -> Unit,
-    onScreenLockCheckedChange: (Boolean) -> Unit,
+    onScreenLockToggle: (Boolean) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
 ) {
+    val window = LocalContext.current.activity?.window ?: return
+    DisposableEffect(screenLockedOn) {
+        if (screenLockedOn == true) {
+            window.addFlags(FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(FLAG_KEEP_SCREEN_ON)
+        }
+        onDispose { window.clearFlags(FLAG_KEEP_SCREEN_ON) }
+    }
     TopAppBar(
         title = {},
         modifier = modifier,
         actions = {
             IconToggleButton(
-                checked = screenLockEnabled ?: false,
-                onCheckedChange = onScreenLockCheckedChange,
+                checked = screenLockedOn ?: false,
+                onCheckedChange = onScreenLockToggle,
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ScreenLockPortrait,
                     contentDescription = stringResource(
-                        if (screenLockEnabled == true)
-                            R.string.location_screen_lock_button_content_description_on
+                        if (screenLockedOn == true)
+                            R.string.location_button_lock_content_description_on
                         else
-                            R.string.location_screen_lock_button_content_description_off
+                            R.string.location_button_lock_content_description_off
                     ),
                 )
             }
@@ -228,14 +264,27 @@ private fun LocationTopAppBar(
     )
 }
 
-private fun showCoordinatesShareSheet(
-    context: Context,
-    event: LocationEvent.ShowCoordinatesShareSheet
+private fun copyCoordinates(
+    coordinates: Coordinates?,
+    coordinatesFormatter: CoordinatesFormatter,
+    clipboardManager: ClipboardManager
 ) {
+    if (coordinates == null) return
+    val formattedCoordinates = coordinatesFormatter.formatForCopy(coordinates)
+    clipboardManager.setText(AnnotatedString(formattedCoordinates))
+}
+
+private fun shareCoordinates(
+    context: Context,
+    coordinatesFormatter: CoordinatesFormatter,
+    coordinates: Coordinates?
+) {
+    if (coordinates == null) return
+    val formattedCoordinates = coordinatesFormatter.formatForCopy(coordinates)
     startActivity(
         context,
         Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_TEXT, event.coordinates)
+            putExtra(Intent.EXTRA_TEXT, formattedCoordinates)
             type = "text/plain"
         },
         null
@@ -253,8 +302,6 @@ private suspend fun SnackbarHostState.showSnackbarWithDismissButton(message: Str
 private fun PermissionNotGrantedPreview() {
     PositionalTheme {
         LocationView(
-            locationState = null,
-            screenLockEnabled = null,
             locationPermissionsState = object : MultiplePermissionsState {
                 override val allPermissionsGranted: Boolean = false
                 override val permissions: List<PermissionState> = emptyList()
@@ -264,13 +311,26 @@ private fun PermissionNotGrantedPreview() {
                     // Don't do anything
                 }
             },
-            events = emptyFlow(),
+            state = LocationState(
+                coordinates = null,
+                coordinatesFormat = CoordinatesFormat.DD,
+                horizontalAccuracyMeters = null,
+                bearingDegrees = null,
+                bearingAccuracyDegrees = null,
+                altitudeMeters = null,
+                altitudeAccuracyMeters = null,
+                speedMetersPerSecond = null,
+                speedAccuracyMetersPerSecond = null,
+                timestamp = null,
+                showAccuracies = true,
+                units = Units.METRIC,
+                screenLockedOn = false
+            ),
+            onAndroidSettingsClick = {},
+            onScreenLockToggle = {},
+            onInfoClick = {},
             onCopyClick = {},
-            onLaunchClick = {},
-            onNavigateToInfo = {},
-            onNavigateToMap = { _, _, _ -> },
-            onNavigateToSettings = {},
-            onScreenLockCheckedChange = {},
+            onMapClick = { _, _ -> },
             onShareClick = {}
         )
     }
@@ -279,11 +339,9 @@ private fun PermissionNotGrantedPreview() {
 @ThemePreviews
 @WindowSizePreviews
 @Composable
-private fun LoadingPreview() {
+private fun LocatingPreview() {
     PositionalTheme {
         LocationView(
-            locationState = null,
-            screenLockEnabled = null,
             locationPermissionsState = object : MultiplePermissionsState {
                 override val allPermissionsGranted: Boolean = true
                 override val permissions: List<PermissionState> = emptyList()
@@ -293,13 +351,26 @@ private fun LoadingPreview() {
                     // Don't do anything
                 }
             },
-            events = emptyFlow(),
+            state = LocationState(
+                coordinates = null,
+                coordinatesFormat = CoordinatesFormat.DD,
+                horizontalAccuracyMeters = null,
+                bearingDegrees = null,
+                bearingAccuracyDegrees = null,
+                altitudeMeters = null,
+                altitudeAccuracyMeters = null,
+                speedMetersPerSecond = null,
+                speedAccuracyMetersPerSecond = null,
+                timestamp = null,
+                showAccuracies = true,
+                units = Units.METRIC,
+                screenLockedOn = false
+            ),
+            onAndroidSettingsClick = {},
+            onScreenLockToggle = {},
+            onInfoClick = {},
             onCopyClick = {},
-            onLaunchClick = {},
-            onNavigateToInfo = {},
-            onNavigateToMap = { _, _, _ -> },
-            onNavigateToSettings = {},
-            onScreenLockCheckedChange = {},
+            onMapClick = { _, _ -> },
             onShareClick = {}
         )
     }
@@ -308,44 +379,41 @@ private fun LoadingPreview() {
 @ThemePreviews
 @WindowSizePreviews
 @Composable
-private fun LoadedPreview() {
+private fun LocatedPreview() {
     PositionalTheme {
         LocationView(
-            locationState = LocationState(
-                location = Location(
+            locationPermissionsState = object : MultiplePermissionsState {
+                override val allPermissionsGranted: Boolean = true
+                override val permissions: List<PermissionState> = emptyList()
+                override val revokedPermissions: List<PermissionState> = emptyList()
+                override val shouldShowRationale: Boolean = false
+                override fun launchMultiplePermissionRequest() {
+                    // Don't do anything
+                }
+            },
+            state = LocationState(
+                coordinates = Coordinates(
                     latitude = 123.456789,
-                    longitude = 123.456789,
-                    horizontalAccuracyMeters = 123.45678f,
-                    bearingDegrees = 123.45678f,
-                    bearingAccuracyDegrees = 123.45678f,
-                    altitudeMeters = 123.45678,
-                    altitudeAccuracyMeters = 123.45678f,
-                    speedMetersPerSecond = 123.45678f,
-                    speedAccuracyMetersPerSecond = 123.45678f,
-                    timestamp = Instant.DISTANT_PAST,
-                    magneticDeclinationDegrees = 123.45678f
+                    longitude = 123.456789
                 ),
                 coordinatesFormat = CoordinatesFormat.DD,
+                horizontalAccuracyMeters = 123.45678f,
+                bearingDegrees = 123.45678f,
+                bearingAccuracyDegrees = 123.45678f,
+                altitudeMeters = 123.45678f,
+                altitudeAccuracyMeters = 123.45678f,
+                speedMetersPerSecond = 123.45678f,
+                speedAccuracyMetersPerSecond = 123.45678f,
+                timestamp = Instant.DISTANT_PAST,
+                showAccuracies = true,
                 units = Units.METRIC,
-                showAccuracies = true
+                screenLockedOn = false
             ),
-            screenLockEnabled = true,
-            locationPermissionsState = object : MultiplePermissionsState {
-                override val allPermissionsGranted: Boolean = true
-                override val permissions: List<PermissionState> = emptyList()
-                override val revokedPermissions: List<PermissionState> = emptyList()
-                override val shouldShowRationale: Boolean = false
-                override fun launchMultiplePermissionRequest() {
-                    // Don't do anything
-                }
-            },
-            events = emptyFlow(),
+            onAndroidSettingsClick = {},
+            onScreenLockToggle = {},
+            onInfoClick = {},
             onCopyClick = {},
-            onLaunchClick = {},
-            onNavigateToInfo = {},
-            onNavigateToMap = { _, _, _ -> },
-            onNavigateToSettings = {},
-            onScreenLockCheckedChange = {},
+            onMapClick = { _, _ -> },
             onShareClick = {}
         )
     }

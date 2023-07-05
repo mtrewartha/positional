@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
@@ -36,7 +36,7 @@ import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 
 fun NavGraphBuilder.settingsView(
-    onNavigateToPrivacyPolicy: () -> Unit
+    onPrivacyPolicyClick: () -> Unit
 ) {
     composable(Settings.route) {
         val viewModel: SettingsViewModel = hiltViewModel()
@@ -56,7 +56,7 @@ fun NavGraphBuilder.settingsView(
             onThemeChange = viewModel::onThemeChange,
             units = units,
             onUnitsChange = viewModel::onUnitsChange,
-            onNavigateToPrivacyPolicy = onNavigateToPrivacyPolicy
+            onPrivacyPolicyClick = onPrivacyPolicyClick
         )
     }
 }
@@ -73,7 +73,7 @@ private fun SettingsView(
     onThemeChange: (Theme) -> Unit,
     units: Units?,
     onUnitsChange: (Units) -> Unit,
-    onNavigateToPrivacyPolicy: () -> Unit
+    onPrivacyPolicyClick: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
@@ -122,7 +122,7 @@ private fun SettingsView(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            TextButton(onClick = onNavigateToPrivacyPolicy) {
+            TextButton(onClick = onPrivacyPolicyClick) {
                 Text(text = stringResource(id = R.string.settings_privacy_policy_title))
             }
         }
@@ -144,7 +144,7 @@ private fun LoadingPreviews() {
             onThemeChange = {},
             units = null,
             onUnitsChange = {},
-            onNavigateToPrivacyPolicy = {}
+            onPrivacyPolicyClick = {}
         )
     }
 }
@@ -164,7 +164,7 @@ private fun LoadedPreviews() {
             onThemeChange = {},
             units = Units.METRIC,
             onUnitsChange = {},
-            onNavigateToPrivacyPolicy = {}
+            onPrivacyPolicyClick = {}
         )
     }
 }
