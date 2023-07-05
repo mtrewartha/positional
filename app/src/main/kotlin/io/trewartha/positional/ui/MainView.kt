@@ -29,8 +29,6 @@ import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.location.Coordinates
 import io.trewartha.positional.ui.location.locationView
 import io.trewartha.positional.ui.settings.settingsView
-import io.trewartha.positional.ui.solunar.info.navigateToSolunarInfo
-import io.trewartha.positional.ui.solunar.info.solunarInfoView
 import io.trewartha.positional.ui.solunar.solunarView
 import io.trewartha.positional.ui.utils.format.DateTimeFormatter
 import kotlinx.datetime.Instant
@@ -74,8 +72,7 @@ fun MainView(navHostController: NavHostController) {
                 navigateToMap(context, dateTimeFormatter, coordinates, timestamp)
             }
             settingsView(onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) })
-            solunarView(onNavigateToInfo = { navHostController.navigateToSolunarInfo() })
-            solunarInfoView(onNavigateUp = { navHostController.popBackStack() })
+            solunarView()
         }
     }
 }

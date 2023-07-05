@@ -18,9 +18,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -46,9 +50,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-fun NavGraphBuilder.solunarView(
-    onNavigateToInfo: () -> Unit
-) {
+fun NavGraphBuilder.solunarView() {
     composable(NavDestination.Solunar.route) {
         val viewModel: SolunarViewModel = hiltViewModel()
         val todaysDate by viewModel.todaysDate
@@ -61,7 +63,6 @@ fun NavGraphBuilder.solunarView(
             todaysDate = todaysDate,
             selectedDate = selectedDate,
             selectedDateTwilights = selectedDateTwilights,
-            onNavigateToInfo = onNavigateToInfo,
             onSelectedDateDecrement = viewModel::onSelectedDateDecrement,
             onSelectedDateIncrement = viewModel::onSelectedDateIncrement,
             onJumpToTodayClick = viewModel::onSelectedDateChangedToToday
@@ -74,18 +75,18 @@ private fun SolunarView(
     todaysDate: LocalDate?,
     selectedDate: LocalDate?,
     selectedDateTwilights: SolarTimes?,
-    onNavigateToInfo: () -> Unit,
     onSelectedDateDecrement: () -> Unit,
     onSelectedDateIncrement: () -> Unit,
     onJumpToTodayClick: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    var showInfoSheet by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 actions = {
-                    IconButton(onClick = onNavigateToInfo) {
+                    IconButton(onClick = { showInfoSheet = true }) {
                         Icon(
                             Icons.Rounded.Info,
                             stringResource(R.string.solunar_button_info_content_description),
@@ -145,6 +146,14 @@ private fun SolunarView(
             }
         }
     }
+    if (showInfoSheet) {
+        val infoSheetState = rememberModalBottomSheetState()
+        SolunarInfoSheet(
+            onDismissRequest = { showInfoSheet = false },
+            sheetState = infoSheetState,
+            windowInsets = WindowInsets(0)
+        )
+    }
 }
 
 @ThemePreviews
@@ -155,11 +164,9 @@ private fun LoadingPreview() {
             todaysDate = null,
             selectedDate = null,
             selectedDateTwilights = null,
-            onNavigateToInfo = {},
             onSelectedDateDecrement = {},
-            onSelectedDateIncrement = {},
-            onJumpToTodayClick = {}
-        )
+            onSelectedDateIncrement = {}
+        ) {}
     }
 }
 
@@ -183,11 +190,9 @@ private fun LoadedPreview() {
                     nauticalDusk = null,
                     astronomicalDusk = null,
                 ),
-                onNavigateToInfo = {},
                 onSelectedDateDecrement = {},
-                onSelectedDateIncrement = {},
-                onJumpToTodayClick = {}
-            )
+                onSelectedDateIncrement = {}
+            ) {}
         }
     }
 }
