@@ -60,7 +60,7 @@
     <string name="location_altitude_imperial">%.0f ft</string>
     <string name="location_altitude_metric">%.1f m</string>
     <string name="location_bearing">%.0f°</string>
-    <string name="location_bearing_accuracy">± %.0f°</string>
+    <string name="location_bearing_accuracy">± %.0f</string>
     <string name="location_button_info_content_description">Info</string>
     <string name="location_button_info_tooltip">Info</string>
     <string name="location_button_map_content_description">Open in map app</string>
