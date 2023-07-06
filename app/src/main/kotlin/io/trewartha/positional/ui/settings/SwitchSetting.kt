@@ -1,23 +1,16 @@
 package io.trewartha.positional.ui.settings
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -74,25 +67,6 @@ fun SwitchSetting(
             checked = value ?: false,
             onCheckedChange = onValueChange,
             modifier = Modifier.placeholder(placeholdersVisible),
-            thumbContent = thumbContent@{
-                if (value == null) return@thumbContent
-                AnimatedVisibility(
-                    visible = value,
-                    modifier = Modifier.size(SwitchDefaults.IconSize),
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Icon(imageVector = Icons.Rounded.Check, contentDescription = null)
-                }
-                AnimatedVisibility(
-                    visible = !value,
-                    modifier = Modifier.size(SwitchDefaults.IconSize),
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Icon(imageVector = Icons.Rounded.Clear, contentDescription = null)
-                }
-            }
         )
     }
 }
