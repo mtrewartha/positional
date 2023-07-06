@@ -184,9 +184,7 @@ private fun LocationView(
             TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
         }
     }
-    if (showInfoSheet) {
-        LocationInfoSheet(onDismissRequest = { showInfoSheet = false })
-    }
+    if (showInfoSheet) LocationInfoSheet(onDismissRequest = { showInfoSheet = false })
 }
 
 @Composable
