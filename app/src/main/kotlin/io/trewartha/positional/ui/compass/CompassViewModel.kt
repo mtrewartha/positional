@@ -51,9 +51,13 @@ class CompassViewModel @Inject constructor(
         )
 
     sealed interface State {
+
         object SensorsMissing : State
+
         sealed interface SensorsPresent : State {
+
             object Loading : SensorsPresent
+
             data class Loaded(
                 val rotationMatrix: FloatArray,
                 val accelerometerAccuracy: CompassAccuracy?,
@@ -71,9 +75,7 @@ class CompassViewModel @Inject constructor(
                     if (accelerometerAccuracy != other.accelerometerAccuracy) return false
                     if (magnetometerAccuracy != other.magnetometerAccuracy) return false
                     if (magneticDeclinationDegrees != other.magneticDeclinationDegrees) return false
-                    if (mode != other.mode) return false
-
-                    return true
+                    return mode == other.mode
                 }
 
                 override fun hashCode(): Int {
