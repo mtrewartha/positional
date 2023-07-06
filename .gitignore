@@ -8,5 +8,5 @@
 *.apk
 keystore
 keystore.properties
-upload_keystore
-upload_keystore.properties
+app/upload_keystore
+app/upload_keystore.properties

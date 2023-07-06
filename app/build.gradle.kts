@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
-private val PROPERTIES_FILE_PATH = "upload_keystore.properties"
+private val PROPERTIES_FILE_PATH = "app/upload_keystore.properties"
 private val PROPERTIES_KEY_ALIAS = "keyAlias"
 private val PROPERTIES_KEY_PASSWORD = "keyPassword"
 private val PROPERTIES_KEY_STORE_FILE = "storeFile"
