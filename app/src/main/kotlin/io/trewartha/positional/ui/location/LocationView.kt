@@ -19,7 +19,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -186,12 +185,7 @@ private fun LocationView(
         }
     }
     if (showInfoSheet) {
-        val infoSheetState = rememberModalBottomSheetState()
-        LocationInfoSheet(
-            onDismissRequest = { showInfoSheet = false },
-            sheetState = infoSheetState,
-            windowInsets = WindowInsets(0)
-        )
+        LocationInfoSheet(onDismissRequest = { showInfoSheet = false })
     }
 }
 

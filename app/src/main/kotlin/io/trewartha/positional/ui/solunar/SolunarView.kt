@@ -149,9 +149,7 @@ private fun SolunarView(
     if (showInfoSheet) {
         val infoSheetState = rememberModalBottomSheetState()
         SolunarInfoSheet(
-            onDismissRequest = { showInfoSheet = false },
-            sheetState = infoSheetState,
-            windowInsets = WindowInsets(0)
+            onDismissRequest = { showInfoSheet = false }
         )
     }
 }

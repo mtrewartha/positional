@@ -129,9 +129,7 @@ private fun CompassView(state: CompassViewModel.State) {
     if (showInfoSheet) {
         val infoSheetState = rememberModalBottomSheetState()
         CompassInfoSheet(
-            onDismissRequest = { showInfoSheet = false },
-            sheetState = infoSheetState,
-            windowInsets = WindowInsets(0)
+            onDismissRequest = { showInfoSheet = false }
         )
     }
 }

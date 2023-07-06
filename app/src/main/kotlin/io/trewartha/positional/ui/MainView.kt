@@ -6,7 +6,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -38,6 +44,7 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun MainView(navHostController: NavHostController) {
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             NavigationBar {
                 val navBackStackEntry by navHostController.currentBackStackEntryAsState()
@@ -57,13 +64,16 @@ fun MainView(navHostController: NavHostController) {
                 }
             }
         }
-    ) { contentPadding ->
+    ) { scaffoldPadding ->
         val context = LocalContext.current
         val dateTimeFormatter = LocalDateTimeFormatter.current
         NavHost(
             navHostController,
             startDestination = Location.route,
-            modifier = Modifier.padding(bottom = contentPadding.calculateBottomPadding())
+            modifier = Modifier
+                .padding(scaffoldPadding)
+                .consumeWindowInsets(scaffoldPadding)
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
         ) {
             compassView()
             locationView(
