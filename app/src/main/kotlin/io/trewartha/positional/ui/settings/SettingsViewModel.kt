@@ -36,7 +36,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onShowAccuraciesChange(showAccuracies: Boolean) {
-        viewModelScope.launch { settingsRepository.setShowAccuracies(!showAccuracies) }
+        viewModelScope.launch { settingsRepository.setShowAccuracies(showAccuracies) }
     }
 
     fun onThemeChange(theme: Theme) {
