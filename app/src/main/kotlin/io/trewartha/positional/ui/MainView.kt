@@ -29,7 +29,6 @@ import io.trewartha.positional.R
 import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.NavDestination.Location
 import io.trewartha.positional.ui.NavDestination.Settings
-import io.trewartha.positional.ui.NavDestination.Solunar
 import io.trewartha.positional.ui.compass.compassView
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.location.Coordinates
@@ -49,7 +48,7 @@ fun MainView(navHostController: NavHostController) {
             NavigationBar {
                 val navBackStackEntry by navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
-                listOf(Location, Compass, Solunar, Settings).forEach { screen ->
+                listOf(Location, Compass, /*Solunar,*/ Settings).forEach { screen ->
                     NavigationBarItem(
                         selected = currentRoute?.startsWith(screen.route) ?: false,
                         onClick = onClick@{
