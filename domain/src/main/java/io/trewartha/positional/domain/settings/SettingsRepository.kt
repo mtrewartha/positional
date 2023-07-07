@@ -3,7 +3,7 @@ package io.trewartha.positional.domain.settings
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.ui.Theme
-import io.trewartha.positional.data.units.Units
+import io.trewartha.positional.data.measurement.Units
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {

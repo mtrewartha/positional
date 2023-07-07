@@ -46,7 +46,10 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.R
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.data.units.Units
+import io.trewartha.positional.data.measurement.Angle
+import io.trewartha.positional.data.measurement.Distance
+import io.trewartha.positional.data.measurement.Speed
+import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.IconToggleButton
 import io.trewartha.positional.ui.NavDestination
@@ -279,13 +282,13 @@ private fun PermissionNotGrantedPreview() {
             state = LocationState(
                 coordinates = null,
                 coordinatesFormat = CoordinatesFormat.DD,
-                horizontalAccuracyMeters = null,
-                bearingDegrees = null,
-                bearingAccuracyDegrees = null,
-                altitudeMeters = null,
-                altitudeAccuracyMeters = null,
-                speedMetersPerSecond = null,
-                speedAccuracyMetersPerSecond = null,
+                horizontalAccuracy = null,
+                bearing = null,
+                bearingAccuracy = null,
+                altitude = null,
+                altitudeAccuracy = null,
+                speed = null,
+                speedAccuracy = null,
                 timestamp = null,
                 showAccuracies = true,
                 units = Units.METRIC,
@@ -316,13 +319,13 @@ private fun LocatingPreview() {
             state = LocationState(
                 coordinates = null,
                 coordinatesFormat = CoordinatesFormat.DD,
-                horizontalAccuracyMeters = null,
-                bearingDegrees = null,
-                bearingAccuracyDegrees = null,
-                altitudeMeters = null,
-                altitudeAccuracyMeters = null,
-                speedMetersPerSecond = null,
-                speedAccuracyMetersPerSecond = null,
+                horizontalAccuracy = null,
+                bearing = null,
+                bearingAccuracy = null,
+                altitude = null,
+                altitudeAccuracy = null,
+                speed = null,
+                speedAccuracy = null,
                 timestamp = null,
                 showAccuracies = true,
                 units = Units.METRIC,
@@ -356,13 +359,13 @@ private fun LocatedPreview() {
                     longitude = 123.456789
                 ),
                 coordinatesFormat = CoordinatesFormat.DD,
-                horizontalAccuracyMeters = 123.45678f,
-                bearingDegrees = 123.45678f,
-                bearingAccuracyDegrees = 123.45678f,
-                altitudeMeters = 123.45678f,
-                altitudeAccuracyMeters = 123.45678f,
-                speedMetersPerSecond = 123.45678f,
-                speedAccuracyMetersPerSecond = 123.45678f,
+                horizontalAccuracy = Distance.Meters(123.45678f),
+                bearing = Angle.Degrees(123.45678f),
+                bearingAccuracy = Angle.Degrees(123.45678f),
+                altitude = Distance.Meters(123.45678f),
+                altitudeAccuracy = Distance.Meters(123.45678f),
+                speed = Speed.KilometersPerHour(123.45678f),
+                speedAccuracy = Speed.KilometersPerHour(123.45678f),
                 timestamp = Instant.DISTANT_PAST,
                 showAccuracies = true,
                 units = Units.METRIC,

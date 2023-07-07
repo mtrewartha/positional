@@ -11,7 +11,7 @@ import io.trewartha.positional.data.settings.SettingsProto.Settings
 import io.trewartha.positional.data.settings.ThemeProto
 import io.trewartha.positional.data.settings.UnitsProto
 import io.trewartha.positional.data.ui.Theme
-import io.trewartha.positional.data.units.Units
+import io.trewartha.positional.data.measurement.Units
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

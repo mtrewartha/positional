@@ -9,6 +9,9 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.measurement.Angle
+import io.trewartha.positional.data.measurement.Distance
+import io.trewartha.positional.data.measurement.Speed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.channels.awaitClose
@@ -88,63 +91,89 @@ class AndroidFusedLocationRepository @Inject constructor(
     }.onCompletion {
         Timber.i("Location flow completed")
     }.flowOn(coroutineDispatcher)
-
-    private fun AndroidLocation.toLocation(): Location {
-        val latitude = this.latitude
-        val longitude = this.longitude
-        val horizontalAccuracyMeters =
-            if (SDK_INT >= O && this.hasAccuracy()) this.accuracy else null
-        val bearingDegrees =
-            if (this.hasBearing() && this.speed >= MIN_SPEED_THRESHOLD) this.bearing else null
-        val bearingAccuracyDegrees =
-            if (SDK_INT >= O && this.hasBearingAccuracy() && this.speed >= MIN_SPEED_THRESHOLD) {
-                this.bearingAccuracyDegrees
-            } else {
-                null
-            }
-        val altitudeMeters = if (this.hasAltitude()) this.altitude else null
-        val altitudeAccuracyMeters =
-            if (SDK_INT >= O && this.hasVerticalAccuracy() && this.verticalAccuracyMeters >= 0) {
-                this.verticalAccuracyMeters
-            } else {
-                null
-            }
-        val speedMetersPerSecond =
-            if (this.hasSpeed() && this.speed >= MIN_SPEED_THRESHOLD) this.speed else null
-        val speedAccuracyMetersPerSecond =
-            if (SDK_INT >= O && this.hasSpeedAccuracy() && this.speedAccuracyMetersPerSecond > 0) {
-                this.speed
-            } else {
-                null
-            }
-        val timestamp =
-            if (this.time > 0) Instant.fromEpochMilliseconds(this.time) else Clock.System.now()
-        val magneticDeclinationDegrees =
-            GeomagneticField(
-                latitude.toFloat(),
-                longitude.toFloat(),
-                altitudeMeters?.toFloat() ?: 0f,
-                timestamp.toEpochMilliseconds()
-            ).declination
-
-        return Location(
-            latitude = latitude,
-            longitude = longitude,
-            horizontalAccuracyMeters = horizontalAccuracyMeters,
-            bearingDegrees = bearingDegrees,
-            bearingAccuracyDegrees = bearingAccuracyDegrees,
-            altitudeMeters = altitudeMeters,
-            altitudeAccuracyMeters = altitudeAccuracyMeters,
-            speedMetersPerSecond = speedMetersPerSecond,
-            speedAccuracyMetersPerSecond = speedAccuracyMetersPerSecond,
-            timestamp = timestamp,
-            magneticDeclinationDegrees = magneticDeclinationDegrees
-        )
-    }
-
-    companion object {
-        private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
-        private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
-        private const val MIN_SPEED_THRESHOLD = 0.3f
-    }
 }
+
+private val AndroidLocation.altitudeObject: Distance?
+    get() = if (hasAltitude()) {
+        Distance.Meters(altitude.toFloat())
+    } else {
+        null
+    }
+
+private val AndroidLocation.altitudeAccuracy: Distance?
+    get() = if (SDK_INT >= O && hasVerticalAccuracy() && verticalAccuracyMeters >= 0) {
+        Distance.Meters(verticalAccuracyMeters)
+    } else {
+        null
+    }
+
+private val AndroidLocation.bearingObject: Angle?
+    get() = if (this.hasBearing() && speed >= MIN_SPEED_THRESHOLD) {
+        Angle.Degrees(this.bearing)
+    } else {
+        null
+    }
+
+private val AndroidLocation.bearingAccuracy: Angle?
+    get() = if (SDK_INT >= O && hasBearingAccuracy() && speed >= MIN_SPEED_THRESHOLD) {
+        Angle.Degrees(bearingAccuracyDegrees)
+    } else {
+        null
+    }
+
+private val AndroidLocation.horizontalAccuracy: Distance?
+    get() = if (SDK_INT >= O && hasAccuracy()) {
+        Distance.Meters(accuracy)
+    } else {
+        null
+    }
+
+private val AndroidLocation.magneticDeclination: Angle
+    get() = Angle.Degrees(
+        GeomagneticField(
+            latitude.toFloat(),
+            longitude.toFloat(),
+            altitude.takeIf { hasAltitude() }?.toFloat() ?: 0f,
+            timestamp.toEpochMilliseconds()
+        ).declination
+    )
+
+private val AndroidLocation.speedObject: Speed?
+    get() = if (hasSpeed() && speed >= MIN_SPEED_THRESHOLD) {
+        Speed.MetersPerSecond(speed)
+    } else {
+        null
+    }
+
+private val AndroidLocation.speedAccuracy: Speed?
+    get() = if (SDK_INT >= O && hasSpeedAccuracy() && speedAccuracyMetersPerSecond > 0) {
+        Speed.MetersPerSecond(speedAccuracyMetersPerSecond)
+    } else {
+        null
+    }
+
+private val AndroidLocation.timestamp: Instant
+    get() = if (time > 0) {
+        Instant.fromEpochMilliseconds(time)
+    } else {
+        Clock.System.now()
+    }
+
+private fun AndroidLocation.toLocation(): Location =
+    Location(
+        latitude = latitude,
+        longitude = longitude,
+        horizontalAccuracy = horizontalAccuracy,
+        bearing = bearingObject,
+        bearingAccuracy = bearingAccuracy,
+        altitude = altitudeObject,
+        altitudeAccuracy = altitudeAccuracy,
+        speed = speedObject,
+        speedAccuracy = speedAccuracy,
+        timestamp = timestamp,
+        magneticDeclination = magneticDeclination
+    )
+
+private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
+private const val LOCATION_UPDATE_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
+private const val MIN_SPEED_THRESHOLD = 0.3f // meters per second

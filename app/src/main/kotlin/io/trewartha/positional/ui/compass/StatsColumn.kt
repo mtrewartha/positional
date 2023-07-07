@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassMode
+import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
@@ -48,8 +49,8 @@ fun StatsColumn(
             icon = ImageVector.vectorResource(R.drawable.ic_angle_acute_24px),
             name = stringResource(R.string.compass_declination_label),
             value = (state as? CompassViewModel.State.SensorsPresent.Loaded)
-                ?.magneticDeclinationDegrees
-                ?.let { stringResource(R.string.compass_declination, it) },
+                ?.magneticDeclination
+                ?.let { stringResource(R.string.compass_declination, it.inDegrees().value) },
             accuracy = null,
             showAccuracy = false,
             showPlaceholder = placeholdersVisible
@@ -106,7 +107,7 @@ private fun StatsColumnLoadedPreview() {
                     rotationMatrix = FloatArray(9),
                     accelerometerAccuracy = CompassAccuracy.HIGH,
                     magnetometerAccuracy = null,
-                    magneticDeclinationDegrees = 10f,
+                    magneticDeclination = Angle.Degrees(10f),
                     mode = CompassMode.TRUE_NORTH
                 )
             )

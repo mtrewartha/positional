@@ -30,7 +30,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.ui.Theme
-import io.trewartha.positional.data.units.Units
+import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews

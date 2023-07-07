@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.location.Location
-import io.trewartha.positional.data.units.Units
+import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.domain.location.GetLocationUseCase
 import io.trewartha.positional.domain.settings.SettingsRepository
 import io.trewartha.positional.domain.utils.flow.throttleFirst
@@ -57,13 +57,13 @@ class LocationViewModel @Inject constructor(
                 coordinates = null,
                 coordinatesFormat = CoordinatesFormat.DD,
                 timestamp = null,
-                horizontalAccuracyMeters = null,
-                bearingDegrees = null,
-                bearingAccuracyDegrees = null,
-                altitudeMeters = null,
-                altitudeAccuracyMeters = null,
-                speedMetersPerSecond = null,
-                speedAccuracyMetersPerSecond = null,
+                horizontalAccuracy = null,
+                bearing = null,
+                bearingAccuracy = null,
+                altitude = null,
+                altitudeAccuracy = null,
+                speed = null,
+                speedAccuracy = null,
                 units = null,
                 showAccuracies = false,
                 screenLockedOn = false
@@ -84,13 +84,13 @@ class LocationViewModel @Inject constructor(
         coordinates = location.coordinates,
         coordinatesFormat = coordinatesFormat,
         timestamp = location.timestamp,
-        horizontalAccuracyMeters = location.horizontalAccuracyMeters,
-        bearingDegrees = location.bearingDegrees,
-        bearingAccuracyDegrees = location.bearingAccuracyDegrees,
-        altitudeMeters = location.altitudeMeters?.toFloat(),
-        altitudeAccuracyMeters = location.altitudeAccuracyMeters,
-        speedMetersPerSecond = location.speedMetersPerSecond,
-        speedAccuracyMetersPerSecond = location.speedAccuracyMetersPerSecond,
+        horizontalAccuracy = location.horizontalAccuracy,
+        bearing = location.bearing,
+        bearingAccuracy = location.bearingAccuracy,
+        altitude = location.altitude,
+        altitudeAccuracy = location.altitudeAccuracy,
+        speed = location.speed,
+        speedAccuracy = location.speedAccuracy,
         units = units,
         showAccuracies = accuraciesShown,
         screenLockedOn = screenLockedOn

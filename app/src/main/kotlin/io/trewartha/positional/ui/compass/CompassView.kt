@@ -50,6 +50,7 @@ import androidx.navigation.compose.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassMode
+import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.PositionalTheme
@@ -61,9 +62,7 @@ fun NavGraphBuilder.compassView() {
     composable(Compass.route) {
         val viewModel: CompassViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
-        CompassView(
-            state = state
-        )
+        CompassView(state = state)
     }
 }
 
@@ -205,7 +204,7 @@ private fun SensorsPresentContent(
                 CompassMode.MAGNETIC_NORTH ->
                     degreesToMagneticNorth
                 CompassMode.TRUE_NORTH ->
-                    degreesToMagneticNorth - state.magneticDeclinationDegrees
+                    degreesToMagneticNorth - state.magneticDeclination.inDegrees().value
             }
         } else {
             0f
@@ -271,7 +270,7 @@ private fun SensorsPresentLoadedPreview() {
                 },
                 accelerometerAccuracy = CompassAccuracy.HIGH,
                 magnetometerAccuracy = null,
-                magneticDeclinationDegrees = 5f,
+                magneticDeclination = Angle.Degrees(5f),
                 mode = CompassMode.TRUE_NORTH,
             )
         )
