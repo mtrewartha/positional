@@ -68,7 +68,6 @@ android {
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi" +
                 "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi" +
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
-                "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi" +
                 "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi" +
                 "-opt-in=kotlin.ExperimentalStdlibApi" +
                 "-opt-in=kotlin.RequiresOptIn" +
@@ -113,7 +112,6 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.window)
     implementation(libs.accompanist.insetsUi)
-    implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.placeholder)

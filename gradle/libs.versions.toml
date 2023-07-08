@@ -55,7 +55,6 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 
 [libraries]
 accompanist-insetsUi = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "accompanist" }
