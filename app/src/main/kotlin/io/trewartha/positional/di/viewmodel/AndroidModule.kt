@@ -2,6 +2,7 @@ package io.trewartha.positional.di.viewmodel
 
 import android.content.Context
 import android.hardware.SensorManager
+import android.location.LocationManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -18,6 +19,11 @@ class AndroidModule {
     fun fusedLocationProviderClient(
         @ApplicationContext context: Context
     ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+
+    @Provides
+    fun locationManager(
+        @ApplicationContext context: Context
+    ): LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     @Provides
     fun sensorManager(
