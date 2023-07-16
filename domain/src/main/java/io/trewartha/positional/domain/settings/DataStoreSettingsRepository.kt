@@ -5,17 +5,20 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.settings.CompassModeProto
 import io.trewartha.positional.data.settings.CoordinatesFormatProto
 import io.trewartha.positional.data.settings.SettingsProto.Settings
 import io.trewartha.positional.data.settings.ThemeProto
 import io.trewartha.positional.data.settings.UnitsProto
 import io.trewartha.positional.data.ui.Theme
-import io.trewartha.positional.data.measurement.Units
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class DataStoreSettingsRepository(private val context: Context) : SettingsRepository {
+class DataStoreSettingsRepository @Inject constructor(
+    private val context: Context
+) : SettingsRepository {
 
     private val Context.settingsDataStore: DataStore<Settings> by dataStore(
         fileName = "settings.proto",

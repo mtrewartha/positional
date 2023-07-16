@@ -52,7 +52,14 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
+    flavorDimensions += "androidVariant"
     productFlavors {
+        create("aosp") {
+            dimension = "androidVariant"
+        }
+        create("play") {
+            dimension = "androidVariant"
+        }
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -122,9 +129,10 @@ dependencies {
     implementation(libs.kotlinx.coroutines.playServices)
     implementation(libs.markwon)
     implementation(libs.materialComponents)
-    implementation(libs.playServices.location)
     implementation(libs.sunriseSunset)
     implementation(libs.timber)
+
+    "playImplementation"(libs.playServices.location)
 
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)

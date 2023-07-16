@@ -25,9 +25,10 @@ firebase-crashlytics-gradle = "2.9.5"
 firebase-performance-gradle = "2.9.5"
 java = "17"
 javapoet = { strictly = "1.13.0" }
+javax-inject = "1"
 guava = "32.0.1-android"
 google-services = "4.3.15"
-hilt = "2.46.1"
+hilt = "2.47"
 kotest = "5.6.2"
 kotlin = "1.8.22"
 kotlinx-coroutines = "1.7.2"
@@ -89,6 +90,7 @@ guava = { module = "com.google.guava:guava", version.ref = "guava" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax-inject" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }

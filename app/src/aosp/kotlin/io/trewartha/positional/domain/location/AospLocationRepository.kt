@@ -30,10 +30,10 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Pure Android-based [LocationRepository] implementation with no third party dependencies (e.g.
+ * AOSP-based [LocationRepository] implementation with no third party dependencies (e.g.
  * Google Play Services)
  */
-class AndroidLocationRepository @Inject constructor(
+class AospLocationRepository @Inject constructor(
     coroutineContext: CoroutineContext,
     locationManager: LocationManager
 ) : LocationRepository {

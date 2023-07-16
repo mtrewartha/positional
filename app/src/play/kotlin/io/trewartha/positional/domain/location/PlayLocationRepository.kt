@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.seconds
  * Google Play Services-based [LocationRepository] implementation that can provide "fused" locations
  * on all supported Android SDK versions
  */
-class GmsLocationRepository @Inject constructor(
+class PlayLocationRepository @Inject constructor(
     coroutineContext: CoroutineContext,
     fusedLocationProviderClient: FusedLocationProviderClient,
 ) : LocationRepository {
