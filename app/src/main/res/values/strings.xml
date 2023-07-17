@@ -82,6 +82,9 @@
     <string name="location_coordinates_copy_longitude">Longitude only</string>
     <string name="location_coordinates_copy_title">Which coordinates would you like to copy?</string>
     <string name="location_coordinates_copy_tooltip">Copy coordinates</string>
+    <string name="location_dialog_map_error_button_confirm" translatable="false">@string/common_ok</string>
+    <string name="location_dialog_map_error_text">There doesn\'t seem to be a map app installed on your device that supports \"geo\" links. You could install an app like Google Maps or something similar and try again.</string>
+    <string name="location_dialog_map_error_title">No map app found</string>
     <string name="location_horizontal_accuracy_imperial">± %.0f ft</string>
     <string name="location_horizontal_accuracy_metric">± %.1f m</string>
     <string name="location_label_accuracy">Accuracy</string>
