@@ -1,4 +1,4 @@
-package io.trewartha.positional.di.fragment
+package io.trewartha.positional.di
 
 import android.content.Context
 import dagger.Module
@@ -10,7 +10,7 @@ import io.noties.markwon.Markwon
 
 @Module
 @InstallIn(FragmentComponent::class)
-class FragmentModule {
+class InfoModule {
 
     @Provides
     fun markwon(@ApplicationContext context: Context): Markwon = Markwon.create(context)

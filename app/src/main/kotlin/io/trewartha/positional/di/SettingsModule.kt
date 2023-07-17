@@ -1,4 +1,4 @@
-package io.trewartha.positional.di.viewmodel
+package io.trewartha.positional.di
 
 import android.content.Context
 import dagger.Module

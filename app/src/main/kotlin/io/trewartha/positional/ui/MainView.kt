@@ -25,20 +25,13 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import io.trewartha.positional.R
 import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.NavDestination.Location
 import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.compass.compassView
-import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
-import io.trewartha.positional.ui.location.Coordinates
 import io.trewartha.positional.ui.location.locationView
 import io.trewartha.positional.ui.settings.settingsView
 import io.trewartha.positional.ui.solunar.solunarView
-import io.trewartha.positional.ui.utils.format.DateTimeFormatter
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun MainView(navHostController: NavHostController) {
@@ -65,7 +58,6 @@ fun MainView(navHostController: NavHostController) {
         }
     ) { scaffoldPadding ->
         val context = LocalContext.current
-        val dateTimeFormatter = LocalDateTimeFormatter.current
         NavHost(
             navHostController,
             startDestination = Location.route,
@@ -75,35 +67,11 @@ fun MainView(navHostController: NavHostController) {
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
         ) {
             compassView()
-            locationView(
-                onAndroidSettingsClick = { navigateToSettings(context) }
-            ) { coordinates, timestamp ->
-                navigateToMap(context, dateTimeFormatter, coordinates, timestamp)
-            }
+            locationView(onAndroidSettingsClick = { navigateToSettings(context) })
             settingsView(onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) })
             solunarView()
         }
     }
-}
-
-private fun navigateToMap(
-    context: Context,
-    dateTimeFormatter: DateTimeFormatter,
-    coordinates: Coordinates?,
-    timestamp: Instant?
-) {
-    if (coordinates == null || timestamp == null) return
-    val localDateTime = timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
-    val formattedDateTime = dateTimeFormatter.formatDateTime(localDateTime)
-    val label = context.getString(R.string.location_launch_label, formattedDateTime)
-    val geoUri = with(coordinates) {
-        Uri.Builder()
-            .scheme("geo")
-            .path("$latitude,$longitude")
-            .appendQueryParameter("q", "$latitude,$longitude($label)")
-            .build()
-    }
-    context.startActivity(Intent(Intent.ACTION_VIEW, geoUri))
 }
 
 private fun navigateToSettings(context: Context) {

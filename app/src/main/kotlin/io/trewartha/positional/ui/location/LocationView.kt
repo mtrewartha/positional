@@ -1,8 +1,10 @@
 package io.trewartha.positional.ui.location
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,12 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -57,8 +63,10 @@ import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.locals.LocalCoordinatesFormatter
+import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.activity
+import io.trewartha.positional.ui.utils.format.DateTimeFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.CoordinatesFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.DecimalDegreesFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.DegreesDecimalMinutesFormatter
@@ -67,10 +75,12 @@ import io.trewartha.positional.ui.utils.format.coordinates.MgrsFormatter
 import io.trewartha.positional.ui.utils.format.coordinates.UtmFormatter
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import timber.log.Timber
 
 fun NavGraphBuilder.locationView(
-    onAndroidSettingsClick: () -> Unit,
-    onMapClick: (Coordinates?, Instant?) -> Unit
+    onAndroidSettingsClick: () -> Unit
 ) {
     composable(NavDestination.Location.route) {
         val locationPermissions = remember { listOf(Manifest.permission.ACCESS_FINE_LOCATION) }
@@ -97,8 +107,7 @@ fun NavGraphBuilder.locationView(
                 onAndroidSettingsClick = onAndroidSettingsClick,
                 onScreenLockToggle = { locked ->
                     viewModel.events.trySend(LocationEvent.LockToggle(locked))
-                },
-                onMapClick = onMapClick
+                }
             ) { coordinates ->
                 shareCoordinates(context, coordinatesFormatter, coordinates)
             }
@@ -112,7 +121,6 @@ private fun LocationView(
     state: LocationState,
     onAndroidSettingsClick: () -> Unit,
     onScreenLockToggle: (Boolean) -> Unit,
-    onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
 ) {
     // Snackbars
@@ -130,6 +138,7 @@ private fun LocationView(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var showInfoSheet by rememberSaveable { mutableStateOf(false) }
+    var showMapError by rememberSaveable { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
@@ -151,7 +160,9 @@ private fun LocationView(
     ) { contentPadding ->
         if (locationPermissionsState.allPermissionsGranted) {
             val clipboardManager = LocalClipboardManager.current
+            val context = LocalContext.current
             val coordinatesFormatter = LocalCoordinatesFormatter.current
+            val dateTimeFormatter = LocalDateTimeFormatter.current
             LocationPermissionGrantedContent(
                 state = state,
                 onCopyClick = { coordinates ->
@@ -161,7 +172,14 @@ private fun LocationView(
                     }
                     copyCoordinates(coordinates, coordinatesFormatter, clipboardManager)
                 },
-                onMapClick = onMapClick,
+                onMapClick = { coordinates, timestamp ->
+                    try {
+                        navigateToMap(context, dateTimeFormatter, coordinates, timestamp)
+                    } catch (exception: ActivityNotFoundException) {
+                        Timber.w(exception, "Unable to open map")
+                        showMapError = true
+                    }
+                },
                 onShareClick = onShareClick,
                 modifier = Modifier
                     .fillMaxSize()
@@ -188,6 +206,7 @@ private fun LocationView(
         }
     }
     if (showInfoSheet) LocationInfoSheet(onDismissRequest = { showInfoSheet = false })
+    if (showMapError) MapErrorDialog(onDismissRequest = { showMapError = false })
 }
 
 @Composable
@@ -237,6 +256,21 @@ private fun LocationTopAppBar(
     )
 }
 
+@Composable
+private fun MapErrorDialog(onDismissRequest: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.location_dialog_map_error_button_confirm))
+            }
+        },
+        icon = { Icon(Icons.Rounded.ErrorOutline, contentDescription = null) },
+        title = { Text(stringResource(R.string.location_dialog_map_error_title)) },
+        text = { Text(stringResource(R.string.location_dialog_map_error_text)) }
+    )
+}
+
 private fun copyCoordinates(
     coordinates: Coordinates?,
     coordinatesFormatter: CoordinatesFormatter,
@@ -245,6 +279,27 @@ private fun copyCoordinates(
     if (coordinates == null) return
     val formattedCoordinates = coordinatesFormatter.formatForCopy(coordinates)
     clipboardManager.setText(AnnotatedString(formattedCoordinates))
+}
+
+@Throws(ActivityNotFoundException::class)
+private fun navigateToMap(
+    context: Context,
+    dateTimeFormatter: DateTimeFormatter,
+    coordinates: Coordinates?,
+    timestamp: Instant?
+) {
+    if (coordinates == null || timestamp == null) return
+    val localDateTime = timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
+    val formattedDateTime = dateTimeFormatter.formatDateTime(localDateTime)
+    val label = context.getString(R.string.location_launch_label, formattedDateTime)
+    val geoUri = with(coordinates) {
+        Uri.Builder()
+            .scheme("geo")
+            .path("$latitude,$longitude")
+            .appendQueryParameter("q", "$latitude,$longitude($label)")
+            .build()
+    }
+    context.startActivity(Intent(Intent.ACTION_VIEW, geoUri))
 }
 
 private fun shareCoordinates(
@@ -295,8 +350,7 @@ private fun PermissionNotGrantedPreview() {
                 screenLockedOn = false
             ),
             onAndroidSettingsClick = {},
-            onScreenLockToggle = {},
-            onMapClick = { _, _ -> }
+            onScreenLockToggle = {}
         ) {}
     }
 }
@@ -332,8 +386,7 @@ private fun LocatingPreview() {
                 screenLockedOn = false
             ),
             onAndroidSettingsClick = {},
-            onScreenLockToggle = {},
-            onMapClick = { _, _ -> }
+            onScreenLockToggle = {}
         ) {}
     }
 }
@@ -372,8 +425,7 @@ private fun LocatedPreview() {
                 screenLockedOn = false
             ),
             onAndroidSettingsClick = {},
-            onScreenLockToggle = {},
-            onMapClick = { _, _ -> }
+            onScreenLockToggle = {}
         ) {}
     }
 }

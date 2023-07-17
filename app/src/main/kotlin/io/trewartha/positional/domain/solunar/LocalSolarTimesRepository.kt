@@ -5,12 +5,13 @@ import com.luckycatlabs.sunrisesunset.dto.Location
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toLocalTime
+import javax.inject.Inject
 
 /**
  * Local implementation of a [SolarTimesRepository] capable of calculating solar times without using
  * an internet connection to an API
  */
-class LocalSolarTimesRepository : SolarTimesRepository {
+class LocalSolarTimesRepository @Inject constructor() : SolarTimesRepository {
 
     override fun getAstronomicalDawn(
         date: LocalDate,

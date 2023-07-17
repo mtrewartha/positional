@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import javax.inject.Inject
 
-class AndroidCompassReadingsRepository @Inject constructor(
+class AospCompassReadingsRepository @Inject constructor(
     private val sensorManager: SensorManager,
 ) : CompassReadingsRepository {
 

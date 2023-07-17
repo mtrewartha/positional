@@ -2,11 +2,12 @@ package io.trewartha.positional.domain.solunar
 
 import io.trewartha.positional.data.solunar.SolarTimes
 import kotlinx.datetime.LocalDate
+import javax.inject.Inject
 
 /**
  * @see invoke
  */
-class GetSolarTimesUseCase(
+class GetSolarTimesUseCase @Inject constructor(
     private val solarTimesRepository: SolarTimesRepository
 ) {
 
@@ -21,13 +22,21 @@ class GetSolarTimesUseCase(
      */
     operator fun invoke(localDate: LocalDate, latitude: Double, longitude: Double): SolarTimes =
         SolarTimes(
-            astronomicalDawn = solarTimesRepository.getAstronomicalDawn(localDate, latitude, longitude),
+            astronomicalDawn = solarTimesRepository.getAstronomicalDawn(
+                localDate,
+                latitude,
+                longitude
+            ),
             nauticalDawn = solarTimesRepository.getNauticalDawn(localDate, latitude, longitude),
             civilDawn = solarTimesRepository.getCivilDawn(localDate, latitude, longitude),
             sunrise = solarTimesRepository.getSunrise(localDate, latitude, longitude),
             sunset = solarTimesRepository.getSunset(localDate, latitude, longitude),
             civilDusk = solarTimesRepository.getCivilDusk(localDate, latitude, longitude),
             nauticalDusk = solarTimesRepository.getNauticalDusk(localDate, latitude, longitude),
-            astronomicalDusk = solarTimesRepository.getAstronomicalDusk(localDate, latitude, longitude),
+            astronomicalDusk = solarTimesRepository.getAstronomicalDusk(
+                localDate,
+                latitude,
+                longitude
+            ),
         )
 }

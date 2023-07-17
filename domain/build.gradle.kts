@@ -32,6 +32,7 @@ dependencies {
     api(libs.kotlinx.coroutines.core)
 
     implementation(libs.androidx.dataStore)
+    implementation(libs.javax.inject)
     implementation(libs.protobuf.java.lite)
     implementation(libs.protobuf.kotlin.lite)
 

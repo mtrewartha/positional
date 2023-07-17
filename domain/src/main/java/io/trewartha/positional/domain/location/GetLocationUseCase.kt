@@ -2,8 +2,9 @@ package io.trewartha.positional.domain.location
 
 import io.trewartha.positional.data.location.Location
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetLocationUseCase(
+class GetLocationUseCase @Inject constructor(
     private val locationRepository: LocationRepository
 ) {
     operator fun invoke(): Flow<Location> = locationRepository.locationFlow
