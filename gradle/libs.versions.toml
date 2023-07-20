@@ -1,7 +1,7 @@
 [versions]
-accompanist = "0.31.4-beta"
+accompanist = "0.31.5-beta"
 android-desugarJdkLibs = "2.0.3"
-android-gradle = "8.1.0-rc01"
+android-gradle = "8.2.0-alpha13"
 android-sdk-compile = "34"
 android-sdk-min = "21"
 android-sdk-target = "34"
@@ -9,7 +9,7 @@ androidx-activity = "1.7.2"
 androidx-activity-compose = "1.7.2"
 androidx-compose = "1.5.0-beta03"
 androidx-compose-bom = "2023.06.01"
-androidx-compose-compiler = "1.4.8"
+androidx-compose-compiler = "1.5.0"
 androidx-compose-material3 = "1.2.0-alpha03"
 androidx-constraint-layout-compose = "1.0.1"
 androidx-core = "1.10.1"
@@ -22,22 +22,21 @@ androidx-navigation = "2.7.0-beta02"
 androidx-preference = "1.2.0"
 androidx-window = "1.2.0-alpha03"
 firebase-bom = "31.5.0"
-firebase-crashlytics-gradle = "2.9.5"
-firebase-performance-gradle = "2.9.5"
+firebase-crashlytics-gradle = "2.9.7"
+firebase-performance-gradle = "1.4.2"
 java = "17"
 javapoet = { strictly = "1.13.0" }
 javax-inject = "1"
-guava = "32.0.1-android"
 google-services = "4.3.15"
 hilt = "2.47"
 kotest = "5.6.2"
-kotlin = "1.8.22"
+kotlin = "1.9.0"
 kotlinx-coroutines = "1.7.2"
 kotlinx-datetime = "0.4.0"
 markwon = "4.6.2"
 materialComponents = "1.9.0"
 play-services-location = "21.0.1"
-protobuf = "3.21.12"
+protobuf = "3.23.4"
 protobuf-plugin = "0.9.3"
 sunrise-sunset = "1.2"
 timber = "5.0.1"
@@ -88,7 +87,6 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
