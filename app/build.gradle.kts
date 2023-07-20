@@ -123,7 +123,6 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.placeholder)
     implementation(libs.accompanist.systemUiController)
-    implementation(libs.guava)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.playServices)
