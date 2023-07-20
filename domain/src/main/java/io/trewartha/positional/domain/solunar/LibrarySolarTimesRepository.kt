@@ -8,10 +8,9 @@ import kotlinx.datetime.toLocalTime
 import javax.inject.Inject
 
 /**
- * Local implementation of a [SolarTimesRepository] capable of calculating solar times without using
- * an internet connection to an API
+ * Library-based implementation of a [SolarTimesRepository]
  */
-class LocalSolarTimesRepository @Inject constructor() : SolarTimesRepository {
+class LibrarySolarTimesRepository @Inject constructor() : SolarTimesRepository {
 
     override fun getAstronomicalDawn(
         date: LocalDate,

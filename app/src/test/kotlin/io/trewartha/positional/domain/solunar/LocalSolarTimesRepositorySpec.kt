@@ -14,7 +14,7 @@ private val DEC_1_2000 = LocalDate(2000, Month.DECEMBER, 1)
 
 class LocalSolarTimesRepositorySpec : BehaviorSpec({
 
-    lateinit var subject: LocalSolarTimesRepository
+    lateinit var subject: LibrarySolarTimesRepository
 
     val dates = listOf(JAN_1_2000, MAR_1_2000, JUN_1_2000, SEP_1_2000, DEC_1_2000)
 
@@ -23,7 +23,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
     val longitude = -92.1005
 
     beforeTest {
-        subject = LocalSolarTimesRepository()
+        subject = LibrarySolarTimesRepository()
     }
 
     given("a date at a specific location") {
