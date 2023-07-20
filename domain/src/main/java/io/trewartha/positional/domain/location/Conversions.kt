@@ -77,7 +77,7 @@ internal val AndroidLocation.timestamp: Instant
         Clock.System.now()
     }
 
-internal fun AndroidLocation.toLocation(): Location = Location(
+fun AndroidLocation.toLocation(): Location = Location(
     latitude = latitude,
     longitude = longitude,
     horizontalAccuracy = horizontalAccuracy,

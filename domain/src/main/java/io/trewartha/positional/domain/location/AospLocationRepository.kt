@@ -51,8 +51,8 @@ class AospLocationRepository @Inject constructor(
             .setMinUpdateIntervalMillis(LOCATION_UPDATE_INTERVAL_MS)
             .setQuality(QUALITY_HIGH_ACCURACY)
             .build()
+        Timber.i("Requesting location updates")
         try {
-            Timber.i("Requesting location updates")
             LocationManagerCompat.requestLocationUpdates(
                 locationManager,
                 locationProvider,

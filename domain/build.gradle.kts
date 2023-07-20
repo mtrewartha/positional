@@ -24,6 +24,11 @@ android {
             )
         }
     }
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs +
+                "-opt-in=kotlin.ExperimentalStdlibApi"
+    }
 }
 
 dependencies {
@@ -31,10 +36,13 @@ dependencies {
     api(files("libs/worldwind.jar")) // TODO: Make this an implementation dependency
     api(libs.kotlinx.coroutines.core)
 
+    implementation(libs.androidx.core)
     implementation(libs.androidx.dataStore)
     implementation(libs.javax.inject)
     implementation(libs.protobuf.java.lite)
     implementation(libs.protobuf.kotlin.lite)
+    implementation(libs.sunriseSunset)
+    implementation(libs.timber)
 
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)

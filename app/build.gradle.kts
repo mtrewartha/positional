@@ -129,7 +129,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.playServices)
     implementation(libs.markwon)
     implementation(libs.materialComponents)
-    implementation(libs.sunriseSunset)
     implementation(libs.timber)
 
     "playImplementation"(libs.playServices.location)
