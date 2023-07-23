@@ -18,6 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +53,7 @@ fun Compass(
     ),
     cardinalTickColor: Color = MaterialTheme.colorScheme.onSurface,
     majorTickColor: Color = cardinalTickColor,
-    minorTickColor: Color = majorTickColor.copy(alpha = 0.7f),
+    minorTickColor: Color = majorTickColor.copy(alpha = 0.3f),
     northTickLength: Dp = 32.dp,
     cardinalTickLength: Dp = 24.dp,
     majorTickLength: Dp = 16.dp,
@@ -218,16 +219,55 @@ private fun CompassRose(
         val canvasSizePx = remember { minOf(constraints.maxWidth, constraints.maxHeight).toFloat() }
         val canvasSizeDp = remember { (canvasSizePx * displayDensity).dp }
         val center = Offset(canvasSizePx / 2f, canvasSizePx / 2f)
-        val rotation by animateFloatAsState(targetValue = -azimuthDegrees)
+
+        // We'll animate the compass rose to the negative of the azimuth so that the rose exactly
+        // counteracts the rotation of the Android device, keeping the rose pointed north. We're
+        // careful to transition naturally across the 0°/360° boundary because we don't want the
+        // rose to completely spin around each time we cross the boundary. The approach has been
+        // adapted from the following StackOverflow answer:
+        // https://stackoverflow.com/a/68259116/1253644
+        val (lastAnimatedAzimuth, setLastAnimatedAzimuth) = remember { mutableIntStateOf(0) }
+        val animatedAzimuthInt = azimuthDegrees.roundToInt()
+        var newAnimatedAzimuth = lastAnimatedAzimuth // We'll update this if necessary
+        val modLastAnimatedAzimuth = if (lastAnimatedAzimuth > 0) {
+            lastAnimatedAzimuth % DEGREES_360
+        } else {
+            DEGREES_360 - (-lastAnimatedAzimuth % DEGREES_360)
+        }
+        if (modLastAnimatedAzimuth != animatedAzimuthInt) {
+            val clockwiseDiff = if (animatedAzimuthInt > modLastAnimatedAzimuth) {
+                modLastAnimatedAzimuth + DEGREES_360 - animatedAzimuthInt
+            } else {
+                modLastAnimatedAzimuth - animatedAzimuthInt
+            }
+            val counterClockwiseDiff = if (animatedAzimuthInt > modLastAnimatedAzimuth) {
+                animatedAzimuthInt - modLastAnimatedAzimuth
+            } else {
+                DEGREES_360 - modLastAnimatedAzimuth + animatedAzimuthInt
+            }
+            val rotateClockwise = clockwiseDiff < counterClockwiseDiff
+            newAnimatedAzimuth = if (rotateClockwise) {
+                lastAnimatedAzimuth - clockwiseDiff
+            } else {
+                lastAnimatedAzimuth + counterClockwiseDiff
+            }
+
+            setLastAnimatedAzimuth(newAnimatedAzimuth)
+        }
+        val animatedRotation: Float by animateFloatAsState(
+            targetValue = -newAnimatedAzimuth.toFloat(),
+            label = "Rotation"
+        )
+
         Canvas(
             modifier = Modifier
                 .size(canvasSizeDp)
-                .rotate(rotation)
+                .rotate(animatedRotation)
         ) {
-            for (degrees in 0..359) {
+            for (degrees in 0..<DEGREES_360) {
                 when {
-                    degrees == DEGREES_NORTH -> northTickStyle
-                    degrees % 90 == 0 -> cardinalTickStyle
+                    degrees == CANVAS_DEGREES_NORTH -> northTickStyle
+                    degrees % CARDINAL_DIRECTION_INTERVAL_DEGREES == 0 -> cardinalTickStyle
                     degrees % majorTickPeriodDegrees == 0 -> majorTickStyle
                     degrees % minorTickPeriodDegrees == 0 -> minorTickStyle
                     else -> null
@@ -281,6 +321,19 @@ private const val AZIMUTH_SW_MIN = AZIMUTH_S_MAX
 private const val AZIMUTH_SW_MAX = AZIMUTH_W_MIN
 private const val AZIMUTH_NW_MIN = AZIMUTH_W_MAX
 private const val AZIMUTH_NW_MAX = AZIMUTH_N_MIN
+private const val CANVAS_DEGREES_NORTH =
+    270 // since canvas angles are measured clockwise off X-axis
+private const val CARDINAL_DIRECTION_INTERVAL_DEGREES = 90
+private const val DEGREES_180 = 180f
+private const val DEGREES_360 = 360
+
+private data class TickStyle(
+    val color: Color,
+    val lengthPx: Float,
+    val widthPx: Float
+)
+
+private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 
 @ThemePreviews
 @Composable
@@ -291,14 +344,3 @@ private fun CompassPreview() {
         }
     }
 }
-
-// Canvas angles are measured clockwise off the X-axis, so north or "up" is actually 270°
-private const val DEGREES_NORTH = 270
-
-private data class TickStyle(
-    val color: Color,
-    val lengthPx: Float,
-    val widthPx: Float
-)
-
-private fun Float.toRadians(): Float = (this / 180f * Math.PI).toFloat()
