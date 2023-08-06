@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.Divider
+import io.trewartha.positional.ui.HorizontalDivider
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
@@ -56,7 +56,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
-            Divider()
+            HorizontalDivider()
         }
         Spacer(modifier = Modifier.weight(1f))
         Column(
@@ -69,7 +69,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
-            Divider()
+            HorizontalDivider()
         }
     }
 }
