@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import io.trewartha.positional.BuildConfig
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.utils.format.DateTimeFormatter

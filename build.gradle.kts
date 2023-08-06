@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.google.firebase.crashlytics) apply false
     alias(libs.plugins.protobuf) apply false
 }
 

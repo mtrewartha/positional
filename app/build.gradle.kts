@@ -1,3 +1,4 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
@@ -6,6 +7,8 @@ plugins {
     alias(libs.plugins.protobuf)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 private val PROPERTIES_FILE_PATH = "app/upload_keystore.properties"
@@ -124,13 +127,16 @@ dependencies {
     implementation(libs.accompanist.placeholder)
     implementation(libs.accompanist.systemUiController)
     implementation(libs.hilt.android)
+    implementation(libs.google.materialComponents)
+    implementation(platform(libs.google.firebase.bom))
+    implementation(libs.google.firebase.crashlytics)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.playServices)
     implementation(libs.markwon)
-    implementation(libs.materialComponents)
     implementation(libs.timber)
 
-    "playImplementation"(libs.playServices.location)
+    "playImplementation"(libs.google.firebase.analytics)
+    "playImplementation"(libs.google.playServices.location)
 
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)

@@ -9,11 +9,7 @@
 
 -dontwarn java.awt.geom.Rectangle2D
 
-# Add any project specific keep options here:
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Crashlytics requires these lines to provide readable crash reports:
+# https://firebase.google.com/docs/crashlytics/get-deobfuscated-reports?hl=en&platform=android#config-r8-proguard-dexguard
+-keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.

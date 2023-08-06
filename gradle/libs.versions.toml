@@ -21,21 +21,20 @@ androidx-lifecycle = "2.6.1"
 androidx-navigation = "2.7.0-rc01"
 androidx-preference = "1.2.0"
 androidx-window = "1.2.0-beta01"
-firebase-bom = "31.5.0"
-firebase-crashlytics-gradle = "2.9.8"
-firebase-performance-gradle = "1.4.2"
+google-firebase-bom = "32.2.2"
+google-firebase-crashlytics-gradle = "2.9.8"
+google-materialComponents = "1.9.0"
+google-playServices-location = "21.0.1"
+google-services = "4.3.15"
 java = "17"
 javapoet = { strictly = "1.13.0" }
 javax-inject = "1"
-google-services = "4.3.15"
 hilt = "2.47"
 kotest = "5.6.2"
 kotlin = "1.9.0"
 kotlinx-coroutines = "1.7.3"
 kotlinx-datetime = "0.4.0"
 markwon = "4.6.2"
-materialComponents = "1.9.0"
-play-services-location = "21.0.1"
 protobuf = "3.23.4"
 protobuf-plugin = "0.9.3"
 sunrise-sunset = "1.2"
@@ -45,8 +44,8 @@ turbine = "1.0.0"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-gradle" }
-firebase-performance = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-performance-gradle" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "google-firebase-crashlytics-gradle" }
+#google-firebase-performance = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-performance-gradle" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -87,6 +86,11 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
+google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "google-firebase-bom" }
+google-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+google-materialComponents = { module = "com.google.android.material:material", version.ref = "google-materialComponents" }
+google-playServices-location = { module = "com.google.android.gms:play-services-location", version.ref = "google-playServices-location" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
@@ -101,8 +105,6 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-playServices = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
-materialComponents = { module = "com.google.android.material:material", version.ref = "materialComponents" }
-playServices-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 protobuf-java-lite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
