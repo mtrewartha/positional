@@ -1,9 +1,12 @@
 package io.trewartha.positional.ui.compass
 
+import android.content.Context
 import android.hardware.SensorManager
 import android.hardware.SensorManager.getOrientation
 import android.hardware.SensorManager.remapCoordinateSystem
+import android.os.Build
 import android.view.Surface
+import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,11 +41,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -188,7 +194,14 @@ private fun SensorsPresentContent(
         val orientation = remember { FloatArray(ORIENTATION_VECTOR_SIZE) }
         val azimuthDegrees = if (state is CompassViewModel.State.SensorsPresent.Loaded) {
             val (newXAxis, newYAxis) = when (
-                val rotation = LocalContext.current.display?.rotation ?: Surface.ROTATION_0
+                val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    LocalContext.current.display?.rotation ?: Surface.ROTATION_0
+                } else {
+                    @Suppress("DEPRECATION")
+                    (LocalContext.current.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
+                        .defaultDisplay
+                        .rotation
+                }
             ) {
                 Surface.ROTATION_0 -> SensorManager.AXIS_X to SensorManager.AXIS_Y
                 Surface.ROTATION_90 -> SensorManager.AXIS_Y to SensorManager.AXIS_MINUS_X
