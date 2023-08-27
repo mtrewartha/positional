@@ -12,44 +12,44 @@ sealed interface NavDestination {
 
     val route: String
 
-    sealed interface BottomNavDestination : NavDestination {
+    sealed interface MainNavDestination : NavDestination {
         val navIcon: ImageVector
         val navLabelRes: Int
     }
 
-    object Compass : BottomNavDestination {
+    data object Compass : MainNavDestination {
         override val route = "compass"
         override val navIcon = Icons.Rounded.Explore
         override val navLabelRes = R.string.bottom_navigation_compass
     }
 
-    object CompassInfo : NavDestination {
+    data object CompassInfo : NavDestination {
         override val route = "compass/info"
     }
 
-    object Location : BottomNavDestination {
+    data object Location : MainNavDestination {
         override val route = "location"
         override val navIcon = Icons.Rounded.MyLocation
         override val navLabelRes = R.string.bottom_navigation_location
     }
 
-    object LocationInfo : NavDestination {
+    data object LocationInfo : NavDestination {
         override val route = "location/info"
     }
 
-    object Settings : BottomNavDestination {
+    data object Settings : MainNavDestination {
         override val route = "settings"
         override val navIcon = Icons.Rounded.Settings
         override val navLabelRes = R.string.bottom_navigation_settings
     }
 
-    object Solunar : BottomNavDestination {
+    data object Solunar : MainNavDestination {
         override val route = "solunar"
         override val navIcon = Icons.Rounded.WbTwilight
         override val navLabelRes = R.string.bottom_navigation_solunar
     }
 
-    object SolunarInfo : NavDestination {
+    data object SolunarInfo : NavDestination {
         override val route = "solunar/info"
     }
 }
