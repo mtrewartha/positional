@@ -1,16 +1,15 @@
 [versions]
-accompanist = "0.31.5-beta"
+accompanist = "0.32.0"
 android-desugarJdkLibs = "2.0.3"
-android-gradle = "8.2.0-alpha15"
+android-gradle = "8.2.0-beta01"
 android-sdk-compile = "34"
 android-sdk-min = "21"
 android-sdk-target = "34"
 androidx-activity = "1.7.2"
 androidx-activity-compose = "1.7.2"
-androidx-compose = "1.5.0-rc01"
-androidx-compose-bom = "2023.06.01"
-androidx-compose-compiler = "1.5.0"
-androidx-compose-material3 = "1.2.0-alpha04"
+androidx-compose-bom = "2023.08.00"
+androidx-compose-compiler = "1.5.2"
+androidx-compose-material3 = "1.2.0-alpha06"
 androidx-constraint-layout-compose = "1.0.1"
 androidx-core = "1.10.1"
 androidx-data-store = "1.1.0-alpha04"
@@ -18,11 +17,11 @@ androidx-fragment = "1.6.1"
 androidx-hilt = "1.0.0"
 androidx-legacySupport-v4 = "1.0.0"
 androidx-lifecycle = "2.6.1"
-androidx-navigation = "2.7.0-rc01"
-androidx-preference = "1.2.0"
+androidx-navigation = "2.7.1"
+androidx-preference = "1.2.1"
 androidx-window = "1.2.0-beta01"
-google-firebase-bom = "32.2.2"
-google-firebase-crashlytics-gradle = "2.9.8"
+google-firebase-bom = "32.2.3"
+google-firebase-crashlytics-gradle = "2.9.9"
 google-materialComponents = "1.9.0"
 google-playServices-location = "21.0.1"
 google-services = "4.3.15"
@@ -35,7 +34,7 @@ kotlin = "1.9.0"
 kotlinx-coroutines = "1.7.3"
 kotlinx-datetime = "0.4.0"
 markwon = "4.6.2"
-protobuf = "3.23.4"
+protobuf = "3.24.2"
 protobuf-plugin = "0.9.3"
 sunrise-sunset = "1.2"
 timber = "5.0.1"
@@ -67,7 +66,7 @@ androidx-compose-material-icons-core = { module = "androidx.compose.material:mat
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
 androidx-compose-material3-windowSizeClass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "androidx-compose-material3" }
-androidx-compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-compose" }
+androidx-compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-uiTooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-constraintLayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidx-constraint-layout-compose" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
