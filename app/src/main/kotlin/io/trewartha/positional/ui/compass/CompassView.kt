@@ -41,14 +41,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -60,8 +58,6 @@ import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
-import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.placeholder
 
 fun NavGraphBuilder.compassView() {
@@ -250,8 +246,7 @@ private const val DEGREES_360 = 360f
 private const val ROTATION_MATRIX_SIZE = 9
 private const val ORIENTATION_VECTOR_SIZE = 3
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewLightDark
 @Composable
 private fun SensorsMissingPreview() {
     PositionalTheme {
@@ -259,8 +254,7 @@ private fun SensorsMissingPreview() {
     }
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewLightDark
 @Composable
 private fun SensorsPresentLoadingPreview() {
     PositionalTheme {
@@ -268,8 +262,7 @@ private fun SensorsPresentLoadingPreview() {
     }
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewLightDark
 @Composable
 private fun SensorsPresentLoadedPreview() {
     PositionalTheme {

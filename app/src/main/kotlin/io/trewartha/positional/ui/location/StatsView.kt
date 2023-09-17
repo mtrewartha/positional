@@ -11,6 +11,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.location.CoordinatesFormat
@@ -19,12 +21,10 @@ import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
-import io.trewartha.positional.ui.WindowSizePreviews
 import kotlinx.datetime.Clock
 
 @Composable
-fun StatsColumn(
+fun StatsView(
     state: LocationState,
     modifier: Modifier = Modifier
 ) {
@@ -190,13 +190,13 @@ private fun SpeedRow(
     )
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewFontScale
+@PreviewLightDark
 @Composable
 private fun Preview() {
     PositionalTheme {
         Surface {
-            StatsColumn(
+            StatsView(
                 state = LocationState(
                     coordinates = Coordinates(
                         latitude = 123.456789,

@@ -42,6 +42,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -60,8 +64,6 @@ import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.IconToggleButton
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
-import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.locals.LocalCoordinatesFormatter
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
@@ -79,9 +81,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
 
-fun NavGraphBuilder.locationView(
-    onAndroidSettingsClick: () -> Unit
-) {
+fun NavGraphBuilder.locationView(onAndroidSettingsClick: () -> Unit) {
     composable(NavDestination.Location.route) {
         val locationPermissions = remember { listOf(Manifest.permission.ACCESS_FINE_LOCATION) }
         val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
@@ -319,8 +319,7 @@ private fun shareCoordinates(
     )
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewLightDark
 @Composable
 private fun PermissionNotGrantedPreview() {
     PositionalTheme {
@@ -355,77 +354,93 @@ private fun PermissionNotGrantedPreview() {
     }
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewLightDark
+@PreviewScreenSizes
+@Preview
 @Composable
 private fun LocatingPreview() {
     PositionalTheme {
-        LocationView(
-            locationPermissionsState = object : MultiplePermissionsState {
-                override val allPermissionsGranted: Boolean = true
-                override val permissions: List<PermissionState> = emptyList()
-                override val revokedPermissions: List<PermissionState> = emptyList()
-                override val shouldShowRationale: Boolean = false
-                override fun launchMultiplePermissionRequest() {
-                    // Don't do anything
-                }
-            },
-            state = LocationState(
-                coordinates = null,
-                coordinatesFormat = CoordinatesFormat.DD,
-                horizontalAccuracy = null,
-                bearing = null,
-                bearingAccuracy = null,
-                altitude = null,
-                altitudeAccuracy = null,
-                speed = null,
-                speedAccuracy = null,
-                timestamp = null,
-                showAccuracies = true,
-                units = Units.METRIC,
-                screenLockedOn = false
-            ),
-            onAndroidSettingsClick = {},
-            onScreenLockToggle = {}
-        ) {}
+        val context = LocalContext.current
+        val locale = LocalLocale.current
+        CompositionLocalProvider(
+            LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
+        ) {
+            LocationView(
+                locationPermissionsState = object : MultiplePermissionsState {
+                    override val allPermissionsGranted: Boolean = true
+                    override val permissions: List<PermissionState> = emptyList()
+                    override val revokedPermissions: List<PermissionState> = emptyList()
+                    override val shouldShowRationale: Boolean = false
+                    override fun launchMultiplePermissionRequest() {
+                        // Don't do anything
+                    }
+                },
+                state = LocationState(
+                    coordinates = null,
+                    coordinatesFormat = CoordinatesFormat.DD,
+                    horizontalAccuracy = null,
+                    bearing = null,
+                    bearingAccuracy = null,
+                    altitude = null,
+                    altitudeAccuracy = null,
+                    speed = null,
+                    speedAccuracy = null,
+                    timestamp = null,
+                    showAccuracies = true,
+                    units = Units.METRIC,
+                    screenLockedOn = false
+                ),
+                onAndroidSettingsClick = {},
+                onScreenLockToggle = {},
+                onShareClick = {}
+            )
+        }
     }
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewFontScale
+@PreviewLightDark
+@PreviewScreenSizes
+@Preview
 @Composable
 private fun LocatedPreview() {
     PositionalTheme {
-        LocationView(
-            locationPermissionsState = object : MultiplePermissionsState {
-                override val allPermissionsGranted: Boolean = true
-                override val permissions: List<PermissionState> = emptyList()
-                override val revokedPermissions: List<PermissionState> = emptyList()
-                override val shouldShowRationale: Boolean = false
-                override fun launchMultiplePermissionRequest() {
-                    // Don't do anything
-                }
-            },
-            state = LocationState(
-                coordinates = Coordinates(
-                    latitude = 123.456789,
-                    longitude = 123.456789
+        val context = LocalContext.current
+        val locale = LocalLocale.current
+        CompositionLocalProvider(
+            LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
+        ) {
+            LocationView(
+                locationPermissionsState = object : MultiplePermissionsState {
+                    override val allPermissionsGranted: Boolean = true
+                    override val permissions: List<PermissionState> = emptyList()
+                    override val revokedPermissions: List<PermissionState> = emptyList()
+                    override val shouldShowRationale: Boolean = false
+                    override fun launchMultiplePermissionRequest() {
+                        // Don't do anything
+                    }
+                },
+                state = LocationState(
+                    coordinates = Coordinates(
+                        latitude = 123.456789,
+                        longitude = 123.456789
+                    ),
+                    coordinatesFormat = CoordinatesFormat.DD,
+                    horizontalAccuracy = Distance.Meters(123.45678f),
+                    bearing = Angle.Degrees(123.45678f),
+                    bearingAccuracy = Angle.Degrees(123.45678f),
+                    altitude = Distance.Meters(123.45678f),
+                    altitudeAccuracy = Distance.Meters(123.45678f),
+                    speed = Speed.KilometersPerHour(123.45678f),
+                    speedAccuracy = Speed.KilometersPerHour(123.45678f),
+                    timestamp = Instant.DISTANT_PAST,
+                    showAccuracies = true,
+                    units = Units.METRIC,
+                    screenLockedOn = false
                 ),
-                coordinatesFormat = CoordinatesFormat.DD,
-                horizontalAccuracy = Distance.Meters(123.45678f),
-                bearing = Angle.Degrees(123.45678f),
-                bearingAccuracy = Angle.Degrees(123.45678f),
-                altitude = Distance.Meters(123.45678f),
-                altitudeAccuracy = Distance.Meters(123.45678f),
-                speed = Speed.KilometersPerHour(123.45678f),
-                speedAccuracy = Speed.KilometersPerHour(123.45678f),
-                timestamp = Instant.DISTANT_PAST,
-                showAccuracies = true,
-                units = Units.METRIC,
-                screenLockedOn = false
-            ),
-            onAndroidSettingsClick = {},
-            onScreenLockToggle = {}
-        ) {}
+                onAndroidSettingsClick = {},
+                onScreenLockToggle = {}, onShareClick = {}
+            )
+        }
     }
 }

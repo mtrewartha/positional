@@ -25,13 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
-import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.utils.activity
 
 @Composable
@@ -101,8 +100,7 @@ private fun Activity.showPrivacyPolicy() {
     )
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewLightDark
 @Composable
 private fun Preview() {
     PositionalTheme {

@@ -30,13 +30,13 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.android.material.color.MaterialColors
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -335,7 +335,7 @@ private data class TickStyle(
 
 private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun CompassPreview() {
     PositionalTheme {

@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,7 +40,6 @@ import io.trewartha.positional.data.solunar.SolarTimes
 import io.trewartha.positional.ui.IconButton
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
@@ -148,7 +148,7 @@ private fun SolunarView(
     if (showInfoSheet) SolunarInfoSheet(onDismissRequest = { showInfoSheet = false })
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun LoadingPreview() {
     PositionalTheme {
@@ -162,7 +162,7 @@ private fun LoadingPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun LoadedPreview() {
     PositionalTheme {

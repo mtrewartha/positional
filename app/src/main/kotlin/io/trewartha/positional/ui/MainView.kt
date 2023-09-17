@@ -68,22 +68,21 @@ fun MainView(
         }
     }
     PositionalTheme(useDarkTheme = useDarkTheme) {
-        val isCompactScreen = windowWidthSizeClass == WindowWidthSizeClass.Compact
+        val isCompactWidthWindow = windowWidthSizeClass == WindowWidthSizeClass.Compact
         val mainNavDestinations = setOf(Location, Compass, /*Solunar,*/ Settings)
         Scaffold(
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             bottomBar = bottomBar@{
-                if (!isCompactScreen) return@bottomBar
+                if (!isCompactWidthWindow) return@bottomBar
                 MainNavigationBar(navHostController, mainNavDestinations)
             },
         ) { scaffoldPadding ->
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (windowWidthSizeClass != WindowWidthSizeClass.Compact) {
+                if (!isCompactWidthWindow) {
                     MainNavigationRail(
                         navHostController,
                         mainNavDestinations,
-                        modifier = Modifier
-                            .fillMaxHeight()
+                        modifier = Modifier.fillMaxHeight()
                     )
                 }
                 val context = LocalContext.current

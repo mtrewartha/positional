@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -33,7 +34,6 @@ import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
 
 fun NavGraphBuilder.settingsView(
     onPrivacyPolicyClick: () -> Unit
@@ -129,7 +129,7 @@ private fun SettingsView(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun LoadingPreviews() {
     PositionalTheme {
@@ -149,7 +149,7 @@ private fun LoadingPreviews() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun LoadedPreviews() {
     PositionalTheme {

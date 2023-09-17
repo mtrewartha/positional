@@ -12,11 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.HorizontalDivider
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.utils.AutoShrinkingText
 import io.trewartha.positional.ui.utils.placeholder
@@ -112,7 +112,7 @@ private fun SunriseSunsetTime(
     )
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun LoadingPreview() {
     PositionalTheme {
@@ -126,7 +126,7 @@ private fun LoadingPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun LoadedPreview() {
     PositionalTheme {

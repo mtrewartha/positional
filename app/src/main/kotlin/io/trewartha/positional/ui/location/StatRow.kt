@@ -2,7 +2,6 @@ package io.trewartha.positional.ui.location
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
@@ -17,10 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
 import io.trewartha.positional.ui.utils.placeholder
 
 @Composable
@@ -34,9 +34,7 @@ fun StatRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .placeholder(visible = showPlaceholder),
+        modifier = modifier.placeholder(visible = showPlaceholder),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -74,7 +72,8 @@ fun StatRow(
     }
 }
 
-@ThemePreviews
+@PreviewFontScale
+@PreviewLightDark
 @Composable
 fun LocationStatRowPreview() {
     PositionalTheme {
@@ -91,7 +90,7 @@ fun LocationStatRowPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun LocationStatRowPlaceholderPreview() {
     PositionalTheme {

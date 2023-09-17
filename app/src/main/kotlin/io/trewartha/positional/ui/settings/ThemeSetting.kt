@@ -6,10 +6,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import io.trewartha.positional.R
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
 
 @Composable
 fun ThemeSetting(
@@ -38,7 +38,7 @@ fun ThemeSetting(
     )
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun Previews() {
     PositionalTheme {

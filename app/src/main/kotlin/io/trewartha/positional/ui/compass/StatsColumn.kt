@@ -11,14 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.ui.PositionalTheme
-import io.trewartha.positional.ui.ThemePreviews
-import io.trewartha.positional.ui.WindowSizePreviews
 import io.trewartha.positional.ui.location.StatRow
 
 @Composable
@@ -96,8 +95,7 @@ fun StatsColumn(
     }
 }
 
-@ThemePreviews
-@WindowSizePreviews
+@PreviewLightDark
 @Composable
 private fun StatsColumnLoadedPreview() {
     PositionalTheme {
