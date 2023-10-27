@@ -1,4 +1,4 @@
-package io.trewartha.positional.domain.solunar
+package io.trewartha.positional.data.solunar
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime

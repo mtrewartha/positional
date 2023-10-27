@@ -1,3 +1,3 @@
-package io.trewartha.positional.domain.compass
+package io.trewartha.positional.data.compass
 
 class CompassHardwareException : IllegalStateException("Device is missing required hardware")

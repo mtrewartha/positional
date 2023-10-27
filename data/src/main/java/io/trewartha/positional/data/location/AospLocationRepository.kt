@@ -1,4 +1,4 @@
-package io.trewartha.positional.domain.location
+package io.trewartha.positional.data.location
 
 import android.location.LocationManager
 import android.location.LocationManager.FUSED_PROVIDER
@@ -9,7 +9,6 @@ import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
 import androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY
-import io.trewartha.positional.data.location.Location
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor

@@ -1,9 +1,9 @@
-package io.trewartha.positional.domain.settings
+package io.trewartha.positional.data.settings
 
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.Theme
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {

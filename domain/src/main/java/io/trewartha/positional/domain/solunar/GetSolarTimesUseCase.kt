@@ -1,6 +1,7 @@
 package io.trewartha.positional.domain.solunar
 
 import io.trewartha.positional.data.solunar.SolarTimes
+import io.trewartha.positional.data.solunar.SolarTimesRepository
 import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 

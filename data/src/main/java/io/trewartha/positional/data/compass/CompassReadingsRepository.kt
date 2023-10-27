@@ -1,6 +1,5 @@
-package io.trewartha.positional.domain.compass
+package io.trewartha.positional.data.compass
 
-import io.trewartha.positional.data.compass.CompassReadings
 import kotlinx.coroutines.flow.Flow
 
 interface CompassReadingsRepository {

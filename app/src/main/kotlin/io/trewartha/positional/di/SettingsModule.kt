@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.trewartha.positional.domain.settings.DataStoreSettingsRepository
-import io.trewartha.positional.domain.settings.SettingsRepository
+import io.trewartha.positional.data.settings.DataStoreSettingsRepository
+import io.trewartha.positional.data.settings.SettingsRepository
 import javax.inject.Singleton
 
 @Module

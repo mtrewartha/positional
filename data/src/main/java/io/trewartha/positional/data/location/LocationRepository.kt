@@ -1,6 +1,5 @@
-package io.trewartha.positional.domain.location
+package io.trewartha.positional.data.location
 
-import io.trewartha.positional.data.location.Location
 import kotlinx.coroutines.flow.Flow
 
 /**

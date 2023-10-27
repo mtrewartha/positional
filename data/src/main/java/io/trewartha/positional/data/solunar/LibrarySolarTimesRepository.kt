@@ -1,4 +1,4 @@
-package io.trewartha.positional.domain.solunar
+package io.trewartha.positional.data.solunar
 
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator
 import com.luckycatlabs.sunrisesunset.dto.Location

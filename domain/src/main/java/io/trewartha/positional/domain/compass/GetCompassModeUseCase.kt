@@ -1,7 +1,7 @@
 package io.trewartha.positional.domain.compass
 
 import io.trewartha.positional.data.compass.CompassMode
-import io.trewartha.positional.domain.settings.SettingsRepository
+import io.trewartha.positional.data.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

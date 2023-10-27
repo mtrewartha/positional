@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.compass.CompassAccuracy
+import io.trewartha.positional.data.compass.CompassHardwareException
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.compass.CompassReadings
 import io.trewartha.positional.data.measurement.Angle
-import io.trewartha.positional.domain.compass.CompassHardwareException
 import io.trewartha.positional.domain.compass.GetCompassDeclinationUseCase
 import io.trewartha.positional.domain.compass.GetCompassModeUseCase
 import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase

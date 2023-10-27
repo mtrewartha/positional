@@ -6,8 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.domain.location.GetLocationUseCase
-import io.trewartha.positional.domain.settings.SettingsRepository
 import io.trewartha.positional.domain.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel

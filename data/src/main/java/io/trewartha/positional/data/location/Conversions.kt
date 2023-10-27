@@ -1,5 +1,6 @@
-package io.trewartha.positional.domain.location
+package io.trewartha.positional.data.location
 
+import android.location.Location as AndroidLocation
 import android.hardware.GeomagneticField
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
@@ -9,7 +10,6 @@ import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import android.location.Location as AndroidLocation
 
 internal val AndroidLocation.altitudeObject: Distance?
     get() = if (hasAltitude()) {
@@ -26,14 +26,14 @@ internal val AndroidLocation.altitudeAccuracy: Distance?
     }
 
 internal val AndroidLocation.bearingObject: Angle?
-    get() = if (this.hasBearing() && speed >= MIN_SPEED_THRESHOLD) {
+    get() = if (this.hasBearing() && speed >= io.trewartha.positional.data.location.MIN_SPEED_THRESHOLD) {
         Angle.Degrees(this.bearing)
     } else {
         null
     }
 
 internal val AndroidLocation.bearingAccuracy: Angle?
-    get() = if (SDK_INT >= O && hasBearingAccuracy() && speed >= MIN_SPEED_THRESHOLD) {
+    get() = if (SDK_INT >= O && hasBearingAccuracy() && speed >= io.trewartha.positional.data.location.MIN_SPEED_THRESHOLD) {
         Angle.Degrees(bearingAccuracyDegrees)
     } else {
         null
@@ -57,7 +57,7 @@ internal val AndroidLocation.magneticDeclination: Angle
     )
 
 internal val AndroidLocation.speedObject: Speed?
-    get() = if (hasSpeed() && speed >= MIN_SPEED_THRESHOLD) {
+    get() = if (hasSpeed() && speed >= io.trewartha.positional.data.location.MIN_SPEED_THRESHOLD) {
         Speed.MetersPerSecond(speed)
     } else {
         null

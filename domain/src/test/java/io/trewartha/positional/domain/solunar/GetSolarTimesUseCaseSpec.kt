@@ -2,6 +2,7 @@ package io.trewartha.positional.domain.solunar
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.trewartha.positional.data.solunar.FakeSolarTimesRepository
 import io.trewartha.positional.data.solunar.SolarTimes
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime

@@ -33,15 +33,8 @@ android {
 
 dependencies {
     api(project(":data"))
-    api(files("libs/worldwind.jar")) // TODO: Make this an implementation dependency
-    api(libs.kotlinx.coroutines.core)
 
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.dataStore)
     implementation(libs.javax.inject)
-    implementation(libs.protobuf.java.lite)
-    implementation(libs.protobuf.kotlin.lite)
-    implementation(libs.sunriseSunset)
     implementation(libs.timber)
 
     testImplementation(libs.turbine)
@@ -53,28 +46,6 @@ dependencies {
 
 kotlin {
     jvmToolchain(libs.versions.java.get().toInt())
-}
-
-protobuf {
-    protoc {
-        artifact = if (osdetector.os == "osx") {
-            val architectureSuffix =
-                if (System.getProperty("os.arch") == "x86_64") "x86_64" else "aarch_64"
-            "${libs.protobuf.protoc.get()}:osx-$architectureSuffix"
-        } else {
-            libs.protobuf.protoc.get().toString()
-        }
-    }
-    plugins {
-        generateProtoTasks {
-            all().forEach {
-                it.builtins {
-                    create("java") { option("lite") }
-                    create("kotlin") { option("lite") }
-                }
-            }
-        }
-    }
 }
 
 tasks.withType<Test>().configureEach {

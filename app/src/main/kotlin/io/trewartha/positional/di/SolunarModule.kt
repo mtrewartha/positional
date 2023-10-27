@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import io.trewartha.positional.domain.solunar.LibrarySolarTimesRepository
-import io.trewartha.positional.domain.solunar.SolarTimesRepository
+import io.trewartha.positional.data.solunar.LibrarySolarTimesRepository
+import io.trewartha.positional.data.solunar.SolarTimesRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)

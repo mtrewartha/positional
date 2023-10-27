@@ -1,4 +1,4 @@
-package io.trewartha.positional.domain.location
+package io.trewartha.positional.data.location
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability

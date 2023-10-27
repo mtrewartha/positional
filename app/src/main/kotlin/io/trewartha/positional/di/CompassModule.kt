@@ -8,8 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.trewartha.positional.domain.compass.AospCompassReadingsRepository
-import io.trewartha.positional.domain.compass.CompassReadingsRepository
+import io.trewartha.positional.data.compass.AospCompassReadingsRepository
+import io.trewartha.positional.data.compass.CompassReadingsRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)

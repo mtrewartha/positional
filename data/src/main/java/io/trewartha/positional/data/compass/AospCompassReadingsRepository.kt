@@ -1,11 +1,9 @@
-package io.trewartha.positional.domain.compass
+package io.trewartha.positional.data.compass
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import io.trewartha.positional.data.compass.CompassAccuracy
-import io.trewartha.positional.data.compass.CompassReadings
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
