@@ -9,7 +9,9 @@ import android.view.Surface
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -88,7 +90,7 @@ private fun CompassView(state: CompassViewModel.State) {
             }
         )
     }
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -101,6 +103,7 @@ private fun CompassView(state: CompassViewModel.State) {
                         )
                     }
                 },
+                scrollBehavior = scrollBehavior
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
@@ -180,11 +183,7 @@ private fun SensorsPresentContent(
     if (showAccuracyHelpDialog) {
         AccuracyHelpDialog(onDismissRequest = { showAccuracyHelpDialog = false })
     }
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
+    BoxWithConstraints {
         val placeholdersVisible = state is CompassViewModel.State.SensorsPresent.Loading
         val remappedRotationMatrix = remember { FloatArray(ROTATION_MATRIX_SIZE) }
         val orientation = remember { FloatArray(ORIENTATION_VECTOR_SIZE) }
@@ -218,14 +217,39 @@ private fun SensorsPresentContent(
         } else {
             0f
         }
-        Compass(
-            azimuthDegrees = azimuthDegrees,
-            modifier = Modifier
-                .weight(1f, fill = true)
-                .widthIn(max = 400.dp)
-                .placeholder(visible = placeholdersVisible)
-        )
-        StatsColumn(state = state)
+        if (maxWidth >= maxHeight) {
+            Row(
+                modifier = modifier,
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Compass(
+                    azimuthDegrees = azimuthDegrees,
+                    modifier = Modifier
+                        .weight(1f, fill = true)
+                        .placeholder(visible = placeholdersVisible)
+                )
+                StatsColumn(
+                    state = state,
+                    modifier = Modifier.weight(1f, fill = true)
+                )
+            }
+        } else {
+            Column(
+                modifier = modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                Compass(
+                    azimuthDegrees = azimuthDegrees,
+                    modifier = Modifier
+                        .weight(1f, fill = true)
+                        .widthIn(max = 400.dp)
+                        .placeholder(visible = placeholdersVisible)
+                )
+                StatsColumn(state = state)
+            }
+        }
     }
 }
 

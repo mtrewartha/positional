@@ -136,7 +136,7 @@ private fun LocationView(
         }
     )
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var showInfoSheet by rememberSaveable { mutableStateOf(false) }
     var showMapError by rememberSaveable { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
