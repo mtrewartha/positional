@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.North
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -70,48 +67,23 @@ fun Compass(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            imageVector = Icons.Rounded.North,
-            contentDescription = null,
-            modifier = Modifier.size(48.dp)
-        )
-        Text(
-            text = stringResource(
-                when {
-                    AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
-                        R.string.compass_direction_northwest
-                    AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
-                        R.string.compass_direction_northeast
-                    AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
-                        R.string.compass_direction_southwest
-                    AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
-                        R.string.compass_direction_southeast
-                    AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
-                        R.string.compass_direction_east
-                    AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
-                        R.string.compass_direction_south
-                    AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
-                        R.string.compass_direction_west
-                    else ->
-                        R.string.compass_direction_north
-                }
-            ),
-            style = MaterialTheme.typography.displayLarge
-        )
         Box(
             modifier = Modifier.aspectRatio(1f),
             contentAlignment = Alignment.Center
         ) {
             ConstraintLayout(modifier = Modifier.widthIn(min = 64.dp)) {
-                val (degreesText, symbolText) = createRefs()
+                val (degreesText, symbolText, directionText) = createRefs()
+                val degreesDirectionChain = createVerticalChain(degreesText, directionText)
+                constrain(degreesDirectionChain) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
                 Text(
                     text = "${azimuthDegrees.roundToInt() % 360}",
                     style = MaterialTheme.typography.displayLarge,
                     modifier = Modifier.constrainAs(degreesText) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
                     }
                 )
                 Text(
@@ -121,6 +93,33 @@ fun Compass(
                         top.linkTo(degreesText.top)
                         start.linkTo(degreesText.end)
                     }
+                )
+                Text(
+                    text = stringResource(
+                        when {
+                            AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
+                                R.string.compass_direction_northwest
+                            AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
+                                R.string.compass_direction_northeast
+                            AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
+                                R.string.compass_direction_southwest
+                            AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
+                                R.string.compass_direction_southeast
+                            AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
+                                R.string.compass_direction_east
+                            AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
+                                R.string.compass_direction_south
+                            AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
+                                R.string.compass_direction_west
+                            else ->
+                                R.string.compass_direction_north
+                        }
+                    ),
+                    modifier = Modifier.constrainAs(directionText) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
+                    style = MaterialTheme.typography.displaySmall
                 )
             }
             CompassRose(
