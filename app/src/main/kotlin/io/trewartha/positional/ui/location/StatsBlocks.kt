@@ -1,76 +1,28 @@
 package io.trewartha.positional.ui.location
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Adjust
-import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.material.icons.rounded.Height
+import androidx.compose.material.icons.rounded.NorthEast
 import androidx.compose.material.icons.rounded.Speed
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
-import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import io.trewartha.positional.data.measurement.Units
-import io.trewartha.positional.ui.PositionalTheme
-import kotlinx.datetime.Clock
 
 @Composable
-fun StatsView(
-    state: LocationState,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        val placeholdersVisible = state.timestamp == null
-        AccuracyRow(
-            accuracy = state.horizontalAccuracy,
-            units = state.units,
-            showAccuracy = state.showAccuracies,
-            placeholdersVisible = placeholdersVisible
-        )
-        BearingRow(
-            bearing = state.bearing,
-            accuracy = state.bearingAccuracy,
-            showAccuracy = state.showAccuracies,
-            placeholdersVisible = placeholdersVisible
-        )
-        AltitudeRow(
-            altitude = state.altitude,
-            accuracy = state.altitudeAccuracy,
-            units = state.units,
-            showAccuracy = state.showAccuracies,
-            placeholdersVisible = placeholdersVisible
-        )
-        SpeedRow(
-            speed = state.speed,
-            accuracy = state.speedAccuracy,
-            units = state.units,
-            showAccuracy = state.showAccuracies,
-            placeholdersVisible = placeholdersVisible
-        )
-    }
-}
-
-@Composable
-private fun AccuracyRow(
+fun AccuracyBlock(
     accuracy: Distance?,
     units: Units?,
     showAccuracy: Boolean?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
-    StatRow(
+    StatBlock(
         icon = Icons.Rounded.Adjust,
         name = stringResource(R.string.location_label_accuracy),
         value = if (accuracy == null || units == null) {
@@ -92,7 +44,7 @@ private fun AccuracyRow(
 }
 
 @Composable
-private fun AltitudeRow(
+fun AltitudeBlock(
     altitude: Distance?,
     accuracy: Distance?,
     units: Units?,
@@ -100,7 +52,7 @@ private fun AltitudeRow(
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
-    StatRow(
+    StatBlock(
         icon = Icons.Rounded.Height,
         name = stringResource(R.string.location_label_altitude),
         value = if (altitude == null || units == null) {
@@ -128,15 +80,15 @@ private fun AltitudeRow(
 }
 
 @Composable
-private fun BearingRow(
+fun BearingBlock(
     bearing: Angle?,
     accuracy: Angle?,
     showAccuracy: Boolean?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
-    StatRow(
-        icon = Icons.Rounded.Explore,
+    StatBlock(
+        icon = Icons.Rounded.NorthEast,
         name = stringResource(R.string.location_label_bearing),
         value = if (bearing == null) {
             null
@@ -155,7 +107,7 @@ private fun BearingRow(
 }
 
 @Composable
-private fun SpeedRow(
+fun SpeedBlock(
     speed: Speed?,
     accuracy: Speed?,
     units: Units?,
@@ -163,7 +115,7 @@ private fun SpeedRow(
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
-    StatRow(
+    StatBlock(
         icon = Icons.Rounded.Speed,
         name = stringResource(R.string.location_label_speed),
         value = if (speed == null || units == null) {
@@ -188,34 +140,4 @@ private fun SpeedRow(
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
-}
-
-@PreviewFontScale
-@PreviewLightDark
-@Composable
-private fun Preview() {
-    PositionalTheme {
-        Surface {
-            StatsView(
-                state = LocationState(
-                    coordinates = Coordinates(
-                        latitude = 123.456789,
-                        longitude = 234.567890
-                    ),
-                    horizontalAccuracy = Distance.Meters(3456.789f),
-                    bearing = Angle.Degrees(123.456f),
-                    bearingAccuracy = Angle.Degrees(1.23f),
-                    altitude = Distance.Meters(12345.678f),
-                    altitudeAccuracy = Distance.Meters(123.456f),
-                    speed = Speed.KilometersPerHour(123.456f),
-                    speedAccuracy = Speed.KilometersPerHour(12.345f),
-                    timestamp = Clock.System.now(),
-                    coordinatesFormat = CoordinatesFormat.DD,
-                    units = Units.METRIC,
-                    showAccuracies = true,
-                    screenLockedOn = false
-                ),
-            )
-        }
-    }
 }

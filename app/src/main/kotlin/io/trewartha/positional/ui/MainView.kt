@@ -11,20 +11,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -70,13 +66,14 @@ fun MainView(
     PositionalTheme(useDarkTheme = useDarkTheme) {
         val isCompactWidthWindow = windowWidthSizeClass == WindowWidthSizeClass.Compact
         val mainNavDestinations = setOf(Location, Compass, /*Solunar,*/ Settings)
+        val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
             bottomBar = bottomBar@{
                 if (!isCompactWidthWindow) return@bottomBar
                 MainNavigationBar(navHostController, mainNavDestinations)
             },
-        ) { scaffoldPadding ->
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        ) { contentPadding ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (!isCompactWidthWindow) {
                     MainNavigationRail(
@@ -89,13 +86,13 @@ fun MainView(
                 NavHost(
                     navHostController,
                     startDestination = Location.route,
-                    modifier = Modifier
-                        .padding(scaffoldPadding)
-                        .consumeWindowInsets(scaffoldPadding)
-                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
+                    modifier = Modifier.padding(contentPadding)
                 ) {
                     compassView()
-                    locationView(onAndroidSettingsClick = { navigateToSettings(context) })
+                    locationView(
+                        snackbarHostState,
+                        onAndroidSettingsClick = { navigateToSettings(context) }
+                    )
                     settingsView(onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) })
                     solunarView()
                 }

@@ -1,21 +1,30 @@
 package io.trewartha.positional.ui.location
 
+import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FileCopy
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Map
+import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,14 +41,16 @@ import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import io.trewartha.positional.data.measurement.Units
-import io.trewartha.positional.ui.IconButton
+import io.trewartha.positional.ui.IconToggleButton
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.locals.LocalCoordinatesFormatter
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.AutoShrinkingText
+import io.trewartha.positional.ui.utils.activity
 import io.trewartha.positional.ui.utils.format.coordinates.DecimalDegreesFormatter
 import io.trewartha.positional.ui.utils.placeholder
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -47,76 +58,91 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun LocationPermissionGrantedContent(
     state: LocationState,
+    snackbarHostState: SnackbarHostState,
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
+    onInfoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BoxWithConstraints {
-        if (maxWidth >= maxHeight) {
-            Row(
-                modifier = modifier,
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CoordinatesView(
-                    state = state,
-                    onCopyClick = onCopyClick,
-                    onMapClick = onMapClick,
-                    onShareClick = onShareClick,
-                    modifier = Modifier.weight(1f, fill = true)
-                )
-                StatsView(
-                    state = state,
-                    modifier = Modifier.weight(1f, fill = true)
-                )
-            }
-        } else {
-            Column(
-                modifier = modifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                CoordinatesView(
-                    state = state,
-                    onCopyClick = onCopyClick,
-                    onMapClick = onMapClick,
-                    onShareClick = onShareClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f, fill = true)
-                )
-                StatsView(
-                    state = state,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+    val placeholdersVisible = state.timestamp == null
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            16.dp,
+            alignment = Alignment.CenterVertically
+        ),
+    ) {
+        CoordinatesView(
+            state = state,
+            snackbarHostState = snackbarHostState,
+            onCopyClick = onCopyClick,
+            onMapClick = onMapClick,
+            onShareClick = onShareClick,
+            onInfoClick = onInfoClick
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            AccuracyBlock(
+                accuracy = state.horizontalAccuracy,
+                units = state.units,
+                showAccuracy = state.showAccuracies,
+                placeholdersVisible = placeholdersVisible,
+                modifier = Modifier.weight(1f)
+            )
+            AltitudeBlock(
+                altitude = state.altitude,
+                accuracy = state.altitudeAccuracy,
+                units = state.units,
+                showAccuracy = state.showAccuracies,
+                placeholdersVisible = placeholdersVisible,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            SpeedBlock(
+                speed = state.speed,
+                accuracy = state.speedAccuracy,
+                units = state.units,
+                showAccuracy = state.showAccuracies,
+                placeholdersVisible = placeholdersVisible,
+                modifier = Modifier.weight(1f)
+            )
+            BearingBlock(
+                bearing = state.bearing,
+                accuracy = state.bearingAccuracy,
+                showAccuracy = state.showAccuracies,
+                placeholdersVisible = placeholdersVisible,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
 
 @Composable
-private fun CoordinatesView(
-    state: LocationState,
+private fun ButtonRow(
+    coordinates: Coordinates?,
+    timestamp: Instant?,
+    snackbarHostState: SnackbarHostState,
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
+    onInfoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Row(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Coordinates(coordinates = state.coordinates)
-        UpdatedAtText(timestamp = state.timestamp)
-        ButtonRow(
-            coordinates = state.coordinates,
-            timestamp = state.timestamp,
-            onCopyClick = onCopyClick,
-            onMapClick = onMapClick,
-            onShareClick = onShareClick
+        MapIconButton(
+            onClick = { onMapClick(coordinates, timestamp) },
+            enabled = coordinates != null
         )
+        ShareIconButton(onClick = { onShareClick(coordinates) }, enabled = coordinates != null)
+        CopyIconButton(onClick = { onCopyClick(coordinates) }, enabled = coordinates != null)
+        ScreenLockToggleButton(snackbarHostState)
+        InfoIconButton(onInfoClick)
     }
 }
 
@@ -140,46 +166,123 @@ private fun Coordinates(
 }
 
 @Composable
-private fun ButtonRow(
-    coordinates: Coordinates?,
-    timestamp: Instant?,
+private fun CoordinatesView(
+    state: LocationState,
+    snackbarHostState: SnackbarHostState,
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
+    onInfoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Column(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
-        verticalAlignment = Alignment.CenterVertically
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
     ) {
-        IconButton(
-            onClick = { onMapClick(coordinates, timestamp) },
-            enabled = coordinates != null
-        ) {
-            Icon(
-                Icons.Rounded.Map,
-                stringResource(R.string.location_button_map_content_description),
-            )
+        Coordinates(coordinates = state.coordinates)
+        UpdatedAtText(timestamp = state.timestamp)
+        ButtonRow(
+            coordinates = state.coordinates,
+            timestamp = state.timestamp,
+            snackbarHostState = snackbarHostState,
+            onCopyClick = onCopyClick,
+            onMapClick = onMapClick,
+            onShareClick = onShareClick,
+            onInfoClick = onInfoClick
+        )
+    }
+}
+
+@Composable
+private fun CopyIconButton(onClick: () -> Unit, enabled: Boolean = true) {
+    IconButton(onClick = onClick, enabled = enabled) {
+        Icon(
+            Icons.Rounded.FileCopy,
+            stringResource(R.string.location_coordinates_copy_content_description),
+        )
+    }
+}
+
+@Composable
+private fun InfoIconButton(onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            imageVector = Icons.Rounded.Info,
+            contentDescription = stringResource(R.string.location_button_info_content_description),
+        )
+    }
+}
+
+@Composable
+private fun MapIconButton(
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    IconButton(onClick = onClick, enabled = enabled) {
+        Icon(
+            Icons.Rounded.Map,
+            stringResource(R.string.location_button_map_content_description),
+        )
+    }
+}
+
+@Composable
+private fun ScreenLockToggleButton(snackbarHostState: SnackbarHostState) {
+    val window = LocalContext.current.activity?.window ?: return
+    var screenLockedOn by rememberSaveable { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val screenLockMessage = stringResource(
+        // This might look backwards, but it's not. We're setting the message to show *when the
+        // state changes from the current value*, not the message to show *for* the current value.
+        if (screenLockedOn) {
+            R.string.location_snackbar_screen_unlocked
+        } else {
+            R.string.location_snackbar_screen_locked
         }
-        IconButton(
-            onClick = { onShareClick(coordinates) },
-            enabled = coordinates != null
-        ) {
-            Icon(
-                Icons.Rounded.Share,
-                stringResource(R.string.location_button_share_content_description),
-            )
+    )
+    DisposableEffect(screenLockedOn) {
+        if (screenLockedOn) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
-        IconButton(
-            onClick = { onCopyClick(coordinates) },
-            enabled = coordinates != null
-        ) {
-            Icon(
-                Icons.Rounded.FileCopy,
-                stringResource(R.string.location_coordinates_copy_content_description),
-            )
+        onDispose { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+    }
+    IconToggleButton(
+        checked = screenLockedOn,
+        onCheckedChange = {
+            screenLockedOn = it
+            coroutineScope.launch {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarHostState.showSnackbar(screenLockMessage)
+            }
         }
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.ScreenLockPortrait,
+            contentDescription = stringResource(
+                if (screenLockedOn) {
+                    R.string.location_button_lock_content_description_on
+                } else {
+                    R.string.location_button_lock_content_description_off
+                }
+            ),
+        )
+    }
+}
+
+@Composable
+private fun ShareIconButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    IconButton(onClick = onClick, modifier = modifier, enabled = enabled) {
+        Icon(
+            Icons.Rounded.Share,
+            stringResource(R.string.location_button_share_content_description),
+        )
     }
 }
 
@@ -195,7 +298,7 @@ private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
                 )
             }
             ?: "",
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.labelLarge,
         modifier = modifier
             .widthIn(min = 128.dp)
             .placeholder(visible = timestamp == null)
@@ -203,8 +306,6 @@ private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
 }
 
 @PreviewLightDark
-@PreviewScreenSizes
-@Preview
 @Composable
 private fun LocatingPreview() {
     PositionalTheme {
@@ -227,12 +328,13 @@ private fun LocatingPreview() {
                         speedAccuracy = null,
                         timestamp = null,
                         units = Units.METRIC,
-                        showAccuracies = true,
-                        screenLockedOn = false
+                        showAccuracies = true
                     ),
+                    snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},
                     onMapClick = { _, _ -> },
-                    onShareClick = {}
+                    onShareClick = {},
+                    onInfoClick = {}
                 )
             }
         }
@@ -265,12 +367,13 @@ private fun LocatedPreview() {
                         speedAccuracy = Speed.KilometersPerHour(123.45678f),
                         timestamp = Instant.DISTANT_PAST,
                         units = Units.METRIC,
-                        showAccuracies = true,
-                        screenLockedOn = false
+                        showAccuracies = true
                     ),
+                    snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},
                     onMapClick = { _, _ -> },
-                    onShareClick = {}
+                    onShareClick = {},
+                    onInfoClick = {}
                 )
             }
         }

@@ -27,9 +27,6 @@ class DataStoreSettingsRepository @Inject constructor(
     override val coordinatesFormat: Flow<CoordinatesFormat> =
         context.settingsDataStore.data.map { it.coordinatesFormat.toData() }
 
-    override val lockScreenOn: Flow<Boolean> =
-        context.settingsDataStore.data.map { it.lockScreenOn }
-
     override val showAccuracies: Flow<Boolean> =
         context.settingsDataStore.data.map { it.showAccuracies }
 
@@ -48,12 +45,6 @@ class DataStoreSettingsRepository @Inject constructor(
     override suspend fun setCoordinatesFormat(coordinatesFormat: CoordinatesFormat) {
         context.settingsDataStore.updateData {
             it.toBuilder().setCoordinatesFormat(coordinatesFormat.toProto()).build()
-        }
-    }
-
-    override suspend fun setLockScreenOn(lockScreenOn: Boolean) {
-        context.settingsDataStore.updateData {
-            it.toBuilder().setLockScreenOn(lockScreenOn).build()
         }
     }
 

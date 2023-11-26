@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.NavigateBefore
-import androidx.compose.material.icons.rounded.NavigateNext
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
+import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,7 +43,7 @@ fun SolunarDateControls(
             modifier = Modifier.weight(1f, fill = true)
         ) {
             Icon(
-                imageVector = Icons.Rounded.NavigateBefore,
+                imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                 contentDescription = stringResource(
                     R.string.solunar_button_previous_day_content_description
                 )
@@ -78,7 +78,7 @@ fun SolunarDateControls(
             modifier = Modifier.weight(1f, fill = true)
         ) {
             Icon(
-                imageVector = Icons.Rounded.NavigateNext,
+                imageVector = Icons.AutoMirrored.Rounded.NavigateNext,
                 contentDescription = stringResource(
                     R.string.solunar_button_next_day_content_description
                 )

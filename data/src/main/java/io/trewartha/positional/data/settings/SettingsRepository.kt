@@ -12,8 +12,6 @@ interface SettingsRepository {
 
     val coordinatesFormat: Flow<CoordinatesFormat>
 
-    val lockScreenOn: Flow<Boolean>
-
     val showAccuracies: Flow<Boolean>
 
     val theme: Flow<Theme>
@@ -23,8 +21,6 @@ interface SettingsRepository {
     suspend fun setCompassMode(compassMode: CompassMode)
 
     suspend fun setCoordinatesFormat(coordinatesFormat: CoordinatesFormat)
-
-    suspend fun setLockScreenOn(lockScreenOn: Boolean)
 
     suspend fun setShowAccuracies(showAccuracies: Boolean)
 

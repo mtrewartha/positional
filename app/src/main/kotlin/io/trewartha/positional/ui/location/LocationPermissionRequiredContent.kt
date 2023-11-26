@@ -39,10 +39,7 @@ fun LocationPermissionRequiredContent(
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier.widthIn(max = 384.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -21,6 +21,5 @@ data class LocationState(
     val speed: Speed?,
     val speedAccuracy: Speed?,
     val units: Units?,
-    val showAccuracies: Boolean,
-    val screenLockedOn: Boolean,
+    val showAccuracies: Boolean
 )

@@ -15,9 +15,11 @@ changes over time. When the compass is set to true north mode, the current magne
 your location is added to the magnetic north reading so that the compass shows you readings relative
 to true north instead of magnetic north.
 
-### Why are my accuracies low, unreliable, or unusable?
+### Why am I getting an accuracy warning?
 The overall compass accuracy depends on the current accuracy of your Android device's magnetometer
 and accelerometer. Readings from both sensors are combined to determine which direction you are
-facing. To improve the accuracy of your sensors, you can move your device in a figure eight pattern,
-rotating your wrist as you go. Magnets or any objects that affect the magnetic field around your
-device can also decrease accuracy.
+facing. If either sensor's accuracy falls to a low level, the warning will appear so that you do not
+accidentally rely in a potentially inaccurate compass reading. To improve the accuracy of your
+sensors and compass reading, you can move your device in a figure eight pattern, rotating your wrist
+as you go. Magnets, metals, or any other objects that affect the magnetic field around your device
+can also decrease accuracy.

@@ -2,144 +2,91 @@ package io.trewartha.positional.ui.compass
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.North
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.android.material.color.MaterialColors
+import com.google.android.material.color.MaterialColors.harmonize
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.utils.placeholder
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
 fun Compass(
-    azimuthDegrees: Float,
-    modifier: Modifier = Modifier,
-    northTickColor: Color = Color(
-        MaterialColors.harmonize(
-            Color.Red.toArgb(),
-            MaterialTheme.colorScheme.primary.toArgb()
-        )
-    ),
-    cardinalTickColor: Color = MaterialTheme.colorScheme.onSurface,
-    majorTickColor: Color = cardinalTickColor,
-    minorTickColor: Color = majorTickColor.copy(alpha = 0.3f),
-    northTickLength: Dp = 32.dp,
-    cardinalTickLength: Dp = 24.dp,
-    majorTickLength: Dp = 16.dp,
-    minorTickLength: Dp = 8.dp,
-    northTickWidth: Dp = 24.dp,
-    cardinalTickWidth: Dp = 12.dp,
-    majorTickWidth: Dp = 12.dp,
-    minorTickWidth: Dp = 8.dp,
-    majorTickPeriodDegrees: Int = 45,
-    minorTickPeriodDegrees: Int = 15
+    azimuthDegrees: Float?,
+    modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = modifier.placeholder(visible = azimuthDegrees == null),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier.aspectRatio(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            ConstraintLayout(modifier = Modifier.widthIn(min = 64.dp)) {
-                val (degreesText, symbolText, directionText) = createRefs()
-                val degreesDirectionChain = createVerticalChain(degreesText, directionText)
-                constrain(degreesDirectionChain) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-                Text(
-                    text = "${azimuthDegrees.roundToInt() % 360}",
-                    style = MaterialTheme.typography.displayLarge,
-                    modifier = Modifier.constrainAs(degreesText) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                )
-                Text(
-                    text = "°",
-                    style = MaterialTheme.typography.displayLarge,
-                    modifier = Modifier.constrainAs(symbolText) {
-                        top.linkTo(degreesText.top)
-                        start.linkTo(degreesText.end)
-                    }
-                )
-                Text(
-                    text = stringResource(
-                        when {
-                            AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
-                                R.string.compass_direction_northwest
-                            AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
-                                R.string.compass_direction_northeast
-                            AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
-                                R.string.compass_direction_southwest
-                            AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
-                                R.string.compass_direction_southeast
-                            AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
-                                R.string.compass_direction_east
-                            AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
-                                R.string.compass_direction_south
-                            AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
-                                R.string.compass_direction_west
-                            else ->
-                                R.string.compass_direction_north
-                        }
-                    ),
-                    modifier = Modifier.constrainAs(directionText) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                    style = MaterialTheme.typography.displaySmall
-                )
-            }
-            CompassRose(
-                azimuthDegrees = azimuthDegrees,
-                northTickColor = northTickColor,
-                cardinalTickColor = cardinalTickColor,
-                majorTickColor = majorTickColor,
-                minorTickColor = minorTickColor,
-                northTickLength = northTickLength,
-                cardinalTickLength = cardinalTickLength,
-                majorTickLength = majorTickLength,
-                minorTickLength = minorTickLength,
-                northTickWidth = northTickWidth,
-                cardinalTickWidth = cardinalTickWidth,
-                majorTickWidth = majorTickWidth,
-                minorTickWidth = minorTickWidth,
-                majorTickPeriodDegrees = majorTickPeriodDegrees,
-                minorTickPeriodDegrees = minorTickPeriodDegrees,
-            )
+        CompassReading(azimuthDegrees ?: 0f)
+        CompassRose(azimuthDegrees ?: 0f, Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+private fun CompassReading(azimuthDegrees: Float, modifier: Modifier = Modifier) {
+    ConstraintLayout(modifier) {
+        val (arrowIcon, degreesText, symbolText, directionText) = createRefs()
+        val innerContentChain = createVerticalChain(arrowIcon, degreesText, directionText)
+        constrain(innerContentChain) {
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
         }
+        Icon(
+            Icons.Rounded.North,
+            contentDescription = null,
+            modifier = Modifier
+                .constrainAs(arrowIcon) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        )
+        DegreesText(
+            azimuthDegrees = azimuthDegrees,
+            modifier = Modifier.constrainAs(degreesText) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
+        DegreeSymbolText(
+            modifier = Modifier.constrainAs(symbolText) {
+                top.linkTo(degreesText.top)
+                start.linkTo(degreesText.end)
+            }
+        )
+        DirectionText(
+            azimuthDegrees = azimuthDegrees,
+            modifier = Modifier.constrainAs(directionText) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+        )
     }
 }
 
@@ -147,30 +94,23 @@ fun Compass(
 private fun CompassRose(
     azimuthDegrees: Float,
     modifier: Modifier = Modifier,
-    northTickColor: Color,
-    cardinalTickColor: Color,
-    majorTickColor: Color,
-    minorTickColor: Color,
-    northTickLength: Dp,
-    cardinalTickLength: Dp,
-    majorTickLength: Dp,
-    minorTickLength: Dp,
-    northTickWidth: Dp,
-    cardinalTickWidth: Dp,
-    majorTickWidth: Dp,
-    minorTickWidth: Dp,
-    majorTickPeriodDegrees: Int,
-    minorTickPeriodDegrees: Int
 ) {
-    val displayDensity = LocalDensity.current.density
-    val northTickLengthPx = remember { northTickLength.value * displayDensity }
-    val cardinalTickLengthPx = remember { cardinalTickLength.value * displayDensity }
-    val majorTickLengthPx = remember { majorTickLength.value * displayDensity }
-    val minorTickLengthPx = remember { minorTickLength.value * displayDensity }
-    val northTickWidthPx = remember { northTickWidth.value * displayDensity }
-    val cardinalTickWidthPx = remember { cardinalTickWidth.value * displayDensity }
-    val majorTickWidthPx = remember { majorTickWidth.value * displayDensity }
-    val minorTickWidthPx = remember { minorTickWidth.value * displayDensity }
+    val northTickColor =
+        Color(harmonize(Color.Red.toArgb(), MaterialTheme.colorScheme.primary.toArgb()))
+    val cardinalTickColor = MaterialTheme.colorScheme.onSurface
+    val majorTickColor = MaterialTheme.colorScheme.onSurface
+    val minorTickColor = majorTickColor.copy(alpha = 0.3f)
+
+    val displayDensity = LocalDensity.current
+
+    val northTickLengthPx = remember { with(displayDensity) { TICK_NORTH_LENGTH.toPx() } }
+    val cardinalTickLengthPx = remember { with(displayDensity) { TICK_CARDINAL_LENGTH.toPx() } }
+    val majorTickLengthPx = remember { with(displayDensity) { TICK_MAJOR_LENGTH.toPx() } }
+    val minorTickLengthPx = remember { with(displayDensity) { TICK_MINOR_LENGTH.toPx() } }
+    val northTickWidthPx = remember { with(displayDensity) { TICK_NORTH_WIDTH.toPx() } }
+    val cardinalTickWidthPx = remember { with(displayDensity) { TICK_CARDINAL_WIDTH.toPx() } }
+    val majorTickWidthPx = remember { with(displayDensity) { TICK_MAJOR_WIDTH.toPx() } }
+    val minorTickWidthPx = remember { with(displayDensity) { TICK_MINOR_WIDTH.toPx() } }
 
     val northTickStyle = remember {
         TickStyle(
@@ -200,49 +140,30 @@ private fun CompassRose(
             widthPx = minorTickWidthPx
         )
     }
-
-    val boxPadding = maxOf(northTickLength, cardinalTickLength, majorTickLength, minorTickLength)
-        .let { maxTickLength ->
-            val maxTickCapLength = when (maxTickLength) {
-                northTickLength -> northTickWidthPx
-                cardinalTickLength -> cardinalTickWidthPx
-                majorTickLength -> majorTickWidthPx
-                else -> minorTickWidthPx
-            }.let { it / 2 }.dp
-            maxTickLength + maxTickCapLength
-        }
-    BoxWithConstraints(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.padding(boxPadding)
-    ) {
-        val canvasSizePx = remember { minOf(constraints.maxWidth, constraints.maxHeight).toFloat() }
-        val canvasSizeDp = remember { (canvasSizePx * displayDensity).dp }
-        val center = Offset(canvasSizePx / 2f, canvasSizePx / 2f)
-
+    Box(modifier, contentAlignment = Alignment.Center) {
         // We'll animate the compass rose to the negative of the azimuth so that the rose exactly
         // counteracts the rotation of the Android device, keeping the rose pointed north. We're
         // careful to transition naturally across the 0°/360° boundary because we don't want the
         // rose to completely spin around each time we cross the boundary. The approach has been
         // adapted from the following StackOverflow answer:
         // https://stackoverflow.com/a/68259116/1253644
-        val (lastAnimatedAzimuth, setLastAnimatedAzimuth) = remember { mutableIntStateOf(0) }
-        val animatedAzimuthInt = azimuthDegrees.roundToInt()
+        val (lastAnimatedAzimuth, setLastAnimatedAzimuth) = remember { mutableFloatStateOf(0f) }
         var newAnimatedAzimuth = lastAnimatedAzimuth // We'll update this if necessary
         val modLastAnimatedAzimuth = if (lastAnimatedAzimuth > 0) {
             lastAnimatedAzimuth % DEGREES_360
         } else {
             DEGREES_360 - (-lastAnimatedAzimuth % DEGREES_360)
         }
-        if (modLastAnimatedAzimuth != animatedAzimuthInt) {
-            val clockwiseDiff = if (animatedAzimuthInt > modLastAnimatedAzimuth) {
-                modLastAnimatedAzimuth + DEGREES_360 - animatedAzimuthInt
+        if (modLastAnimatedAzimuth != azimuthDegrees) {
+            val clockwiseDiff = if (azimuthDegrees > modLastAnimatedAzimuth) {
+                modLastAnimatedAzimuth + DEGREES_360 - azimuthDegrees
             } else {
-                modLastAnimatedAzimuth - animatedAzimuthInt
+                modLastAnimatedAzimuth - azimuthDegrees
             }
-            val counterClockwiseDiff = if (animatedAzimuthInt > modLastAnimatedAzimuth) {
-                animatedAzimuthInt - modLastAnimatedAzimuth
+            val counterClockwiseDiff = if (azimuthDegrees > modLastAnimatedAzimuth) {
+                azimuthDegrees - modLastAnimatedAzimuth
             } else {
-                DEGREES_360 - modLastAnimatedAzimuth + animatedAzimuthInt
+                DEGREES_360 - modLastAnimatedAzimuth + azimuthDegrees
             }
             val rotateClockwise = clockwiseDiff < counterClockwiseDiff
             newAnimatedAzimuth = if (rotateClockwise) {
@@ -254,53 +175,89 @@ private fun CompassRose(
             setLastAnimatedAzimuth(newAnimatedAzimuth)
         }
         val animatedRotation: Float by animateFloatAsState(
-            targetValue = -newAnimatedAzimuth.toFloat(),
+            targetValue = -newAnimatedAzimuth,
             label = "Rotation"
         )
 
-        Canvas(
-            modifier = Modifier
-                .size(canvasSizeDp)
-                .rotate(animatedRotation)
-        ) {
-            for (degrees in 0..<DEGREES_360) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val outerRadius = size.minDimension / 2
+            for (tickDegrees in 0..<DEGREES_360) {
                 when {
-                    degrees == CANVAS_DEGREES_NORTH -> northTickStyle
-                    degrees % CARDINAL_DIRECTION_INTERVAL_DEGREES == 0 -> cardinalTickStyle
-                    degrees % majorTickPeriodDegrees == 0 -> majorTickStyle
-                    degrees % minorTickPeriodDegrees == 0 -> minorTickStyle
+                    tickDegrees == DEGREES_0 -> northTickStyle
+                    tickDegrees % TICK_PERIOD_DEGREES_CARDINAL == 0 -> cardinalTickStyle
+                    tickDegrees % TICK_PERIOD_DEGREES_MAJOR == 0 -> majorTickStyle
+                    tickDegrees % TICK_PERIOD_DEGREES_MINOR == 0 -> minorTickStyle
                     else -> null
                 }?.let { tickStyle ->
-                    drawTick(center, degrees, tickStyle)
+                    val combinedAngle =
+                        (animatedRotation + tickDegrees) + COMPASS_CANVAS_ROTATION_DIFF
+                    val cos = cos(combinedAngle.toRadians())
+                    val sin = sin(combinedAngle.toRadians())
+
+                    // End is the outermost point of the tick mark, start is the innermost point.
+                    // Note that these should account for the extra length the cap adds to each end
+                    // of the line.
+                    val capLength = tickStyle.widthPx / 2f
+                    val outerRadiusForLine = outerRadius - capLength
+                    val end = center + Offset(cos * outerRadiusForLine, sin * outerRadiusForLine)
+                    val start = end - Offset(cos * tickStyle.lengthPx, sin * tickStyle.lengthPx)
+
+                    drawLine(
+                        color = tickStyle.color,
+                        start = start,
+                        end = end,
+                        strokeWidth = tickStyle.widthPx,
+                        cap = StrokeCap.Round
+                    )
                 }
             }
         }
     }
 }
 
-/**
- * Draws a tick mark in a compass rose
- *
- * @param center the center of the compass rose
- * @param degrees the location of the tick mark in clockwise degrees from the X-axis
- * @param tickStyle the styling to apply to the tick mark
- */
-private fun DrawScope.drawTick(center: Offset, degrees: Int, tickStyle: TickStyle) {
-    val cos = cos(degrees.toFloat().toRadians())
-    val sin = sin(degrees.toFloat().toRadians())
-    val start = center + Offset(cos * center.x, sin * center.y)
-    val end = when {
-        cos >= 0 && sin >= 0 -> start + Offset(cos * tickStyle.lengthPx, sin * tickStyle.lengthPx)
-        cos >= 0 && sin < 0 -> start + Offset(cos * tickStyle.lengthPx, sin * tickStyle.lengthPx)
-        cos < 0 && sin >= 0 -> start + Offset(cos * tickStyle.lengthPx, sin * tickStyle.lengthPx)
-        else -> start + Offset(cos * tickStyle.lengthPx, sin * tickStyle.lengthPx)
-    }
-    drawLine(
-        color = tickStyle.color,
-        start = start,
-        end = end,
-        strokeWidth = tickStyle.widthPx,
-        cap = StrokeCap.Round
+@Composable
+private fun DegreesText(azimuthDegrees: Float, modifier: Modifier = Modifier) {
+    Text(
+        text = "${azimuthDegrees.roundToInt() % 360}",
+        modifier = modifier,
+        style = MaterialTheme.typography.displayLarge
+    )
+}
+
+@Composable
+private fun DegreeSymbolText(modifier: Modifier = Modifier) {
+    Text(
+        text = "°",
+        modifier = modifier,
+        style = MaterialTheme.typography.displayLarge
+    )
+}
+
+@Composable
+private fun DirectionText(azimuthDegrees: Float, modifier: Modifier = Modifier) {
+    Text(
+        text = stringResource(
+            when {
+                AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
+                    R.string.compass_direction_northwest
+                AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
+                    R.string.compass_direction_northeast
+                AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
+                    R.string.compass_direction_southwest
+                AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
+                    R.string.compass_direction_southeast
+                AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
+                    R.string.compass_direction_east
+                AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
+                    R.string.compass_direction_south
+                AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
+                    R.string.compass_direction_west
+                else ->
+                    R.string.compass_direction_north
+            }
+        ),
+        modifier = modifier,
+        style = MaterialTheme.typography.displaySmall
     )
 }
 
@@ -320,11 +277,22 @@ private const val AZIMUTH_SW_MIN = AZIMUTH_S_MAX
 private const val AZIMUTH_SW_MAX = AZIMUTH_W_MIN
 private const val AZIMUTH_NW_MIN = AZIMUTH_W_MAX
 private const val AZIMUTH_NW_MAX = AZIMUTH_N_MIN
-private const val CANVAS_DEGREES_NORTH =
-    270 // since canvas angles are measured clockwise off X-axis
-private const val CARDINAL_DIRECTION_INTERVAL_DEGREES = 90
+private const val COMPASS_CANVAS_ROTATION_DIFF = -90f
+private const val DEGREES_0 = 0
 private const val DEGREES_180 = 180f
 private const val DEGREES_360 = 360
+private const val TICK_PERIOD_DEGREES_CARDINAL = 90
+private const val TICK_PERIOD_DEGREES_MAJOR = 45
+private const val TICK_PERIOD_DEGREES_MINOR = 15
+
+private val TICK_NORTH_WIDTH = 24.dp
+private val TICK_NORTH_LENGTH = 32.dp
+private val TICK_CARDINAL_WIDTH = 12.dp
+private val TICK_CARDINAL_LENGTH = 24.dp
+private val TICK_MAJOR_WIDTH = 12.dp
+private val TICK_MAJOR_LENGTH = 16.dp
+private val TICK_MINOR_WIDTH = 8.dp
+private val TICK_MINOR_LENGTH = 8.dp
 
 private data class TickStyle(
     val color: Color,
@@ -335,11 +303,12 @@ private data class TickStyle(
 private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 
 @PreviewLightDark
+@PreviewScreenSizes
 @Composable
 private fun CompassPreview() {
     PositionalTheme {
-        Surface {
-            Compass(azimuthDegrees = 0f)
+        Surface(Modifier.size(600.dp, 300.dp)) {
+            Compass(azimuthDegrees = 25f)
         }
     }
 }
