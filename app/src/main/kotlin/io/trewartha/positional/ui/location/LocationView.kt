@@ -47,7 +47,9 @@ import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.R
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
@@ -79,13 +81,16 @@ fun NavGraphBuilder.locationView(
         val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
 
         val viewModel: LocationViewModel = hiltViewModel()
-        val state by viewModel.state.collectAsStateWithLifecycle()
+        val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()
+        val location by viewModel.location.collectAsStateWithLifecycle()
+        val showAccuracies by viewModel.showAccuracies.collectAsStateWithLifecycle()
+        val units by viewModel.units.collectAsStateWithLifecycle()
 
         val context = LocalContext.current
         val locale = LocalLocale.current
         CompositionLocalProvider(
-            LocalCoordinatesFormatter provides when (state.coordinatesFormat) {
-                CoordinatesFormat.DD -> DecimalDegreesFormatter(context, locale)
+            LocalCoordinatesFormatter provides when (coordinatesFormat) {
+                CoordinatesFormat.DD, null -> DecimalDegreesFormatter(context, locale)
                 CoordinatesFormat.DDM -> DegreesDecimalMinutesFormatter(context, locale)
                 CoordinatesFormat.DMS -> DegreesMinutesSecondsFormatter(context, locale)
                 CoordinatesFormat.MGRS -> MgrsFormatter(context)
@@ -95,7 +100,9 @@ fun NavGraphBuilder.locationView(
             val coordinatesFormatter = LocalCoordinatesFormatter.current
             LocationView(
                 locationPermissionsState = locationPermissionsState,
-                state = state,
+                location = location,
+                showAccuracies = showAccuracies,
+                units = units,
                 snackbarHostState = snackbarHostState,
                 onAndroidSettingsClick = onAndroidSettingsClick,
             ) { coordinates ->
@@ -108,7 +115,9 @@ fun NavGraphBuilder.locationView(
 @Composable
 private fun LocationView(
     locationPermissionsState: MultiplePermissionsState,
-    state: LocationState,
+    location: Location?,
+    showAccuracies: Boolean?,
+    units: Units?,
     snackbarHostState: SnackbarHostState,
     onAndroidSettingsClick: () -> Unit,
     onShareClick: (Coordinates?) -> Unit,
@@ -126,7 +135,9 @@ private fun LocationView(
         val dateTimeFormatter = LocalDateTimeFormatter.current
 
         LocationPermissionGrantedContent(
-            state = state,
+            location = location,
+            showAccuracies = showAccuracies,
+            units = units,
             snackbarHostState = snackbarHostState,
             onCopyClick = { coordinates ->
                 coroutineScope.launch {
@@ -234,34 +245,24 @@ private fun shareCoordinates(
 @Composable
 private fun PermissionNotGrantedPreview() {
     PositionalTheme {
-        LocationView(
-            locationPermissionsState = object : MultiplePermissionsState {
-                override val allPermissionsGranted: Boolean = false
-                override val permissions: List<PermissionState> = emptyList()
-                override val revokedPermissions: List<PermissionState> = emptyList()
-                override val shouldShowRationale: Boolean = false
-                override fun launchMultiplePermissionRequest() {
-                    // Don't do anything
-                }
-            },
-            state = LocationState(
-                coordinates = null,
-                coordinatesFormat = CoordinatesFormat.DD,
-                horizontalAccuracy = null,
-                bearing = null,
-                bearingAccuracy = null,
-                altitude = null,
-                altitudeAccuracy = null,
-                speed = null,
-                speedAccuracy = null,
-                timestamp = null,
+        Surface {
+            LocationView(
+                locationPermissionsState = object : MultiplePermissionsState {
+                    override val allPermissionsGranted: Boolean = false
+                    override val permissions: List<PermissionState> = emptyList()
+                    override val revokedPermissions: List<PermissionState> = emptyList()
+                    override val shouldShowRationale: Boolean = false
+                    override fun launchMultiplePermissionRequest() {
+                        // Don't do anything
+                    }
+                },
+                location = null,
                 showAccuracies = true,
-                units = Units.METRIC
-            ),
-            snackbarHostState = SnackbarHostState(),
-            onAndroidSettingsClick = {},
-            onShareClick = {}
-        )
+                units = null,
+                snackbarHostState = SnackbarHostState(),
+                onAndroidSettingsClick = {}
+            ) {}
+        }
     }
 }
 
@@ -287,24 +288,12 @@ private fun LocatingPreview() {
                             // Don't do anything
                         }
                     },
-                    state = LocationState(
-                        coordinates = null,
-                        coordinatesFormat = CoordinatesFormat.DD,
-                        horizontalAccuracy = null,
-                        bearing = null,
-                        bearingAccuracy = null,
-                        altitude = null,
-                        altitudeAccuracy = null,
-                        speed = null,
-                        speedAccuracy = null,
-                        timestamp = null,
-                        showAccuracies = true,
-                        units = Units.METRIC
-                    ),
+                    location = null,
+                    showAccuracies = true,
+                    units = null,
                     snackbarHostState = SnackbarHostState(),
-                    onAndroidSettingsClick = {},
-                    onShareClick = {}
-                )
+                    onAndroidSettingsClick = {}
+                ) {}
             }
         }
     }
@@ -333,27 +322,26 @@ private fun LocatedPreview() {
                             // Don't do anything
                         }
                     },
-                    state = LocationState(
+                    location = Location(
                         coordinates = Coordinates(
                             latitude = 123.456789,
                             longitude = 123.456789
                         ),
-                        coordinatesFormat = CoordinatesFormat.DD,
                         horizontalAccuracy = Distance.Meters(123.45678f),
                         bearing = Angle.Degrees(123.45678f),
                         bearingAccuracy = Angle.Degrees(123.45678f),
                         altitude = Distance.Meters(123.45678f),
                         altitudeAccuracy = Distance.Meters(123.45678f),
+                        magneticDeclination = Angle.Degrees(1f),
                         speed = Speed.KilometersPerHour(123.45678f),
                         speedAccuracy = Speed.KilometersPerHour(123.45678f),
                         timestamp = Instant.DISTANT_PAST,
-                        showAccuracies = true,
-                        units = Units.METRIC
                     ),
+                    showAccuracies = true,
+                    units = Units.METRIC,
                     snackbarHostState = SnackbarHostState(),
-                    onAndroidSettingsClick = {},
-                    onShareClick = {}
-                )
+                    onAndroidSettingsClick = {}
+                ) {}
             }
         }
     }

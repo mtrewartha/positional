@@ -1,7 +1,7 @@
 package io.trewartha.positional.ui.utils.format.coordinates
 
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.ui.location.Coordinates
 
 /**
  * Formats location coordinates into a list of strings for display to the user

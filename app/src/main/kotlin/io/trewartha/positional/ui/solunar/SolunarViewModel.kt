@@ -53,7 +53,7 @@ class SolunarViewModel @Inject constructor(
      */
     val selectedDateTwilights: Flow<SolarTimes>
         get() = combine(selectedDate, location) { date, location ->
-            getDailyTwilightTimes(date, location.latitude, location.longitude)
+            getDailyTwilightTimes(location.coordinates, date)
         }
 
     /**

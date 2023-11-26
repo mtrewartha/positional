@@ -1,5 +1,6 @@
 package io.trewartha.positional.data.solunar
 
+import io.trewartha.positional.data.location.Coordinates
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
@@ -9,98 +10,90 @@ import kotlinx.datetime.LocalTime
 interface SolarTimesRepository {
 
     /**
-     * Gets the local time of astronomical dawn given a date at a latitude and longitude
+     * Gets the local time of astronomical dawn at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of astronomical dawn or `null` if there is none on the given date at
-     * the given location
+     * @return the local time of astronomical dawn or `null` if there is none at the given place on
+     * the given date
      */
-    fun getAstronomicalDawn(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getAstronomicalDawn(coordinates: Coordinates, date: LocalDate): LocalTime?
 
     /**
-     * Gets the local time of astronomical dusk given a date at a latitude and longitude
+     * Gets the local time of astronomical dusk at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of astronomical dusk or `null` if there is none on the given date at
-     * the given location
+     * @return the local time of astronomical dusk or `null` if there is none at the given place on
+     * the given date
      */
-    fun getAstronomicalDusk(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getAstronomicalDusk(coordinates: Coordinates, date: LocalDate): LocalTime?
 
     /**
-     * Gets the local time of civil dawn given a date at a latitude and longitude
+     * Gets the local time of civil dawn at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of civil dawn or `null` if there is none on the given date at the
-     * given location
+     * @return the local time of civil dawn or `null` if there is none at the given place on the
+     * given date
      */
-    fun getCivilDawn(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getCivilDawn(coordinates: Coordinates, date: LocalDate): LocalTime?
 
     /**
-     * Gets the local time of civil dusk given a date at a latitude and longitude
+     * Gets the local time of civil dusk at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of civil dusk or `null` if there is none on the given date at the
-     * given location
+     * @return the local time of civil dusk or `null` if there is none at the given place on the
+     * given date
      */
-    fun getCivilDusk(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getCivilDusk(coordinates: Coordinates, date: LocalDate): LocalTime?
 
     /**
-     * Gets the local time of nautical dawn given a date at a latitude and longitude
+     * Gets the local time of nautical dawn at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of nautical dawn or `null` if there is none on the given date at the
-     * given location
+     * @return the local time of nautical dawn or `null` if there is none at the given place on the
+     * given date
      */
-    fun getNauticalDawn(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getNauticalDawn(coordinates: Coordinates, date: LocalDate): LocalTime?
 
     /**
-     * Gets the local time of nautical dusk given a date at a latitude and longitude
+     * Gets the local time of nautical dusk at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of nautical dusk or `null` if there is none on the given date at the
-     * given location
+     * @return the local time of nautical dusk or `null` if there is none at the given place on the
+     * given date
      */
-    fun getNauticalDusk(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getNauticalDusk(coordinates: Coordinates, date: LocalDate): LocalTime?
 
     /**
-     * Gets the local time of sunrise given a date at a latitude and longitude
+     * Gets the local time of sunrise at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of sunrise or `null` if there is none on the given date at the given
-     * location
+     * @return the local time of sunrise or `null` if there is none at the given place on the given
+     * date
      */
-    fun getSunrise(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getSunrise(coordinates: Coordinates, date: LocalDate): LocalTime?
 
     /**
-     * Gets the local time of sunset given a date at a latitude and longitude
+     * Gets the local time of sunset at a given place on a given date
      *
-     * @param date the local date at the location denoted by [latitude] and [longitude]
-     * @param latitude the latitude of the location
-     * @param longitude the longitude of the location
+     * @param coordinates Coordinates of the place
+     * @param date Local date at the place
      *
-     * @return the local time of sunset or `null` if there is none on the given date at the given
-     * location
+     * @return the local time of sunset or `null` if there is none at the given place on the given
+     * date
      */
-    fun getSunset(date: LocalDate, latitude: Double, longitude: Double): LocalTime?
+    fun getSunset(coordinates: Coordinates, date: LocalDate): LocalTime?
 }

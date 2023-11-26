@@ -2,6 +2,7 @@ package io.trewartha.positional.domain.solunar
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.solunar.LibrarySolarTimesRepository
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -20,8 +21,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
     val dates = listOf(JAN_1_2000, MAR_1_2000, JUN_1_2000, SEP_1_2000, DEC_1_2000)
 
     // Duluth, MN (according to Google)
-    val latitude = 46.7867
-    val longitude = -92.1005
+    val coordinates = Coordinates(46.7867, -92.1005)
 
     beforeTest {
         subject = LibrarySolarTimesRepository()
@@ -30,7 +30,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
     given("a date at a specific location") {
         `when`("astronomical dawn is calculated") {
             val astronomicalDawns = dates.associateWith { date ->
-                subject.getAstronomicalDawn(date, latitude, longitude)
+                subject.getAstronomicalDawn(coordinates, date)
             }
             then("then it is correct") {
                 astronomicalDawns[JAN_1_2000]!!.shouldBe(LocalTime(6, 3))
@@ -42,7 +42,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
         }
         `when`("nautical dawn is calculated") {
             val nauticalDawns = dates.associateWith { date ->
-                subject.getNauticalDawn(date, latitude, longitude)
+                subject.getNauticalDawn(coordinates, date)
             }
             then("then it is correct") {
                 nauticalDawns[JAN_1_2000]!!.shouldBe(LocalTime(6, 40))
@@ -54,7 +54,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
         }
         `when`("civil dawn is calculated") {
             val civilDawns = dates.associateWith { date ->
-                subject.getCivilDawn(date, latitude, longitude)
+                subject.getCivilDawn(coordinates, date)
             }
             then("then it is correct") {
                 civilDawns[JAN_1_2000]!!.shouldBe(LocalTime(7, 18))
@@ -66,7 +66,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
         }
         `when`("sunrise is calculated") {
             val sunrises = dates.associateWith { date ->
-                subject.getSunrise(date, latitude, longitude)
+                subject.getSunrise(coordinates, date)
             }
             then("then it is correct") {
                 sunrises[JAN_1_2000]!!.shouldBe(LocalTime(7, 54))
@@ -78,7 +78,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
         }
         `when`("sunset is calculated") {
             val sunsets = dates.associateWith { date ->
-                subject.getSunset(date, latitude, longitude)
+                subject.getSunset(coordinates, date)
             }
             then("then it is correct") {
                 sunsets[JAN_1_2000]!!.shouldBe(LocalTime(16, 31))
@@ -90,7 +90,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
         }
         `when`("civil dusk is calculated") {
             val civilDusks = dates.associateWith { date ->
-                subject.getCivilDusk(date, latitude, longitude)
+                subject.getCivilDusk(coordinates, date)
             }
             then("then it is correct") {
                 civilDusks[JAN_1_2000]!!.shouldBe(LocalTime(17, 6))
@@ -102,7 +102,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
         }
         `when`("nautical dusk is calculated") {
             val nauticalDusks = dates.associateWith { date ->
-                subject.getNauticalDusk(date, latitude, longitude)
+                subject.getNauticalDusk(coordinates, date)
             }
             then("then it is correct") {
                 nauticalDusks[JAN_1_2000]!!.shouldBe(LocalTime(17, 44))
@@ -114,7 +114,7 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
         }
         `when`("astronomical dusk is calculated") {
             val astronomicalDusks = dates.associateWith { date ->
-                subject.getAstronomicalDusk(date, latitude, longitude)
+                subject.getAstronomicalDusk(coordinates, date)
             }
             then("then it is correct") {
                 astronomicalDusks[JAN_1_2000]!!.shouldBe(LocalTime(18, 21))

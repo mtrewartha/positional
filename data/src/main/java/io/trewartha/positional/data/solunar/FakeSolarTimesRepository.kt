@@ -1,110 +1,89 @@
 package io.trewartha.positional.data.solunar
 
+import io.trewartha.positional.data.location.Coordinates
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
 class FakeSolarTimesRepository : SolarTimesRepository {
 
-    private val sunrises = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
-    private val sunsets = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
-    private val astronomicalDawns = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
-    private val astronomicalDusks = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
-    private val nauticalDawns = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
-    private val nauticalDusks = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
-    private val civilDawns = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
-    private val civilDusks = mutableMapOf<Triple<LocalDate, Double, Double>, LocalTime?>()
+    private val sunrises = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
+    private val sunsets = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
+    private val astronomicalDawns = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
+    private val astronomicalDusks = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
+    private val nauticalDawns = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
+    private val nauticalDusks = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
+    private val civilDawns = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
+    private val civilDusks = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
 
-    override fun getSunrise(date: LocalDate, latitude: Double, longitude: Double): LocalTime? =
-        sunrises[Triple(date, latitude, longitude)]
+    override fun getSunrise(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        sunrises[Pair(coordinates, date)]
 
-    override fun getSunset(date: LocalDate, latitude: Double, longitude: Double): LocalTime? =
-        sunsets[Triple(date, latitude, longitude)]
+    override fun getSunset(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        sunsets[Pair(coordinates, date)]
 
-    override fun getCivilDawn(
-        date: LocalDate,
-        latitude: Double,
-        longitude: Double
-    ): LocalTime? = civilDawns[Triple(date, latitude, longitude)]
+    override fun getCivilDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        civilDawns[Pair(coordinates, date)]
 
-    override fun getCivilDusk(
-        date: LocalDate,
-        latitude: Double,
-        longitude: Double
-    ): LocalTime? = civilDusks[Triple(date, latitude, longitude)]
+    override fun getCivilDusk(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        civilDusks[Pair(coordinates, date)]
 
-    override fun getNauticalDawn(
-        date: LocalDate,
-        latitude: Double,
-        longitude: Double
-    ): LocalTime? = nauticalDawns[Triple(date, latitude, longitude)]
+    override fun getNauticalDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        nauticalDawns[Pair(coordinates, date)]
 
-    override fun getNauticalDusk(
-        date: LocalDate,
-        latitude: Double,
-        longitude: Double
-    ): LocalTime? = nauticalDusks[Triple(date, latitude, longitude)]
+    override fun getNauticalDusk(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        nauticalDusks[Pair(coordinates, date)]
 
-    override fun getAstronomicalDawn(
-        date: LocalDate,
-        latitude: Double,
-        longitude: Double
-    ): LocalTime? = astronomicalDawns[Triple(date, latitude, longitude)]
+    override fun getAstronomicalDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        astronomicalDawns[Pair(coordinates, date)]
 
-    override fun getAstronomicalDusk(
-        date: LocalDate,
-        latitude: Double,
-        longitude: Double
-    ): LocalTime? = astronomicalDusks[Triple(date, latitude, longitude)]
+    override fun getAstronomicalDusk(coordinates: Coordinates, date: LocalDate): LocalTime? =
+        astronomicalDusks[Pair(coordinates, date)]
 
     fun setAstronomicalDawn(
+        coordinates: Coordinates,
         date: LocalDate,
-        latitude: Double,
-        longitude: Double,
         astronomicalDawn: LocalTime?
     ) {
-        astronomicalDawns[Triple(date, latitude, longitude)] = astronomicalDawn
+        astronomicalDawns[Pair(coordinates, date)] = astronomicalDawn
     }
 
     fun setAstronomicalDusk(
+        coordinates: Coordinates,
         date: LocalDate,
-        latitude: Double,
-        longitude: Double,
         astronomicalDusk: LocalTime?
     ) {
-        astronomicalDusks[Triple(date, latitude, longitude)] = astronomicalDusk
+        astronomicalDusks[Pair(coordinates, date)] = astronomicalDusk
     }
 
-    fun setCivilDawn(date: LocalDate, latitude: Double, longitude: Double, civilDawn: LocalTime?) {
-        civilDawns[Triple(date, latitude, longitude)] = civilDawn
+    fun setCivilDawn(coordinates: Coordinates, date: LocalDate, civilDawn: LocalTime?) {
+        civilDawns[Pair(coordinates, date)] = civilDawn
     }
 
-    fun setCivilDusk(date: LocalDate, latitude: Double, longitude: Double, civilDusk: LocalTime?) {
-        civilDusks[Triple(date, latitude, longitude)] = civilDusk
+    fun setCivilDusk(coordinates: Coordinates, date: LocalDate, civilDusk: LocalTime?) {
+        civilDusks[Pair(coordinates, date)] = civilDusk
     }
 
     fun setNauticalDawn(
+        coordinates: Coordinates,
         date: LocalDate,
-        latitude: Double,
-        longitude: Double,
         nauticalDawn: LocalTime?
     ) {
-        nauticalDawns[Triple(date, latitude, longitude)] = nauticalDawn
+        nauticalDawns[Pair(coordinates, date)] = nauticalDawn
     }
 
     fun setNauticalDusk(
+        coordinates: Coordinates,
         date: LocalDate,
-        latitude: Double,
-        longitude: Double,
         nauticalDusk: LocalTime?
     ) {
-        nauticalDusks[Triple(date, latitude, longitude)] = nauticalDusk
+        nauticalDusks[Pair(coordinates, date)] = nauticalDusk
     }
 
-    fun setSunrise(date: LocalDate, latitude: Double, longitude: Double, sunrise: LocalTime?) {
-        sunrises[Triple(date, latitude, longitude)] = sunrise
+    fun setSunrise(coordinates: Coordinates, date: LocalDate, sunrise: LocalTime?) {
+        sunrises[Pair(coordinates, date)] = sunrise
     }
 
-    fun setSunset(date: LocalDate, latitude: Double, longitude: Double, sunset: LocalTime?) {
-        sunsets[Triple(date, latitude, longitude)] = sunset
+    fun setSunset(coordinates: Coordinates, date: LocalDate, sunset: LocalTime?) {
+        sunsets[Pair(coordinates, date)] = sunset
     }
 }

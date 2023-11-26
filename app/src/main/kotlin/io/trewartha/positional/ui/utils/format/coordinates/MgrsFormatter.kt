@@ -4,8 +4,8 @@ import android.content.Context
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.MGRSCoord
 import io.trewartha.positional.R
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.ui.location.Coordinates
 
 class MgrsFormatter(private val context: Context) : CoordinatesFormatter {
 

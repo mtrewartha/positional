@@ -4,7 +4,6 @@ import android.location.Location as AndroidLocation
 import android.hardware.GeomagneticField
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
-import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
@@ -78,8 +77,7 @@ internal val AndroidLocation.timestamp: Instant
     }
 
 fun AndroidLocation.toLocation(): Location = Location(
-    latitude = latitude,
-    longitude = longitude,
+    coordinates = Coordinates(latitude, longitude),
     horizontalAccuracy = horizontalAccuracy,
     bearing = bearingObject,
     bearingAccuracy = bearingAccuracy,

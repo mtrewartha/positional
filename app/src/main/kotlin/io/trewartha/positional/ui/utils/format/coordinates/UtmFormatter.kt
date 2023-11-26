@@ -4,8 +4,8 @@ import android.content.Context
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.UTMCoord
 import io.trewartha.positional.R
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.location.CoordinatesFormat
-import io.trewartha.positional.ui.location.Coordinates
 import java.util.Locale
 
 class UtmFormatter(

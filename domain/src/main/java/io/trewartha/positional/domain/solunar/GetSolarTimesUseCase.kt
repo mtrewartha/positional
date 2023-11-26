@@ -1,5 +1,6 @@
 package io.trewartha.positional.domain.solunar
 
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.solunar.SolarTimes
 import io.trewartha.positional.data.solunar.SolarTimesRepository
 import kotlinx.datetime.LocalDate
@@ -13,31 +14,22 @@ class GetSolarTimesUseCase @Inject constructor(
 ) {
 
     /**
-     * Gets the [solar times][SolarTimes] for a given location and date
+     * Gets the [solar times][SolarTimes] for given coordinates and a given date
      *
-     * @param localDate Date that's local to the given [latitude] and [longitude]
-     * @param latitude Latitude of the location
-     * @param longitude Longitude of the location
+     * @param coordinates Geographic coordinates
+     * @param date Local date at the given coordinates
      *
      * @return The [solar times][SolarTimes] on the given date at the given location
      */
-    operator fun invoke(localDate: LocalDate, latitude: Double, longitude: Double): SolarTimes =
+    operator fun invoke(coordinates: Coordinates, date: LocalDate): SolarTimes =
         SolarTimes(
-            astronomicalDawn = solarTimesRepository.getAstronomicalDawn(
-                localDate,
-                latitude,
-                longitude
-            ),
-            nauticalDawn = solarTimesRepository.getNauticalDawn(localDate, latitude, longitude),
-            civilDawn = solarTimesRepository.getCivilDawn(localDate, latitude, longitude),
-            sunrise = solarTimesRepository.getSunrise(localDate, latitude, longitude),
-            sunset = solarTimesRepository.getSunset(localDate, latitude, longitude),
-            civilDusk = solarTimesRepository.getCivilDusk(localDate, latitude, longitude),
-            nauticalDusk = solarTimesRepository.getNauticalDusk(localDate, latitude, longitude),
-            astronomicalDusk = solarTimesRepository.getAstronomicalDusk(
-                localDate,
-                latitude,
-                longitude
-            ),
+            astronomicalDawn = solarTimesRepository.getAstronomicalDawn(coordinates, date),
+            nauticalDawn = solarTimesRepository.getNauticalDawn(coordinates, date),
+            civilDawn = solarTimesRepository.getCivilDawn(coordinates, date),
+            sunrise = solarTimesRepository.getSunrise(coordinates, date),
+            sunset = solarTimesRepository.getSunset(coordinates, date),
+            civilDusk = solarTimesRepository.getCivilDusk(coordinates, date),
+            nauticalDusk = solarTimesRepository.getNauticalDusk(coordinates, date),
+            astronomicalDusk = solarTimesRepository.getAstronomicalDusk(coordinates, date),
         )
 }

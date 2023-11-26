@@ -2,6 +2,7 @@ package io.trewartha.positional.domain.solunar
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.solunar.FakeSolarTimesRepository
 import io.trewartha.positional.data.solunar.SolarTimes
 import kotlinx.datetime.LocalDate
@@ -21,8 +22,7 @@ class GetSolarTimesUseCaseSpec : BehaviorSpec({
     given("a date, latitude, and longitude") {
 
         val localDate = LocalDate(2000, Month.JANUARY, 1)
-        val latitude = 1.23
-        val longitude = 4.56
+        val coordinates = Coordinates(1.23, 4.56)
         val astronomicalDawn = LocalTime(0, 0, 1)
         val nauticalDawn = LocalTime(0, 0, 2)
         val civilDawn = LocalTime(0, 0, 3)
@@ -38,16 +38,16 @@ class GetSolarTimesUseCaseSpec : BehaviorSpec({
 
             beforeEach {
                 with(fakeSolarTimesRepository) {
-                    setAstronomicalDawn(localDate, latitude, longitude, astronomicalDawn)
-                    setNauticalDawn(localDate, latitude, longitude, nauticalDawn)
-                    setCivilDawn(localDate, latitude, longitude, civilDawn)
-                    setSunrise(localDate, latitude, longitude, sunrise)
-                    setSunset(localDate, latitude, longitude, sunset)
-                    setCivilDusk(localDate, latitude, longitude, civilDusk)
-                    setNauticalDusk(localDate, latitude, longitude, nauticalDusk)
-                    setAstronomicalDusk(localDate, latitude, longitude, astronomicalDusk)
+                    setAstronomicalDawn(coordinates, localDate, astronomicalDawn)
+                    setNauticalDawn(coordinates, localDate, nauticalDawn)
+                    setCivilDawn(coordinates, localDate, civilDawn)
+                    setSunrise(coordinates, localDate, sunrise)
+                    setSunset(coordinates, localDate, sunset)
+                    setCivilDusk(coordinates, localDate, civilDusk)
+                    setNauticalDusk(coordinates, localDate, nauticalDusk)
+                    setAstronomicalDusk(coordinates, localDate, astronomicalDusk)
                 }
-                result = subject(localDate, latitude, longitude)
+                result = subject(coordinates, localDate)
             }
 
             then("solar times are returned for the correct date, latitude, and longitude") {

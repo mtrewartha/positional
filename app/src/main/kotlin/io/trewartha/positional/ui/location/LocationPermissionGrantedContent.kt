@@ -36,7 +36,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
-import io.trewartha.positional.data.location.CoordinatesFormat
+import io.trewartha.positional.data.location.Coordinates
+import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
@@ -57,7 +58,9 @@ import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun LocationPermissionGrantedContent(
-    state: LocationState,
+    location: Location?,
+    showAccuracies: Boolean?,
+    units: Units?,
     snackbarHostState: SnackbarHostState,
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
@@ -65,7 +68,7 @@ fun LocationPermissionGrantedContent(
     onInfoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val placeholdersVisible = state.timestamp == null
+    val placeholdersVisible = location == null || showAccuracies == null || units == null
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +78,8 @@ fun LocationPermissionGrantedContent(
         ),
     ) {
         CoordinatesView(
-            state = state,
+            coordinates = location?.coordinates,
+            timestamp = location?.timestamp,
             snackbarHostState = snackbarHostState,
             onCopyClick = onCopyClick,
             onMapClick = onMapClick,
@@ -84,34 +88,34 @@ fun LocationPermissionGrantedContent(
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             AccuracyBlock(
-                accuracy = state.horizontalAccuracy,
-                units = state.units,
-                showAccuracy = state.showAccuracies,
+                accuracy = location?.horizontalAccuracy,
+                units = units,
+                showAccuracy = showAccuracies,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
             AltitudeBlock(
-                altitude = state.altitude,
-                accuracy = state.altitudeAccuracy,
-                units = state.units,
-                showAccuracy = state.showAccuracies,
+                altitude = location?.altitude,
+                accuracy = location?.altitudeAccuracy,
+                units = units,
+                showAccuracy = showAccuracies,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             SpeedBlock(
-                speed = state.speed,
-                accuracy = state.speedAccuracy,
-                units = state.units,
-                showAccuracy = state.showAccuracies,
+                speed = location?.speed,
+                accuracy = location?.speedAccuracy,
+                units = units,
+                showAccuracy = showAccuracies,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
             BearingBlock(
-                bearing = state.bearing,
-                accuracy = state.bearingAccuracy,
-                showAccuracy = state.showAccuracies,
+                bearing = location?.bearing,
+                accuracy = location?.bearingAccuracy,
+                showAccuracy = showAccuracies,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
@@ -167,7 +171,8 @@ private fun Coordinates(
 
 @Composable
 private fun CoordinatesView(
-    state: LocationState,
+    coordinates: Coordinates?,
+    timestamp: Instant?,
     snackbarHostState: SnackbarHostState,
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
@@ -180,11 +185,11 @@ private fun CoordinatesView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
     ) {
-        Coordinates(coordinates = state.coordinates)
-        UpdatedAtText(timestamp = state.timestamp)
+        Coordinates(coordinates = coordinates)
+        UpdatedAtText(timestamp = timestamp)
         ButtonRow(
-            coordinates = state.coordinates,
-            timestamp = state.timestamp,
+            coordinates = coordinates,
+            timestamp = timestamp,
             snackbarHostState = snackbarHostState,
             onCopyClick = onCopyClick,
             onMapClick = onMapClick,
@@ -316,20 +321,9 @@ private fun LocatingPreview() {
                 LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
             ) {
                 LocationPermissionGrantedContent(
-                    state = LocationState(
-                        coordinates = null,
-                        coordinatesFormat = CoordinatesFormat.DD,
-                        horizontalAccuracy = null,
-                        bearing = null,
-                        bearingAccuracy = null,
-                        altitude = null,
-                        altitudeAccuracy = null,
-                        speed = null,
-                        speedAccuracy = null,
-                        timestamp = null,
-                        units = Units.METRIC,
-                        showAccuracies = true
-                    ),
+                    location = null,
+                    showAccuracies = true,
+                    units = Units.METRIC,
                     snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},
                     onMapClick = { _, _ -> },
@@ -355,20 +349,20 @@ private fun LocatedPreview() {
                 LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
             ) {
                 LocationPermissionGrantedContent(
-                    state = LocationState(
+                    location = Location(
                         coordinates = Coordinates(latitude = 123.456789, longitude = 123.456789),
-                        coordinatesFormat = CoordinatesFormat.DD,
                         horizontalAccuracy = Distance.Meters(123.45678f),
                         bearing = Angle.Degrees(123.45678f),
                         bearingAccuracy = Angle.Degrees(123.45678f),
                         altitude = Distance.Meters(123.45678f),
                         altitudeAccuracy = Distance.Meters(123.45678f),
+                        magneticDeclination = Angle.Degrees(1f),
                         speed = Speed.KilometersPerHour(123.45678f),
                         speedAccuracy = Speed.KilometersPerHour(123.45678f),
                         timestamp = Instant.DISTANT_PAST,
-                        units = Units.METRIC,
-                        showAccuracies = true
                     ),
+                    showAccuracies = true,
+                    units = Units.METRIC,
                     snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},
                     onMapClick = { _, _ -> },
