@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.FileCopy
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Map
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Share
@@ -65,7 +65,7 @@ fun LocationPermissionGrantedContent(
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
-    onInfoClick: () -> Unit,
+    onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val placeholdersVisible = location == null || showAccuracies == null || units == null
@@ -84,7 +84,7 @@ fun LocationPermissionGrantedContent(
             onCopyClick = onCopyClick,
             onMapClick = onMapClick,
             onShareClick = onShareClick,
-            onInfoClick = onInfoClick
+            onHelpClick = onHelpClick
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             AccuracyBlock(
@@ -131,7 +131,7 @@ private fun ButtonRow(
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
-    onInfoClick: () -> Unit,
+    onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -139,14 +139,14 @@ private fun ButtonRow(
         horizontalArrangement = Arrangement.spacedBy(24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        MapIconButton(
+        MapButton(
             onClick = { onMapClick(coordinates, timestamp) },
             enabled = coordinates != null
         )
-        ShareIconButton(onClick = { onShareClick(coordinates) }, enabled = coordinates != null)
-        CopyIconButton(onClick = { onCopyClick(coordinates) }, enabled = coordinates != null)
+        ShareButton(onClick = { onShareClick(coordinates) }, enabled = coordinates != null)
+        CopyButton(onClick = { onCopyClick(coordinates) }, enabled = coordinates != null)
         ScreenLockToggleButton(snackbarHostState)
-        InfoIconButton(onInfoClick)
+        HelpButton(onHelpClick)
     }
 }
 
@@ -177,7 +177,7 @@ private fun CoordinatesView(
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
     onShareClick: (Coordinates?) -> Unit,
-    onInfoClick: () -> Unit,
+    onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -194,13 +194,13 @@ private fun CoordinatesView(
             onCopyClick = onCopyClick,
             onMapClick = onMapClick,
             onShareClick = onShareClick,
-            onInfoClick = onInfoClick
+            onHelpClick = onHelpClick
         )
     }
 }
 
 @Composable
-private fun CopyIconButton(onClick: () -> Unit, enabled: Boolean = true) {
+private fun CopyButton(onClick: () -> Unit, enabled: Boolean = true) {
     IconButton(onClick = onClick, enabled = enabled) {
         Icon(
             Icons.Rounded.FileCopy,
@@ -210,17 +210,17 @@ private fun CopyIconButton(onClick: () -> Unit, enabled: Boolean = true) {
 }
 
 @Composable
-private fun InfoIconButton(onClick: () -> Unit) {
+private fun HelpButton(onClick: () -> Unit) {
     IconButton(onClick = onClick) {
         Icon(
-            imageVector = Icons.Rounded.Info,
-            contentDescription = stringResource(R.string.location_button_info_content_description),
+            imageVector = Icons.AutoMirrored.Rounded.HelpOutline,
+            contentDescription = stringResource(R.string.location_button_help_content_description),
         )
     }
 }
 
 @Composable
-private fun MapIconButton(
+private fun MapButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
@@ -278,7 +278,7 @@ private fun ScreenLockToggleButton(snackbarHostState: SnackbarHostState) {
 }
 
 @Composable
-private fun ShareIconButton(
+private fun ShareButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true
@@ -328,7 +328,7 @@ private fun LocatingPreview() {
                     onCopyClick = {},
                     onMapClick = { _, _ -> },
                     onShareClick = {},
-                    onInfoClick = {}
+                    onHelpClick = {}
                 )
             }
         }
@@ -367,7 +367,7 @@ private fun LocatedPreview() {
                     onCopyClick = {},
                     onMapClick = { _, _ -> },
                     onShareClick = {},
-                    onInfoClick = {}
+                    onHelpClick = {}
                 )
             }
         }

@@ -1,4 +1,4 @@
-package io.trewartha.positional.data.solunar
+package io.trewartha.positional.data.sun
 
 import io.trewartha.positional.data.location.Coordinates
 import kotlinx.datetime.LocalDate

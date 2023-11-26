@@ -23,8 +23,8 @@ sealed interface NavDestination {
         override val navLabelRes = R.string.bottom_navigation_compass
     }
 
-    data object CompassInfo : NavDestination {
-        override val route = "compass/info"
+    data object CompassHelp : NavDestination {
+        override val route = "compass/help"
     }
 
     data object Location : MainNavDestination {
@@ -33,8 +33,8 @@ sealed interface NavDestination {
         override val navLabelRes = R.string.bottom_navigation_location
     }
 
-    data object LocationInfo : NavDestination {
-        override val route = "location/info"
+    data object LocationHelp : NavDestination {
+        override val route = "location/help"
     }
 
     data object Settings : MainNavDestination {
@@ -43,13 +43,13 @@ sealed interface NavDestination {
         override val navLabelRes = R.string.bottom_navigation_settings
     }
 
-    data object Solunar : MainNavDestination {
-        override val route = "solunar"
+    data object Sun : MainNavDestination {
+        override val route = "sun"
         override val navIcon = Icons.Rounded.WbTwilight
-        override val navLabelRes = R.string.bottom_navigation_solunar
+        override val navLabelRes = R.string.bottom_navigation_sun
     }
 
-    data object SolunarInfo : NavDestination {
-        override val route = "solunar/info"
+    data object SunHelp : NavDestination {
+        override val route = "sun/help"
     }
 }

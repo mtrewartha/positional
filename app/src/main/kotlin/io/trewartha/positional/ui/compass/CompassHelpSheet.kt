@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.location
+package io.trewartha.positional.ui.compass
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,19 +17,19 @@ import io.trewartha.positional.R
 import io.trewartha.positional.ui.Markdown
 
 @Composable
-fun LocationInfoSheet(
+fun CompassHelpSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = modifier.statusBarsPadding(),
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        windowInsets = WindowInsets(0, 0, 0, 0)
     ) {
-        val infoMarkdownContent = LocalContext.current.resources
-            .openRawResource(R.raw.location_info).reader().readText()
+        val helpMarkdownContent = LocalContext.current.resources
+            .openRawResource(R.raw.compass_help).reader().readText()
         Markdown(
-            content = infoMarkdownContent,
+            content = helpMarkdownContent,
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())

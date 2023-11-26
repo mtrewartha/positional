@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.solunar
+package io.trewartha.positional.ui.sun
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +17,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.ui.Markdown
 
 @Composable
-fun SolunarInfoSheet(
+fun SunHelpSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -26,10 +26,10 @@ fun SolunarInfoSheet(
         modifier = modifier.statusBarsPadding(),
         windowInsets = WindowInsets(0, 0, 0, 0)
     ) {
-        val infoMarkdownContent = LocalContext.current.resources
-            .openRawResource(R.raw.solunar_info).reader().readText()
+        val helpMarkdownContent = LocalContext.current.resources
+            .openRawResource(R.raw.sun_help).reader().readText()
         Markdown(
-            content = infoMarkdownContent,
+            content = helpMarkdownContent,
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())

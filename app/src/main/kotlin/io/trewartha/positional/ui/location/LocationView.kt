@@ -129,7 +129,7 @@ private fun LocationView(
     // Snackbars
     val coroutineScope = rememberCoroutineScope()
     val coordinatesCopiedMessage = stringResource(R.string.location_snackbar_coordinates_copied)
-    var showInfoSheet by rememberSaveable { mutableStateOf(false) }
+    var showHelpClick by rememberSaveable { mutableStateOf(false) }
     var showMapError by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     if (locationPermissionsState.allPermissionsGranted) {
@@ -159,7 +159,7 @@ private fun LocationView(
                 }
             },
             onShareClick = onShareClick,
-            onInfoClick = { showInfoSheet = true },
+            onHelpClick = { showHelpClick = true },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(dimensionResource(R.dimen.standard_padding))
@@ -177,7 +177,7 @@ private fun LocationView(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         )
     }
-    if (showInfoSheet) LocationInfoSheet(onDismissRequest = { showInfoSheet = false })
+    if (showHelpClick) LocationHelpSheet(onDismissRequest = { showHelpClick = false })
     if (showMapError) MapErrorDialog(onDismissRequest = { showMapError = false })
 }
 

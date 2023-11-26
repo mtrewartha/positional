@@ -1,9 +1,9 @@
-package io.trewartha.positional.domain.solunar
+package io.trewartha.positional.domain.sun
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.data.location.Coordinates
-import io.trewartha.positional.data.solunar.LibrarySolarTimesRepository
+import io.trewartha.positional.data.sun.LibrarySolarTimesRepository
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month

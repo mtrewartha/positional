@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.Memory
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.AlertDialog
@@ -70,7 +70,7 @@ fun NavGraphBuilder.compassView() {
 
 @Composable
 private fun CompassView(state: CompassViewModel.State) {
-    var showInfoSheet by rememberSaveable { mutableStateOf(false) }
+    var showHelpSheet by rememberSaveable { mutableStateOf(false) }
     var showMissingSensorDialog by remember { mutableStateOf(false) }
     if (showMissingSensorDialog) {
         AlertDialog(
@@ -101,12 +101,12 @@ private fun CompassView(state: CompassViewModel.State) {
             is CompassViewModel.State.SensorsPresent ->
                 SensorsPresentContent(
                     state,
-                    onInfoClick = { showInfoSheet = true },
+                    onHelpClick = { showHelpSheet = true },
                     Modifier.fillMaxSize()
                 )
         }
     }
-    if (showInfoSheet) CompassInfoSheet(onDismissRequest = { showInfoSheet = false })
+    if (showHelpSheet) CompassHelpSheet(onDismissRequest = { showHelpSheet = false })
 }
 
 @Composable
@@ -154,7 +154,7 @@ private fun SensorsMissingContent(
 @Composable
 private fun SensorsPresentContent(
     state: CompassViewModel.State.SensorsPresent,
-    onInfoClick: () -> Unit,
+    onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -224,17 +224,17 @@ private fun SensorsPresentContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             DeclinationText(declination)
-            InfoIconButton(onInfoClick)
+            HelpButton(onHelpClick)
         }
     }
 }
 
 @Composable
-private fun InfoIconButton(onClick: () -> Unit) {
+private fun HelpButton(onClick: () -> Unit) {
     IconButton(onClick) {
         Icon(
-            Icons.Rounded.Info,
-            stringResource(R.string.compass_button_info_content_description),
+            Icons.AutoMirrored.Rounded.HelpOutline,
+            stringResource(R.string.compass_button_help_content_description),
         )
     }
 }

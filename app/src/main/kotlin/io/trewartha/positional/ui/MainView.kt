@@ -38,10 +38,11 @@ import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.NavDestination.Location
 import io.trewartha.positional.ui.NavDestination.Settings
+import io.trewartha.positional.ui.NavDestination.Sun
 import io.trewartha.positional.ui.compass.compassView
 import io.trewartha.positional.ui.location.locationView
 import io.trewartha.positional.ui.settings.settingsView
-import io.trewartha.positional.ui.solunar.solunarView
+import io.trewartha.positional.ui.sun.sunView
 
 @Composable
 fun MainView(
@@ -62,7 +63,7 @@ fun MainView(
     }
     PositionalTheme(useDarkTheme = useDarkTheme) {
         val isCompactWidthWindow = windowWidthSizeClass == WindowWidthSizeClass.Compact
-        val mainNavDestinations = setOf(Location, Compass, /*Solunar,*/ Settings)
+        val mainNavDestinations = setOf(Location, Compass, Sun, Settings)
         val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
             bottomBar = bottomBar@{
@@ -91,7 +92,7 @@ fun MainView(
                         onAndroidSettingsClick = { navigateToSettings(context) }
                     )
                     settingsView(onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) })
-                    solunarView()
+                    sunView()
                 }
             }
         }

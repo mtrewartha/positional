@@ -1,10 +1,9 @@
-package io.trewartha.positional.ui.solunar
+package io.trewartha.positional.ui.sun
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,39 +23,20 @@ import io.trewartha.positional.ui.utils.placeholder
 import kotlinx.datetime.LocalTime
 
 @Composable
-fun DawnDuskColumn(
-    astronomicalDawn: LocalTime?,
-    nauticalDawn: LocalTime?,
-    civilDawn: LocalTime?,
-    civilDusk: LocalTime?,
-    nauticalDusk: LocalTime?,
-    astronomicalDusk: LocalTime?,
+fun SunriseSunsetColumn(
+    sunrise: LocalTime?,
+    sunset: LocalTime?,
     showPlaceholders: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         HeaderRow(modifier = Modifier.fillMaxWidth())
-        DawnDuskRow(
-            label = stringResource(R.string.solunar_label_dawn_dusk_civil),
-            dawn = civilDawn,
-            dusk = civilDusk,
-            showPlaceholders = showPlaceholders,
-            modifier = Modifier.fillMaxWidth()
-        )
-        DawnDuskRow(
-            label = stringResource(R.string.solunar_label_dawn_dusk_nautical),
-            dawn = nauticalDawn,
-            dusk = nauticalDusk,
-            showPlaceholders = showPlaceholders,
-            modifier = Modifier.fillMaxWidth()
-        )
-        DawnDuskRow(
-            label = stringResource(R.string.solunar_label_dawn_dusk_astronomical),
-            dawn = astronomicalDawn,
-            dusk = astronomicalDusk,
+        SunriseSunsetRow(
+            sunrise = sunrise,
+            sunset = sunset,
             showPlaceholders = showPlaceholders,
             modifier = Modifier.fillMaxWidth()
         )
@@ -72,7 +52,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             AutoShrinkingText(
-                text = stringResource(R.string.solunar_title_dawn),
+                text = stringResource(R.string.sun_title_sunrise),
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
@@ -85,7 +65,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             AutoShrinkingText(
-                text = stringResource(R.string.solunar_title_dusk),
+                text = stringResource(R.string.sun_title_sunset),
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
@@ -95,54 +75,40 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun DawnDuskRow(
-    label: String,
-    dawn: LocalTime?,
-    dusk: LocalTime?,
+private fun SunriseSunsetRow(
+    sunrise: LocalTime?,
+    sunset: LocalTime?,
     showPlaceholders: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
-        TwilightTime(
-            time = dawn,
+    Row(modifier = modifier.fillMaxWidth()) {
+        SunriseSunsetTime(
+            localTime = sunrise,
             showPlaceholder = showPlaceholders,
-            modifier = Modifier.weight(1f, fill = true)
+            modifier = Modifier.weight(1f)
         )
-        AutoShrinkingText(
-            text = label,
-            modifier = Modifier.weight(1f, fill = true),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1
-        )
-        TwilightTime(
-            time = dusk,
+        Spacer(modifier = Modifier.weight(1f))
+        SunriseSunsetTime(
+            localTime = sunset,
             showPlaceholder = showPlaceholders,
-            modifier = Modifier.weight(1f, fill = true)
+            modifier = Modifier.weight(1f)
         )
     }
 }
 
 @Composable
-private fun TwilightTime(
-    time: LocalTime?,
+private fun SunriseSunsetTime(
+    localTime: LocalTime?,
     showPlaceholder: Boolean,
     modifier: Modifier = Modifier
 ) {
     AutoShrinkingText(
-        text = time?.let { LocalDateTimeFormatter.current.formatTime(it) }
-            ?: stringResource(R.string.solunar_text_time_none),
-        modifier = modifier
-            .defaultMinSize(minWidth = 64.dp)
-            .placeholder(showPlaceholder),
-        maxLines = 1,
+        text = localTime?.let { LocalDateTimeFormatter.current.formatTime(it) }
+            ?: stringResource(R.string.sun_text_time_none),
+        modifier = modifier.placeholder(visible = showPlaceholder),
+        style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.bodyLarge
+        maxLines = 1
     )
 }
 
@@ -151,13 +117,9 @@ private fun TwilightTime(
 private fun LoadingPreview() {
     PositionalTheme {
         Surface {
-            DawnDuskColumn(
-                astronomicalDawn = null,
-                nauticalDawn = null,
-                civilDawn = null,
-                civilDusk = null,
-                nauticalDusk = null,
-                astronomicalDusk = null,
+            SunriseSunsetColumn(
+                sunrise = null,
+                sunset = null,
                 showPlaceholders = true
             )
         }
@@ -169,15 +131,12 @@ private fun LoadingPreview() {
 private fun LoadedPreview() {
     PositionalTheme {
         Surface {
-            DawnDuskColumn(
-                astronomicalDawn = LocalTime(12, 0, 0),
-                nauticalDawn = LocalTime(12, 0, 1),
-                civilDawn = LocalTime(12, 0, 2),
-                civilDusk = null,
-                nauticalDusk = null,
-                astronomicalDusk = null,
+            SunriseSunsetColumn(
+                sunrise = LocalTime(12, 0, 0),
+                sunset = null,
                 showPlaceholders = false
             )
         }
     }
 }
+

@@ -1,12 +1,12 @@
-package io.trewartha.positional.ui.solunar
+package io.trewartha.positional.ui.sun
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.location.Location
-import io.trewartha.positional.data.solunar.SolarTimes
+import io.trewartha.positional.data.sun.SolarTimes
 import io.trewartha.positional.domain.location.GetLocationUseCase
-import io.trewartha.positional.domain.solunar.GetSolarTimesUseCase
+import io.trewartha.positional.domain.sun.GetSolarTimesUseCase
 import io.trewartha.positional.ui.utils.ForViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -30,10 +30,10 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * View model for the Twilight view
+ * View model for the Sun view
  */
 @HiltViewModel
-class SolunarViewModel @Inject constructor(
+class SunViewModel @Inject constructor(
     getLocationUseCase: GetLocationUseCase,
     private val getDailyTwilightTimes: GetSolarTimesUseCase,
 ) : ViewModel() {
@@ -66,6 +66,13 @@ class SolunarViewModel @Inject constructor(
                 delay(1.seconds)
             }
         }.distinctUntilChanged().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), today)
+
+    /**
+     * Callback to tell the view model that the user has selected a date
+     */
+    fun onSelectedDateChange(date: LocalDate) {
+        _date.update { date }
+    }
 
     /**
      * Callback to tell the view model that the user wants to change the selected date to today

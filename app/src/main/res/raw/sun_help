@@ -1,7 +1,7 @@
 ### How are these times calculated?
-The times are calculated using equations that model the earth's orbit and the moon's orbit. Your
-current location and the date at your location are used as inputs into those equations. The times
-shown are for the same time zone your Android device is set to.
+The times are calculated using equations that model Earth's rotation about its own axis and around
+the sun. Your current location and the date at your location are used as inputs into those
+equations. The times shown are for the same time zone your Android device is set to.
 
 ### Sunrise & Sunset
 Sunrise is when the sun is coming up from below the horizon. Sunset is when the sun is going down

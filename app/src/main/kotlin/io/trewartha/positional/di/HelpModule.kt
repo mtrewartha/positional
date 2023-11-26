@@ -10,7 +10,7 @@ import io.noties.markwon.Markwon
 
 @Module
 @InstallIn(FragmentComponent::class)
-class InfoModule {
+class HelpModule {
 
     @Provides
     fun markwon(@ApplicationContext context: Context): Markwon = Markwon.create(context)
