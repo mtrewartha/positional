@@ -105,9 +105,13 @@ fun NavGraphBuilder.locationView(
                 units = units,
                 snackbarHostState = snackbarHostState,
                 onAndroidSettingsClick = onAndroidSettingsClick,
-            ) { coordinates ->
-                shareCoordinates(context, coordinatesFormatter, coordinates)
-            }
+                onShareClick = click@{ coordinates ->
+                    val formattedCoordinates =
+                        coordinates?.let { coordinatesFormatter.formatForCopy(it) }
+                            ?: return@click
+                    shareCoordinates(context, formattedCoordinates)
+                },
+            )
         }
     }
 }
@@ -223,13 +227,7 @@ private fun navigateToMap(
     context.startActivity(Intent(Intent.ACTION_VIEW, geoUri))
 }
 
-private fun shareCoordinates(
-    context: Context,
-    coordinatesFormatter: CoordinatesFormatter,
-    coordinates: Coordinates?
-) {
-    if (coordinates == null) return
-    val formattedCoordinates = coordinatesFormatter.formatForCopy(coordinates)
+private fun shareCoordinates(context: Context, formattedCoordinates: String) {
     startActivity(
         context,
         Intent(Intent.ACTION_SEND).apply {
