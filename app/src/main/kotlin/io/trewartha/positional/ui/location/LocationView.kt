@@ -151,9 +151,7 @@ private fun LocationView(
                 .verticalScroll(rememberScrollState())
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         )
-    } else if (
-        with(locationPermissionsState) { revokedPermissions.size == permissions.size }
-    ) {
+    } else {
         LocationPermissionRequiredContent(
             locationPermissionsState = locationPermissionsState,
             onSettingsClick = onAndroidSettingsClick,
@@ -163,8 +161,6 @@ private fun LocationView(
                 .verticalScroll(rememberScrollState())
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         )
-    } else {
-        TODO("Handle the case where COARSE location permission has been granted, but FINE has not")
     }
     if (showInfoSheet) LocationInfoSheet(onDismissRequest = { showInfoSheet = false })
     if (showMapError) MapErrorDialog(onDismissRequest = { showMapError = false })
