@@ -25,6 +25,16 @@ android {
         }
     }
 
+    flavorDimensions += "androidVariant"
+    productFlavors {
+        create("aosp") {
+            dimension = "androidVariant"
+        }
+        create("play") {
+            dimension = "androidVariant"
+        }
+    }
+
     kotlinOptions {
         freeCompilerArgs = freeCompilerArgs +
                 "-opt-in=kotlin.ExperimentalStdlibApi"

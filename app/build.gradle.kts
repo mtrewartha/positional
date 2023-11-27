@@ -130,12 +130,10 @@ dependencies {
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.crashlytics)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.playServices)
     implementation(libs.markwon)
     implementation(libs.timber)
 
     "playImplementation"(libs.google.firebase.analytics)
-    "playImplementation"(libs.google.playServices.location)
 
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)
