@@ -15,7 +15,7 @@ androidx-constraint-layout-compose = "1.0.1"
 androidx-core = "1.12.0"
 androidx-data-store = "1.1.0-alpha06"
 androidx-fragment = "1.6.2"
-androidx-hilt = "1.0.0"
+androidx-hilt = "1.1.0"
 androidx-legacySupport-v4 = "1.0.0"
 androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.5"
@@ -23,6 +23,7 @@ androidx-preference = "1.2.1"
 androidx-window = "1.2.0"
 google-firebase-bom = "32.6.0"
 google-firebase-crashlytics-gradle = "2.9.9"
+google-ksp = "1.9.20-1.0.14"
 google-materialComponents = "1.10.0"
 google-playServices-location = "21.0.1"
 google-services = "4.4.0"
@@ -45,12 +46,11 @@ turbine = "1.0.0"
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "google-firebase-crashlytics-gradle" }
-#google-firebase-performance = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-performance-gradle" }
+google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 
 [libraries]

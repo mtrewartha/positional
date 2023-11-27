@@ -2,10 +2,10 @@ import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.protobuf)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
 }
@@ -94,7 +94,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.android.desugarJdkLibs)
 
@@ -109,7 +109,6 @@ dependencies {
     implementation(libs.androidx.compose.uiTooling)
     implementation(libs.androidx.constraintLayout.compose)
     implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.androidx.legacySupport.v4)
@@ -150,10 +149,6 @@ dependencies {
 
 hilt {
     enableAggregatingTask = true
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 kotlin {
