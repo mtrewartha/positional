@@ -4,6 +4,7 @@ import android.content.Context
 import android.hardware.SensorManager
 import android.hardware.SensorManager.getOrientation
 import android.hardware.SensorManager.remapCoordinateSystem
+import android.hardware.display.DisplayManager
 import android.os.Build
 import android.view.Surface
 import android.view.WindowManager
@@ -168,7 +169,13 @@ private fun SensorsPresentContent(
         }
         val remappedRotationMatrix = remember { FloatArray(ROTATION_MATRIX_SIZE) }
         val orientation = remember { FloatArray(ORIENTATION_VECTOR_SIZE) }
-        val displayRotation = LocalContext.current.display?.rotation
+        val displayRotation =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                LocalContext.current.display?.rotation
+            } else {
+                (LocalContext.current.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager)
+                    .displays.first().rotation
+            }
         val windowManager =
             LocalContext.current.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val declination = when (state) {
