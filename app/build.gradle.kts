@@ -35,6 +35,9 @@ android {
         targetSdk = libs.versions.android.sdk.target.get().toInt()
         versionCode = 21030000
         versionName = "3.0.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
     buildFeatures {
         buildConfig = true
@@ -141,6 +144,7 @@ dependencies {
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotlin.reflect)
 
+    androidTestImplementation(libs.kotest.assertions.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.uiTest.junit4)
 }
