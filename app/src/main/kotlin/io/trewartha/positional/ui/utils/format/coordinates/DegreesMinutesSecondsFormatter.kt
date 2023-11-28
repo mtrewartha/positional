@@ -32,7 +32,7 @@ class DegreesMinutesSecondsFormatter(
         val components = convert(latitude, FORMAT_SECONDS).split(':')
         val degrees = components[0].toInt()
         val minutes = components[1].toInt()
-        val seconds = components[2].toFloat()
+        val seconds = components[2].normalizeDecimalSeparator().toFloat()
         return FORMAT.format(locale, degrees, minutes, seconds)
     }
 
@@ -40,7 +40,7 @@ class DegreesMinutesSecondsFormatter(
         val components = convert(longitude, FORMAT_SECONDS).split(':')
         val degrees = components[0].toInt()
         val minutes = components[1].toInt()
-        val seconds = components[2].toFloat()
+        val seconds = components[2].normalizeDecimalSeparator().toFloat()
         return FORMAT.format(locale, degrees, minutes, seconds)
     }
 }

@@ -30,4 +30,13 @@ interface CoordinatesFormatter {
      * of the app
      */
     fun formatForCopy(coordinates: Coordinates): String
+
+    /**
+     * Assumes the string represents a number and normalizes all decimal separators to a period
+     */
+    fun String.normalizeDecimalSeparator(): String =
+        replace(COMMA, PERIOD)
 }
+
+private const val COMMA = ','
+private const val PERIOD = '.'

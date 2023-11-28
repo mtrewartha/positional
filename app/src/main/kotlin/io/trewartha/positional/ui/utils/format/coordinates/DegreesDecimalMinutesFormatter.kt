@@ -31,14 +31,14 @@ class DegreesDecimalMinutesFormatter(
     private fun formatLatitude(latitude: Double): String {
         val components = convert(latitude, FORMAT_MINUTES).split(':')
         val degrees = components[0].toInt()
-        val minutes = components[1].toFloat()
+        val minutes = components[1].normalizeDecimalSeparator().toFloat()
         return FORMAT.format(locale, degrees, minutes)
     }
 
     private fun formatLongitude(longitude: Double): String {
         val components = convert(longitude, FORMAT_MINUTES).split(':')
         val degrees = components[0].toInt()
-        val minutes = components[1].toFloat()
+        val minutes = components[1].normalizeDecimalSeparator().toFloat()
         return FORMAT.format(locale, degrees, minutes)
     }
 }
