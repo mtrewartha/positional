@@ -33,8 +33,8 @@ android {
         applicationId = "io.trewartha.positional"
         minSdk = libs.versions.android.sdk.min.get().toInt()
         targetSdk = libs.versions.android.sdk.target.get().toInt()
-        versionCode = 21030000
-        versionName = "3.0.0"
+        versionCode = 21030001
+        versionName = "3.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
