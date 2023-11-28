@@ -18,13 +18,13 @@ class AospCompassReadingsRepository @Inject constructor(
     private val accelerometer: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
-    private val accelerometerAccuracyFlow: Flow<CompassAccuracy> =
+    private val accelerometerAccuracyFlow: Flow<CompassAccuracy?> =
         sensorManager.getAccuracyFlow(accelerometer)
 
     private val magnetometer: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
-    private val magnetometerAccuracyFlow: Flow<CompassAccuracy> =
+    private val magnetometerAccuracyFlow: Flow<CompassAccuracy?> =
         sensorManager.getAccuracyFlow(magnetometer)
 
     private val rotationMatrixFlow: Flow<FloatArray> =
@@ -63,9 +63,12 @@ class AospCompassReadingsRepository @Inject constructor(
         CompassReadings(rotationMatrix, accelerometerAccuracy, magnetometerAccuracy)
     }
 
-    private fun SensorManager.getAccuracyFlow(sensor: Sensor?): Flow<CompassAccuracy> {
+    private fun SensorManager.getAccuracyFlow(sensor: Sensor?): Flow<CompassAccuracy?> {
         return callbackFlow {
             if (sensor == null) throw CompassHardwareException()
+            // Some devices don't seem to trigger the listener below, so send a null accuracy
+            // indicating we don't have one right away. If we later get an accuracy, it'll be sent.
+            trySend(null)
             val listener = object : SensorEventListener {
                 override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
                     trySend(
