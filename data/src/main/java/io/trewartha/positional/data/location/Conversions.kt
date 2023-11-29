@@ -25,14 +25,14 @@ internal val AndroidLocation.altitudeAccuracy: Distance?
     }
 
 internal val AndroidLocation.bearingObject: Angle?
-    get() = if (this.hasBearing() && speed >= io.trewartha.positional.data.location.MIN_SPEED_THRESHOLD) {
+    get() = if (this.hasBearing() && speed >= MIN_SPEED_THRESHOLD) {
         Angle.Degrees(this.bearing)
     } else {
         null
     }
 
 internal val AndroidLocation.bearingAccuracy: Angle?
-    get() = if (SDK_INT >= O && hasBearingAccuracy() && speed >= io.trewartha.positional.data.location.MIN_SPEED_THRESHOLD) {
+    get() = if (SDK_INT >= O && hasBearingAccuracy() && speed >= MIN_SPEED_THRESHOLD) {
         Angle.Degrees(bearingAccuracyDegrees)
     } else {
         null
@@ -56,7 +56,7 @@ internal val AndroidLocation.magneticDeclination: Angle
     )
 
 internal val AndroidLocation.speedObject: Speed?
-    get() = if (hasSpeed() && speed >= io.trewartha.positional.data.location.MIN_SPEED_THRESHOLD) {
+    get() = if (hasSpeed() && speed >= MIN_SPEED_THRESHOLD) {
         Speed.MetersPerSecond(speed)
     } else {
         null

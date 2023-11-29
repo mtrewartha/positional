@@ -198,7 +198,7 @@ private fun SensorsPresentContent(
                     (toDegrees(orientation[0].toDouble()).toFloat() + DEGREES_360) % DEGREES_360
                 when (state.mode) {
                     CompassMode.MAGNETIC_NORTH -> degreesToMagneticNorth
-                    CompassMode.TRUE_NORTH -> degreesToMagneticNorth - (declination ?: 0f)
+                    CompassMode.TRUE_NORTH -> degreesToMagneticNorth + (declination ?: 0f)
                 }
             } else {
                 null
