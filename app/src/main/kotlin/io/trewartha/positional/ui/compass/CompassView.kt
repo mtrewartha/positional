@@ -1,13 +1,9 @@
 package io.trewartha.positional.ui.compass
 
-import android.content.Context
 import android.hardware.SensorManager
 import android.hardware.SensorManager.getOrientation
 import android.hardware.SensorManager.remapCoordinateSystem
-import android.hardware.display.DisplayManager
-import android.os.Build
 import android.view.Surface
-import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +45,7 @@ import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -60,6 +57,8 @@ import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.utils.placeholder
+import io.trewartha.positional.util.tryOrNull
+import java.lang.Math.toDegrees
 
 fun NavGraphBuilder.compassView() {
     composable(Compass.route) {
@@ -98,6 +97,7 @@ private fun CompassView(state: CompassViewModel.State) {
             is CompassViewModel.State.SensorsMissing ->
                 SensorsMissingContent(
                     onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
+                    Modifier.fillMaxSize()
                 )
             is CompassViewModel.State.SensorsPresent ->
                 SensorsPresentContent(
@@ -169,15 +169,8 @@ private fun SensorsPresentContent(
         }
         val remappedRotationMatrix = remember { FloatArray(ROTATION_MATRIX_SIZE) }
         val orientation = remember { FloatArray(ORIENTATION_VECTOR_SIZE) }
-        val displayRotation =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                LocalContext.current.display?.rotation
-            } else {
-                (LocalContext.current.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager)
-                    .displays.first().rotation
-            }
-        val windowManager =
-            LocalContext.current.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = LocalContext.current
+            .let { tryOrNull { ContextCompat.getDisplayOrDefault(it) } }
         val declination = when (state) {
             is CompassViewModel.State.SensorsPresent.Loaded ->
                 state.magneticDeclination.inDegrees().value
@@ -186,21 +179,13 @@ private fun SensorsPresentContent(
         }
         val azimuthDegrees = remember(state) {
             if (state is CompassViewModel.State.SensorsPresent.Loaded) {
-                val (newXAxis, newYAxis) = when (
-                    val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        displayRotation ?: Surface.ROTATION_0
-                    } else {
-                        @Suppress("DEPRECATION")
-                        windowManager
-                            .defaultDisplay
-                            .rotation
-                    }
-                ) {
+                val (newXAxis, newYAxis) = when (val displayRotation = display?.rotation) {
+                    null, // Display is null in Compose preview
                     Surface.ROTATION_0 -> SensorManager.AXIS_X to SensorManager.AXIS_Y
                     Surface.ROTATION_90 -> SensorManager.AXIS_Y to SensorManager.AXIS_MINUS_X
                     Surface.ROTATION_180 -> SensorManager.AXIS_MINUS_Y to SensorManager.AXIS_MINUS_X
                     Surface.ROTATION_270 -> SensorManager.AXIS_MINUS_Y to SensorManager.AXIS_X
-                    else -> error("Unexpected rotation: $rotation")
+                    else -> error("Unexpected display rotation: $displayRotation")
                 }
                 remapCoordinateSystem(
                     state.rotationMatrix,
@@ -210,8 +195,7 @@ private fun SensorsPresentContent(
                 )
                 getOrientation(remappedRotationMatrix, orientation)
                 val degreesToMagneticNorth =
-                    (Math.toDegrees(orientation[0].toDouble())
-                        .toFloat() + DEGREES_360) % DEGREES_360
+                    (toDegrees(orientation[0].toDouble()).toFloat() + DEGREES_360) % DEGREES_360
                 when (state.mode) {
                     CompassMode.MAGNETIC_NORTH -> degreesToMagneticNorth
                     CompassMode.TRUE_NORTH -> degreesToMagneticNorth - (declination ?: 0f)
@@ -272,6 +256,16 @@ private fun DeclinationText(declination: Float?, modifier: Modifier = Modifier) 
 private const val DEGREES_360 = 360f
 private const val ROTATION_MATRIX_SIZE = 9
 private const val ORIENTATION_VECTOR_SIZE = 3
+
+@PreviewLightDark
+@Composable
+private fun SensorsMissingPreview() {
+    PositionalTheme {
+        Surface {
+            CompassView(state = CompassViewModel.State.SensorsMissing)
+        }
+    }
+}
 
 @PreviewLightDark
 @Composable
