@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.32.0"
 android-desugarJdkLibs = "2.0.4"
-android-gradle = "8.2.0-rc03"
+android-gradle = "8.2.0"
 android-sdk-compile = "34"
 android-sdk-min = "21"
 android-sdk-target = "34"
