@@ -1,8 +1,10 @@
 package io.trewartha.positional.ui.settings
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,11 +36,22 @@ import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.bottomNavEnterTransition
+import io.trewartha.positional.ui.bottomNavExitTransition
+import io.trewartha.positional.ui.bottomNavPopEnterTransition
+import io.trewartha.positional.ui.bottomNavPopExitTransition
 
 fun NavGraphBuilder.settingsView(
+    contentPadding: PaddingValues,
     onPrivacyPolicyClick: () -> Unit
 ) {
-    composable(Settings.route) {
+    composable(
+        Settings.route,
+        enterTransition = bottomNavEnterTransition(),
+        exitTransition = bottomNavExitTransition(),
+        popEnterTransition = bottomNavPopEnterTransition(),
+        popExitTransition = bottomNavPopExitTransition()
+    ) {
         val viewModel: SettingsViewModel = hiltViewModel()
         val compassMode by viewModel.compassMode.collectAsState(initial = null)
         val coordinatesFormat by viewModel.coordinatesFormat.collectAsState(initial = null)
@@ -55,6 +68,7 @@ fun NavGraphBuilder.settingsView(
             theme = theme,
             onThemeChange = viewModel::onThemeChange,
             units = units,
+            contentPadding = contentPadding,
             onUnitsChange = viewModel::onUnitsChange,
             onPrivacyPolicyClick = onPrivacyPolicyClick
         )
@@ -62,6 +76,7 @@ fun NavGraphBuilder.settingsView(
 }
 
 @Composable
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 private fun SettingsView(
     compassMode: CompassMode?,
     onCompassModeChange: (CompassMode) -> Unit,
@@ -70,8 +85,9 @@ private fun SettingsView(
     showAccuracies: Boolean?,
     onShowAccuraciesChange: (Boolean) -> Unit,
     theme: Theme?,
-    onThemeChange: (Theme) -> Unit,
     units: Units?,
+    contentPadding: PaddingValues,
+    onThemeChange: (Theme) -> Unit,
     onUnitsChange: (Units) -> Unit,
     onPrivacyPolicyClick: () -> Unit
 ) {
@@ -83,12 +99,15 @@ private fun SettingsView(
                 scrollBehavior = scrollBehavior
             )
         },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
-    ) { contentPadding ->
+        contentWindowInsets = WindowInsets(
+            top = contentPadding.calculateTopPadding(),
+            bottom = contentPadding.calculateBottomPadding()
+        )
+    ) { innerContentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
+                .padding(innerContentPadding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
                 .padding(dimensionResource(R.dimen.standard_padding)),
@@ -141,8 +160,9 @@ private fun LoadingPreviews() {
             showAccuracies = null,
             onShowAccuraciesChange = {},
             theme = null,
-            onThemeChange = {},
             units = null,
+            contentPadding = PaddingValues(),
+            onThemeChange = {},
             onUnitsChange = {},
             onPrivacyPolicyClick = {}
         )
@@ -161,8 +181,9 @@ private fun LoadedPreviews() {
             showAccuracies = true,
             onShowAccuraciesChange = {},
             theme = Theme.DEVICE,
-            onThemeChange = {},
             units = Units.METRIC,
+            contentPadding = PaddingValues(),
+            onThemeChange = {},
             onUnitsChange = {},
             onPrivacyPolicyClick = {}
         )

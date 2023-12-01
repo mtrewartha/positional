@@ -2,6 +2,7 @@ package io.trewartha.positional.ui.sun
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,9 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -30,12 +28,17 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.data.sun.SolarTimes
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.bottomNavEnterTransition
+import io.trewartha.positional.ui.bottomNavExitTransition
+import io.trewartha.positional.ui.bottomNavPopEnterTransition
+import io.trewartha.positional.ui.bottomNavPopExitTransition
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
@@ -45,8 +48,14 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-fun NavGraphBuilder.sunView() {
-    composable(NavDestination.Sun.route) {
+fun NavGraphBuilder.sunView(navController: NavController, contentPadding: PaddingValues) {
+    composable(
+        NavDestination.Sun.route,
+        enterTransition = bottomNavEnterTransition(),
+        exitTransition = bottomNavExitTransition(NavDestination.SunHelp.route),
+        popEnterTransition = bottomNavPopEnterTransition(NavDestination.SunHelp.route),
+        popExitTransition = bottomNavPopExitTransition()
+    ) {
         val viewModel: SunViewModel = hiltViewModel()
         val todaysDate by viewModel.todaysDate
             .collectAsStateWithLifecycle(initialValue = null)
@@ -58,10 +67,12 @@ fun NavGraphBuilder.sunView() {
             todaysDate = todaysDate,
             selectedDate = selectedDate,
             selectedDateTwilights = selectedDateTwilights,
+            contentPadding = contentPadding,
             onSelectedDateDecrement = viewModel::onSelectedDateDecrement,
             onDateSelection = viewModel::onSelectedDateChange,
             onSelectedDateIncrement = viewModel::onSelectedDateIncrement,
-            onJumpToTodayClick = viewModel::onSelectedDateChangedToToday
+            onJumpToTodayClick = viewModel::onSelectedDateChangedToToday,
+            onHelpClick = { navController.navigate(NavDestination.SunHelp.route) }
         )
     }
 }
@@ -71,15 +82,17 @@ private fun SunView(
     todaysDate: LocalDate?,
     selectedDate: LocalDate?,
     selectedDateTwilights: SolarTimes?,
+    contentPadding: PaddingValues,
     onSelectedDateDecrement: () -> Unit,
     onDateSelection: (LocalDate) -> Unit,
     onSelectedDateIncrement: () -> Unit,
-    onJumpToTodayClick: () -> Unit
+    onJumpToTodayClick: () -> Unit,
+    onHelpClick: () -> Unit
 ) {
-    var showHelpSheet by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(contentPadding)
             .verticalScroll(rememberScrollState())
             .padding(dimensionResource(R.dimen.standard_padding)),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -108,7 +121,7 @@ private fun SunView(
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        HelpButton(onClick = { showHelpSheet = true })
+        HelpButton(onClick = onHelpClick)
         Spacer(modifier = Modifier.height(24.dp))
         SunDateControls(
             selectedDate = selectedDate,
@@ -124,7 +137,6 @@ private fun SunView(
             Text(stringResource(R.string.sun_button_today))
         }
     }
-    if (showHelpSheet) SunHelpSheet(onDismissRequest = { showHelpSheet = false })
 }
 
 @Composable
@@ -145,10 +157,13 @@ private fun LoadingPreview() {
             todaysDate = null,
             selectedDate = null,
             selectedDateTwilights = null,
+            contentPadding = PaddingValues(),
             onSelectedDateDecrement = {},
             onDateSelection = {},
-            onSelectedDateIncrement = {}
-        ) {}
+            onSelectedDateIncrement = {},
+            onJumpToTodayClick = {},
+            onHelpClick = {}
+        )
     }
 }
 
@@ -175,10 +190,13 @@ private fun LoadedPreview() {
                         nauticalDusk = null,
                         astronomicalDusk = null,
                     ),
+                    contentPadding = PaddingValues(),
                     onSelectedDateDecrement = {},
                     onDateSelection = {},
-                    onSelectedDateIncrement = {}
-                ) {}
+                    onSelectedDateIncrement = {},
+                    onJumpToTodayClick = {},
+                    onHelpClick = {}
+                )
             }
         }
     }

@@ -3,13 +3,14 @@ package io.trewartha.positional.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -39,9 +40,12 @@ import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.NavDestination.Location
 import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.NavDestination.Sun
+import io.trewartha.positional.ui.compass.compassHelpView
 import io.trewartha.positional.ui.compass.compassView
+import io.trewartha.positional.ui.location.locationHelpView
 import io.trewartha.positional.ui.location.locationView
 import io.trewartha.positional.ui.settings.settingsView
+import io.trewartha.positional.ui.sun.sunHelpView
 import io.trewartha.positional.ui.sun.sunView
 
 @Composable
@@ -70,7 +74,7 @@ fun MainView(
                 if (!isCompactWidthWindow) return@bottomBar
                 MainNavigationBar(navHostController, mainNavDestinations)
             },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         ) { contentPadding ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (!isCompactWidthWindow) {
@@ -84,15 +88,24 @@ fun MainView(
                 NavHost(
                     navHostController,
                     startDestination = Location.route,
-                    modifier = Modifier.padding(contentPadding)
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None }
                 ) {
-                    compassView()
+                    compassView(navHostController, contentPadding)
+                    compassHelpView(navHostController, contentPadding)
                     locationView(
+                        navHostController,
+                        contentPadding,
                         snackbarHostState,
-                        onAndroidSettingsClick = { navigateToSettings(context) }
+                        onAndroidSettingsClick = { navigateToSettings(context) },
                     )
-                    settingsView(onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) })
-                    sunView()
+                    locationHelpView(navHostController, contentPadding)
+                    settingsView(
+                        contentPadding,
+                        onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) }
+                    )
+                    sunView(navHostController, contentPadding)
+                    sunHelpView(navHostController, contentPadding)
                 }
             }
         }
@@ -111,12 +124,8 @@ private fun MainNavigationBar(
         mainNavDestination.forEach { mainNavDestination ->
             NavigationBarItem(
                 selected = currentRoute?.startsWith(mainNavDestination.route) ?: false,
-                onClick = onClick@{
-                    if (currentRoute == mainNavDestination.route) return@onClick
-                    navHostController.navigate(mainNavDestination.route) {
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                onClick = {
+                    onNavigationItemClick(currentRoute, mainNavDestination, navHostController)
                 },
                 icon = { Icon(imageVector = mainNavDestination.navIcon, null) },
                 label = { Text(stringResource(mainNavDestination.navLabelRes)) }
@@ -141,12 +150,8 @@ private fun MainNavigationRail(
             mainNavDestination.forEach { mainNavDestination ->
                 NavigationRailItem(
                     selected = currentRoute?.startsWith(mainNavDestination.route) ?: false,
-                    onClick = onClick@{
-                        if (currentRoute == mainNavDestination.route) return@onClick
-                        navHostController.navigate(mainNavDestination.route) {
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                    onClick = {
+                        onNavigationItemClick(currentRoute, mainNavDestination, navHostController)
                     },
                     icon = { Icon(imageVector = mainNavDestination.navIcon, null) },
                     label = { Text(stringResource(mainNavDestination.navLabelRes)) },
@@ -169,6 +174,19 @@ private fun navigateToSettings(context: Context) {
 private fun navigateToPrivacyPolicy(context: Context) {
     val privacyPolicyIntent = Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URI))
     ContextCompat.startActivity(context, privacyPolicyIntent, null)
+}
+
+private fun onNavigationItemClick(
+    currentRoute: String?,
+    mainNavDestination: NavDestination.MainNavDestination,
+    navHostController: NavHostController
+) {
+    if (currentRoute == mainNavDestination.route || currentRoute == null) return
+    navHostController.navigate(mainNavDestination.route) {
+        launchSingleTop = true
+        popUpTo(currentRoute) { inclusive = true }
+        restoreState = true
+    }
 }
 
 private const val PRIVACY_POLICY_URI =

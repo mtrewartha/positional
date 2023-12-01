@@ -7,6 +7,7 @@ import android.view.Surface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,29 +48,46 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.measurement.Angle
-import io.trewartha.positional.ui.NavDestination.Compass
+import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.bottomNavEnterTransition
+import io.trewartha.positional.ui.bottomNavExitTransition
+import io.trewartha.positional.ui.bottomNavPopEnterTransition
+import io.trewartha.positional.ui.bottomNavPopExitTransition
 import io.trewartha.positional.ui.utils.placeholder
 import io.trewartha.positional.util.tryOrNull
 import java.lang.Math.toDegrees
 
-fun NavGraphBuilder.compassView() {
-    composable(Compass.route) {
+fun NavGraphBuilder.compassView(navController: NavController, contentPadding: PaddingValues) {
+    composable(
+        NavDestination.Compass.route,
+        enterTransition = bottomNavEnterTransition(),
+        exitTransition = bottomNavExitTransition(NavDestination.CompassHelp.route),
+        popEnterTransition = bottomNavPopEnterTransition(NavDestination.CompassHelp.route),
+        popExitTransition = bottomNavPopExitTransition()
+    ) {
         val viewModel: CompassViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
-        CompassView(state = state)
+        CompassView(
+            state = state,
+            contentPadding = contentPadding,
+            onHelpClick = { navController.navigate(NavDestination.CompassHelp.route) })
     }
 }
 
 @Composable
-private fun CompassView(state: CompassViewModel.State) {
-    var showHelpSheet by rememberSaveable { mutableStateOf(false) }
+private fun CompassView(
+    state: CompassViewModel.State,
+    contentPadding: PaddingValues,
+    onHelpClick: () -> Unit
+) {
     var showMissingSensorDialog by remember { mutableStateOf(false) }
     if (showMissingSensorDialog) {
         AlertDialog(
@@ -91,6 +108,7 @@ private fun CompassView(state: CompassViewModel.State) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(contentPadding)
             .padding(dimensionResource(R.dimen.standard_padding)),
     ) {
         when (state) {
@@ -100,14 +118,9 @@ private fun CompassView(state: CompassViewModel.State) {
                     Modifier.fillMaxSize()
                 )
             is CompassViewModel.State.SensorsPresent ->
-                SensorsPresentContent(
-                    state,
-                    onHelpClick = { showHelpSheet = true },
-                    Modifier.fillMaxSize()
-                )
+                SensorsPresentContent(state, onHelpClick, Modifier.fillMaxSize())
         }
     }
-    if (showHelpSheet) CompassHelpSheet(onDismissRequest = { showHelpSheet = false })
 }
 
 @Composable
@@ -262,7 +275,11 @@ private const val ORIENTATION_VECTOR_SIZE = 3
 private fun SensorsMissingPreview() {
     PositionalTheme {
         Surface {
-            CompassView(state = CompassViewModel.State.SensorsMissing)
+            CompassView(
+                state = CompassViewModel.State.SensorsMissing,
+                contentPadding = PaddingValues(),
+                onHelpClick = {}
+            )
         }
     }
 }
@@ -272,7 +289,11 @@ private fun SensorsMissingPreview() {
 private fun SensorsPresentLoadingPreview() {
     PositionalTheme {
         Surface {
-            CompassView(state = CompassViewModel.State.SensorsPresent.Loading)
+            CompassView(
+                state = CompassViewModel.State.SensorsPresent.Loading,
+                contentPadding = PaddingValues(),
+                onHelpClick = {}
+            )
         }
     }
 }
@@ -297,6 +318,8 @@ private fun SensorsPresentLoadedPreview() {
                     magneticDeclination = Angle.Degrees(5f),
                     mode = CompassMode.TRUE_NORTH,
                 ),
+                contentPadding = PaddingValues(),
+                onHelpClick = {}
             )
         }
     }

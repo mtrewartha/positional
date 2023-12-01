@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -41,6 +42,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.google.accompanist.permissions.MultiplePermissionsState
@@ -56,6 +58,10 @@ import io.trewartha.positional.data.measurement.Speed
 import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.bottomNavEnterTransition
+import io.trewartha.positional.ui.bottomNavExitTransition
+import io.trewartha.positional.ui.bottomNavPopEnterTransition
+import io.trewartha.positional.ui.bottomNavPopExitTransition
 import io.trewartha.positional.ui.locals.LocalCoordinatesFormatter
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
@@ -73,10 +79,18 @@ import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
 
 fun NavGraphBuilder.locationView(
+    navController: NavController,
+    contentPadding: PaddingValues,
     snackbarHostState: SnackbarHostState,
     onAndroidSettingsClick: () -> Unit
 ) {
-    composable(NavDestination.Location.route) {
+    composable(
+        NavDestination.Location.route,
+        enterTransition = bottomNavEnterTransition(),
+        exitTransition = bottomNavExitTransition(NavDestination.LocationHelp.route),
+        popEnterTransition = bottomNavPopEnterTransition(NavDestination.LocationHelp.route),
+        popExitTransition = bottomNavPopExitTransition()
+    ) {
         val locationPermissions = remember { listOf(Manifest.permission.ACCESS_FINE_LOCATION) }
         val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
 
@@ -103,6 +117,7 @@ fun NavGraphBuilder.locationView(
                 location = location,
                 showAccuracies = showAccuracies,
                 units = units,
+                contentPadding = contentPadding,
                 snackbarHostState = snackbarHostState,
                 onAndroidSettingsClick = onAndroidSettingsClick,
                 onShareClick = click@{ coordinates ->
@@ -111,6 +126,7 @@ fun NavGraphBuilder.locationView(
                             ?: return@click
                     shareCoordinates(context, formattedCoordinates)
                 },
+                onHelpClick = { navController.navigate(NavDestination.LocationHelp.route) }
             )
         }
     }
@@ -122,14 +138,15 @@ private fun LocationView(
     location: Location?,
     showAccuracies: Boolean?,
     units: Units?,
+    contentPadding: PaddingValues,
     snackbarHostState: SnackbarHostState,
     onAndroidSettingsClick: () -> Unit,
     onShareClick: (Coordinates?) -> Unit,
+    onHelpClick: () -> Unit,
 ) {
     // Snackbars
     val coroutineScope = rememberCoroutineScope()
     val coordinatesCopiedMessage = stringResource(R.string.location_snackbar_coordinates_copied)
-    var showHelpClick by rememberSaveable { mutableStateOf(false) }
     var showMapError by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     if (locationPermissionsState.allPermissionsGranted) {
@@ -159,9 +176,10 @@ private fun LocationView(
                 }
             },
             onShareClick = onShareClick,
-            onHelpClick = { showHelpClick = true },
+            onHelpClick = onHelpClick,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(contentPadding)
                 .padding(dimensionResource(R.dimen.standard_padding))
                 .verticalScroll(rememberScrollState())
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -172,12 +190,12 @@ private fun LocationView(
             onSettingsClick = onAndroidSettingsClick,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(contentPadding)
                 .padding(dimensionResource(R.dimen.standard_padding))
                 .verticalScroll(rememberScrollState())
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         )
     }
-    if (showHelpClick) LocationHelpSheet(onDismissRequest = { showHelpClick = false })
     if (showMapError) MapErrorDialog(onDismissRequest = { showMapError = false })
 }
 
@@ -257,9 +275,12 @@ private fun PermissionNotGrantedPreview() {
                 location = null,
                 showAccuracies = true,
                 units = null,
+                contentPadding = PaddingValues(),
                 snackbarHostState = SnackbarHostState(),
-                onAndroidSettingsClick = {}
-            ) {}
+                onAndroidSettingsClick = {},
+                onShareClick = {},
+                onHelpClick = {}
+            )
         }
     }
 }
@@ -289,9 +310,12 @@ private fun LocatingPreview() {
                     location = null,
                     showAccuracies = true,
                     units = null,
+                    contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
-                    onAndroidSettingsClick = {}
-                ) {}
+                    onAndroidSettingsClick = {},
+                    onShareClick = {},
+                    onHelpClick = {}
+                )
             }
         }
     }
@@ -337,9 +361,12 @@ private fun LocatedPreview() {
                     ),
                     showAccuracies = true,
                     units = Units.METRIC,
+                    contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
-                    onAndroidSettingsClick = {}
-                ) {}
+                    onAndroidSettingsClick = {},
+                    onShareClick = {},
+                    onHelpClick = {}
+                )
             }
         }
     }

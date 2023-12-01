@@ -10,6 +10,7 @@
     <string name="common_ok">OK</string>
     <string name="common_privacy_policy">Privacy policy</string>
     <string name="common_save">Save</string>
+    <string name="common_up">Up</string>
 
     <!-- Bottom Navigation -->
     <string name="bottom_navigation_compass">Compass</string>
@@ -52,6 +53,9 @@
     <string name="compass_missing_hardware_dialog_text">Most compass apps, like Positional, use a magnetometer that detects Earth\'s magnetic field just like a real compass uses a magnetic needle. We also use an accelerometer to determine how the device is oriented in the magnetic field (e.g. right side up or upside down). Unfortunately, your device is missing at least one of those sensors.</string>
     <string name="compass_missing_hardware_button_why">Why?</string>
     <string name="compass_missing_hardware_title">Missing Hardware</string>
+
+    <!-- Compass Help -->
+    <string name="compass_help_title">Compass Help</string>
 
     <!-- Location -->
     <string name="location_accuracy_imperial">± %.0f</string>
@@ -105,6 +109,9 @@
     <string name="location_updated_at">Updated at %s</string>
     <string name="location_updating">Device is acquiring location…</string>
 
+    <!-- Location Help -->
+    <string name="location_help_title">Location Help</string>
+
     <!-- Settings -->
     <string name="settings_compass_mode_dialog_title">Compass mode</string>
     <string name="settings_compass_mode_title">Compass mode</string>
@@ -155,4 +162,7 @@
     <string name="sun_title_dusk">Dusk</string>
     <string name="sun_title_sunrise">Sunrise</string>
     <string name="sun_title_sunset">Sunset</string>
+
+    <!-- Sun Help -->
+    <string name="sun_help_title">Sun Help</string>
 </resources>
