@@ -92,6 +92,7 @@
     <string name="settings_coordinates_format_value_mgrs_name">MGRS</string>
     <string name="settings_coordinates_format_value_utm_name">UTM</string>
 
+    <string name="settings_license_title">License</string>
     <string name="settings_privacy_policy_title" translatable="false">@string/common_privacy_policy</string>
 
     <string name="settings_show_accuracies_description">Show or hide accuracies of measurements</string>
