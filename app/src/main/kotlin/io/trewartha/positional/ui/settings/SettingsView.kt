@@ -43,6 +43,7 @@ import io.trewartha.positional.ui.bottomNavPopExitTransition
 
 fun NavGraphBuilder.settingsView(
     contentPadding: PaddingValues,
+    onLicenseClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit
 ) {
     composable(
@@ -70,6 +71,7 @@ fun NavGraphBuilder.settingsView(
             units = units,
             contentPadding = contentPadding,
             onUnitsChange = viewModel::onUnitsChange,
+            onLicenseClick = onLicenseClick,
             onPrivacyPolicyClick = onPrivacyPolicyClick
         )
     }
@@ -89,6 +91,7 @@ private fun SettingsView(
     contentPadding: PaddingValues,
     onThemeChange: (Theme) -> Unit,
     onUnitsChange: (Units) -> Unit,
+    onLicenseClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -141,10 +144,23 @@ private fun SettingsView(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            TextButton(onClick = onPrivacyPolicyClick) {
-                Text(text = stringResource(id = R.string.settings_privacy_policy_title))
-            }
+            LicenseButton(onLicenseClick, modifier = Modifier.padding(top = 16.dp))
+            PrivacyPolicyButton(onPrivacyPolicyClick)
         }
+    }
+}
+
+@Composable
+private fun LicenseButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    TextButton(onClick = onClick, modifier) {
+        Text(text = stringResource(id = R.string.settings_license_title))
+    }
+}
+
+@Composable
+private fun PrivacyPolicyButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    TextButton(onClick = onClick, modifier) {
+        Text(text = stringResource(id = R.string.settings_privacy_policy_title))
     }
 }
 
@@ -164,6 +180,7 @@ private fun LoadingPreviews() {
             contentPadding = PaddingValues(),
             onThemeChange = {},
             onUnitsChange = {},
+            onLicenseClick = {},
             onPrivacyPolicyClick = {}
         )
     }
@@ -185,6 +202,7 @@ private fun LoadedPreviews() {
             contentPadding = PaddingValues(),
             onThemeChange = {},
             onUnitsChange = {},
+            onLicenseClick = {},
             onPrivacyPolicyClick = {}
         )
     }

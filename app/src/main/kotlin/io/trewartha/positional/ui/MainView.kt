@@ -102,6 +102,7 @@ fun MainView(
                     locationHelpView(navHostController, contentPadding)
                     settingsView(
                         contentPadding,
+                        onLicenseClick = { navigateToLicense(context) },
                         onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) }
                     )
                     sunView(navHostController, contentPadding)
@@ -171,6 +172,11 @@ private fun navigateToSettings(context: Context) {
     ContextCompat.startActivity(context, settingsIntent, null)
 }
 
+private fun navigateToLicense(context: Context) {
+    val licenseIntent = Intent(Intent.ACTION_VIEW, Uri.parse(LICENSE_URI))
+    ContextCompat.startActivity(context, licenseIntent, null)
+}
+
 private fun navigateToPrivacyPolicy(context: Context) {
     val privacyPolicyIntent = Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URI))
     ContextCompat.startActivity(context, privacyPolicyIntent, null)
@@ -189,5 +195,7 @@ private fun onNavigationItemClick(
     }
 }
 
+private const val LICENSE_URI =
+    "https://github.com/mtrewartha/positional/blob/main/LICENSE"
 private const val PRIVACY_POLICY_URI =
-    "https://github.com/mtrewartha/positional/blob/master/PRIVACY.md"
+    "https://github.com/mtrewartha/positional/blob/main/PRIVACY.md"
