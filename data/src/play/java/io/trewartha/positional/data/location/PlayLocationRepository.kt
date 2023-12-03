@@ -6,7 +6,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
-import io.trewartha.positional.data.location.Location
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
@@ -42,7 +41,7 @@ class PlayLocationRepository @Inject constructor(
      * Once permissions have been obtained, location will be attempted and the result(s) will flow
      * through.
      */
-    override val locationFlow: Flow<Location> = callbackFlow {
+    override val location: Flow<Location> = callbackFlow {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let { trySendBlocking(it) }

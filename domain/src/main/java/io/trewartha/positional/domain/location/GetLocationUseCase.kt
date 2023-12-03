@@ -8,5 +8,5 @@ import javax.inject.Inject
 class GetLocationUseCase @Inject constructor(
     private val locationRepository: LocationRepository
 ) {
-    operator fun invoke(): Flow<Location> = locationRepository.locationFlow
+    operator fun invoke(): Flow<Location> = locationRepository.location
 }

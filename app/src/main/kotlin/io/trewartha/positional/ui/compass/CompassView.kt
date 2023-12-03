@@ -1,9 +1,5 @@
 package io.trewartha.positional.ui.compass
 
-import android.hardware.SensorManager
-import android.hardware.SensorManager.getOrientation
-import android.hardware.SensorManager.remapCoordinateSystem
-import android.view.Surface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,8 +49,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassAccuracy
+import io.trewartha.positional.data.compass.CompassAzimuth
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.measurement.Angle
+import io.trewartha.positional.domain.compass.CompassReadings
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.bottomNavEnterTransition
@@ -62,8 +60,6 @@ import io.trewartha.positional.ui.bottomNavExitTransition
 import io.trewartha.positional.ui.bottomNavPopEnterTransition
 import io.trewartha.positional.ui.bottomNavPopExitTransition
 import io.trewartha.positional.ui.utils.placeholder
-import io.trewartha.positional.util.tryOrNull
-import java.lang.Math.toDegrees
 
 fun NavGraphBuilder.compassView(navController: NavController, contentPadding: PaddingValues) {
     composable(
@@ -180,43 +176,28 @@ private fun SensorsPresentContent(
         if (showAccuracyHelpDialog) {
             AccuracyHelpDialog(onDismissRequest = { showAccuracyHelpDialog = false })
         }
-        val remappedRotationMatrix = remember { FloatArray(ROTATION_MATRIX_SIZE) }
-        val orientation = remember { FloatArray(ORIENTATION_VECTOR_SIZE) }
-        val display = LocalContext.current
-            .let { tryOrNull { ContextCompat.getDisplayOrDefault(it) } }
-        val declination = when (state) {
-            is CompassViewModel.State.SensorsPresent.Loaded ->
-                state.magneticDeclination.inDegrees().value
-            else ->
-                null
-        }
-        val azimuthDegrees = remember(state) {
-            if (state is CompassViewModel.State.SensorsPresent.Loaded) {
-                val (newXAxis, newYAxis) = when (val displayRotation = display?.rotation) {
-                    null, // Display is null in Compose preview
-                    Surface.ROTATION_0 -> SensorManager.AXIS_X to SensorManager.AXIS_Y
-                    Surface.ROTATION_90 -> SensorManager.AXIS_Y to SensorManager.AXIS_MINUS_X
-                    Surface.ROTATION_180 -> SensorManager.AXIS_MINUS_Y to SensorManager.AXIS_MINUS_X
-                    Surface.ROTATION_270 -> SensorManager.AXIS_MINUS_Y to SensorManager.AXIS_X
-                    else -> error("Unexpected display rotation: $displayRotation")
-                }
-                remapCoordinateSystem(
-                    state.rotationMatrix,
-                    newXAxis,
-                    newYAxis,
-                    remappedRotationMatrix
-                )
-                getOrientation(remappedRotationMatrix, orientation)
-                val degreesToMagneticNorth =
-                    (toDegrees(orientation[0].toDouble()).toFloat() + DEGREES_360) % DEGREES_360
-                when (state.mode) {
-                    CompassMode.MAGNETIC_NORTH -> degreesToMagneticNorth
-                    CompassMode.TRUE_NORTH -> degreesToMagneticNorth + (declination ?: 0f)
-                }
-            } else {
-                null
+        val context = LocalContext.current
+        val displayRotationDegrees = try {
+            when (ContextCompat.getDisplayOrDefault(context).rotation) {
+                android.view.Surface.ROTATION_0 -> DEGREES_0
+                android.view.Surface.ROTATION_90 -> DEGREES_90
+                android.view.Surface.ROTATION_180 -> DEGREES_180
+                android.view.Surface.ROTATION_270 -> DEGREES_270
+                else -> DEGREES_0
             }
+        } catch (_: NullPointerException) { // Compose preview causes this
+            DEGREES_0
         }
+        val azimuthDegrees = (state as? CompassViewModel.State.SensorsPresent.Loaded)
+            ?.let {
+                when (it.compassMode) {
+                    CompassMode.MAGNETIC_NORTH -> it.compassReadings.magneticAzimuth
+                    CompassMode.TRUE_NORTH -> it.compassReadings.trueAzimuth
+                }
+            }
+            ?.angle?.inDegrees()?.value
+            ?.plus(displayRotationDegrees)
+            ?.mod(DEGREES_360)
         Compass(
             azimuthDegrees,
             Modifier
@@ -227,6 +208,8 @@ private fun SensorsPresentContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val declination = (state as? CompassViewModel.State.SensorsPresent.Loaded)
+                ?.compassReadings?.magneticDeclination?.inDegrees()?.value
             DeclinationText(declination)
             HelpButton(onHelpClick)
         }
@@ -266,10 +249,6 @@ private fun DeclinationText(declination: Float?, modifier: Modifier = Modifier) 
     )
 }
 
-private const val DEGREES_360 = 360f
-private const val ROTATION_MATRIX_SIZE = 9
-private const val ORIENTATION_VECTOR_SIZE = 3
-
 @PreviewLightDark
 @Composable
 private fun SensorsMissingPreview() {
@@ -307,16 +286,15 @@ private fun SensorsPresentLoadedPreview() {
         Surface {
             CompassView(
                 state = CompassViewModel.State.SensorsPresent.Loaded(
-                    rotationMatrix = FloatArray(9).apply {
-                        // Set the identity rotation matrix
-                        set(0, 1f)
-                        set(4, 1f)
-                        set(8, 1f)
-                    },
-                    accelerometerAccuracy = CompassAccuracy.HIGH,
-                    magnetometerAccuracy = null,
-                    magneticDeclination = Angle.Degrees(5f),
-                    mode = CompassMode.TRUE_NORTH,
+                    compassReadings = CompassReadings(
+                        magneticAzimuth = CompassAzimuth(
+                            angle = Angle.Degrees(40f),
+                            accelerometerAccuracy = CompassAccuracy.HIGH,
+                            magnetometerAccuracy = CompassAccuracy.MEDIUM
+                        ),
+                        magneticDeclination = Angle.Degrees(5f)
+                    ),
+                    compassMode = CompassMode.TRUE_NORTH
                 ),
                 contentPadding = PaddingValues(),
                 onHelpClick = {}
@@ -324,3 +302,9 @@ private fun SensorsPresentLoadedPreview() {
         }
     }
 }
+
+private const val DEGREES_0 = 0f
+private const val DEGREES_90 = 90f
+private const val DEGREES_180 = 180f
+private const val DEGREES_270 = 270f
+private const val DEGREES_360 = 360f

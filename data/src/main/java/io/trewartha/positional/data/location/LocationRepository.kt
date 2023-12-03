@@ -12,5 +12,5 @@ interface LocationRepository {
      * [Flow][Flow] of the latest [location][Location]. The source of the location is up to the
      * implementation of this interface.
      */
-    val locationFlow: Flow<Location>
+    val location: Flow<Location>
 }

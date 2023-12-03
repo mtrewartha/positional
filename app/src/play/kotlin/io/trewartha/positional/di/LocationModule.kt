@@ -9,8 +9,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.trewartha.positional.data.location.PlayLocationRepository
 import io.trewartha.positional.data.location.LocationRepository
+import io.trewartha.positional.data.location.PlayLocationRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)

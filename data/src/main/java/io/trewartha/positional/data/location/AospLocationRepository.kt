@@ -43,7 +43,7 @@ class AospLocationRepository @Inject constructor(
      * Once permissions have been obtained, location will be attempted and the result(s) will flow
      * through.
      */
-    override val locationFlow: Flow<Location> = callbackFlow {
+    override val location: Flow<Location> = callbackFlow {
         val locationCallback = LocationListenerCompat { location -> trySendBlocking(location) }
         val locationProvider = if (SDK_INT >= S) FUSED_PROVIDER else GPS_PROVIDER
         val locationRequest = LocationRequestCompat.Builder(LOCATION_UPDATE_INTERVAL_MS)
