@@ -3,10 +3,7 @@
 
     <!-- Common Text -->
     <string name="common_cancel">Cancel</string>
-    <string name="common_close">Close</string>
     <string name="common_dash" translatable="false">—</string>
-    <string name="common_do_not_ask_again">DON\'T ASK AGAIN</string>
-    <string name="common_exit">Exit</string>
     <string name="common_ok">OK</string>
     <string name="common_privacy_policy">Privacy policy</string>
     <string name="common_save">Save</string>
@@ -21,18 +18,8 @@
     <!-- Compass -->
     <string name="compass_button_help_content_description">Help</string>
     <string name="compass_declination">Declination: %.2f°</string>
-    <string name="compass_degrees">%d°</string>
-    <string name="compass_degrees_content_description">Current bearing %d degrees</string>
-    <string name="compass_degrees_content_description_unknown">Current bearing unknown</string>
     <string name="compass_dialog_accuracy_help_text">The sensors used to determine your direction currently have low accuracy. Moving your device in a figure eight pattern may help.</string>
     <string name="compass_dialog_accuracy_help_title">Low Compass Accuracy</string>
-    <string name="compass_accuracy_high">High</string>
-    <string name="compass_accuracy_low">Low</string>
-    <string name="compass_accuracy_medium">Medium</string>
-    <string name="compass_accuracy_unusable">Unusable</string>
-    <string name="compass_accuracy_title">Accuracy </string>
-    <string name="compass_accuracy_unknown">@string/common_dash</string>
-    <string name="compass_accuracy_unreliable">Unreliable</string>
     <string name="compass_direction_east">E</string>
     <string name="compass_direction_north">N</string>
     <string name="compass_direction_northeast">NE</string>
@@ -41,13 +28,6 @@
     <string name="compass_direction_southeast">SE</string>
     <string name="compass_direction_southwest">SW</string>
     <string name="compass_direction_west">W</string>
-    <string name="compass_label_accelerometer_accuracy">Accelerometer accuracy</string>
-    <string name="compass_label_magnetometer_accuracy">Magnetometer accuracy</string>
-    <string name="compass_magnetic_field_strength_label">Field Strength</string>
-    <string name="compass_magnetic_field_strength_value">%d μT</string>
-    <string name="compass_mode_label">Mode</string>
-    <string name="compass_mode_value_magnetic_north">Magnetic North</string>
-    <string name="compass_mode_value_true_north">True North</string>
     <string name="compass_missing_hardware_body">The compass has been disabled.</string>
     <string name="compass_missing_hardware_dialog_confirm" translatable="false">@string/common_ok</string>
     <string name="compass_missing_hardware_dialog_text">Most compass apps, like Positional, use a magnetometer that detects Earth\'s magnetic field just like a real compass uses a magnetic needle. We also use an accelerometer to determine how the device is oriented in the magnetic field (e.g. right side up or upside down). Unfortunately, your device is missing at least one of those sensors.</string>
@@ -65,26 +45,15 @@
     <string name="location_bearing">%.0f°</string>
     <string name="location_bearing_accuracy">± %.0f</string>
     <string name="location_button_help_content_description">Help</string>
-    <string name="location_button_help_tooltip">Help</string>
     <string name="location_button_map_content_description">Open in map app</string>
     <string name="location_button_lock_content_description_off">Lock screen (currently off)</string>
     <string name="location_button_lock_content_description_on">Lock screen (currently on)</string>
-    <string name="location_button_lock_tooltip_off">Lock screen (currently off)</string>
-    <string name="location_button_lock_tooltip_on">Lock screen (currently on)</string>
     <string name="location_button_share_content_description">Share coordinates</string>
-    <string name="location_button_share_tooltip">Share coordinates</string>
     <string name="location_coordinates_copy_format_dd">%1$s, %2$s</string>
     <string name="location_coordinates_copy_format_ddm">%1$s, %2$s</string>
     <string name="location_coordinates_copy_format_dms">%1$s, %2$s</string>
     <string name="location_coordinates_copy_format_mgrs">%1$s %2$s %3$s</string>
-    <string name="location_coordinates_copy_format_utm">%1$s %2$s %3$s</string>
-    <string name="location_coordinates_copy_label">Location</string>
-    <string name="location_coordinates_copy_both">Latitude and longitude</string>
     <string name="location_coordinates_copy_content_description">Copy coordinates</string>
-    <string name="location_coordinates_copy_latitude">Latitude only</string>
-    <string name="location_coordinates_copy_longitude">Longitude only</string>
-    <string name="location_coordinates_copy_title">Which coordinates would you like to copy?</string>
-    <string name="location_coordinates_copy_tooltip">Copy coordinates</string>
     <string name="location_dialog_map_error_button_confirm" translatable="false">@string/common_ok</string>
     <string name="location_dialog_map_error_text">There doesn\'t seem to be a map app installed on your device that supports \"geo\" links. You could install an app like Google Maps or something similar and try again.</string>
     <string name="location_dialog_map_error_title">No map app found</string>
@@ -99,15 +68,12 @@
     <string name="location_permission_required_button_privacy_policy" translatable="false">@string/common_privacy_policy</string>
     <string name="location_permission_required_body">Your location is kept completely private.</string>
     <string name="location_permission_required_title">Precise location permission required</string>
-    <string name="location_permission_without_rationale_title">Let\'s get started!</string>
-    <string name="location_permission_without_rationale_message">In order to show your location, Positional needs permission. Your location is never recorded. For more details, check out the simple privacy policy.</string>
     <string name="location_snackbar_coordinates_copied">Coordinates copied</string>
     <string name="location_snackbar_screen_locked">Screen locked on while showing coordinates</string>
     <string name="location_snackbar_screen_unlocked">Screen unlocked</string>
     <string name="location_speed_imperial">%.0f mph</string>
     <string name="location_speed_metric">%.0f km/h</string>
     <string name="location_updated_at">Updated at %s</string>
-    <string name="location_updating">Device is acquiring location…</string>
 
     <!-- Location Help -->
     <string name="location_help_title">Location Help</string>
@@ -131,9 +97,7 @@
     <string name="settings_show_accuracies_description">Show or hide accuracies of measurements</string>
     <string name="settings_show_accuracies_title">Show accuracies</string>
 
-    <string name="settings_theme_dialog_dialog_title">Theme</string>
     <string name="settings_theme_dialog_title">Select a theme</string>
-    <string name="settings_theme_dialog_text">If your device runs Android 13 or higher, we\'ll use the accent colors from your device\'s theme.</string>
     <string name="settings_theme_dialog_confirm" translatable="false">@string/common_save</string>
     <string name="settings_theme_dialog_dismiss" translatable="false">@string/common_cancel</string>
     <string name="settings_theme_title">Theme</string>
@@ -152,7 +116,6 @@
     <string name="sun_button_help_content_description">Help</string>
     <string name="sun_button_next_day_content_description">Next day</string>
     <string name="sun_button_previous_day_content_description">Previous day</string>
-    <string name="sun_button_select_click_label">Next day</string>
     <string name="sun_button_today">Jump to today</string>
     <string name="sun_label_dawn_dusk_astronomical">Astronomical</string>
     <string name="sun_label_dawn_dusk_civil">Civil</string>

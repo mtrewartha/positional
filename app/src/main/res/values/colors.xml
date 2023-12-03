@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="black">#000000</color>
-
-    <color name="blue100">#bbdefb</color>
-    <color name="blue300">#64b5f6</color>
-    <color name="blue700">#1976d2</color>
-    <color name="blue900">#0d47a1</color>
-
-    <color name="gray1">#f9f9f9</color>
-    <color name="gray2">#f0f0f0</color>
-    <color name="gray3">#282828</color>
-    <color name="gray4">#121212</color>
-
-    <color name="deepPurple100">#d1c4e9</color>
-    <color name="deepPurple300">#9575cd</color>
-    <color name="deepPurple700">#512da8</color>
-    <color name="deepPurple900">#311b92</color>
-
-    <color name="red">#f44336</color>
-    <color name="white">#ffffff</color>
-
 </resources>
