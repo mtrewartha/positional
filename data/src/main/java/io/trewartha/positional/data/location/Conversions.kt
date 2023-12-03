@@ -10,6 +10,25 @@ import io.trewartha.positional.data.measurement.Speed
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
+class CoordinatesNaNException(coordinates: Coordinates) :
+    IllegalStateException("Coordinate is NaN: $coordinates")
+
+class DeclinationNaNException(coordinates: Coordinates, altitude: Distance?, timestamp: Instant) :
+    IllegalStateException("Declination is NaN for $coordinates, $altitude, ${timestamp.toEpochMilliseconds()}")
+
+fun AndroidLocation.toLocation(): Location = Location(
+    coordinates = Coordinates(latitude, longitude),
+    horizontalAccuracy = horizontalAccuracy,
+    bearing = bearingObject,
+    bearingAccuracy = bearingAccuracy,
+    altitude = altitudeObject,
+    altitudeAccuracy = altitudeAccuracy,
+    speed = speedObject,
+    speedAccuracy = speedAccuracy,
+    timestamp = timestamp,
+    magneticDeclination = magneticDeclination
+)
+
 internal val AndroidLocation.altitudeObject: Distance?
     get() = if (hasAltitude()) {
         Distance.Meters(altitude.toFloat())
@@ -46,14 +65,29 @@ internal val AndroidLocation.horizontalAccuracy: Distance?
     }
 
 internal val AndroidLocation.magneticDeclination: Angle
-    get() = Angle.Degrees(
-        GeomagneticField(
-            latitude.toFloat(),
-            longitude.toFloat(),
-            altitude.takeIf { hasAltitude() }?.toFloat() ?: 0f,
-            timestamp.toEpochMilliseconds()
-        ).declination
-    )
+    get() {
+        val (lat, lon) = try {
+            checkNotNull(latitude.toFloat().takeUnless { it.isNaN() }) to
+                    checkNotNull(longitude.toFloat().takeUnless { it.isNaN() })
+        } catch (_: IllegalStateException) {
+            throw CoordinatesNaNException(Coordinates(latitude, longitude))
+        }
+        // It seems safe to ignore altitude (if we're not able to get it) in the magnetic
+        // declination calculation. The error from doing so should be tiny, so the tiny error
+        // seems like a great trade-off to make if it means we can still calculate/show true
+        // north for the user. See this for more details:
+        // https://earthscience.stackexchange.com/a/9613
+        val alt = altitude.toFloat().takeUnless { it.isNaN() || !hasAltitude() } ?: 0f
+        val millis = timestamp.toEpochMilliseconds()
+        val declination = GeomagneticField(lat, lon, alt, millis).declination
+            .takeUnless { it.isNaN() }
+            ?: throw DeclinationNaNException(
+                Coordinates(latitude, longitude),
+                altitudeObject,
+                timestamp
+            )
+        return Angle.Degrees(declination)
+    }
 
 internal val AndroidLocation.speedObject: Speed?
     get() = if (hasSpeed() && speed >= MIN_SPEED_THRESHOLD) {
@@ -75,18 +109,5 @@ internal val AndroidLocation.timestamp: Instant
     } else {
         Clock.System.now()
     }
-
-fun AndroidLocation.toLocation(): Location = Location(
-    coordinates = Coordinates(latitude, longitude),
-    horizontalAccuracy = horizontalAccuracy,
-    bearing = bearingObject,
-    bearingAccuracy = bearingAccuracy,
-    altitude = altitudeObject,
-    altitudeAccuracy = altitudeAccuracy,
-    speed = speedObject,
-    speedAccuracy = speedAccuracy,
-    timestamp = timestamp,
-    magneticDeclination = magneticDeclination
-)
 
 private const val MIN_SPEED_THRESHOLD = 0.3f // meters per second
