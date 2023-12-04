@@ -12,19 +12,16 @@ sealed interface Angle {
     ) : Angle {
 
         init {
-            require(value.isFinite()) { "Value must be finite" }
-            require(value in VALID_RANGE) { "Value is outside of range 0..<360" }
+            require(value.isFinite()) { "Value '$value' is not finite" }
         }
 
         override fun inDegrees(): Degrees = this
 
         override operator fun plus(other: Angle): Angle =
-            Degrees((value + other.inDegrees().value) % DEGREES_360)
+            Degrees((value + other.inDegrees().value + DEGREES_360) % DEGREES_360)
 
         override fun toString(): String = "${value}°"
     }
 }
 
-private const val DEGREES_0 = 0f
 private const val DEGREES_360 = 360f
-private val VALID_RANGE = DEGREES_0..<DEGREES_360

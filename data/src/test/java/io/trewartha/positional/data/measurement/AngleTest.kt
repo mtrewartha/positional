@@ -7,21 +7,6 @@ import kotlin.test.assertFailsWith
 class AngleTest {
 
     @Test
-    fun testIllegalArgumentExceptionThrownWhenValueIsLessThanZero() {
-        assertFailsWith<IllegalArgumentException> { Angle.Degrees(-0.0001f) }
-    }
-
-    @Test
-    fun testIllegalArgumentExceptionThrownWhenValueIsEqualTo360() {
-        assertFailsWith<IllegalArgumentException> { Angle.Degrees(360f) }
-    }
-
-    @Test
-    fun testIllegalArgumentExceptionThrownWhenValueIsGreaterThan360() {
-        assertFailsWith<IllegalArgumentException> { Angle.Degrees(360.0001f) }
-    }
-
-    @Test
     fun testIllegalArgumentExceptionThrownWhenValueIsInfinite() {
         assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.POSITIVE_INFINITY) }
         assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.NEGATIVE_INFINITY) }

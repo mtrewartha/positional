@@ -65,14 +65,14 @@ class AospCompassAzimuthRepository @Inject constructor(
             accelerometerAccuracy,
             magnetometerAccuracy
         ) { rotation, accelerometerAccuracy, magnetometerAccuracy ->
-            SensorManager.getOrientation(rotation, orientation)
             try {
+                SensorManager.getOrientation(rotation, orientation)
                 val angle = Angle.Degrees(
                     (Math.toDegrees(orientation[0].toDouble())
                         .toFloat() + DEGREES_360) % DEGREES_360
                 )
                 CompassAzimuth(angle, accelerometerAccuracy, magnetometerAccuracy)
-            } catch (_: IllegalArgumentException) {
+            } catch (_: Exception) {
                 null
             }
         }.filterNotNull()

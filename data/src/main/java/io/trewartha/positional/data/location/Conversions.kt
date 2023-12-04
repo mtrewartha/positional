@@ -9,6 +9,7 @@ import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import timber.log.Timber
 
 fun AndroidLocation.toLocation(): Location = Location(
     coordinates = Coordinates(latitude, longitude),
@@ -72,7 +73,8 @@ internal val AndroidLocation.magneticDeclination: Angle?
         val alt = altitude.toFloat().takeIf { hasAltitude() && it.isFinite() } ?: 0f
         val millis = timestamp.toEpochMilliseconds()
         Angle.Degrees(GeomagneticField(lat, lon, alt, millis).declination)
-    } catch (_: IllegalArgumentException) {
+    } catch (exception: IllegalArgumentException) {
+        Timber.w(exception, "Unable to calculate magnetic declination")
         null
     }
 
