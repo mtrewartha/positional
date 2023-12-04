@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
 class AospCompassAzimuthRepository @Inject constructor(
@@ -58,17 +59,23 @@ class AospCompassAzimuthRepository @Inject constructor(
     private val rotationVectorSensor: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
-    override val compassAzimuth: Flow<CompassAzimuth> = combine(
-        rotation,
-        accelerometerAccuracy,
-        magnetometerAccuracy
-    ) { rotation, accelerometerAccuracy, magnetometerAccuracy ->
-        SensorManager.getOrientation(rotation, orientation)
-        val angle = Angle.Degrees(
-            (Math.toDegrees(orientation[0].toDouble()).toFloat() + DEGREES_360) % DEGREES_360
-        )
-        CompassAzimuth(angle, accelerometerAccuracy, magnetometerAccuracy)
-    }
+    override val compassAzimuth: Flow<CompassAzimuth> =
+        combine(
+            rotation,
+            accelerometerAccuracy,
+            magnetometerAccuracy
+        ) { rotation, accelerometerAccuracy, magnetometerAccuracy ->
+            SensorManager.getOrientation(rotation, orientation)
+            try {
+                val angle = Angle.Degrees(
+                    (Math.toDegrees(orientation[0].toDouble())
+                        .toFloat() + DEGREES_360) % DEGREES_360
+                )
+                CompassAzimuth(angle, accelerometerAccuracy, magnetometerAccuracy)
+            } catch (_: IllegalArgumentException) {
+                null
+            }
+        }.filterNotNull()
 }
 
 private fun SensorManager.getAccuracyFlow(sensor: Sensor?): Flow<CompassAccuracy?> =

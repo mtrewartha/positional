@@ -1,5 +1,7 @@
 package io.trewartha.positional.ui.compass
 
+import android.content.Context
+import android.view.Surface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -177,29 +179,15 @@ private fun SensorsPresentContent(
             AccuracyHelpDialog(onDismissRequest = { showAccuracyHelpDialog = false })
         }
         val context = LocalContext.current
-        val displayRotationDegrees = try {
-            when (ContextCompat.getDisplayOrDefault(context).rotation) {
-                android.view.Surface.ROTATION_0 -> DEGREES_0
-                android.view.Surface.ROTATION_90 -> DEGREES_90
-                android.view.Surface.ROTATION_180 -> DEGREES_180
-                android.view.Surface.ROTATION_270 -> DEGREES_270
-                else -> DEGREES_0
-            }
-        } catch (_: NullPointerException) { // Compose preview causes this
-            DEGREES_0
+        val baseAzimuth = (state as? CompassViewModel.State.SensorsPresent.Loaded)?.let {
+            when (it.compassMode) {
+                CompassMode.MAGNETIC_NORTH -> it.compassReadings.magneticAzimuth
+                CompassMode.TRUE_NORTH -> it.compassReadings.trueAzimuth
+            }?.angle
         }
-        val azimuthDegrees = (state as? CompassViewModel.State.SensorsPresent.Loaded)
-            ?.let {
-                when (it.compassMode) {
-                    CompassMode.MAGNETIC_NORTH -> it.compassReadings.magneticAzimuth
-                    CompassMode.TRUE_NORTH -> it.compassReadings.trueAzimuth
-                }
-            }
-            ?.angle?.inDegrees()?.value
-            ?.plus(displayRotationDegrees)
-            ?.mod(DEGREES_360)
+        val adjustedAzimuth = baseAzimuth?.let { adjustAzimuthForDisplayRotation(context, it) }
         Compass(
-            azimuthDegrees,
+            adjustedAzimuth,
             Modifier
                 .sizeIn(maxWidth = 480.dp, maxHeight = 480.dp)
                 .weight(1f)
@@ -248,6 +236,22 @@ private fun DeclinationText(declination: Float?, modifier: Modifier = Modifier) 
         modifier = modifier.placeholder(declination == null)
     )
 }
+
+private fun adjustAzimuthForDisplayRotation(context: Context, baseAzimuth: Angle): Angle =
+    baseAzimuth.plus(getDisplayRotation(context))
+
+private fun getDisplayRotation(context: Context): Angle =
+    try {
+        when (ContextCompat.getDisplayOrDefault(context).rotation) {
+            Surface.ROTATION_0 -> DEGREES_0
+            Surface.ROTATION_90 -> DEGREES_90
+            Surface.ROTATION_180 -> DEGREES_180
+            Surface.ROTATION_270 -> DEGREES_270
+            else -> DEGREES_0
+        }
+    } catch (_: NullPointerException) { // Compose preview causes this
+        DEGREES_0
+    }.let { Angle.Degrees(it) }
 
 @PreviewLightDark
 @Composable
@@ -307,4 +311,3 @@ private const val DEGREES_0 = 0f
 private const val DEGREES_90 = 90f
 private const val DEGREES_180 = 180f
 private const val DEGREES_270 = 270f
-private const val DEGREES_360 = 360f

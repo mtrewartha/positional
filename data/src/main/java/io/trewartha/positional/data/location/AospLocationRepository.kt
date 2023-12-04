@@ -18,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -44,7 +43,14 @@ class AospLocationRepository @Inject constructor(
      * through.
      */
     override val location: Flow<Location> = callbackFlow {
-        val locationCallback = LocationListenerCompat { location -> trySendBlocking(location) }
+        val locationCallback = LocationListenerCompat { androidLocation ->
+            try {
+                trySendBlocking(androidLocation.toLocation())
+            } catch (_: IllegalArgumentException) {
+                // Drop any Android locations that can't be converted
+                Timber.w("Dropping Android location that can't be converted")
+            }
+        }
         val locationProvider = if (SDK_INT >= S) FUSED_PROVIDER else GPS_PROVIDER
         val locationRequest = LocationRequestCompat.Builder(LOCATION_UPDATE_INTERVAL_MS)
             .setMinUpdateIntervalMillis(LOCATION_UPDATE_INTERVAL_MS)
@@ -70,8 +76,6 @@ class AospLocationRepository @Inject constructor(
                 Timber.w(securityException, "Unable to stop location updates")
             }
         }
-    }.map { androidLocation ->
-        androidLocation.toLocation()
     }.onStart {
         Timber.i("Starting location flow")
     }.onEach {

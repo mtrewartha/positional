@@ -2,12 +2,9 @@ package io.trewartha.positional.ui.compass
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.compass.CompassHardwareException
 import io.trewartha.positional.data.compass.CompassMode
-import io.trewartha.positional.data.location.CoordinatesNaNException
-import io.trewartha.positional.data.location.DeclinationNaNException
 import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.domain.compass.CompassReadings
 import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
@@ -35,11 +32,6 @@ class CompassViewModel @Inject constructor(
             when (throwable) {
                 is CompassHardwareException -> {
                     emit(State.SensorsMissing)
-                }
-                is CoordinatesNaNException,
-                is DeclinationNaNException -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
-                    emit(State.SensorsPresent.Loading)
                 }
                 else -> {
                     throw throwable

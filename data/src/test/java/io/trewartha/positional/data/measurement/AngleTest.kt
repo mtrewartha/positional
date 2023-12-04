@@ -2,19 +2,56 @@ package io.trewartha.positional.data.measurement
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
+import kotlin.test.assertFailsWith
 
 class AngleTest {
 
     @Test
-    fun testConversionFromDegreesToDegrees() {
-        val degrees = Angle.Degrees(1f)
+    fun testIllegalArgumentExceptionThrownWhenValueIsLessThanZero() {
+        assertFailsWith<IllegalArgumentException> { Angle.Degrees(-0.0001f) }
+    }
 
-        val result = degrees.inDegrees()
+    @Test
+    fun testIllegalArgumentExceptionThrownWhenValueIsEqualTo360() {
+        assertFailsWith<IllegalArgumentException> { Angle.Degrees(360f) }
+    }
 
-        assertIs<Angle.Degrees>(result)
-        assertEquals(expected = 1f, actual = result.value, absoluteTolerance = TOLERANCE)
+    @Test
+    fun testIllegalArgumentExceptionThrownWhenValueIsGreaterThan360() {
+        assertFailsWith<IllegalArgumentException> { Angle.Degrees(360.0001f) }
+    }
+
+    @Test
+    fun testIllegalArgumentExceptionThrownWhenValueIsInfinite() {
+        assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.POSITIVE_INFINITY) }
+        assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.NEGATIVE_INFINITY) }
+    }
+
+    @Test
+    fun testIllegalArgumentExceptionThrownWhenValueIsNaN() {
+        assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.NaN) }
+    }
+
+    @Test
+    fun testConversionFromDegreesToDegreesIsAnIdentityFunction() {
+        val originalDegrees = Angle.Degrees(1f)
+
+        val result = originalDegrees.inDegrees()
+
+        assertEquals(expected = originalDegrees, actual = result)
+    }
+
+    @Test
+    fun testAdditionWithoutWrapping() {
+        val result = Angle.Degrees(1f) + Angle.Degrees(2f)
+
+        assertEquals(expected = Angle.Degrees(3f), actual = result)
+    }
+
+    @Test
+    fun testAdditionWithWrapping() {
+        val result = Angle.Degrees(359f) + Angle.Degrees(2f)
+
+        assertEquals(expected = Angle.Degrees(1f), actual = result)
     }
 }
-
-private const val TOLERANCE = 0.001f

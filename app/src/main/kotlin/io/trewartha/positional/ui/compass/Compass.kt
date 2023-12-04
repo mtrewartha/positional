@@ -28,7 +28,9 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.android.material.color.MaterialColors.harmonize
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.trewartha.positional.R
+import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.utils.placeholder
 import kotlin.math.cos
@@ -37,20 +39,22 @@ import kotlin.math.sin
 
 @Composable
 fun Compass(
-    azimuthDegrees: Float?,
+    azimuth: Angle?,
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.placeholder(visible = azimuthDegrees == null),
+        modifier = modifier.placeholder(visible = azimuth == null),
         contentAlignment = Alignment.Center
     ) {
-        CompassReading(azimuthDegrees ?: 0f)
-        CompassRose(azimuthDegrees ?: 0f, Modifier.fillMaxSize())
+        if (azimuth != null) {
+            CompassReading(azimuth)
+            CompassRose(azimuth, Modifier.fillMaxSize())
+        }
     }
 }
 
 @Composable
-private fun CompassReading(azimuthDegrees: Float, modifier: Modifier = Modifier) {
+private fun CompassReading(azimuth: Angle, modifier: Modifier = Modifier) {
     ConstraintLayout(modifier) {
         val (arrowIcon, degreesText, symbolText, directionText) = createRefs()
         val innerContentChain = createVerticalChain(arrowIcon, degreesText, directionText)
@@ -68,7 +72,7 @@ private fun CompassReading(azimuthDegrees: Float, modifier: Modifier = Modifier)
                 }
         )
         DegreesText(
-            azimuthDegrees = azimuthDegrees,
+            azimuth = azimuth,
             modifier = Modifier.constrainAs(degreesText) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
@@ -81,7 +85,7 @@ private fun CompassReading(azimuthDegrees: Float, modifier: Modifier = Modifier)
             }
         )
         DirectionText(
-            azimuthDegrees = azimuthDegrees,
+            azimuth = azimuth,
             modifier = Modifier.constrainAs(directionText) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
@@ -92,7 +96,7 @@ private fun CompassReading(azimuthDegrees: Float, modifier: Modifier = Modifier)
 
 @Composable
 private fun CompassRose(
-    azimuthDegrees: Float,
+    azimuth: Angle,
     modifier: Modifier = Modifier,
 ) {
     val northTickColor =
@@ -154,6 +158,7 @@ private fun CompassRose(
         } else {
             DEGREES_360 - (-lastAnimatedAzimuth % DEGREES_360)
         }
+        val azimuthDegrees = azimuth.inDegrees().value.takeIf { it.isFinite() } ?: AZIMUTH_DEFAULT
         if (modLastAnimatedAzimuth != azimuthDegrees) {
             val clockwiseDiff = if (azimuthDegrees > modLastAnimatedAzimuth) {
                 modLastAnimatedAzimuth + DEGREES_360 - azimuthDegrees
@@ -216,9 +221,16 @@ private fun CompassRose(
 }
 
 @Composable
-private fun DegreesText(azimuthDegrees: Float, modifier: Modifier = Modifier) {
+private fun DegreesText(azimuth: Angle, modifier: Modifier = Modifier) {
+    val degrees = try {
+        // The azimuth could round to 360, so don't forget to mod it
+        azimuth.inDegrees().value.roundToInt() % DEGREES_360
+    } catch (exception: IllegalArgumentException) {
+        FirebaseCrashlytics.getInstance().recordException(exception)
+        DEGREES_0
+    }
     Text(
-        text = "${azimuthDegrees.roundToInt() % 360}",
+        text = "$degrees",
         modifier = modifier,
         style = MaterialTheme.typography.displayLarge
     )
@@ -234,33 +246,37 @@ private fun DegreeSymbolText(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun DirectionText(azimuthDegrees: Float, modifier: Modifier = Modifier) {
-    Text(
-        text = stringResource(
-            when {
-                AZIMUTH_NW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NW_MAX ->
-                    R.string.compass_direction_northwest
-                AZIMUTH_NE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_NE_MAX ->
-                    R.string.compass_direction_northeast
-                AZIMUTH_SW_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SW_MAX ->
-                    R.string.compass_direction_southwest
-                AZIMUTH_SE_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_SE_MAX ->
-                    R.string.compass_direction_southeast
-                AZIMUTH_E_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_E_MAX ->
-                    R.string.compass_direction_east
-                AZIMUTH_S_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_S_MAX ->
-                    R.string.compass_direction_south
-                AZIMUTH_W_MIN <= azimuthDegrees && azimuthDegrees < AZIMUTH_W_MAX ->
-                    R.string.compass_direction_west
-                else ->
-                    R.string.compass_direction_north
-            }
-        ),
-        modifier = modifier,
-        style = MaterialTheme.typography.displaySmall
-    )
+private fun DirectionText(azimuth: Angle, modifier: Modifier = Modifier) {
+    val degrees = azimuth.inDegrees().value.takeIf { it.isFinite() }
+    if (degrees != null) {
+        Text(
+            text = stringResource(
+                when {
+                    AZIMUTH_NW_MIN <= degrees && degrees < AZIMUTH_NW_MAX ->
+                        R.string.compass_direction_northwest
+                    AZIMUTH_NE_MIN <= degrees && degrees < AZIMUTH_NE_MAX ->
+                        R.string.compass_direction_northeast
+                    AZIMUTH_SW_MIN <= degrees && degrees < AZIMUTH_SW_MAX ->
+                        R.string.compass_direction_southwest
+                    AZIMUTH_SE_MIN <= degrees && degrees < AZIMUTH_SE_MAX ->
+                        R.string.compass_direction_southeast
+                    AZIMUTH_E_MIN <= degrees && degrees < AZIMUTH_E_MAX ->
+                        R.string.compass_direction_east
+                    AZIMUTH_S_MIN <= degrees && degrees < AZIMUTH_S_MAX ->
+                        R.string.compass_direction_south
+                    AZIMUTH_W_MIN <= degrees && degrees < AZIMUTH_W_MAX ->
+                        R.string.compass_direction_west
+                    else ->
+                        R.string.compass_direction_north
+                }
+            ),
+            modifier = modifier,
+            style = MaterialTheme.typography.displaySmall
+        )
+    }
 }
 
+private const val AZIMUTH_DEFAULT = 0f
 private const val AZIMUTH_N_MIN = 337.5f
 private const val AZIMUTH_N_MAX = 22.5f
 private const val AZIMUTH_E_MIN = 67.5f
@@ -308,7 +324,7 @@ private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 private fun CompassPreview() {
     PositionalTheme {
         Surface(Modifier.size(600.dp, 300.dp)) {
-            Compass(azimuthDegrees = 25f)
+            Compass(azimuth = Angle.Degrees(25f))
         }
     }
 }

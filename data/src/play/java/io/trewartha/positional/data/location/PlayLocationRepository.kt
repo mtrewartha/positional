@@ -15,7 +15,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -44,7 +43,12 @@ class PlayLocationRepository @Inject constructor(
     override val location: Flow<Location> = callbackFlow {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                locationResult.lastLocation?.let { trySendBlocking(it) }
+                try {
+                    locationResult.lastLocation?.let { trySendBlocking(it.toLocation()) }
+                } catch (_: IllegalArgumentException) {
+                    // Drop any Android locations that can't be converted
+                    Timber.w("Dropping Android location that can't be converted")
+                }
             }
 
             override fun onLocationAvailability(locationAvailability: LocationAvailability) {
@@ -69,8 +73,6 @@ class PlayLocationRepository @Inject constructor(
             Timber.i("Stopping location updates")
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         }
-    }.map { androidLocation ->
-        androidLocation.toLocation()
     }.onStart {
         Timber.i("Starting location flow")
     }.onEach {

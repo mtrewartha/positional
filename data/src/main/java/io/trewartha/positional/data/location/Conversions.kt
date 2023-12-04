@@ -10,12 +10,6 @@ import io.trewartha.positional.data.measurement.Speed
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
-class CoordinatesNaNException(coordinates: Coordinates) :
-    IllegalStateException("Coordinate is NaN: $coordinates")
-
-class DeclinationNaNException(coordinates: Coordinates, altitude: Distance?, timestamp: Instant) :
-    IllegalStateException("Declination is NaN for $coordinates, $altitude, ${timestamp.toEpochMilliseconds()}")
-
 fun AndroidLocation.toLocation(): Location = Location(
     coordinates = Coordinates(latitude, longitude),
     horizontalAccuracy = horizontalAccuracy,
@@ -66,27 +60,18 @@ internal val AndroidLocation.horizontalAccuracy: Distance?
 
 internal val AndroidLocation.magneticDeclination: Angle
     get() {
-        val (lat, lon) = try {
-            checkNotNull(latitude.toFloat().takeUnless { it.isNaN() }) to
-                    checkNotNull(longitude.toFloat().takeUnless { it.isNaN() })
-        } catch (_: IllegalStateException) {
-            throw CoordinatesNaNException(Coordinates(latitude, longitude))
-        }
+        val lat = latitude.toFloat()
+        val lon = longitude.toFloat()
+        require(lat.isFinite())
+        require(lon.isFinite())
         // It seems safe to ignore altitude (if we're not able to get it) in the magnetic
         // declination calculation. The error from doing so should be tiny, so the tiny error
         // seems like a great trade-off to make if it means we can still calculate/show true
         // north for the user. See this for more details:
         // https://earthscience.stackexchange.com/a/9613
-        val alt = altitude.toFloat().takeUnless { it.isNaN() || !hasAltitude() } ?: 0f
+        val alt = altitude.toFloat().takeIf { hasAltitude() && it.isFinite() } ?: 0f
         val millis = timestamp.toEpochMilliseconds()
-        val declination = GeomagneticField(lat, lon, alt, millis).declination
-            .takeUnless { it.isNaN() }
-            ?: throw DeclinationNaNException(
-                Coordinates(latitude, longitude),
-                altitudeObject,
-                timestamp
-            )
-        return Angle.Degrees(declination)
+        return Angle.Degrees(GeomagneticField(lat, lon, alt, millis).declination)
     }
 
 internal val AndroidLocation.speedObject: Speed?
