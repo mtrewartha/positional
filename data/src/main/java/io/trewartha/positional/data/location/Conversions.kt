@@ -58,8 +58,8 @@ internal val AndroidLocation.horizontalAccuracy: Distance?
         null
     }
 
-internal val AndroidLocation.magneticDeclination: Angle
-    get() {
+internal val AndroidLocation.magneticDeclination: Angle?
+    get() = try {
         val lat = latitude.toFloat()
         val lon = longitude.toFloat()
         require(lat.isFinite())
@@ -71,7 +71,9 @@ internal val AndroidLocation.magneticDeclination: Angle
         // https://earthscience.stackexchange.com/a/9613
         val alt = altitude.toFloat().takeIf { hasAltitude() && it.isFinite() } ?: 0f
         val millis = timestamp.toEpochMilliseconds()
-        return Angle.Degrees(GeomagneticField(lat, lon, alt, millis).declination)
+        Angle.Degrees(GeomagneticField(lat, lon, alt, millis).declination)
+    } catch (_: IllegalArgumentException) {
+        null
     }
 
 internal val AndroidLocation.speedObject: Speed?

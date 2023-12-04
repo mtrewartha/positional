@@ -16,7 +16,7 @@ import kotlinx.datetime.Instant
  * @property altitude Altitude above the WGS84 ellipsoid or `null` if unknown
  * @property altitudeAccuracy Accuracy of the altitude or `null` if unknown
  * @property magneticDeclination Magnetic declination (i.e. angle between true north and magnetic
- * north) at the location
+ * north) at the location or `null` if unknown
  * @property speed Speed or `null` if unknown
  * @property speedAccuracy Accuracy of the speed or `null` if unknown
  * @property timestamp Instant at which the location was determined
@@ -28,7 +28,7 @@ data class Location(
     val bearingAccuracy: Angle?,
     val altitude: Distance?,
     val altitudeAccuracy: Distance?,
-    val magneticDeclination: Angle,
+    val magneticDeclination: Angle?,
     val speed: Speed?,
     val speedAccuracy: Speed?,
     val timestamp: Instant

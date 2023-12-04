@@ -1,7 +1,6 @@
 package io.trewartha.positional.domain.compass
 
 import io.trewartha.positional.data.compass.CompassAzimuthRepository
-import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.location.LocationRepository
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.domain.utils.flow.throttleFirst
@@ -19,7 +18,7 @@ class DefaultGetCompassReadingsUseCase @Inject constructor(
 
     private val magneticDeclination: Flow<Angle?> = locationRepository.location
         .throttleFirst(LOCATION_THROTTLE_PERIOD)
-        .map<Location, Angle?> { it.magneticDeclination }
+        .map { it.magneticDeclination }
         .onStart { emit(null) }
 
     override operator fun invoke(): Flow<CompassReadings> =
