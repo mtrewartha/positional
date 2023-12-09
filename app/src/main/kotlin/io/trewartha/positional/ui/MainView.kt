@@ -3,6 +3,8 @@ package io.trewartha.positional.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
@@ -28,6 +31,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,6 +52,7 @@ import io.trewartha.positional.ui.location.locationView
 import io.trewartha.positional.ui.settings.settingsView
 import io.trewartha.positional.ui.sun.sunHelpView
 import io.trewartha.positional.ui.sun.sunView
+import io.trewartha.positional.ui.utils.activity
 
 @Composable
 fun MainView(
@@ -65,6 +71,12 @@ fun MainView(
             }
         }
     }
+    val systemBarStyle =
+        SystemBarStyle.auto(Color.Transparent.toArgb(), Color.Transparent.toArgb()) { useDarkTheme }
+    LocalContext.current.activity?.enableEdgeToEdge(
+        statusBarStyle = systemBarStyle,
+        navigationBarStyle = systemBarStyle
+    )
     PositionalTheme(useDarkTheme = useDarkTheme) {
         val isCompactWidthWindow = windowWidthSizeClass == WindowWidthSizeClass.Compact
         val mainNavDestinations = setOf(Location, Compass, Sun, Settings)
