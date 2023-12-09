@@ -62,4 +62,4 @@ class LibrarySolarTimesRepository @Inject constructor() : SolarTimesRepository {
     private fun String.asLocalTime(): LocalTime? = takeIf { it != NO_TIME }?.toLocalTime()
 }
 
-private const val NO_TIME = "00:00"
+private const val NO_TIME = "99:99"
