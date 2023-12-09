@@ -1,3 +1,4 @@
+import java.nio.file.NoSuchFileException
 import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
@@ -21,11 +22,15 @@ android {
 
     signingConfigs {
         create("release") {
-            val uploadKeystoreProperties = loadProperties(PROPERTIES_FILE_PATH)
-            storeFile = file(uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_FILE))
-            storePassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_PASSWORD)
-            keyAlias = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_ALIAS)
-            keyPassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_PASSWORD)
+            try {
+                val uploadKeystoreProperties = loadProperties(PROPERTIES_FILE_PATH)
+                storeFile = file(uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_FILE))
+                storePassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_PASSWORD)
+                keyAlias = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_ALIAS)
+                keyPassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_PASSWORD)
+            } catch (_: NoSuchFileException) {
+                // Builds can't be signed for upload to store unless properties file is loaded
+            }
         }
     }
     compileSdk = libs.versions.android.sdk.compile.get().toInt()

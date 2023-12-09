@@ -7,6 +7,7 @@ import io.trewartha.positional.data.sun.LibrarySolarTimesRepository
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
+import java.util.TimeZone
 
 private val JAN_1_2000 = LocalDate(2000, Month.JANUARY, 1)
 private val MAR_1_2000 = LocalDate(2000, Month.MARCH, 1)
@@ -16,6 +17,7 @@ private val DEC_1_2000 = LocalDate(2000, Month.DECEMBER, 1)
 
 class LocalSolarTimesRepositorySpec : BehaviorSpec({
 
+    lateinit var originalDefaultTimeZone: TimeZone
     lateinit var subject: LibrarySolarTimesRepository
 
     val dates = listOf(JAN_1_2000, MAR_1_2000, JUN_1_2000, SEP_1_2000, DEC_1_2000)
@@ -24,7 +26,13 @@ class LocalSolarTimesRepositorySpec : BehaviorSpec({
     val coordinates = Coordinates(46.7867, -92.1005)
 
     beforeTest {
+        originalDefaultTimeZone = TimeZone.getDefault()
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Chicago")) // Time zone for Duluth above
         subject = LibrarySolarTimesRepository()
+    }
+
+    afterTest {
+        TimeZone.setDefault(originalDefaultTimeZone)
     }
 
     given("a date at a specific location") {
