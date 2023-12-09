@@ -65,7 +65,7 @@ comments:
     endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
   KDocReferencesNonPublicProperty:
     active: false
-    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    excludes: [ '**/test/**' ]
   OutdatedDocumentation:
     active: true
     matchTypeParameters: true
@@ -73,14 +73,15 @@ comments:
     allowParamOnConstructorProperties: true
   UndocumentedPublicClass:
     active: true
-    excludes: [ ]
+    excludes: [ '**/test/**' ]
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
     searchInInnerInterface: true
+    ignoreAnnotated: [ 'Test' ]
   UndocumentedPublicFunction:
     active: true
-    excludes: [ ]
+    excludes: [ '**/test/**' ]
     ignoreAnnotated: [ 'Composable' ]
   UndocumentedPublicProperty:
     active: true
