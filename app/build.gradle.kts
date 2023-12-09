@@ -125,7 +125,7 @@ dependencies {
     implementation(libs.androidx.window)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.accompanist.permissions)
-    implementation(libs.accompanist.placeholder)
+    implementation(libs.composePlaceholder.material3)
     implementation(libs.hilt.android)
     implementation(libs.google.materialComponents)
     implementation(platform(libs.google.firebase.bom))
