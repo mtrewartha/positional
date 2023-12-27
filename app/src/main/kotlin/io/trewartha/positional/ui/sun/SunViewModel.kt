@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -26,6 +27,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -96,5 +98,15 @@ class SunViewModel @Inject constructor(
     }
 
     private val location: Flow<Location> =
-        getLocationUseCase().shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
+        getLocationUseCase()
+            .retry { cause ->
+                if (cause is SecurityException) {
+                    Timber.w("Waiting for location permissions to be granted")
+                    delay(1.seconds)
+                    true
+                } else {
+                    throw cause
+                }
+            }
+            .shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
 }
