@@ -10,12 +10,11 @@ import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
-import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.tasks.await
@@ -24,34 +23,22 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /**
- * Google Play Services-based [LocationRepository] implementation that can provide "fused" locations
- * on all supported Android SDK versions
+ * [Locator] implementation powered by the GMS [FusedLocationProviderClient] with a fallback in case
+ * GMS locations are unavailable
  */
-class PlayLocationRepository @Inject constructor(
+class GmsLocator @Inject constructor(
     private val coroutineContext: CoroutineContext,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val aospLocationRepository: AospLocationRepository
-) : LocationRepository {
+    private val fallbackLocator: Locator
+) : Locator {
 
-    /**
-     * [Flow] of the current [Location]. Before collecting this flow, make sure to obtain location
-     * permissions. If you do not, this flow will retry indefinitely while waiting for permissions.
-     * Once permissions have been obtained, location will be attempted and the result(s) will flow
-     * through.
-     */
     override val location: Flow<Location>
-        get() = callbackFlow {
-            try {
-                producePlayLocations()
-            } catch (securityException: SecurityException) {
-                close(securityException)
-            } catch (_: ApiException) {
-                Timber.w("Play location unavailable, falling back on AOSP location")
-                try {
-                    produceAospLocations()
-                } catch (securityException: SecurityException) {
-                    close(securityException)
-                }
+        get() = gmsLocations.catch { cause ->
+            if (cause is ApiException) {
+                Timber.w("GMS location unavailable, falling back")
+                fallbackLocator.location.collect { location -> emit(location) }
+            } else {
+                throw cause
             }
         }.onStart {
             Timber.d("Starting location flow")
@@ -59,22 +46,7 @@ class PlayLocationRepository @Inject constructor(
             Timber.d("Location update received")
         }.flowOn(coroutineContext)
 
-    private suspend fun ProducerScope<Location>.produceAospLocations() {
-        aospLocationRepository.location
-            .onEach {
-                val result = trySend(it)
-                if (result.isFailure) {
-                    Timber.w(result.exceptionOrNull(), "Unable to send location")
-                }
-            }
-            .launchIn(this)
-        awaitClose {
-            // Don't need to do anything, AOSP location repository should handle its cleanup
-            // and there shouldn't be any more.
-        }
-    }
-
-    private suspend fun ProducerScope<Location>.producePlayLocations() {
+    private val gmsLocations = callbackFlow {
         val request = LocationRequest.Builder(LOCATION_UPDATE_INTERVAL_MS)
             .setMinUpdateIntervalMillis(LOCATION_UPDATE_INTERVAL_MS)
             .setPriority(PRIORITY_HIGH_ACCURACY)

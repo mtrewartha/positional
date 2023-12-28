@@ -3,14 +3,12 @@ package io.trewartha.positional.data.compass
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Compass abstraction that exposes a user's azimuth, i.e. the angle from north that the user is
- * facing, as a flow that constantly emits the most recent azimuth
+ * Compass abstraction that exposes the device's orientation to north as an azimuth
  */
 interface Compass {
 
     /**
-     * [Flow] that constantly emits the most recent azimuth, i.e. the angle from north that the user
-     * is facing
+     * Hot [Flow] that constantly emits the most recent azimuth
      */
     val azimuth: Flow<CompassAzimuth>
 }

@@ -24,18 +24,13 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /**
- * AOSP-based [LocationRepository] implementation with no third party dependencies (e.g.
- * Google Play Services)
+ * [Locator] implementation powered by the AOSP [LocationManager]
  */
-class AospLocationRepository @Inject constructor(
+class AospLocator @Inject constructor(
     private val coroutineContext: CoroutineContext,
     private val locationManager: LocationManager
-) : LocationRepository {
+) : Locator {
 
-    /**
-     * [Flow] of the current [Location]. Before collecting this flow, make sure to obtain location
-     * permissions. If you do not, this flow will fail.
-     */
     override val location: Flow<Location>
         get() = callbackFlow {
             val provider = if (SDK_INT >= S) FUSED_PROVIDER else GPS_PROVIDER

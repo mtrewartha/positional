@@ -8,15 +8,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.trewartha.positional.data.location.AospLocationRepository
-import io.trewartha.positional.data.location.LocationRepository
+import io.trewartha.positional.data.location.AospLocator
+import io.trewartha.positional.data.location.Locator
 
 @Module
 @InstallIn(ViewModelComponent::class)
 interface LocationModule {
 
     @Binds
-    fun locationRepository(aospLocationRepository: AospLocationRepository): LocationRepository
+    fun locator(aospLocator: AospLocator): Locator
 
     companion object {
 
