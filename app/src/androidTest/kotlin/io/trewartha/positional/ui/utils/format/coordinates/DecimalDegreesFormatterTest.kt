@@ -16,7 +16,7 @@ import java.util.Locale
 @RunWith(AndroidJUnit4::class)
 class DecimalDegreesFormatterTest {
 
-    lateinit var subject: DecimalDegreesFormatter
+    private lateinit var subject: DecimalDegreesFormatter
 
     @Before
     fun setUp() {

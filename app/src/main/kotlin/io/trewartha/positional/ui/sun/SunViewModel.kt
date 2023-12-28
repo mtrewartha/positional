@@ -7,7 +7,7 @@ import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.sun.SolarTimes
 import io.trewartha.positional.domain.location.GetLocationUseCase
 import io.trewartha.positional.domain.sun.GetSolarTimesUseCase
-import io.trewartha.positional.ui.utils.ForViewModel
+import io.trewartha.positional.ui.utils.flow.ForViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

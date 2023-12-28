@@ -3,7 +3,6 @@ package io.trewartha.positional.data.measurement
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class AngleTest {
 

@@ -8,7 +8,7 @@ import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.domain.compass.CompassReadings
 import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
-import io.trewartha.positional.ui.utils.ForViewModel
+import io.trewartha.positional.ui.utils.flow.ForViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch

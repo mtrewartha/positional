@@ -1,11 +1,11 @@
-package io.trewartha.positional.ui.utils
+package io.trewartha.positional.ui.utils.flow
 
 import kotlinx.coroutines.flow.SharingStarted
 
 val SharingStarted.Companion.ForViewModel: SharingStarted
     get() = WhileSubscribed(
-        stopTimeoutMillis = VIEW_MODEL_SHARING_STOP_TIMOUT_MS,
+        stopTimeoutMillis = VIEW_MODEL_SHARING_STOP_TIMEOUT_MS,
         replayExpirationMillis = 0
     )
 
-private const val VIEW_MODEL_SHARING_STOP_TIMOUT_MS = 3_000L
+private const val VIEW_MODEL_SHARING_STOP_TIMEOUT_MS = 3_000L
