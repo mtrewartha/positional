@@ -8,8 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.trewartha.positional.data.compass.AospCompassAzimuthRepository
-import io.trewartha.positional.data.compass.CompassAzimuthRepository
+import io.trewartha.positional.data.compass.AospCompass
+import io.trewartha.positional.data.compass.Compass
 import io.trewartha.positional.domain.compass.DefaultGetCompassReadingsUseCase
 import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 
@@ -19,8 +19,8 @@ interface CompassModule {
 
     @Binds
     fun compassAzimuthRepository(
-        aospCompassAzimuthRepository: AospCompassAzimuthRepository
-    ): CompassAzimuthRepository
+        aospCompass: AospCompass
+    ): Compass
 
     @Binds
     fun getCompassReadingsUseCase(

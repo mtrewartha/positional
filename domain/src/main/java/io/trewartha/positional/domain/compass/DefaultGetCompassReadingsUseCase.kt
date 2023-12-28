@@ -1,6 +1,6 @@
 package io.trewartha.positional.domain.compass
 
-import io.trewartha.positional.data.compass.CompassAzimuthRepository
+import io.trewartha.positional.data.compass.Compass
 import io.trewartha.positional.data.location.LocationRepository
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.domain.utils.flow.throttleFirst
@@ -12,7 +12,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.minutes
 
 class DefaultGetCompassReadingsUseCase @Inject constructor(
-    private val compassAzimuthRepository: CompassAzimuthRepository,
+    private val compass: Compass,
     locationRepository: LocationRepository,
 ) : GetCompassReadingsUseCase {
 
@@ -23,7 +23,7 @@ class DefaultGetCompassReadingsUseCase @Inject constructor(
 
     override operator fun invoke(): Flow<CompassReadings> =
         combine(
-            compassAzimuthRepository.compassAzimuth,
+            compass.azimuth,
             magneticDeclination,
         ) { compassAzimuth, magneticDeclination ->
             CompassReadings(compassAzimuth, magneticDeclination)

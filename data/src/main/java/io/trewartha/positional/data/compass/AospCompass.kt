@@ -13,9 +13,12 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
-class AospCompassAzimuthRepository @Inject constructor(
+/**
+ * [Compass] implementation powered by the AOSP [SensorManager]
+ */
+class AospCompass @Inject constructor(
     private val sensorManager: SensorManager,
-) : CompassAzimuthRepository {
+) : Compass {
 
     private val orientation = FloatArray(ROTATION_VECTOR_SIZE)
 
@@ -59,7 +62,7 @@ class AospCompassAzimuthRepository @Inject constructor(
     private val rotationVectorSensor: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
-    override val compassAzimuth: Flow<CompassAzimuth> =
+    override val azimuth: Flow<CompassAzimuth> =
         combine(
             rotation,
             accelerometerAccuracy,
