@@ -1,8 +1,8 @@
 package io.trewartha.positional.data.measurement
 
+import io.kotest.matchers.floats.shouldBeExactly
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
 class DistanceTest {
 
@@ -12,8 +12,8 @@ class DistanceTest {
 
         val result = feet.inFeet()
 
-        assertIs<Distance.Feet>(result)
-        assertEquals(expected = 1f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Distance.Feet>()
+        result.value.shouldBeExactly(1f)
     }
 
     @Test
@@ -22,8 +22,8 @@ class DistanceTest {
 
         val result = feet.inMeters()
 
-        assertIs<Distance.Meters>(result)
-        assertEquals(expected = 0.3048f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Distance.Meters>()
+        result.value.shouldBeExactly(0.3048f)
     }
 
     @Test
@@ -32,8 +32,8 @@ class DistanceTest {
 
         val result = meters.inFeet()
 
-        assertIs<Distance.Feet>(result)
-        assertEquals(expected = 3.28084f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Distance.Feet>()
+        result.value.shouldBeExactly(3.28084f)
     }
 
     @Test
@@ -42,9 +42,7 @@ class DistanceTest {
 
         val result = meters.inMeters()
 
-        assertIs<Distance.Meters>(result)
-        assertEquals(expected = 1f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Distance.Meters>()
+        result.value.shouldBeExactly(1f)
     }
 }
-
-private const val TOLERANCE = 0.001f

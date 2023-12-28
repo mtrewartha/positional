@@ -1,20 +1,21 @@
 package io.trewartha.positional.data.measurement
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 class AngleTest {
 
     @Test
     fun testIllegalArgumentExceptionThrownWhenValueIsInfinite() {
-        assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.POSITIVE_INFINITY) }
-        assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.NEGATIVE_INFINITY) }
+        shouldThrow<IllegalArgumentException> { Angle.Degrees(Float.POSITIVE_INFINITY) }
+        shouldThrow<IllegalArgumentException> { Angle.Degrees(Float.NEGATIVE_INFINITY) }
     }
 
     @Test
     fun testIllegalArgumentExceptionThrownWhenValueIsNaN() {
-        assertFailsWith<IllegalArgumentException> { Angle.Degrees(Float.NaN) }
+        shouldThrow<IllegalArgumentException> { Angle.Degrees(Float.NaN) }
     }
 
     @Test
@@ -23,20 +24,20 @@ class AngleTest {
 
         val result = originalDegrees.inDegrees()
 
-        assertEquals(expected = originalDegrees, actual = result)
+        result.shouldBe(originalDegrees)
     }
 
     @Test
     fun testAdditionWithoutWrapping() {
         val result = Angle.Degrees(1f) + Angle.Degrees(2f)
 
-        assertEquals(expected = Angle.Degrees(3f), actual = result)
+        result.shouldBe(Angle.Degrees(3f))
     }
 
     @Test
     fun testAdditionWithWrapping() {
         val result = Angle.Degrees(359f) + Angle.Degrees(2f)
 
-        assertEquals(expected = Angle.Degrees(1f), actual = result)
+        result.shouldBe(Angle.Degrees(1f))
     }
 }

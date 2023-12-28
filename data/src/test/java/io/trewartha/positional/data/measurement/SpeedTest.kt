@@ -1,8 +1,8 @@
 package io.trewartha.positional.data.measurement
 
+import io.kotest.matchers.floats.shouldBeExactly
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
 class SpeedTest {
 
@@ -12,8 +12,8 @@ class SpeedTest {
 
         val result = kilometersPerHour.inMetersPerSecond()
 
-        assertIs<Speed.MetersPerSecond>(result)
-        assertEquals(expected = 0.277778f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.MetersPerSecond>()
+        result.value.shouldBeExactly(0.277778f)
     }
 
     @Test
@@ -22,8 +22,8 @@ class SpeedTest {
 
         val result = kilometersPerHour.inMilesPerHour()
 
-        assertIs<Speed.MilesPerHour>(result)
-        assertEquals(expected = 0.621371f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.MilesPerHour>()
+        result.value.shouldBeExactly(0.621371f)
     }
 
     @Test
@@ -32,8 +32,8 @@ class SpeedTest {
 
         val result = kilometersPerHour.inKilometersPerHour()
 
-        assertIs<Speed.KilometersPerHour>(result)
-        assertEquals(expected = 1f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.KilometersPerHour>()
+        result.value.shouldBeExactly(1f)
     }
 
     @Test
@@ -42,8 +42,8 @@ class SpeedTest {
 
         val result = metersPerSecond.inMetersPerSecond()
 
-        assertIs<Speed.MetersPerSecond>(result)
-        assertEquals(expected = 1f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.MetersPerSecond>()
+        result.value.shouldBeExactly(1f)
     }
 
     @Test
@@ -52,8 +52,8 @@ class SpeedTest {
 
         val result = metersPerSecond.inMilesPerHour()
 
-        assertIs<Speed.MilesPerHour>(result)
-        assertEquals(expected = 2.23694f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.MilesPerHour>()
+        result.value.shouldBeExactly(2.236936f)
     }
 
     @Test
@@ -62,8 +62,8 @@ class SpeedTest {
 
         val result = metersPerSecond.inKilometersPerHour()
 
-        assertIs<Speed.KilometersPerHour>(result)
-        assertEquals(expected = 3.6f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.KilometersPerHour>()
+        result.value.shouldBeExactly(3.6f)
     }
 
     @Test
@@ -72,8 +72,8 @@ class SpeedTest {
 
         val result = milesPerHour.inMetersPerSecond()
 
-        assertIs<Speed.MetersPerSecond>(result)
-        assertEquals(expected = 0.44704f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.MetersPerSecond>()
+        result.value.shouldBeExactly(0.44704f)
     }
 
     @Test
@@ -82,8 +82,8 @@ class SpeedTest {
 
         val result = milesPerHour.inMilesPerHour()
 
-        assertIs<Speed.MilesPerHour>(result)
-        assertEquals(expected = 1f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.MilesPerHour>()
+        result.value.shouldBeExactly(1f)
     }
 
     @Test
@@ -92,9 +92,7 @@ class SpeedTest {
 
         val result = milesPerHour.inKilometersPerHour()
 
-        assertIs<Speed.KilometersPerHour>(result)
-        assertEquals(expected = 1.60934f, actual = result.value, absoluteTolerance = TOLERANCE)
+        result.shouldBeInstanceOf<Speed.KilometersPerHour>()
+        result.value.shouldBeExactly(1.60934f)
     }
 }
-
-private const val TOLERANCE = 0.001f
