@@ -30,7 +30,7 @@ android {
         create("aosp") {
             dimension = "androidVariant"
         }
-        create("play") {
+        create("gms") {
             dimension = "androidVariant"
         }
     }
@@ -54,8 +54,8 @@ dependencies {
     implementation(libs.sunriseSunset)
     implementation(libs.timber)
 
-    "playApi"(libs.google.playServices.location)
-    "playImplementation"(libs.kotlinx.coroutines.playServices)
+    "gmsApi"(libs.google.playServices.location)
+    "gmsImplementation"(libs.kotlinx.coroutines.playServices)
 
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)

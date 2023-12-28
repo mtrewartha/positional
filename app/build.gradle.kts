@@ -74,7 +74,7 @@ android {
         create("aosp") {
             dimension = "androidVariant"
         }
-        create("play") {
+        create("gms") {
             dimension = "androidVariant"
         }
     }
@@ -113,7 +113,7 @@ android {
                     apiLevel = 33
                     systemImageSource = "aosp-atd"
                 }
-                create("pixel7GoogleApi33") {
+                create("pixel7GmsApi33") {
                     device = "Pixel 7"
                     apiLevel = 33
                     systemImageSource = "google-atd"
@@ -122,8 +122,8 @@ android {
                     create("aosp") {
                         targetDevices.add(devices["pixel7AospApi33"])
                     }
-                    create("google") {
-                        targetDevices.add(devices["pixel7GoogleApi33"])
+                    create("gms") {
+                        targetDevices.add(devices["pixel7GmsApi33"])
                     }
                 }
             }
@@ -173,7 +173,7 @@ dependencies {
     implementation(libs.markwon)
     implementation(libs.timber)
 
-    "playImplementation"(libs.google.firebase.analytics)
+    "gmsImplementation"(libs.google.firebase.analytics)
 
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)

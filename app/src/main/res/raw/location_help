@@ -7,9 +7,9 @@ Positional shows you 5 different aspects of your location:
 - Altitude
 - Speed
 
-Positional does not actually calculate any of these; it simply asks Google Play Services and your
-Android device for them and then displays them to you as they flow in. For your privacy, Positional
-**never** records your location.
+Positional does not actually calculate any of these; it simply asks Android or Google Play Services
+and your Android device for them and then displays them to you as they flow in. For your privacy,
+Positional **never** records your location.
 
 ### Coordinates
 This is your position on Earth, shown in whatever coordinate format you have selected. You can
@@ -21,9 +21,9 @@ adjust the format in Settings. The following formats are available:
 - MGRS
 - UTM
 
-These coordinates are determined using Google Play Services' "fused" approach, using data from
-various sources like GNSS (e.g. GPS, Galileo, BDS, GLONASS, IRNSS, or QZSS), cell towers, and Wi-Fi
-networks.
+These coordinates are determined using Android's or Google Play Services' "fused" approaches, using
+data from various sources like GNSS (e.g. GPS, Galileo, BDS, GLONASS, IRNSS, or QZSS), cell towers,
+and Wi-Fi networks.
 
 ### Accuracy
 This is the accuracy of the coordinates above. It varies depending on the coordinates source (for

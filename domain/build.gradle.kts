@@ -30,7 +30,7 @@ android {
         create("aosp") {
             dimension = "androidVariant"
         }
-        create("play") {
+        create("gms") {
             dimension = "androidVariant"
         }
     }
