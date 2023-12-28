@@ -1,5 +1,5 @@
-import java.nio.file.NoSuchFileException
 import org.jetbrains.kotlin.konan.properties.loadProperties
+import java.nio.file.NoSuchFileException
 
 plugins {
     alias(libs.plugins.kotlin.android)
@@ -33,7 +33,11 @@ android {
             }
         }
     }
+
+    namespace = "io.trewartha.positional"
+
     compileSdk = libs.versions.android.sdk.compile.get().toInt()
+
     defaultConfig {
         applicationId = "io.trewartha.positional"
         minSdk = libs.versions.android.sdk.min.get().toInt()
@@ -44,10 +48,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
+
     buildFeatures {
         buildConfig = true
         compose = true
     }
+
     buildTypes {
         getByName("debug").apply {
             isDebuggable = true
@@ -62,6 +68,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
+
     flavorDimensions += "androidVariant"
     productFlavors {
         create("aosp") {
@@ -71,12 +78,15 @@ android {
             dimension = "androidVariant"
         }
     }
+
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
+
     kotlinOptions {
         freeCompilerArgs = freeCompilerArgs +
                 "-Xinline-classes" +
@@ -94,7 +104,31 @@ android {
                 "-opt-in=kotlinx.coroutines.DelicateCoroutinesApi" +
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
-    namespace = "io.trewartha.positional"
+
+    testOptions {
+        managedDevices {
+            localDevices {
+                create("pixel7AospApi33") {
+                    device = "Pixel 7"
+                    apiLevel = 33
+                    systemImageSource = "aosp-atd"
+                }
+                create("pixel7GoogleApi33") {
+                    device = "Pixel 7"
+                    apiLevel = 33
+                    systemImageSource = "google-atd"
+                }
+                groups {
+                    create("aosp") {
+                        targetDevices.add(devices["pixel7AospApi33"])
+                    }
+                    create("google") {
+                        targetDevices.add(devices["pixel7GoogleApi33"])
+                    }
+                }
+            }
+        }
+    }
 }
 
 tasks.withType<Test> {
