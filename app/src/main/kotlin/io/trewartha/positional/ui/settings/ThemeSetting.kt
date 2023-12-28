@@ -20,7 +20,7 @@ fun ThemeSetting(
     ListSetting(
         icon = Icons.Rounded.DarkMode,
         title = stringResource(R.string.settings_theme_title),
-        values = Theme.values().toSet(),
+        values = Theme.entries.toSet(),
         value = value,
         valueName = { theme ->
             stringResource(

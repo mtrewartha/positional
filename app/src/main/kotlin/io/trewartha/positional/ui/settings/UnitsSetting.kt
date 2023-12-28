@@ -20,7 +20,7 @@ fun UnitsSetting(
     ListSetting(
         icon = Icons.Rounded.Straighten,
         title = stringResource(R.string.settings_units_title),
-        values = Units.values().toSet(),
+        values = Units.entries.toSet(),
         value = value,
         valueName = { units ->
             stringResource(

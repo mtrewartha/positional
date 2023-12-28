@@ -20,7 +20,7 @@ fun CoordinatesFormatSetting(
     ListSetting(
         icon = Icons.Rounded.Pin,
         title = stringResource(R.string.settings_coordinates_format_title),
-        values = CoordinatesFormat.values().toSet(),
+        values = CoordinatesFormat.entries.toSet(),
         value = value,
         valueName = { coordinatesFormat ->
             stringResource(
