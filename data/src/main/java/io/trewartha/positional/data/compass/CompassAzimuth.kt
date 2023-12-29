@@ -18,12 +18,12 @@ data class CompassAzimuth @Throws(IllegalArgumentException::class) constructor(
     /**
      * Accuracy of the accelerometer or `null` if unavailable
      */
-    val accelerometerAccuracy: CompassAccuracy?,
+    val accelerometerAccuracy: CompassAccuracy? = null,
 
     /**
      * Accuracy of the magnetometer or `null` if unavailable
      */
-    val magnetometerAccuracy: CompassAccuracy?
+    val magnetometerAccuracy: CompassAccuracy? = null
 ) {
 
     init {
