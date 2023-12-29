@@ -6,6 +6,7 @@ import io.trewartha.positional.data.location.Coordinates
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.toLocalTime
+import java.util.Calendar
 import javax.inject.Inject
 
 /**
@@ -61,5 +62,11 @@ class LibrarySolarTimesRepository @Inject constructor() : SolarTimesRepository {
 
     private fun String.asLocalTime(): LocalTime? = takeIf { it != NO_TIME }?.toLocalTime()
 }
+
+private fun LocalDate.toCalendar(): Calendar =
+    Calendar.getInstance().apply {
+        set(Calendar.YEAR, year)
+        set(Calendar.DAY_OF_YEAR, dayOfYear)
+    }
 
 private const val NO_TIME = "99:99"
