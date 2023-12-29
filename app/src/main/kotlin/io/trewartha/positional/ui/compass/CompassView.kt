@@ -54,7 +54,7 @@ import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassAzimuth
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.measurement.Angle
-import io.trewartha.positional.domain.compass.CompassReadings
+import io.trewartha.positional.domain.compass.CompassReading
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.bottomNavEnterTransition
@@ -181,8 +181,8 @@ private fun SensorsPresentContent(
         val context = LocalContext.current
         val baseAzimuth = (state as? CompassViewModel.State.SensorsPresent.Loaded)?.let {
             when (it.compassMode) {
-                CompassMode.MAGNETIC_NORTH -> it.compassReadings.magneticAzimuth
-                CompassMode.TRUE_NORTH -> it.compassReadings.trueAzimuth
+                CompassMode.MAGNETIC_NORTH -> it.compassReading.magneticAzimuth
+                CompassMode.TRUE_NORTH -> it.compassReading.trueAzimuth
             }?.angle
         }
         val adjustedAzimuth = baseAzimuth?.let { adjustAzimuthForDisplayRotation(context, it) }
@@ -197,7 +197,7 @@ private fun SensorsPresentContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             val declination = (state as? CompassViewModel.State.SensorsPresent.Loaded)
-                ?.compassReadings?.magneticDeclination?.inDegrees()?.value
+                ?.compassReading?.magneticDeclination?.inDegrees()?.value
             DeclinationText(declination)
             HelpButton(onHelpClick)
         }
@@ -290,7 +290,7 @@ private fun SensorsPresentLoadedPreview() {
         Surface {
             CompassView(
                 state = CompassViewModel.State.SensorsPresent.Loaded(
-                    compassReadings = CompassReadings(
+                    compassReading = CompassReading(
                         magneticAzimuth = CompassAzimuth(
                             angle = Angle.Degrees(40f),
                             accelerometerAccuracy = CompassAccuracy.HIGH,

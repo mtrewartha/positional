@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface GetCompassReadingsUseCase {
 
-    operator fun invoke(): Flow<CompassReadings>
+    operator fun invoke(): Flow<CompassReading>
 }

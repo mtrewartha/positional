@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.compass.CompassHardwareException
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.settings.SettingsRepository
-import io.trewartha.positional.domain.compass.CompassReadings
+import io.trewartha.positional.domain.compass.CompassReading
 import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 import io.trewartha.positional.ui.utils.flow.ForViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +23,7 @@ class CompassViewModel @Inject constructor(
 ) : ViewModel() {
 
     val state: StateFlow<State> =
-        combine<CompassReadings, CompassMode, State>(
+        combine<CompassReading, CompassMode, State>(
             getCompassReadingsUseCase(),
             settingsRepository.compassMode
         ) { readings, mode ->
@@ -52,7 +52,7 @@ class CompassViewModel @Inject constructor(
             data object Loading : SensorsPresent
 
             data class Loaded(
-                val compassReadings: CompassReadings,
+                val compassReading: CompassReading,
                 val compassMode: CompassMode
             ) : SensorsPresent
         }

@@ -21,12 +21,12 @@ class DefaultGetCompassReadingsUseCase @Inject constructor(
         .map { it.magneticDeclination }
         .onStart { emit(null) }
 
-    override operator fun invoke(): Flow<CompassReadings> =
+    override operator fun invoke(): Flow<CompassReading> =
         combine(
             compass.azimuth,
             magneticDeclination,
         ) { compassAzimuth, magneticDeclination ->
-            CompassReadings(compassAzimuth, magneticDeclination)
+            CompassReading(compassAzimuth, magneticDeclination)
         }
 }
 
