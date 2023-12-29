@@ -18,9 +18,7 @@ import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 interface CompassModule {
 
     @Binds
-    fun compassAzimuthRepository(
-        aospCompass: AospCompass
-    ): Compass
+    fun compass(aospCompass: AospCompass): Compass
 
     @Binds
     fun getCompassReadingsUseCase(
