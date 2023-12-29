@@ -37,7 +37,9 @@ android {
 
     kotlinOptions {
         freeCompilerArgs = freeCompilerArgs +
-                "-opt-in=kotlin.ExperimentalStdlibApi"
+                "-opt-in=kotlin.ExperimentalStdlibApi" +
+                "-opt-in=kotlin.time.ExperimentalTime" +
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
 }
 
@@ -50,14 +52,11 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.property)
-    testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotlin.reflect)
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 kotlin {
     jvmToolchain(libs.versions.java.get().toInt())
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }
