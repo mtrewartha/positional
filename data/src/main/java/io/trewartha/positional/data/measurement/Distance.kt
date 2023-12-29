@@ -41,5 +41,5 @@ sealed interface Distance {
     }
 }
 
-const val FEET_PER_METER = 3.28084f
-const val METERS_PER_FOOT = 0.3048f
+private const val FEET_PER_METER = 3.28084f
+private const val METERS_PER_FOOT = 0.3048f
