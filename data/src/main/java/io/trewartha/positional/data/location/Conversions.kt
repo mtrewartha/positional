@@ -12,16 +12,16 @@ import kotlinx.datetime.Instant
 import timber.log.Timber
 
 internal fun AndroidLocation.toLocation(): Location = Location(
+    timestamp = timestamp,
     coordinates = Coordinates(latitude, longitude),
     horizontalAccuracy = horizontalAccuracy,
     bearing = bearingObject,
     bearingAccuracy = bearingAccuracy,
     altitude = altitudeObject,
     altitudeAccuracy = altitudeAccuracy,
+    magneticDeclination = magneticDeclination,
     speed = speedObject,
-    speedAccuracy = speedAccuracy,
-    timestamp = timestamp,
-    magneticDeclination = magneticDeclination
+    speedAccuracy = speedAccuracy
 )
 
 internal val AndroidLocation.altitudeObject: Distance?

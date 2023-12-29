@@ -345,6 +345,7 @@ private fun LocatedPreview() {
                         }
                     },
                     location = Location(
+                        timestamp = Instant.DISTANT_PAST,
                         coordinates = Coordinates(
                             latitude = 123.456789,
                             longitude = 123.456789
@@ -357,7 +358,6 @@ private fun LocatedPreview() {
                         magneticDeclination = Angle.Degrees(1f),
                         speed = Speed.KilometersPerHour(123.45678f),
                         speedAccuracy = Speed.KilometersPerHour(123.45678f),
-                        timestamp = Instant.DISTANT_PAST,
                     ),
                     showAccuracies = true,
                     units = Units.METRIC,

@@ -9,6 +9,7 @@ import kotlinx.datetime.Instant
  * Location somewhere on Earth, represented in a decimal degrees latitude, longitude, altitude, and
  * timestamp (among other metadata).
  *
+ * @property timestamp Instant at which the location was determined
  * @property coordinates Geographic coordinates of the location
  * @property horizontalAccuracy Horizontal accuracy of the location or `null` if unknown
  * @property bearing Bearing (direction of movement) or `null` if unknown
@@ -19,17 +20,16 @@ import kotlinx.datetime.Instant
  * north) at the location or `null` if unknown
  * @property speed Speed or `null` if unknown
  * @property speedAccuracy Accuracy of the speed or `null` if unknown
- * @property timestamp Instant at which the location was determined
  */
 data class Location(
+    val timestamp: Instant,
     val coordinates: Coordinates,
-    val horizontalAccuracy: Distance?,
-    val bearing: Angle?,
-    val bearingAccuracy: Angle?,
-    val altitude: Distance?,
-    val altitudeAccuracy: Distance?,
-    val magneticDeclination: Angle?,
-    val speed: Speed?,
-    val speedAccuracy: Speed?,
-    val timestamp: Instant
+    val horizontalAccuracy: Distance? = null,
+    val bearing: Angle? = null,
+    val bearingAccuracy: Angle? = null,
+    val altitude: Distance? = null,
+    val altitudeAccuracy: Distance? = null,
+    val magneticDeclination: Angle? = null,
+    val speed: Speed? = null,
+    val speedAccuracy: Speed? = null
 )
