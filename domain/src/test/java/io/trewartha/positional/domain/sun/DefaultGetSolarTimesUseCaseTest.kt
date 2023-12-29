@@ -9,7 +9,7 @@ import java.time.Month
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
-class GetSolarTimesUseCaseTest {
+class DefaultGetSolarTimesUseCaseTest {
 
     private lateinit var fakeSolarTimesRepository: FakeSolarTimesRepository
     private lateinit var subject: GetSolarTimesUseCase
