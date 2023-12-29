@@ -8,7 +8,7 @@ import kotlinx.datetime.LocalTime
  * [SolarTimesRepository] implementation intended for easing testing of classes that depend on a
  * [SolarTimesRepository]
  */
-class FakeSolarTimesRepository : SolarTimesRepository {
+class TestSolarTimesRepository : SolarTimesRepository {
 
     private val sunrises = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
     private val sunsets = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()

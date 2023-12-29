@@ -2,7 +2,7 @@ package io.trewartha.positional.domain.sun
 
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.data.location.Coordinates
-import io.trewartha.positional.data.sun.FakeSolarTimesRepository
+import io.trewartha.positional.data.sun.TestSolarTimesRepository
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import java.time.Month
@@ -11,7 +11,7 @@ import kotlin.test.Test
 
 class DefaultGetSolarTimesUseCaseTest {
 
-    private lateinit var fakeSolarTimesRepository: FakeSolarTimesRepository
+    private lateinit var solarTimesRepository: TestSolarTimesRepository
     private lateinit var subject: GetSolarTimesUseCase
 
     private val localDate = LocalDate(2000, Month.JANUARY, 1)
@@ -27,7 +27,7 @@ class DefaultGetSolarTimesUseCaseTest {
 
     @BeforeTest
     fun setUp() {
-        fakeSolarTimesRepository = FakeSolarTimesRepository().apply {
+        solarTimesRepository = TestSolarTimesRepository().apply {
             setAstronomicalDawn(coordinates, localDate, astronomicalDawn)
             setNauticalDawn(coordinates, localDate, nauticalDawn)
             setCivilDawn(coordinates, localDate, civilDawn)
@@ -37,7 +37,7 @@ class DefaultGetSolarTimesUseCaseTest {
             setNauticalDusk(coordinates, localDate, nauticalDusk)
             setAstronomicalDusk(coordinates, localDate, astronomicalDusk)
         }
-        subject = DefaultGetSolarTimesUseCase(fakeSolarTimesRepository)
+        subject = DefaultGetSolarTimesUseCase(solarTimesRepository)
     }
 
     @Test
