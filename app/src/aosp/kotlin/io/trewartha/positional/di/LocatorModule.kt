@@ -13,7 +13,7 @@ import io.trewartha.positional.data.location.Locator
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface LocationModule {
+interface LocatorModule {
 
     @Binds
     fun locator(aospLocator: AospLocator): Locator
