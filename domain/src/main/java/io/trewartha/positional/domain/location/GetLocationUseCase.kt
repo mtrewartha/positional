@@ -1,12 +1,17 @@
 package io.trewartha.positional.domain.location
 
 import io.trewartha.positional.data.location.Location
-import io.trewartha.positional.data.location.Locator
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class GetLocationUseCase @Inject constructor(
-    private val locator: Locator
-) {
-    operator fun invoke(): Flow<Location> = locator.location
+/**
+ * Abstraction for a use case for getting [location][Location]
+ */
+interface GetLocationUseCase {
+
+    /**
+     * Gets a [Flow] that emits the current device [location][Location] any time it changes
+     *
+     * @return [Flow] that emits the current device [location][Location] any time it changes
+     */
+    operator fun invoke(): Flow<Location>
 }
