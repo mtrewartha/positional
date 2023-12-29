@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/**
+ * [SettingsRepository] implementation powered by the AndroidX DataStore library
+ */
 class DataStoreSettingsRepository @Inject constructor(
     private val context: Context
 ) : SettingsRepository {
