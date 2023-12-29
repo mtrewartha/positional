@@ -20,7 +20,7 @@ class LibrarySolarTimesRepositoryTest {
     private val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
     private lateinit var originalDefaultTimeZone: TimeZone
 
-    private lateinit var subject: LibrarySolarTimesRepository
+    private lateinit var subject: SolarTimesRepository
 
     @BeforeTest
     fun setUp() {
