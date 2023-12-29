@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.minutes
 
+/**
+ * [GetCompassReadingsUseCase] implementation powered by a [Compass] and [Locator]
+ */
 class DefaultGetCompassReadingsUseCase @Inject constructor(
     private val compass: Compass,
     locator: Locator,
