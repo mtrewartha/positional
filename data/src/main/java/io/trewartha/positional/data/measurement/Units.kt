@@ -1,3 +1,17 @@
 package io.trewartha.positional.data.measurement
 
-enum class Units { IMPERIAL, METRIC }
+/**
+ * Measurement units/system
+ */
+enum class Units {
+
+    /**
+     * Imperial system units
+     */
+    IMPERIAL,
+
+    /**
+     * Metric system units
+     */
+    METRIC
+}

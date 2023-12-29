@@ -1,13 +1,33 @@
 package io.trewartha.positional.data.measurement
 
+/**
+ * Speed abstraction
+ */
 sealed interface Speed {
 
+    /**
+     * Magnitude of the speed
+     */
     val value: Float
 
+    /**
+     * Converts this speed to an equivalent speed in kilometers per hour
+     */
     fun inKilometersPerHour(): KilometersPerHour
+
+    /**
+     * Converts this speed to an equivalent speed in meters per second
+     */
     fun inMetersPerSecond(): MetersPerSecond
+
+    /**
+     * Converts this speed to an equivalent speed in miles per hour
+     */
     fun inMilesPerHour(): MilesPerHour
 
+    /**
+     * Speed in kilometers per hour
+     */
     @JvmInline
     value class KilometersPerHour(override val value: Float) : Speed {
 
@@ -20,6 +40,9 @@ sealed interface Speed {
             MilesPerHour(value * MILES_PER_KILOMETER)
     }
 
+    /**
+     * Speed in meters per second
+     */
     @JvmInline
     value class MetersPerSecond(override val value: Float) : Speed {
 
@@ -32,6 +55,9 @@ sealed interface Speed {
             MilesPerHour(value * MILES_PER_HOUR_PER_METER_PER_SECOND)
     }
 
+    /**
+     * Speed in miles per hour
+     */
     @JvmInline
     value class MilesPerHour(override val value: Float) : Speed {
 

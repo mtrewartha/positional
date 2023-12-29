@@ -1,11 +1,25 @@
 package io.trewartha.positional.data.measurement
 
+/**
+ * Angle abstraction
+ */
 sealed interface Angle {
 
+    /**
+     * Converts this angle to degrees
+     */
     fun inDegrees(): Degrees
 
+    /**
+     * Adds another angle to this angle
+     */
     operator fun plus(other: Angle): Angle
 
+    /**
+     * Angle in degrees
+     *
+     * @property value The magnitude of the angle
+     */
     @JvmInline
     value class Degrees @Throws(IllegalArgumentException::class) constructor(
         val value: Float
