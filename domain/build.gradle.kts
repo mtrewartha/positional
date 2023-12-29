@@ -51,7 +51,6 @@ dependencies {
 
     testImplementation(libs.turbine)
     testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotest.property)
     testImplementation(libs.kotlin.reflect)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
