@@ -11,7 +11,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import timber.log.Timber
 
-fun AndroidLocation.toLocation(): Location = Location(
+internal fun AndroidLocation.toLocation(): Location = Location(
     coordinates = Coordinates(latitude, longitude),
     horizontalAccuracy = horizontalAccuracy,
     bearing = bearingObject,
