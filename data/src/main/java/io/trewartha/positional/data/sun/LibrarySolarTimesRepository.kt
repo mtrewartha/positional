@@ -10,7 +10,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 /**
- * Library-based implementation of a [SolarTimesRepository]
+ * [SolarTimesRepository] implementation powered by a library
  */
 class LibrarySolarTimesRepository @Inject constructor() : SolarTimesRepository {
 

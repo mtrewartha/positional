@@ -4,6 +4,10 @@ import io.trewartha.positional.data.location.Coordinates
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
+/**
+ * [SolarTimesRepository] implementation intended for easing testing of classes that depend on a
+ * [SolarTimesRepository]
+ */
 class FakeSolarTimesRepository : SolarTimesRepository {
 
     private val sunrises = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
@@ -39,6 +43,14 @@ class FakeSolarTimesRepository : SolarTimesRepository {
     override fun getAstronomicalDusk(coordinates: Coordinates, date: LocalDate): LocalTime? =
         astronomicalDusks[Pair(coordinates, date)]
 
+    /**
+     * Sets the astronomical dawn time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param astronomicalDawn Time to set or `null` if no such time should exist at the coordinates
+     * on the date
+     */
     fun setAstronomicalDawn(
         coordinates: Coordinates,
         date: LocalDate,
@@ -47,6 +59,14 @@ class FakeSolarTimesRepository : SolarTimesRepository {
         astronomicalDawns[Pair(coordinates, date)] = astronomicalDawn
     }
 
+    /**
+     * Sets the astronomical dusk time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param astronomicalDusk Time to set or `null` if no such time should exist at the coordinates
+     * on the date
+     */
     fun setAstronomicalDusk(
         coordinates: Coordinates,
         date: LocalDate,
@@ -55,14 +75,38 @@ class FakeSolarTimesRepository : SolarTimesRepository {
         astronomicalDusks[Pair(coordinates, date)] = astronomicalDusk
     }
 
+    /**
+     * Sets the civil dawn time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param civilDawn Time to set or `null` if no such time should exist at the coordinates on the
+     * date
+     */
     fun setCivilDawn(coordinates: Coordinates, date: LocalDate, civilDawn: LocalTime?) {
         civilDawns[Pair(coordinates, date)] = civilDawn
     }
 
+    /**
+     * Sets the civil dusk time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param civilDusk Time to set or `null` if no such time should exist at the coordinates on the
+     * date
+     */
     fun setCivilDusk(coordinates: Coordinates, date: LocalDate, civilDusk: LocalTime?) {
         civilDusks[Pair(coordinates, date)] = civilDusk
     }
 
+    /**
+     * Sets the nautical dawn time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param nauticalDawn Time to set or `null` if no such time should exist at the coordinates on
+     * the date
+     */
     fun setNauticalDawn(
         coordinates: Coordinates,
         date: LocalDate,
@@ -71,6 +115,14 @@ class FakeSolarTimesRepository : SolarTimesRepository {
         nauticalDawns[Pair(coordinates, date)] = nauticalDawn
     }
 
+    /**
+     * Sets the nautical dusk time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param nauticalDusk Time to set or `null` if no such time should exist at the coordinates on
+     * the date
+     */
     fun setNauticalDusk(
         coordinates: Coordinates,
         date: LocalDate,
@@ -79,10 +131,26 @@ class FakeSolarTimesRepository : SolarTimesRepository {
         nauticalDusks[Pair(coordinates, date)] = nauticalDusk
     }
 
+    /**
+     * Sets the sunrise time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param sunrise Time to set or `null` if no such time should exist at the coordinates on the
+     * date
+     */
     fun setSunrise(coordinates: Coordinates, date: LocalDate, sunrise: LocalTime?) {
         sunrises[Pair(coordinates, date)] = sunrise
     }
 
+    /**
+     * Sets the sunset time for some given coordinates and a given date
+     *
+     * @param coordinates Coordinates to set the time for
+     * @param date Date to set the time for
+     * @param sunset Time to set or `null` if no such time should exist at the coordinates on the
+     * date
+     */
     fun setSunset(coordinates: Coordinates, date: LocalDate, sunset: LocalTime?) {
         sunsets[Pair(coordinates, date)] = sunset
     }
