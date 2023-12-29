@@ -1,8 +1,11 @@
 package io.trewartha.positional.data.settings
 
 import android.content.Context
+import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
+import com.google.protobuf.InvalidProtocolBufferException
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
@@ -10,6 +13,8 @@ import io.trewartha.positional.data.settings.SettingsProto.Settings
 import io.trewartha.positional.data.ui.Theme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
 /**
@@ -128,4 +133,18 @@ class DataStoreSettingsRepository @Inject constructor(
             UnitsProto.Units.UNRECOGNIZED -> Units.IMPERIAL
             UnitsProto.Units.METRIC -> Units.METRIC
         }
+}
+
+private object SettingsSerializer : Serializer<Settings> {
+
+    override val defaultValue: Settings = Settings.getDefaultInstance()
+
+    override suspend fun readFrom(input: InputStream): Settings =
+        try {
+            Settings.parseFrom(input)
+        } catch (exception: InvalidProtocolBufferException) {
+            throw CorruptionException("Unable to read protobuf", exception)
+        }
+
+    override suspend fun writeTo(t: Settings, output: OutputStream) = t.writeTo(output)
 }
