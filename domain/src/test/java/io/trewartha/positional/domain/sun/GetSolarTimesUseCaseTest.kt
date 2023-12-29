@@ -11,8 +11,8 @@ import kotlin.test.Test
 
 class GetSolarTimesUseCaseTest {
 
-    private lateinit var subject: GetSolarTimesUseCase
     private lateinit var fakeSolarTimesRepository: FakeSolarTimesRepository
+    private lateinit var subject: GetSolarTimesUseCase
 
     private val localDate = LocalDate(2000, Month.JANUARY, 1)
     private val coordinates = Coordinates(1.23, 4.56)
@@ -37,7 +37,7 @@ class GetSolarTimesUseCaseTest {
             setNauticalDusk(coordinates, localDate, nauticalDusk)
             setAstronomicalDusk(coordinates, localDate, astronomicalDusk)
         }
-        subject = GetSolarTimesUseCase(fakeSolarTimesRepository)
+        subject = DefaultGetSolarTimesUseCase(fakeSolarTimesRepository)
     }
 
     @Test
