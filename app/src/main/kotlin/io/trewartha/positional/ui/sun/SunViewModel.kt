@@ -67,7 +67,7 @@ class SunViewModel @Inject constructor(
                 emit(today)
                 delay(1.seconds)
             }
-        }.distinctUntilChanged().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), today)
+        }.distinctUntilChanged().stateIn(viewModelScope, SharingStarted.ForViewModel, today)
 
     /**
      * Callback to tell the view model that the user has selected a date

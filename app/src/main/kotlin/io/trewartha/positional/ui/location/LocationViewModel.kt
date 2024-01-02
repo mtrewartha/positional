@@ -10,6 +10,7 @@ import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.domain.location.GetLocationUseCase
 import io.trewartha.positional.domain.utils.flow.throttleFirst
+import io.trewartha.positional.ui.utils.flow.ForViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,11 +28,11 @@ class LocationViewModel @Inject constructor(
 
     val accuracyVisibility: StateFlow<LocationAccuracyVisibility?> =
         settingsRepository.locationAccuracyVisibility
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
     val coordinatesFormat: StateFlow<CoordinatesFormat?> =
         settingsRepository.coordinatesFormat
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
     val location: StateFlow<Location?> =
         getLocationUseCase().throttleFirst(locationFlowPeriod)
@@ -44,11 +45,11 @@ class LocationViewModel @Inject constructor(
                     throw cause
                 }
             }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
     val units: StateFlow<Units?> =
         settingsRepository.units
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 }
 
 private val locationFlowPeriod = 2.seconds
