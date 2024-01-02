@@ -33,6 +33,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.NavDestination.Settings
 import io.trewartha.positional.ui.PositionalTheme
@@ -56,7 +57,8 @@ fun NavGraphBuilder.settingsView(
         val viewModel: SettingsViewModel = hiltViewModel()
         val compassMode by viewModel.compassMode.collectAsState(initial = null)
         val coordinatesFormat by viewModel.coordinatesFormat.collectAsState(initial = null)
-        val showAccuracies by viewModel.showAccuracies.collectAsState(initial = null)
+        val locationAccuracyVisibility by viewModel.locationAccuracyVisibility
+            .collectAsState(initial = null)
         val theme by viewModel.theme.collectAsState(initial = null)
         val units by viewModel.units.collectAsState(initial = null)
         SettingsView(
@@ -64,8 +66,8 @@ fun NavGraphBuilder.settingsView(
             onCompassModeChange = viewModel::onCompassModeChange,
             coordinatesFormat = coordinatesFormat,
             onCoordinatesFormatChange = viewModel::onCoordinatesFormatChange,
-            showAccuracies = showAccuracies,
-            onShowAccuraciesChange = viewModel::onShowAccuraciesChange,
+            locationAccuracyVisibility = locationAccuracyVisibility,
+            onLocationAccuracyVisibilityChange = viewModel::onLocationAccuracyVisibilityChange,
             theme = theme,
             onThemeChange = viewModel::onThemeChange,
             units = units,
@@ -84,8 +86,8 @@ private fun SettingsView(
     onCompassModeChange: (CompassMode) -> Unit,
     coordinatesFormat: CoordinatesFormat?,
     onCoordinatesFormatChange: (CoordinatesFormat) -> Unit,
-    showAccuracies: Boolean?,
-    onShowAccuraciesChange: (Boolean) -> Unit,
+    locationAccuracyVisibility: LocationAccuracyVisibility?,
+    onLocationAccuracyVisibilityChange: (LocationAccuracyVisibility) -> Unit,
     theme: Theme?,
     units: Units?,
     contentPadding: PaddingValues,
@@ -138,9 +140,9 @@ private fun SettingsView(
                 modifier = Modifier.fillMaxWidth()
             )
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                ShowAccuraciesSetting(
-                    value = showAccuracies,
-                    onValueChange = onShowAccuraciesChange,
+                LocationAccuracyVisibilitySetting(
+                    value = locationAccuracyVisibility,
+                    onValueChange = onLocationAccuracyVisibilityChange,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -173,8 +175,8 @@ private fun LoadingPreviews() {
             onCompassModeChange = {},
             coordinatesFormat = null,
             onCoordinatesFormatChange = {},
-            showAccuracies = null,
-            onShowAccuraciesChange = {},
+            locationAccuracyVisibility = null,
+            onLocationAccuracyVisibilityChange = {},
             theme = null,
             units = null,
             contentPadding = PaddingValues(),
@@ -195,8 +197,8 @@ private fun LoadedPreviews() {
             onCompassModeChange = {},
             coordinatesFormat = CoordinatesFormat.DD,
             onCoordinatesFormatChange = {},
-            showAccuracies = true,
-            onShowAccuraciesChange = {},
+            locationAccuracyVisibility = LocationAccuracyVisibility.SHOW,
+            onLocationAccuracyVisibilityChange = {},
             theme = Theme.DEVICE,
             units = Units.METRIC,
             contentPadding = PaddingValues(),

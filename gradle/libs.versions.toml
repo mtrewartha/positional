@@ -20,6 +20,8 @@ androidx-legacySupport-v4 = "1.0.0"
 androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.6"
 androidx-preference = "1.2.1"
+androidx-test = "1.5.0"
+androidx-test-ext-junit = "1.1.5"
 androidx-window = "1.2.0"
 composePlaceholder = "1.0.7"
 google-firebase-bom = "32.7.0"
@@ -27,6 +29,7 @@ google-firebase-crashlytics-gradle = "2.9.9"
 google-ksp = "1.9.21-1.0.15"
 google-materialComponents = "1.11.0"
 google-playServices-location = "21.0.1"
+google-playServices-testing = "16.0.0"
 google-services = "4.4.0"
 java = "17"
 javapoet = { strictly = "1.13.0" }
@@ -39,6 +42,7 @@ kotlinx-datetime = "0.5.0"
 markwon = "4.6.2"
 protobuf = "3.25.1"
 protobuf-plugin = "0.9.4"
+robolectric = "4.11.1"
 sunrise-sunset = "1.2"
 timber = "5.0.1"
 turbine = "1.0.0"
@@ -81,6 +85,9 @@ androidx-lifecycle-viewModel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewModel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-ext-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-test-ext-junit" }
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
 composePlaceholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholder" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "google-firebase-bom" }
@@ -88,6 +95,7 @@ google-firebase-analytics = { module = "com.google.firebase:firebase-analytics-k
 google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 google-materialComponents = { module = "com.google.android.material:material", version.ref = "google-materialComponents" }
 google-playServices-location = { module = "com.google.android.gms:play-services-location", version.ref = "google-playServices-location" }
+google-playServices-testing = { module = "com.google.android.gms:play-services-base-testing", version.ref = "google-playServices-testing" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
@@ -104,6 +112,8 @@ markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 protobuf-java-lite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+robolectric-playServices = { module = "org.robolectric:shadows-playservices", version.ref = "robolectric" }
 sunriseSunset = { module = "com.luckycatlabs:SunriseSunsetCalculator", version.ref = "sunrise-sunset" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }

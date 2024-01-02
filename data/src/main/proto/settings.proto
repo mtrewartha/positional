@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "compass_mode.proto";
 import "coordinates_format.proto";
+import "location_accuracy_visibility.proto";
 import "theme.proto";
 import "units.proto";
 
@@ -11,7 +12,7 @@ option java_outer_classname = "SettingsProto";
 message Settings {
   CompassMode compass_mode = 1;
   CoordinatesFormat coordinates_format = 2;
-  bool show_accuracies = 3;
+  LocationAccuracyVisibility location_accuracy_visibility = 3;
   Theme theme = 4 ;
   Units units = 5;
 }

@@ -39,6 +39,12 @@ android {
         freeCompilerArgs = freeCompilerArgs +
                 "-opt-in=kotlin.ExperimentalStdlibApi"
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -57,10 +63,16 @@ dependencies {
     "gmsApi"(libs.google.playServices.location)
     "gmsImplementation"(libs.kotlinx.coroutines.playServices)
 
-    testImplementation(libs.turbine)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(libs.androidx.test.ext.junit.ktx)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotlin.reflect)
     testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.robolectric.playServices)
+    testImplementation(libs.turbine)
 }
 
 kotlin {

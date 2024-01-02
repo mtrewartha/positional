@@ -3,6 +3,7 @@ package io.trewartha.positional.data.settings
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import kotlinx.coroutines.flow.Flow
 
@@ -22,9 +23,9 @@ interface SettingsRepository {
     val coordinatesFormat: Flow<CoordinatesFormat>
 
     /**
-     * Whether to show accuracies in the Location view
+     * Visibility of location accuracies in the Location view
      */
-    val showAccuracies: Flow<Boolean>
+    val locationAccuracyVisibility: Flow<LocationAccuracyVisibility>
 
     /**
      * Theme to use for the application
@@ -51,11 +52,11 @@ interface SettingsRepository {
     suspend fun setCoordinatesFormat(coordinatesFormat: CoordinatesFormat)
 
     /**
-     * Sets whether to show accuracies in the Location view
+     * Sets the visibility of accuracies in the Location view
      *
-     * @param showAccuracies Whether to show accuracies
+     * @param visibility Visibility of location accuracies
      */
-    suspend fun setShowAccuracies(showAccuracies: Boolean)
+    suspend fun setLocationAccuracyVisibility(visibility: LocationAccuracyVisibility)
 
     /**
      * Sets the theme to use for the application

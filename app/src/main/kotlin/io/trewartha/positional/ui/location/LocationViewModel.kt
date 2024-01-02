@@ -7,6 +7,7 @@ import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.settings.SettingsRepository
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.domain.location.GetLocationUseCase
 import io.trewartha.positional.domain.utils.flow.throttleFirst
 import kotlinx.coroutines.delay
@@ -24,6 +25,10 @@ class LocationViewModel @Inject constructor(
     settingsRepository: SettingsRepository
 ) : ViewModel() {
 
+    val accuracyVisibility: StateFlow<LocationAccuracyVisibility?> =
+        settingsRepository.locationAccuracyVisibility
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
+
     val coordinatesFormat: StateFlow<CoordinatesFormat?> =
         settingsRepository.coordinatesFormat
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
@@ -39,10 +44,6 @@ class LocationViewModel @Inject constructor(
                     throw cause
                 }
             }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
-
-    val showAccuracies: StateFlow<Boolean?> =
-        settingsRepository.showAccuracies
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = null)
 
     val units: StateFlow<Units?> =

@@ -42,6 +42,7 @@ import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.ui.IconToggleButton
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.locals.LocalCoordinatesFormatter
@@ -59,7 +60,7 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun LocationPermissionGrantedContent(
     location: Location?,
-    showAccuracies: Boolean?,
+    accuracyVisibility: LocationAccuracyVisibility?,
     units: Units?,
     snackbarHostState: SnackbarHostState,
     onCopyClick: (Coordinates?) -> Unit,
@@ -68,7 +69,7 @@ fun LocationPermissionGrantedContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val placeholdersVisible = location == null || showAccuracies == null || units == null
+    val placeholdersVisible = location == null || accuracyVisibility == null || units == null
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,7 +91,7 @@ fun LocationPermissionGrantedContent(
             AccuracyBlock(
                 accuracy = location?.horizontalAccuracy,
                 units = units,
-                showAccuracy = showAccuracies,
+                accuracyVisibility = accuracyVisibility,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
@@ -98,7 +99,7 @@ fun LocationPermissionGrantedContent(
                 altitude = location?.altitude,
                 accuracy = location?.altitudeAccuracy,
                 units = units,
-                showAccuracy = showAccuracies,
+                accuracyVisibility = accuracyVisibility,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
@@ -108,14 +109,14 @@ fun LocationPermissionGrantedContent(
                 speed = location?.speed,
                 accuracy = location?.speedAccuracy,
                 units = units,
-                showAccuracy = showAccuracies,
+                accuracyVisibility = accuracyVisibility,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
             BearingBlock(
                 bearing = location?.bearing,
                 accuracy = location?.bearingAccuracy,
-                showAccuracy = showAccuracies,
+                accuracyVisibility = accuracyVisibility,
                 placeholdersVisible = placeholdersVisible,
                 modifier = Modifier.weight(1f)
             )
@@ -322,7 +323,7 @@ private fun LocatingPreview() {
             ) {
                 LocationPermissionGrantedContent(
                     location = null,
-                    showAccuracies = true,
+                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
                     units = Units.METRIC,
                     snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},
@@ -361,7 +362,7 @@ private fun LocatedPreview() {
                         speed = Speed.KilometersPerHour(123.45678f),
                         speedAccuracy = Speed.KilometersPerHour(123.45678f),
                     ),
-                    showAccuracies = true,
+                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
                     units = Units.METRIC,
                     snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},

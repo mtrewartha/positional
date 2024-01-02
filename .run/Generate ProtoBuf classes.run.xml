@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="data:generateProto" />
+          <option value="data:generateAospDebugProto" />
         </list>
       </option>
       <option name="vmOptions" />

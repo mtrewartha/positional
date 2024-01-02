@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "io.trewartha.positional.data.settings";
+option java_outer_classname = "LocationAccuracyVisibilityProto";
+
+enum LocationAccuracyVisibility {
+  LOCATION_ACCURACY_VISIBILITY_UNSPECIFIED = 0;
+  LOCATION_ACCURACY_VISIBILITY_SHOW = 1;
+  LOCATION_ACCURACY_VISIBILITY_HIDE = 2;
+}

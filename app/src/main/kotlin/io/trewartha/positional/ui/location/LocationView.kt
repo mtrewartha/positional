@@ -56,6 +56,7 @@ import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.bottomNavEnterTransition
@@ -97,7 +98,7 @@ fun NavGraphBuilder.locationView(
         val viewModel: LocationViewModel = hiltViewModel()
         val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()
         val location by viewModel.location.collectAsStateWithLifecycle()
-        val showAccuracies by viewModel.showAccuracies.collectAsStateWithLifecycle()
+        val accuracyVisibility by viewModel.accuracyVisibility.collectAsStateWithLifecycle()
         val units by viewModel.units.collectAsStateWithLifecycle()
 
         val context = LocalContext.current
@@ -115,7 +116,7 @@ fun NavGraphBuilder.locationView(
             LocationView(
                 locationPermissionsState = locationPermissionsState,
                 location = location,
-                showAccuracies = showAccuracies,
+                accuracyVisibility = accuracyVisibility,
                 units = units,
                 contentPadding = contentPadding,
                 snackbarHostState = snackbarHostState,
@@ -136,7 +137,7 @@ fun NavGraphBuilder.locationView(
 private fun LocationView(
     locationPermissionsState: MultiplePermissionsState,
     location: Location?,
-    showAccuracies: Boolean?,
+    accuracyVisibility: LocationAccuracyVisibility?,
     units: Units?,
     contentPadding: PaddingValues,
     snackbarHostState: SnackbarHostState,
@@ -157,7 +158,7 @@ private fun LocationView(
 
         LocationPermissionGrantedContent(
             location = location,
-            showAccuracies = showAccuracies,
+            accuracyVisibility = accuracyVisibility,
             units = units,
             snackbarHostState = snackbarHostState,
             onCopyClick = { coordinates ->
@@ -273,7 +274,7 @@ private fun PermissionNotGrantedPreview() {
                     }
                 },
                 location = null,
-                showAccuracies = true,
+                accuracyVisibility = LocationAccuracyVisibility.SHOW,
                 units = null,
                 contentPadding = PaddingValues(),
                 snackbarHostState = SnackbarHostState(),
@@ -308,7 +309,7 @@ private fun LocatingPreview() {
                         }
                     },
                     location = null,
-                    showAccuracies = true,
+                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
                     units = null,
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
@@ -359,7 +360,7 @@ private fun LocatedPreview() {
                         speed = Speed.KilometersPerHour(123.45678f),
                         speedAccuracy = Speed.KilometersPerHour(123.45678f),
                     ),
-                    showAccuracies = true,
+                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
                     units = Units.METRIC,
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),

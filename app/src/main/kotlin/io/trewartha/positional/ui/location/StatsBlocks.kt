@@ -13,12 +13,13 @@ import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
 import io.trewartha.positional.data.measurement.Speed
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 
 @Composable
 fun AccuracyBlock(
     accuracy: Distance?,
     units: Units?,
-    showAccuracy: Boolean?,
+    accuracyVisibility: LocationAccuracyVisibility?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -37,7 +38,7 @@ fun AccuracyBlock(
             stringResource(stringResource, convertedAccuracy.value)
         },
         accuracy = null,
-        showAccuracy = showAccuracy ?: false,
+        accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
@@ -48,7 +49,7 @@ fun AltitudeBlock(
     altitude: Distance?,
     accuracy: Distance?,
     units: Units?,
-    showAccuracy: Boolean?,
+    accuracyVisibility: LocationAccuracyVisibility?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -73,7 +74,7 @@ fun AltitudeBlock(
             }
             stringResource(stringResource, convertedAccuracy.value)
         },
-        showAccuracy = showAccuracy ?: false,
+        accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
@@ -83,7 +84,7 @@ fun AltitudeBlock(
 fun BearingBlock(
     bearing: Angle?,
     accuracy: Angle?,
-    showAccuracy: Boolean?,
+    accuracyVisibility: LocationAccuracyVisibility?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -100,7 +101,7 @@ fun BearingBlock(
         } else {
             stringResource(R.string.location_bearing_accuracy, accuracy.inDegrees().value)
         },
-        showAccuracy = showAccuracy ?: false,
+        accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )
@@ -111,7 +112,7 @@ fun SpeedBlock(
     speed: Speed?,
     accuracy: Speed?,
     units: Units?,
-    showAccuracy: Boolean?,
+    accuracyVisibility: LocationAccuracyVisibility?,
     placeholdersVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -136,7 +137,7 @@ fun SpeedBlock(
             }
             stringResource(stringResource, convertedAccuracy.value)
         },
-        showAccuracy = showAccuracy ?: false,
+        accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
         modifier = modifier
     )

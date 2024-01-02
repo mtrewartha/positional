@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.utils.placeholder
 
@@ -31,7 +32,7 @@ fun StatBlock(
     name: String,
     value: String?,
     accuracy: String?,
-    showAccuracy: Boolean,
+    accuracyVisibility: LocationAccuracyVisibility?,
     showPlaceholder: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -58,7 +59,7 @@ fun StatBlock(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
-            if (showAccuracy) {
+            if (accuracyVisibility == LocationAccuracyVisibility.SHOW) {
                 Text(
                     text = accuracy ?: stringResource(R.string.common_dash),
                     style = MaterialTheme.typography.headlineSmall,
@@ -83,7 +84,7 @@ private fun LoadingPreview() {
                         "accuracy",
                 value = null,
                 accuracy = null,
-                showAccuracy = true,
+                accuracyVisibility = LocationAccuracyVisibility.SHOW,
                 showPlaceholder = true
             )
         }
@@ -101,7 +102,7 @@ private fun LoadedPreview() {
                 name = "Accelerometer\naccuracy",
                 value = "10,000 ft",
                 accuracy = "±5",
-                showAccuracy = true,
+                accuracyVisibility = LocationAccuracyVisibility.SHOW,
                 showPlaceholder = false
             )
         }

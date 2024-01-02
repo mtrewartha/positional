@@ -4,6 +4,7 @@ option java_package = "io.trewartha.positional.data.settings";
 option java_outer_classname = "UnitsProto";
 
 enum Units {
-  IMPERIAL = 0;
-  METRIC = 1;
+  UNITS_UNSPECIFIED = 0;
+  UNITS_METRIC = 1;
+  UNITS_IMPERIAL = 2;
 }

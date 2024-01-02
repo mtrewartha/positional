@@ -7,6 +7,7 @@ import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.settings.SettingsRepository
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -21,7 +22,8 @@ class SettingsViewModel @Inject constructor(
 
     val coordinatesFormat: Flow<CoordinatesFormat> = settingsRepository.coordinatesFormat
 
-    val showAccuracies: Flow<Boolean> = settingsRepository.showAccuracies
+    val locationAccuracyVisibility: Flow<LocationAccuracyVisibility> =
+        settingsRepository.locationAccuracyVisibility
 
     val theme: Flow<Theme> = settingsRepository.theme
 
@@ -35,8 +37,8 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { settingsRepository.setCoordinatesFormat(coordinatesFormat) }
     }
 
-    fun onShowAccuraciesChange(showAccuracies: Boolean) {
-        viewModelScope.launch { settingsRepository.setShowAccuracies(showAccuracies) }
+    fun onLocationAccuracyVisibilityChange(visibility: LocationAccuracyVisibility) {
+        viewModelScope.launch { settingsRepository.setLocationAccuracyVisibility(visibility) }
     }
 
     fun onThemeChange(theme: Theme) {

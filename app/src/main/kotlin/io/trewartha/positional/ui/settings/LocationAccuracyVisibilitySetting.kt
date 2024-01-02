@@ -7,19 +7,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.trewartha.positional.R
+import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 
 @Composable
-fun ShowAccuraciesSetting(
-    value: Boolean?,
-    onValueChange: (Boolean) -> Unit,
+fun LocationAccuracyVisibilitySetting(
+    value: LocationAccuracyVisibility?,
+    onValueChange: (LocationAccuracyVisibility) -> Unit,
     modifier: Modifier = Modifier
 ) {
     SwitchSetting(
         icon = Icons.Rounded.Adjust,
         title = stringResource(R.string.settings_show_accuracies_title),
         description = { stringResource(R.string.settings_show_accuracies_description) },
-        value = value,
-        onValueChange = onValueChange,
+        value = when (value) {
+            LocationAccuracyVisibility.HIDE -> false
+            LocationAccuracyVisibility.SHOW -> true
+            null -> null
+        },
+        onValueChange = {
+            val visibility =
+                if (it) LocationAccuracyVisibility.SHOW else LocationAccuracyVisibility.HIDE
+            onValueChange(visibility)
+        },
         modifier = modifier.fillMaxWidth()
     )
 }
