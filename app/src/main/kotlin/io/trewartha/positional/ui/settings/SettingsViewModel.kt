@@ -9,7 +9,10 @@ import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
-import kotlinx.coroutines.flow.Flow
+import io.trewartha.positional.ui.utils.flow.ForViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,16 +21,21 @@ class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    val compassMode: Flow<CompassMode> = settingsRepository.compassMode
+    val compassMode: StateFlow<CompassMode?> = settingsRepository.compassMode
+        .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val coordinatesFormat: Flow<CoordinatesFormat> = settingsRepository.coordinatesFormat
+    val coordinatesFormat: StateFlow<CoordinatesFormat?> = settingsRepository.coordinatesFormat
+        .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val locationAccuracyVisibility: Flow<LocationAccuracyVisibility> =
+    val locationAccuracyVisibility: StateFlow<LocationAccuracyVisibility?> =
         settingsRepository.locationAccuracyVisibility
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val theme: Flow<Theme> = settingsRepository.theme
+    val theme: StateFlow<Theme?> = settingsRepository.theme
+        .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val units: Flow<Units> = settingsRepository.units
+    val units: StateFlow<Units?> = settingsRepository.units
+        .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
     fun onCompassModeChange(compassMode: CompassMode) {
         viewModelScope.launch { settingsRepository.setCompassMode(compassMode) }

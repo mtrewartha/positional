@@ -57,12 +57,9 @@ fun NavGraphBuilder.sunView(navController: NavController, contentPadding: Paddin
         popExitTransition = bottomNavPopExitTransition()
     ) {
         val viewModel: SunViewModel = hiltViewModel()
-        val todaysDate by viewModel.todaysDate
-            .collectAsStateWithLifecycle(initialValue = null)
-        val selectedDate by viewModel.selectedDate
-            .collectAsStateWithLifecycle(initialValue = null)
-        val selectedDateTwilights by viewModel.selectedDateTwilights
-            .collectAsStateWithLifecycle(initialValue = null)
+        val todaysDate by viewModel.todaysDate.collectAsStateWithLifecycle()
+        val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+        val selectedDateTwilights by viewModel.selectedDateTwilights.collectAsStateWithLifecycle()
         SunView(
             todaysDate = todaysDate,
             selectedDate = selectedDate,

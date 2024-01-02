@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
@@ -40,28 +41,41 @@ class SunViewModel @Inject constructor(
     private val getDailyTwilightTimes: GetSolarTimesUseCase,
 ) : ViewModel() {
 
+    private val location: Flow<Location> =
+        getLocationUseCase()
+            .retry { cause ->
+                if (cause is SecurityException) {
+                    Timber.w("Waiting for location permissions to be granted")
+                    delay(1.seconds)
+                    true
+                } else {
+                    throw cause
+                }
+            }
+            .shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
+
     private val today: LocalDate
         get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 
     /**
      * The currently selected date
      */
-    val selectedDate: Flow<LocalDate>
+    val selectedDate: StateFlow<LocalDate>
         get() = _date
     private val _date = MutableStateFlow(today)
 
     /**
      * Twilight times on the selected date at the device's current location
      */
-    val selectedDateTwilights: Flow<SolarTimes>
-        get() = combine(selectedDate, location) { date, location ->
+    val selectedDateTwilights: StateFlow<SolarTimes?> =
+        combine(selectedDate, location) { date, location ->
             getDailyTwilightTimes(location.coordinates, date)
-        }
+        }.stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
     /**
      * Today's date
      */
-    val todaysDate: Flow<LocalDate> =
+    val todaysDate: StateFlow<LocalDate> =
         flow {
             while (viewModelScope.isActive) {
                 emit(today)
@@ -96,17 +110,4 @@ class SunViewModel @Inject constructor(
     fun onSelectedDateIncrement() {
         _date.update { it + DatePeriod(days = 1) }
     }
-
-    private val location: Flow<Location> =
-        getLocationUseCase()
-            .retry { cause ->
-                if (cause is SecurityException) {
-                    Timber.w("Waiting for location permissions to be granted")
-                    delay(1.seconds)
-                    true
-                } else {
-                    throw cause
-                }
-            }
-            .shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
 }

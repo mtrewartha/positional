@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.trewartha.positional.R
@@ -55,12 +55,12 @@ fun NavGraphBuilder.settingsView(
         popExitTransition = bottomNavPopExitTransition()
     ) {
         val viewModel: SettingsViewModel = hiltViewModel()
-        val compassMode by viewModel.compassMode.collectAsState(initial = null)
-        val coordinatesFormat by viewModel.coordinatesFormat.collectAsState(initial = null)
+        val compassMode by viewModel.compassMode.collectAsStateWithLifecycle()
+        val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()
         val locationAccuracyVisibility by viewModel.locationAccuracyVisibility
-            .collectAsState(initial = null)
-        val theme by viewModel.theme.collectAsState(initial = null)
-        val units by viewModel.units.collectAsState(initial = null)
+            .collectAsStateWithLifecycle()
+        val theme by viewModel.theme.collectAsStateWithLifecycle()
+        val units by viewModel.units.collectAsStateWithLifecycle()
         SettingsView(
             compassMode = compassMode,
             onCompassModeChange = viewModel::onCompassModeChange,

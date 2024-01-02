@@ -24,7 +24,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -59,7 +59,7 @@ fun MainView(
     navHostController: NavHostController,
     windowWidthSizeClass: WindowWidthSizeClass
 ) {
-    val theme by viewModel.theme.collectAsState(initial = Theme.DEVICE)
+    val theme by viewModel.theme.collectAsStateWithLifecycle()
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val useDarkTheme by remember {
         derivedStateOf {
