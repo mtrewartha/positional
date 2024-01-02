@@ -8,4 +8,4 @@ val SharingStarted.Companion.ForViewModel: SharingStarted
         replayExpirationMillis = 0
     )
 
-private const val VIEW_MODEL_SHARING_STOP_TIMEOUT_MS = 3_000L
+private const val VIEW_MODEL_SHARING_STOP_TIMEOUT_MS = 5_000L
