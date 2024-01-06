@@ -12,19 +12,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.android.material.color.MaterialColors.harmonize
@@ -47,6 +52,7 @@ fun Compass(
         contentAlignment = Alignment.Center
     ) {
         if (azimuth != null) {
+            NorthHapticFeedback(azimuth)
             CompassReading(azimuth)
             CompassRose(azimuth, Modifier.fillMaxSize())
         }
@@ -276,7 +282,25 @@ private fun DirectionText(azimuth: Angle, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun NorthHapticFeedback(azimuth: Angle) {
+    var previousQuadrant by remember { mutableStateOf<Quadrant?>(null) }
+    val currentQuadrant by remember(azimuth) { derivedStateOf { azimuth.quadrant } }
+    val crossedNorth = previousQuadrant != null &&
+            ((previousQuadrant == Quadrant.NW && currentQuadrant == Quadrant.NE) ||
+                    (previousQuadrant == Quadrant.NE && currentQuadrant == Quadrant.NW))
+    previousQuadrant = currentQuadrant
+    val hapticFeedback = LocalHapticFeedback.current
+    LaunchedEffect(crossedNorth) {
+        if (crossedNorth) hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+    }
+}
+
 private const val AZIMUTH_DEFAULT = 0f
+private const val AZIMUTH_N = 0f
+private const val AZIMUTH_E = 90f
+private const val AZIMUTH_S = 180f
+private const val AZIMUTH_W = 270f
 private const val AZIMUTH_N_MIN = 337.5f
 private const val AZIMUTH_N_MAX = 22.5f
 private const val AZIMUTH_E_MIN = 67.5f
@@ -310,16 +334,21 @@ private val TICK_MAJOR_LENGTH = 16.dp
 private val TICK_MINOR_WIDTH = 8.dp
 private val TICK_MINOR_LENGTH = 8.dp
 
-private data class TickStyle(
-    val color: Color,
-    val lengthPx: Float,
-    val widthPx: Float
-)
+private enum class Quadrant { NE, SE, SW, NW }
+
+private data class TickStyle(val color: Color, val lengthPx: Float, val widthPx: Float)
+
+private val Angle.quadrant: Quadrant
+    get() = when (inDegrees().value) {
+        in AZIMUTH_N..AZIMUTH_E -> Quadrant.NE
+        in AZIMUTH_E..AZIMUTH_S -> Quadrant.SE
+        in AZIMUTH_S..AZIMUTH_W -> Quadrant.SW
+        else -> Quadrant.NW
+    }
 
 private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 
 @PreviewLightDark
-@PreviewScreenSizes
 @Composable
 private fun CompassPreview() {
     PositionalTheme {
