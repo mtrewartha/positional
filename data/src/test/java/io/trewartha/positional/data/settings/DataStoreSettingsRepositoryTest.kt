@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldBe
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import kotlinx.coroutines.test.runTest
@@ -123,6 +124,31 @@ class DataStoreSettingsRepositoryTest {
             subject.setUnits(Units.IMPERIAL)
 
             awaitItem().shouldBe(Units.IMPERIAL)
+        }
+    }
+
+    @Test
+    fun testCompassNorthVibrationDefaultAndSetAndGet() = runTest {
+        subject.compassNorthVibration.test {
+            withClue("Default compass north vibration should be medium") {
+                awaitItem().shouldBe(CompassNorthVibration.MEDIUM)
+            }
+
+            subject.setCompassNorthVibration(CompassNorthVibration.NONE)
+
+            awaitItem().shouldBe(CompassNorthVibration.NONE)
+
+            subject.setCompassNorthVibration(CompassNorthVibration.SHORT)
+
+            awaitItem().shouldBe(CompassNorthVibration.SHORT)
+
+            subject.setCompassNorthVibration(CompassNorthVibration.MEDIUM)
+
+            awaitItem().shouldBe(CompassNorthVibration.MEDIUM)
+
+            subject.setCompassNorthVibration(CompassNorthVibration.LONG)
+
+            awaitItem().shouldBe(CompassNorthVibration.LONG)
         }
     }
 }

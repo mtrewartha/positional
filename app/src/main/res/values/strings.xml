@@ -84,6 +84,13 @@
     <string name="settings_compass_mode_value_magnetic_name">Magnetic North</string>
     <string name="settings_compass_mode_value_true_name">True North</string>
 
+    <string name="settings_compass_north_vibration_dialog_title">Compass north vibration</string>
+    <string name="settings_compass_north_vibration_title">Compass north vibration</string>
+    <string name="settings_compass_north_vibration_value_long">Long</string>
+    <string name="settings_compass_north_vibration_value_medium">Medium</string>
+    <string name="settings_compass_north_vibration_value_none">None</string>
+    <string name="settings_compass_north_vibration_value_short">Short</string>
+
     <string name="settings_coordinates_format_dialog_title">Coordinates format</string>
     <string name="settings_coordinates_format_title">Coordinates format</string>
     <string name="settings_coordinates_format_value_dd_name">Decimal degrees</string>

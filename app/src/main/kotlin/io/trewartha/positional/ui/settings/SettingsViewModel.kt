@@ -7,6 +7,7 @@ import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.settings.SettingsRepository
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.utils.flow.ForViewModel
@@ -24,6 +25,10 @@ class SettingsViewModel @Inject constructor(
     val compassMode: StateFlow<CompassMode?> = settingsRepository.compassMode
         .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
+    val compassNorthVibration: StateFlow<CompassNorthVibration?> =
+        settingsRepository.compassNorthVibration
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
+
     val coordinatesFormat: StateFlow<CoordinatesFormat?> = settingsRepository.coordinatesFormat
         .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
@@ -39,6 +44,10 @@ class SettingsViewModel @Inject constructor(
 
     fun onCompassModeChange(compassMode: CompassMode) {
         viewModelScope.launch { settingsRepository.setCompassMode(compassMode) }
+    }
+
+    fun onCompassNorthVibrationChange(compassNorthVibration: CompassNorthVibration) {
+        viewModelScope.launch { settingsRepository.setCompassNorthVibration(compassNorthVibration) }
     }
 
     fun onCoordinatesFormatChange(coordinatesFormat: CoordinatesFormat) {

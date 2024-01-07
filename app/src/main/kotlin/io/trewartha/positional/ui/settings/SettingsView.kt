@@ -33,6 +33,7 @@ import io.trewartha.positional.R
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.NavDestination.Settings
@@ -56,6 +57,7 @@ fun NavGraphBuilder.settingsView(
     ) {
         val viewModel: SettingsViewModel = hiltViewModel()
         val compassMode by viewModel.compassMode.collectAsStateWithLifecycle()
+        val compassNorthVibration by viewModel.compassNorthVibration.collectAsStateWithLifecycle()
         val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()
         val locationAccuracyVisibility by viewModel.locationAccuracyVisibility
             .collectAsStateWithLifecycle()
@@ -64,6 +66,8 @@ fun NavGraphBuilder.settingsView(
         SettingsView(
             compassMode = compassMode,
             onCompassModeChange = viewModel::onCompassModeChange,
+            compassNorthVibration = compassNorthVibration,
+            onCompassNorthVibrationChange = viewModel::onCompassNorthVibrationChange,
             coordinatesFormat = coordinatesFormat,
             onCoordinatesFormatChange = viewModel::onCoordinatesFormatChange,
             locationAccuracyVisibility = locationAccuracyVisibility,
@@ -84,6 +88,8 @@ fun NavGraphBuilder.settingsView(
 private fun SettingsView(
     compassMode: CompassMode?,
     onCompassModeChange: (CompassMode) -> Unit,
+    compassNorthVibration: CompassNorthVibration?,
+    onCompassNorthVibrationChange: (CompassNorthVibration) -> Unit,
     coordinatesFormat: CoordinatesFormat?,
     onCoordinatesFormatChange: (CoordinatesFormat) -> Unit,
     locationAccuracyVisibility: LocationAccuracyVisibility?,
@@ -139,6 +145,11 @@ private fun SettingsView(
                 onValueChange = onCompassModeChange,
                 modifier = Modifier.fillMaxWidth()
             )
+            CompassNorthVibrationSetting(
+                value = compassNorthVibration,
+                onValueChange = onCompassNorthVibrationChange,
+                modifier = Modifier.fillMaxWidth()
+            )
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 LocationAccuracyVisibilitySetting(
                     value = locationAccuracyVisibility,
@@ -173,6 +184,8 @@ private fun LoadingPreviews() {
         SettingsView(
             compassMode = null,
             onCompassModeChange = {},
+            compassNorthVibration = null,
+            onCompassNorthVibrationChange = {},
             coordinatesFormat = null,
             onCoordinatesFormatChange = {},
             locationAccuracyVisibility = null,
@@ -195,6 +208,8 @@ private fun LoadedPreviews() {
         SettingsView(
             compassMode = CompassMode.TRUE_NORTH,
             onCompassModeChange = {},
+            compassNorthVibration = CompassNorthVibration.SHORT,
+            onCompassNorthVibrationChange = {},
             coordinatesFormat = CoordinatesFormat.DD,
             onCoordinatesFormatChange = {},
             locationAccuracyVisibility = LocationAccuracyVisibility.SHOW,

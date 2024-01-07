@@ -3,6 +3,7 @@ package io.trewartha.positional.data.settings
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.measurement.Units
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,11 @@ interface SettingsRepository {
      * Compass mode to use in the Compass view
      */
     val compassMode: Flow<CompassMode>
+
+    /**
+     * Style of device vibration to trigger when the compass crosses north
+     */
+    val compassNorthVibration: Flow<CompassNorthVibration>
 
     /**
      * Coordinates format to display location coordinates in
@@ -43,6 +49,13 @@ interface SettingsRepository {
      * @param compassMode Compass mode to use
      */
     suspend fun setCompassMode(compassMode: CompassMode)
+
+    /**
+     * Sets the style of device vibration to trigger when the compass crosses north
+     *
+     * @param compassNorthVibration Style of device vibration to use
+     */
+    suspend fun setCompassNorthVibration(compassNorthVibration: CompassNorthVibration)
 
     /**
      * Sets the coordinates format to display location coordinates in

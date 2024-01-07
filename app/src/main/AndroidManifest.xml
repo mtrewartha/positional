@@ -14,6 +14,8 @@
         android:name="android.hardware.sensor.compass"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".PositionalApplication"
         android:dataExtractionRules="@xml/backup_rules"

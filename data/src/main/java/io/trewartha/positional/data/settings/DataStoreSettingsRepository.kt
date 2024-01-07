@@ -12,6 +12,11 @@ import io.trewartha.positional.data.measurement.Units
 import io.trewartha.positional.data.settings.CompassModeProto.CompassMode.COMPASS_MODE_MAGNETIC_NORTH
 import io.trewartha.positional.data.settings.CompassModeProto.CompassMode.COMPASS_MODE_TRUE_NORTH
 import io.trewartha.positional.data.settings.CompassModeProto.CompassMode.COMPASS_MODE_UNSPECIFIED
+import io.trewartha.positional.data.settings.CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_LONG
+import io.trewartha.positional.data.settings.CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_MEDIUM
+import io.trewartha.positional.data.settings.CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_NONE
+import io.trewartha.positional.data.settings.CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_SHORT
+import io.trewartha.positional.data.settings.CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_UNSPECIFIED
 import io.trewartha.positional.data.settings.CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DECIMAL_DEGREES
 import io.trewartha.positional.data.settings.CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DEGREES_DECIMAL_MINUTES
 import io.trewartha.positional.data.settings.CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DEGREES_MINUTES_SECONDS
@@ -30,6 +35,7 @@ import io.trewartha.positional.data.settings.ThemeProto.Theme.THEME_UNSPECIFIED
 import io.trewartha.positional.data.settings.UnitsProto.Units.UNITS_IMPERIAL
 import io.trewartha.positional.data.settings.UnitsProto.Units.UNITS_METRIC
 import io.trewartha.positional.data.settings.UnitsProto.Units.UNITS_UNSPECIFIED
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.data.ui.LocationAccuracyVisibility
 import io.trewartha.positional.data.ui.Theme
 import kotlinx.coroutines.flow.Flow
@@ -53,6 +59,9 @@ class DataStoreSettingsRepository @Inject constructor(
     override val compassMode: Flow<CompassMode> =
         context.settingsDataStore.data.map { it.compassMode.toData() }
 
+    override val compassNorthVibration: Flow<CompassNorthVibration> =
+        context.settingsDataStore.data.map { it.compassNorthVibration.toData() }
+
     override val coordinatesFormat: Flow<CoordinatesFormat> =
         context.settingsDataStore.data.map { it.coordinatesFormat.toData() }
 
@@ -68,6 +77,12 @@ class DataStoreSettingsRepository @Inject constructor(
     override suspend fun setCompassMode(compassMode: CompassMode) {
         context.settingsDataStore.updateData {
             it.toBuilder().setCompassMode(compassMode.toProto()).build()
+        }
+    }
+
+    override suspend fun setCompassNorthVibration(compassNorthVibration: CompassNorthVibration) {
+        context.settingsDataStore.updateData {
+            it.toBuilder().setCompassNorthVibration(compassNorthVibration.toProto()).build()
         }
     }
 
@@ -107,6 +122,28 @@ class DataStoreSettingsRepository @Inject constructor(
             COMPASS_MODE_UNSPECIFIED,
             CompassModeProto.CompassMode.UNRECOGNIZED -> CompassMode.TRUE_NORTH
             COMPASS_MODE_MAGNETIC_NORTH -> CompassMode.MAGNETIC_NORTH
+        }
+
+    private fun CompassNorthVibration.toProto(): CompassNorthVibrationProto.CompassNorthVibration =
+        when (this) {
+            CompassNorthVibration.NONE -> COMPASS_NORTH_VIBRATION_NONE
+            CompassNorthVibration.SHORT -> COMPASS_NORTH_VIBRATION_SHORT
+            CompassNorthVibration.MEDIUM -> COMPASS_NORTH_VIBRATION_MEDIUM
+            CompassNorthVibration.LONG -> COMPASS_NORTH_VIBRATION_LONG
+        }
+
+    private fun CompassNorthVibrationProto.CompassNorthVibration.toData(): CompassNorthVibration =
+        when (this) {
+            COMPASS_NORTH_VIBRATION_SHORT ->
+                CompassNorthVibration.SHORT
+            COMPASS_NORTH_VIBRATION_MEDIUM,
+            COMPASS_NORTH_VIBRATION_UNSPECIFIED,
+            CompassNorthVibrationProto.CompassNorthVibration.UNRECOGNIZED ->
+                CompassNorthVibration.MEDIUM
+            COMPASS_NORTH_VIBRATION_LONG ->
+                CompassNorthVibration.LONG
+            COMPASS_NORTH_VIBRATION_NONE ->
+                CompassNorthVibration.NONE
         }
 
     private fun CoordinatesFormat.toProto(): CoordinatesFormatProto.CoordinatesFormat =

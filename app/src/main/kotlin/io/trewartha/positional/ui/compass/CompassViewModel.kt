@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.compass.CompassHardwareException
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.settings.SettingsRepository
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.domain.compass.CompassReading
 import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 import io.trewartha.positional.ui.utils.flow.ForViewModel
@@ -23,11 +24,12 @@ class CompassViewModel @Inject constructor(
 ) : ViewModel() {
 
     val state: StateFlow<State> =
-        combine<CompassReading, CompassMode, State>(
+        combine<CompassReading, CompassMode, CompassNorthVibration, State>(
             getCompassReadingsUseCase(),
-            settingsRepository.compassMode
-        ) { readings, mode ->
-            State.SensorsPresent.Loaded(readings, mode)
+            settingsRepository.compassMode,
+            settingsRepository.compassNorthVibration
+        ) { reading, mode, northVibration ->
+            State.SensorsPresent.Loaded(reading, mode, northVibration)
         }.catch { throwable ->
             when (throwable) {
                 is CompassHardwareException -> {
@@ -52,8 +54,9 @@ class CompassViewModel @Inject constructor(
             data object Loading : SensorsPresent
 
             data class Loaded(
-                val compassReading: CompassReading,
-                val compassMode: CompassMode
+                val reading: CompassReading,
+                val mode: CompassMode,
+                val northVibration: CompassNorthVibration
             ) : SensorsPresent
         }
     }

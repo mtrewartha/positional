@@ -12,9 +12,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -24,14 +28,15 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.android.material.color.MaterialColors.harmonize
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.trewartha.positional.R
 import io.trewartha.positional.data.measurement.Angle
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.locals.LocalVibrator
 import io.trewartha.positional.ui.utils.placeholder
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -40,6 +45,7 @@ import kotlin.math.sin
 @Composable
 fun Compass(
     azimuth: Angle?,
+    northVibration: CompassNorthVibration?,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -47,6 +53,7 @@ fun Compass(
         contentAlignment = Alignment.Center
     ) {
         if (azimuth != null) {
+            NorthVibration(azimuth, northVibration)
             CompassReading(azimuth)
             CompassRose(azimuth, Modifier.fillMaxSize())
         }
@@ -276,7 +283,28 @@ private fun DirectionText(azimuth: Angle, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun NorthVibration(azimuth: Angle, northVibration: CompassNorthVibration?) {
+    var previousQuadrant by remember { mutableStateOf<Quadrant?>(null) }
+    val currentQuadrant by remember(azimuth) { derivedStateOf { azimuth.quadrant } }
+    val crossedNorth = previousQuadrant != null &&
+            ((previousQuadrant == Quadrant.NW && currentQuadrant == Quadrant.NE) ||
+                    (previousQuadrant == Quadrant.NE && currentQuadrant == Quadrant.NW))
+    previousQuadrant = currentQuadrant
+    val vibrator = LocalVibrator.current
+    LaunchedEffect(crossedNorth) {
+        if (crossedNorth && northVibration != null) {
+            @Suppress("DEPRECATION") // It matches our needs and goes back pre API 21
+            vibrator.vibrate(northVibration.duration.inWholeMilliseconds)
+        }
+    }
+}
+
 private const val AZIMUTH_DEFAULT = 0f
+private const val AZIMUTH_N = 0f
+private const val AZIMUTH_E = 90f
+private const val AZIMUTH_S = 180f
+private const val AZIMUTH_W = 270f
 private const val AZIMUTH_N_MIN = 337.5f
 private const val AZIMUTH_N_MAX = 22.5f
 private const val AZIMUTH_E_MIN = 67.5f
@@ -310,21 +338,26 @@ private val TICK_MAJOR_LENGTH = 16.dp
 private val TICK_MINOR_WIDTH = 8.dp
 private val TICK_MINOR_LENGTH = 8.dp
 
-private data class TickStyle(
-    val color: Color,
-    val lengthPx: Float,
-    val widthPx: Float
-)
+private enum class Quadrant { NE, SE, SW, NW }
+
+private data class TickStyle(val color: Color, val lengthPx: Float, val widthPx: Float)
+
+private val Angle.quadrant: Quadrant
+    get() = when (inDegrees().value) {
+        in AZIMUTH_N..AZIMUTH_E -> Quadrant.NE
+        in AZIMUTH_E..AZIMUTH_S -> Quadrant.SE
+        in AZIMUTH_S..AZIMUTH_W -> Quadrant.SW
+        else -> Quadrant.NW
+    }
 
 private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 
 @PreviewLightDark
-@PreviewScreenSizes
 @Composable
 private fun CompassPreview() {
     PositionalTheme {
         Surface(Modifier.size(600.dp, 300.dp)) {
-            Compass(azimuth = Angle.Degrees(25f))
+            Compass(azimuth = Angle.Degrees(25f), northVibration = CompassNorthVibration.SHORT)
         }
     }
 }
