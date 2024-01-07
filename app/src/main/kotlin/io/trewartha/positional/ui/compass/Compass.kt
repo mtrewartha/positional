@@ -25,9 +25,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -36,7 +34,9 @@ import com.google.android.material.color.MaterialColors.harmonize
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.trewartha.positional.R
 import io.trewartha.positional.data.measurement.Angle
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.locals.LocalVibrator
 import io.trewartha.positional.ui.utils.placeholder
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -45,6 +45,7 @@ import kotlin.math.sin
 @Composable
 fun Compass(
     azimuth: Angle?,
+    northVibration: CompassNorthVibration?,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -52,7 +53,7 @@ fun Compass(
         contentAlignment = Alignment.Center
     ) {
         if (azimuth != null) {
-            NorthHapticFeedback(azimuth)
+            NorthVibration(azimuth, northVibration)
             CompassReading(azimuth)
             CompassRose(azimuth, Modifier.fillMaxSize())
         }
@@ -283,16 +284,19 @@ private fun DirectionText(azimuth: Angle, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun NorthHapticFeedback(azimuth: Angle) {
+private fun NorthVibration(azimuth: Angle, northVibration: CompassNorthVibration?) {
     var previousQuadrant by remember { mutableStateOf<Quadrant?>(null) }
     val currentQuadrant by remember(azimuth) { derivedStateOf { azimuth.quadrant } }
     val crossedNorth = previousQuadrant != null &&
             ((previousQuadrant == Quadrant.NW && currentQuadrant == Quadrant.NE) ||
                     (previousQuadrant == Quadrant.NE && currentQuadrant == Quadrant.NW))
     previousQuadrant = currentQuadrant
-    val hapticFeedback = LocalHapticFeedback.current
+    val vibrator = LocalVibrator.current
     LaunchedEffect(crossedNorth) {
-        if (crossedNorth) hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+        if (crossedNorth && northVibration != null) {
+            @Suppress("DEPRECATION") // It matches our needs and goes back pre API 21
+            vibrator.vibrate(northVibration.duration.inWholeMilliseconds)
+        }
     }
 }
 
@@ -353,7 +357,7 @@ private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 private fun CompassPreview() {
     PositionalTheme {
         Surface(Modifier.size(600.dp, 300.dp)) {
-            Compass(azimuth = Angle.Degrees(25f))
+            Compass(azimuth = Angle.Degrees(25f), northVibration = CompassNorthVibration.SHORT)
         }
     }
 }

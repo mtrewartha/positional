@@ -1,6 +1,7 @@
 package io.trewartha.positional.ui.compass
 
 import android.content.Context
+import android.os.Vibrator
 import android.view.Surface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +30,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +56,7 @@ import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.CompassAzimuth
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.measurement.Angle
+import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.domain.compass.CompassReading
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
@@ -61,6 +64,7 @@ import io.trewartha.positional.ui.bottomNavEnterTransition
 import io.trewartha.positional.ui.bottomNavExitTransition
 import io.trewartha.positional.ui.bottomNavPopEnterTransition
 import io.trewartha.positional.ui.bottomNavPopExitTransition
+import io.trewartha.positional.ui.locals.LocalVibrator
 import io.trewartha.positional.ui.utils.placeholder
 
 fun NavGraphBuilder.compassView(navController: NavController, contentPadding: PaddingValues) {
@@ -73,10 +77,16 @@ fun NavGraphBuilder.compassView(navController: NavController, contentPadding: Pa
     ) {
         val viewModel: CompassViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
-        CompassView(
-            state = state,
-            contentPadding = contentPadding,
-            onHelpClick = { navController.navigate(NavDestination.CompassHelp.route) })
+        CompositionLocalProvider(
+            LocalVibrator provides
+                    @Suppress("DEPRECATION") // It matches our needs and goes back pre API 21
+                    LocalContext.current.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        ) {
+            CompassView(
+                state = state,
+                contentPadding = contentPadding,
+                onHelpClick = { navController.navigate(NavDestination.CompassHelp.route) })
+        }
     }
 }
 
@@ -180,14 +190,17 @@ private fun SensorsPresentContent(
         }
         val context = LocalContext.current
         val baseAzimuth = (state as? CompassViewModel.State.SensorsPresent.Loaded)?.let {
-            when (it.compassMode) {
-                CompassMode.MAGNETIC_NORTH -> it.compassReading.magneticAzimuth
-                CompassMode.TRUE_NORTH -> it.compassReading.trueAzimuth
+            when (it.mode) {
+                CompassMode.MAGNETIC_NORTH -> it.reading.magneticAzimuth
+                CompassMode.TRUE_NORTH -> it.reading.trueAzimuth
             }?.angle
         }
         val adjustedAzimuth = baseAzimuth?.let { adjustAzimuthForDisplayRotation(context, it) }
+        val northVibration =
+            (state as? CompassViewModel.State.SensorsPresent.Loaded)?.northVibration
         Compass(
             adjustedAzimuth,
+            northVibration,
             Modifier
                 .sizeIn(maxWidth = 480.dp, maxHeight = 480.dp)
                 .weight(1f)
@@ -197,7 +210,7 @@ private fun SensorsPresentContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             val declination = (state as? CompassViewModel.State.SensorsPresent.Loaded)
-                ?.compassReading?.magneticDeclination?.inDegrees()?.value
+                ?.reading?.magneticDeclination?.inDegrees()?.value
             DeclinationText(declination)
             HelpButton(onHelpClick)
         }
@@ -290,7 +303,7 @@ private fun SensorsPresentLoadedPreview() {
         Surface {
             CompassView(
                 state = CompassViewModel.State.SensorsPresent.Loaded(
-                    compassReading = CompassReading(
+                    reading = CompassReading(
                         magneticAzimuth = CompassAzimuth(
                             angle = Angle.Degrees(40f),
                             accelerometerAccuracy = CompassAccuracy.HIGH,
@@ -298,7 +311,8 @@ private fun SensorsPresentLoadedPreview() {
                         ),
                         magneticDeclination = Angle.Degrees(5f)
                     ),
-                    compassMode = CompassMode.TRUE_NORTH
+                    mode = CompassMode.TRUE_NORTH,
+                    northVibration = CompassNorthVibration.SHORT
                 ),
                 contentPadding = PaddingValues(),
                 onHelpClick = {}
