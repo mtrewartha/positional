@@ -1,6 +1,5 @@
 package io.trewartha.positional.ui.location
 
-import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -23,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -45,9 +43,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.R
 import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.location.CoordinatesFormat
@@ -82,8 +77,7 @@ import timber.log.Timber
 fun NavGraphBuilder.locationView(
     navController: NavController,
     contentPadding: PaddingValues,
-    snackbarHostState: SnackbarHostState,
-    onAndroidSettingsClick: () -> Unit
+    snackbarHostState: SnackbarHostState
 ) {
     composable(
         NavDestination.Location.route,
@@ -92,15 +86,11 @@ fun NavGraphBuilder.locationView(
         popEnterTransition = bottomNavPopEnterTransition(NavDestination.LocationHelp.route),
         popExitTransition = bottomNavPopExitTransition()
     ) {
-        val locationPermissions = remember { listOf(Manifest.permission.ACCESS_FINE_LOCATION) }
-        val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
-
         val viewModel: LocationViewModel = hiltViewModel()
         val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()
         val location by viewModel.location.collectAsStateWithLifecycle()
         val accuracyVisibility by viewModel.accuracyVisibility.collectAsStateWithLifecycle()
         val units by viewModel.units.collectAsStateWithLifecycle()
-
         val context = LocalContext.current
         val locale = LocalLocale.current
         CompositionLocalProvider(
@@ -114,17 +104,14 @@ fun NavGraphBuilder.locationView(
         ) {
             val coordinatesFormatter = LocalCoordinatesFormatter.current
             LocationView(
-                locationPermissionsState = locationPermissionsState,
                 location = location,
                 accuracyVisibility = accuracyVisibility,
                 units = units,
                 contentPadding = contentPadding,
                 snackbarHostState = snackbarHostState,
-                onAndroidSettingsClick = onAndroidSettingsClick,
                 onShareClick = click@{ coordinates ->
                     val formattedCoordinates =
-                        coordinates?.let { coordinatesFormatter.formatForCopy(it) }
-                            ?: return@click
+                        coordinates?.let { coordinatesFormatter.formatForCopy(it) } ?: return@click
                     shareCoordinates(context, formattedCoordinates)
                 },
                 onHelpClick = { navController.navigate(NavDestination.LocationHelp.route) }
@@ -135,13 +122,11 @@ fun NavGraphBuilder.locationView(
 
 @Composable
 private fun LocationView(
-    locationPermissionsState: MultiplePermissionsState,
     location: Location?,
     accuracyVisibility: LocationAccuracyVisibility?,
     units: Units?,
     contentPadding: PaddingValues,
     snackbarHostState: SnackbarHostState,
-    onAndroidSettingsClick: () -> Unit,
     onShareClick: (Coordinates?) -> Unit,
     onHelpClick: () -> Unit,
 ) {
@@ -150,53 +135,40 @@ private fun LocationView(
     val coordinatesCopiedMessage = stringResource(R.string.location_snackbar_coordinates_copied)
     var showMapError by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    if (locationPermissionsState.allPermissionsGranted) {
-        val clipboardManager = LocalClipboardManager.current
-        val context = LocalContext.current
-        val coordinatesFormatter = LocalCoordinatesFormatter.current
-        val dateTimeFormatter = LocalDateTimeFormatter.current
+    val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
+    val coordinatesFormatter = LocalCoordinatesFormatter.current
+    val dateTimeFormatter = LocalDateTimeFormatter.current
 
-        LocationPermissionGrantedContent(
-            location = location,
-            accuracyVisibility = accuracyVisibility,
-            units = units,
-            snackbarHostState = snackbarHostState,
-            onCopyClick = { coordinates ->
-                coroutineScope.launch {
-                    snackbarHostState.currentSnackbarData?.dismiss()
-                    snackbarHostState.showSnackbar(coordinatesCopiedMessage)
-                }
-                copyCoordinates(coordinates, coordinatesFormatter, clipboardManager)
-            },
-            onMapClick = { coordinates, timestamp ->
-                try {
-                    navigateToMap(context, dateTimeFormatter, coordinates, timestamp)
-                } catch (exception: ActivityNotFoundException) {
-                    Timber.w(exception, "Unable to open map")
-                    showMapError = true
-                }
-            },
-            onShareClick = onShareClick,
-            onHelpClick = onHelpClick,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .padding(dimensionResource(R.dimen.standard_padding))
-                .verticalScroll(rememberScrollState())
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-        )
-    } else {
-        LocationPermissionRequiredContent(
-            locationPermissionsState = locationPermissionsState,
-            onSettingsClick = onAndroidSettingsClick,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .padding(dimensionResource(R.dimen.standard_padding))
-                .verticalScroll(rememberScrollState())
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-        )
-    }
+    LocationPermissionGrantedContent(
+        location = location,
+        accuracyVisibility = accuracyVisibility,
+        units = units,
+        snackbarHostState = snackbarHostState,
+        onCopyClick = { coordinates ->
+            coroutineScope.launch {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarHostState.showSnackbar(coordinatesCopiedMessage)
+            }
+            copyCoordinates(coordinates, coordinatesFormatter, clipboardManager)
+        },
+        onMapClick = { coordinates, timestamp ->
+            try {
+                navigateToMap(context, dateTimeFormatter, coordinates, timestamp)
+            } catch (exception: ActivityNotFoundException) {
+                Timber.w(exception, "Unable to open map")
+                showMapError = true
+            }
+        },
+        onShareClick = onShareClick,
+        onHelpClick = onHelpClick,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(contentPadding)
+            .padding(dimensionResource(R.dimen.standard_padding))
+            .verticalScroll(rememberScrollState())
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    )
     if (showMapError) MapErrorDialog(onDismissRequest = { showMapError = false })
 }
 
@@ -264,21 +236,11 @@ private fun PermissionNotGrantedPreview() {
     PositionalTheme {
         Surface {
             LocationView(
-                locationPermissionsState = object : MultiplePermissionsState {
-                    override val allPermissionsGranted: Boolean = false
-                    override val permissions: List<PermissionState> = emptyList()
-                    override val revokedPermissions: List<PermissionState> = emptyList()
-                    override val shouldShowRationale: Boolean = false
-                    override fun launchMultiplePermissionRequest() {
-                        // Don't do anything
-                    }
-                },
                 location = null,
                 accuracyVisibility = LocationAccuracyVisibility.SHOW,
                 units = null,
                 contentPadding = PaddingValues(),
                 snackbarHostState = SnackbarHostState(),
-                onAndroidSettingsClick = {},
                 onShareClick = {},
                 onHelpClick = {}
             )
@@ -299,21 +261,11 @@ private fun LocatingPreview() {
         ) {
             Surface {
                 LocationView(
-                    locationPermissionsState = object : MultiplePermissionsState {
-                        override val allPermissionsGranted: Boolean = true
-                        override val permissions: List<PermissionState> = emptyList()
-                        override val revokedPermissions: List<PermissionState> = emptyList()
-                        override val shouldShowRationale: Boolean = false
-                        override fun launchMultiplePermissionRequest() {
-                            // Don't do anything
-                        }
-                    },
                     location = null,
                     accuracyVisibility = LocationAccuracyVisibility.SHOW,
                     units = null,
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
-                    onAndroidSettingsClick = {},
                     onShareClick = {},
                     onHelpClick = {}
                 )
@@ -336,15 +288,6 @@ private fun LocatedPreview() {
         ) {
             Surface {
                 LocationView(
-                    locationPermissionsState = object : MultiplePermissionsState {
-                        override val allPermissionsGranted: Boolean = true
-                        override val permissions: List<PermissionState> = emptyList()
-                        override val revokedPermissions: List<PermissionState> = emptyList()
-                        override val shouldShowRationale: Boolean = false
-                        override fun launchMultiplePermissionRequest() {
-                            // Don't do anything
-                        }
-                    },
                     location = Location(
                         timestamp = Instant.DISTANT_PAST,
                         coordinates = Coordinates(
@@ -364,7 +307,6 @@ private fun LocatedPreview() {
                     units = Units.METRIC,
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
-                    onAndroidSettingsClick = {},
                     onShareClick = {},
                     onHelpClick = {}
                 )

@@ -66,8 +66,8 @@
     <string name="location_launch_label">My Location on %s (Exported from Positional)</string>
     <string name="location_permission_required_button_ok" translatable="false">@string/common_ok</string>
     <string name="location_permission_required_button_privacy_policy" translatable="false">@string/common_privacy_policy</string>
-    <string name="location_permission_required_body">Your location is kept completely private.</string>
-    <string name="location_permission_required_title">Precise location permission required</string>
+    <string name="location_permission_required_body">Positional is completely private. Your location is never stored, sent, or shared.</string>
+    <string name="location_permission_required_title">Precise location permission needed</string>
     <string name="location_snackbar_coordinates_copied">Coordinates copied</string>
     <string name="location_snackbar_screen_locked">Screen locked on while showing coordinates</string>
     <string name="location_snackbar_screen_unlocked">Screen unlocked</string>

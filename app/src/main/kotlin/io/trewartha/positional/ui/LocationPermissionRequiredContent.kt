@@ -1,4 +1,4 @@
-package io.trewartha.positional.ui.location
+package io.trewartha.positional.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
 import io.trewartha.positional.R
-import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.utils.activity
 
 @Composable
@@ -39,50 +38,52 @@ fun LocationPermissionRequiredContent(
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Column(
-            modifier = Modifier.widthIn(max = 384.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.LocationOn,
-                contentDescription = null,
-                modifier = Modifier.size(96.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(36.dp))
-            Text(
-                text = stringResource(R.string.location_permission_required_title),
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = stringResource(R.string.location_permission_required_body),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            val activity = LocalContext.current.activity
-            TextButton(onClick = { activity?.showPrivacyPolicy() }) {
+    Surface(modifier = modifier) {
+        Box(contentAlignment = Alignment.Center) {
+            Column(
+                modifier = Modifier.widthIn(max = 384.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.LocationOn,
+                    contentDescription = null,
+                    modifier = Modifier.size(96.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(36.dp))
                 Text(
-                    text = stringResource(R.string.location_permission_required_button_privacy_policy),
+                    text = stringResource(R.string.location_permission_required_title),
+                    style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center
                 )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(
-                onClick = {
-                    if (locationPermissionsState.shouldShowRationale) {
-                        onSettingsClick()
-                    } else {
-                        locationPermissionsState.launchMultiplePermissionRequest()
-                    }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.location_permission_required_body),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                val activity = LocalContext.current.activity
+                TextButton(onClick = { activity?.showPrivacyPolicy() }) {
+                    Text(
+                        text = stringResource(R.string.location_permission_required_button_privacy_policy),
+                        textAlign = TextAlign.Center
+                    )
                 }
-            ) {
-                Text(text = stringResource(id = R.string.location_permission_required_button_ok))
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(
+                    onClick = {
+                        if (locationPermissionsState.shouldShowRationale) {
+                            onSettingsClick()
+                        } else {
+                            locationPermissionsState.launchMultiplePermissionRequest()
+                        }
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.location_permission_required_button_ok))
+                }
             }
         }
     }

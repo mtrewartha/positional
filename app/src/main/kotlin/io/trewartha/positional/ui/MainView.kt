@@ -1,5 +1,6 @@
 package io.trewartha.positional.ui
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -39,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.trewartha.positional.data.ui.Theme
 import io.trewartha.positional.ui.NavDestination.Compass
 import io.trewartha.positional.ui.NavDestination.Location
@@ -72,54 +75,56 @@ fun MainView(
     }
     val systemBarStyle =
         SystemBarStyle.auto(Color.Transparent.toArgb(), Color.Transparent.toArgb()) { useDarkTheme }
-    LocalContext.current.activity?.enableEdgeToEdge(
-        statusBarStyle = systemBarStyle,
-        navigationBarStyle = systemBarStyle
-    )
+    LocalContext.current.activity?.enableEdgeToEdge(systemBarStyle, systemBarStyle)
     PositionalTheme(useDarkTheme = useDarkTheme) {
+        val context = LocalContext.current
+        val locationPermissions = remember { listOf(Manifest.permission.ACCESS_FINE_LOCATION) }
+        val locationPermissionsState = rememberMultiplePermissionsState(locationPermissions)
         val isCompactWidthWindow = windowWidthSizeClass == WindowWidthSizeClass.Compact
         val mainNavDestinations = setOf(Location, Compass, Sun, Settings)
         val snackbarHostState = remember { SnackbarHostState() }
-        Scaffold(
-            bottomBar = bottomBar@{
-                if (!isCompactWidthWindow) return@bottomBar
-                MainNavigationBar(navHostController, mainNavDestinations)
-            },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        ) { contentPadding ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (!isCompactWidthWindow) {
-                    MainNavigationRail(
+        if (locationPermissionsState.allPermissionsGranted) {
+            Scaffold(
+                bottomBar = bottomBar@{
+                    if (!isCompactWidthWindow) return@bottomBar
+                    MainNavigationBar(navHostController, mainNavDestinations)
+                },
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+            ) { contentPadding ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (!isCompactWidthWindow) {
+                        MainNavigationRail(
+                            navHostController,
+                            mainNavDestinations,
+                            modifier = Modifier.fillMaxHeight()
+                        )
+                    }
+                    NavHost(
                         navHostController,
-                        mainNavDestinations,
-                        modifier = Modifier.fillMaxHeight()
-                    )
-                }
-                val context = LocalContext.current
-                NavHost(
-                    navHostController,
-                    startDestination = Location.route,
-                    enterTransition = { EnterTransition.None },
-                    exitTransition = { ExitTransition.None }
-                ) {
-                    compassView(navHostController, contentPadding)
-                    compassHelpView(navHostController, contentPadding)
-                    locationView(
-                        navHostController,
-                        contentPadding,
-                        snackbarHostState,
-                        onAndroidSettingsClick = { navigateToSettings(context) },
-                    )
-                    locationHelpView(navHostController, contentPadding)
-                    settingsView(
-                        contentPadding,
-                        onLicenseClick = { navigateToLicense(context) },
-                        onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) }
-                    )
-                    sunView(navHostController, contentPadding)
-                    sunHelpView(navHostController, contentPadding)
+                        startDestination = Location.route,
+                        enterTransition = { EnterTransition.None },
+                        exitTransition = { ExitTransition.None }
+                    ) {
+                        compassView(navHostController, contentPadding)
+                        compassHelpView(navHostController, contentPadding)
+                        locationView(navHostController, contentPadding, snackbarHostState)
+                        locationHelpView(navHostController, contentPadding)
+                        settingsView(
+                            contentPadding,
+                            onLicenseClick = { navigateToLicense(context) },
+                            onPrivacyPolicyClick = { navigateToPrivacyPolicy(context) }
+                        )
+                        sunView(navHostController, contentPadding)
+                        sunHelpView(navHostController, contentPadding)
+                    }
                 }
             }
+        } else {
+            LocationPermissionRequiredContent(
+                locationPermissionsState,
+                onSettingsClick = { navigateToSettings(context) },
+                Modifier.fillMaxSize()
+            )
         }
     }
 }
