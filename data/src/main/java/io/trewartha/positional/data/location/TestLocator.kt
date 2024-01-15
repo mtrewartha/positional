@@ -1,9 +1,10 @@
 package io.trewartha.positional.data.location
 
+import io.trewartha.positional.data.measurement.Distance
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.datetime.Clock
 
 /**
  * [Locator] implementation for use in testing classes that depend on a [Locator]
@@ -11,16 +12,24 @@ import kotlinx.coroutines.flow.update
 class TestLocator : Locator {
 
     override val location: Flow<Location>
-        get() = _location.filterNotNull()
+        get() = _location.distinctUntilChanged()
 
-    private val _location = MutableStateFlow<Location?>(null)
+    private val _location = MutableSharedFlow<Location>(replay = 1)
 
     /**
      * Sets the current location
      *
      * @param location the location to set
      */
-    fun setLocation(location: Location) {
-        _location.update { location }
+    suspend fun setLocation(location: Location = getTestLocation()) {
+        _location.emit(location)
     }
+
+    private fun getTestLocation(): Location =
+        Location(
+            timestamp = Clock.System.now(),
+            coordinates = Coordinates(latitude = 0.0, longitude = 0.0),
+            altitude = Distance.Meters(0.0f),
+            magneticDeclination = null
+        )
 }

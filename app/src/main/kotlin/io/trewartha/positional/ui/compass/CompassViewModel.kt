@@ -3,61 +3,53 @@ package io.trewartha.positional.ui.compass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.trewartha.positional.data.compass.CompassHardwareException
-import io.trewartha.positional.data.compass.CompassMode
+import io.trewartha.positional.data.compass.Compass
+import io.trewartha.positional.data.location.Locator
+import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.settings.SettingsRepository
-import io.trewartha.positional.data.ui.CompassNorthVibration
-import io.trewartha.positional.domain.compass.CompassReading
-import io.trewartha.positional.domain.compass.GetCompassReadingsUseCase
 import io.trewartha.positional.ui.utils.flow.ForViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class CompassViewModel @Inject constructor(
-    getCompassReadingsUseCase: GetCompassReadingsUseCase,
-    settingsRepository: SettingsRepository
+    compass: Compass?,
+    locator: Locator,
+    settings: SettingsRepository
 ) : ViewModel() {
 
-    val state: StateFlow<State> =
-        combine<CompassReading, CompassMode, CompassNorthVibration, State>(
-            getCompassReadingsUseCase(),
-            settingsRepository.compassMode,
-            settingsRepository.compassNorthVibration
-        ) { reading, mode, northVibration ->
-            State.SensorsPresent.Loaded(reading, mode, northVibration)
-        }.catch { throwable ->
-            when (throwable) {
-                is CompassHardwareException -> {
-                    emit(State.SensorsMissing)
-                }
-                else -> {
-                    throw throwable
-                }
-            }
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.ForViewModel,
-            initialValue = State.SensorsPresent.Loading
-        )
+    private val magneticDeclination: Flow<Angle?> = locator.location
+        .map { it.magneticDeclination }
+        .distinctUntilChanged()
+        .onStart { emit(null) }
 
-    sealed interface State {
-
-        data object SensorsMissing : State
-
-        sealed interface SensorsPresent : State {
-
-            data object Loading : SensorsPresent
-
-            data class Loaded(
-                val reading: CompassReading,
-                val mode: CompassMode,
-                val northVibration: CompassNorthVibration
-            ) : SensorsPresent
+    val state: StateFlow<CompassState> =
+        if (compass == null) {
+            flowOf(CompassState.SensorsMissing).stateIn(
+                viewModelScope,
+                SharingStarted.ForViewModel,
+                initialValue = CompassState.SensorsMissing
+            )
+        } else {
+            combine(
+                compass.azimuth,
+                magneticDeclination,
+                settings.compassMode,
+                settings.compassNorthVibration
+            ) { reading, declination, mode, northVibration ->
+                CompassState.Data(reading, declination, mode, northVibration)
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.ForViewModel,
+                initialValue = CompassState.Loading
+            )
         }
-    }
 }

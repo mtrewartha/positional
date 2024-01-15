@@ -175,9 +175,11 @@ dependencies {
 
     "gmsImplementation"(libs.google.firebase.analytics)
 
-    testImplementation(libs.turbine)
+    testImplementation(libs.kotlin.test)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotlin.reflect)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 
     androidTestImplementation(libs.kotest.assertions.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface Compass {
 
     /**
-     * Hot [Flow] that constantly emits the most recent azimuth
+     * [Flow] that constantly emits the most recent azimuth
      */
-    val azimuth: Flow<CompassAzimuth>
+    val azimuth: Flow<Azimuth>
 }

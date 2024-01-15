@@ -52,12 +52,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.trewartha.positional.R
-import io.trewartha.positional.data.compass.CompassAccuracy
-import io.trewartha.positional.data.compass.CompassAzimuth
+import io.trewartha.positional.data.compass.Azimuth
 import io.trewartha.positional.data.compass.CompassMode
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.ui.CompassNorthVibration
-import io.trewartha.positional.domain.compass.CompassReading
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
 import io.trewartha.positional.ui.bottomNavEnterTransition
@@ -92,7 +90,7 @@ fun NavGraphBuilder.compassView(navController: NavController, contentPadding: Pa
 
 @Composable
 private fun CompassView(
-    state: CompassViewModel.State,
+    state: CompassState,
     contentPadding: PaddingValues,
     onHelpClick: () -> Unit
 ) {
@@ -120,12 +118,12 @@ private fun CompassView(
             .padding(dimensionResource(R.dimen.standard_padding)),
     ) {
         when (state) {
-            is CompassViewModel.State.SensorsMissing ->
+            is CompassState.SensorsMissing ->
                 SensorsMissingContent(
                     onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
                     Modifier.fillMaxSize()
                 )
-            is CompassViewModel.State.SensorsPresent ->
+            is CompassState.SensorsPresent ->
                 SensorsPresentContent(state, onHelpClick, Modifier.fillMaxSize())
         }
     }
@@ -175,7 +173,7 @@ private fun SensorsMissingContent(
 
 @Composable
 private fun SensorsPresentContent(
-    state: CompassViewModel.State.SensorsPresent,
+    state: CompassState.SensorsPresent,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -189,15 +187,14 @@ private fun SensorsPresentContent(
             AccuracyHelpDialog(onDismissRequest = { showAccuracyHelpDialog = false })
         }
         val context = LocalContext.current
-        val baseAzimuth = (state as? CompassViewModel.State.SensorsPresent.Loaded)?.let {
-            when (it.mode) {
-                CompassMode.MAGNETIC_NORTH -> it.reading.magneticAzimuth
-                CompassMode.TRUE_NORTH -> it.reading.trueAzimuth
-            }?.angle
+        val baseAzimuth = (state as? CompassState.Data)?.let { data ->
+            when (data.mode) {
+                CompassMode.MAGNETIC_NORTH -> data.azimuth.angle
+                CompassMode.TRUE_NORTH -> data.declination?.let { data.azimuth.angle + it }
+            }
         }
         val adjustedAzimuth = baseAzimuth?.let { adjustAzimuthForDisplayRotation(context, it) }
-        val northVibration =
-            (state as? CompassViewModel.State.SensorsPresent.Loaded)?.northVibration
+        val northVibration = (state as? CompassState.Data)?.northVibration
         Compass(
             adjustedAzimuth,
             northVibration,
@@ -209,8 +206,7 @@ private fun SensorsPresentContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val declination = (state as? CompassViewModel.State.SensorsPresent.Loaded)
-                ?.reading?.magneticDeclination?.inDegrees()?.value
+            val declination = (state as? CompassState.Data)?.declination?.inDegrees()?.value
             DeclinationText(declination)
             HelpButton(onHelpClick)
         }
@@ -272,7 +268,7 @@ private fun SensorsMissingPreview() {
     PositionalTheme {
         Surface {
             CompassView(
-                state = CompassViewModel.State.SensorsMissing,
+                state = CompassState.SensorsMissing,
                 contentPadding = PaddingValues(),
                 onHelpClick = {}
             )
@@ -286,7 +282,7 @@ private fun SensorsPresentLoadingPreview() {
     PositionalTheme {
         Surface {
             CompassView(
-                state = CompassViewModel.State.SensorsPresent.Loading,
+                state = CompassState.Loading,
                 contentPadding = PaddingValues(),
                 onHelpClick = {}
             )
@@ -302,15 +298,9 @@ private fun SensorsPresentLoadedPreview() {
     PositionalTheme {
         Surface {
             CompassView(
-                state = CompassViewModel.State.SensorsPresent.Loaded(
-                    reading = CompassReading(
-                        magneticAzimuth = CompassAzimuth(
-                            angle = Angle.Degrees(40f),
-                            accelerometerAccuracy = CompassAccuracy.HIGH,
-                            magnetometerAccuracy = CompassAccuracy.MEDIUM
-                        ),
-                        magneticDeclination = Angle.Degrees(5f)
-                    ),
+                state = CompassState.Data(
+                    azimuth = Azimuth(Angle.Degrees(45f)),
+                    declination = Angle.Degrees(1f),
                     mode = CompassMode.TRUE_NORTH,
                     northVibration = CompassNorthVibration.SHORT
                 ),

@@ -3,11 +3,11 @@ package io.trewartha.positional.data.compass
 import io.trewartha.positional.data.measurement.Angle
 
 /**
- * Compass azimuth angle and accuracies associated with it
+ * Azimuth angle and accuracies associated with it
  *
  * @throws IllegalArgumentException if [angle] is outside of the range 0..<360
  */
-data class CompassAzimuth @Throws(IllegalArgumentException::class) constructor(
+data class Azimuth @Throws(IllegalArgumentException::class) constructor(
 
     /**
      * Angle from north. A positive angle indicates the user is facing east of north and a negative
@@ -25,7 +25,6 @@ data class CompassAzimuth @Throws(IllegalArgumentException::class) constructor(
      */
     val magnetometerAccuracy: CompassAccuracy? = null
 ) {
-
     init {
         require(angle.inDegrees().value in VALID_RANGE) { "$angle is outside of range 0..<360" }
     }

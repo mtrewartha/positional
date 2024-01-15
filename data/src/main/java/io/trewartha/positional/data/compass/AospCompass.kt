@@ -11,32 +11,31 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**
  * [Compass] implementation powered by the AOSP [SensorManager]
  */
 class AospCompass @Inject constructor(
+    coroutineContext: CoroutineContext,
     private val sensorManager: SensorManager,
+    accelerometer: Sensor,
+    magnetometer: Sensor,
+    private val rotationVectorSensor: Sensor
 ) : Compass {
 
     private val orientation = FloatArray(ROTATION_VECTOR_SIZE)
 
-    private val accelerometer: Sensor? =
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-
     private val accelerometerAccuracy: Flow<CompassAccuracy?> =
         sensorManager.getAccuracyFlow(accelerometer)
-
-    private val magnetometer: Sensor? =
-        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
     private val magnetometerAccuracy: Flow<CompassAccuracy?> =
         sensorManager.getAccuracyFlow(magnetometer)
 
     private val rotation: Flow<FloatArray> =
         callbackFlow {
-            if (rotationVectorSensor == null) throw CompassHardwareException()
             val rotationVector = FloatArray(ROTATION_VECTOR_SIZE)
             val listener = object : SensorEventListener {
                 override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -59,10 +58,7 @@ class AospCompass @Inject constructor(
             awaitClose { sensorManager.unregisterListener(listener) }
         }.conflate()
 
-    private val rotationVectorSensor: Sensor? =
-        sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-
-    override val azimuth: Flow<CompassAzimuth> =
+    override val azimuth: Flow<Azimuth> =
         combine(
             rotation,
             accelerometerAccuracy,
@@ -74,16 +70,15 @@ class AospCompass @Inject constructor(
                     (Math.toDegrees(orientation[0].toDouble())
                         .toFloat() + DEGREES_360) % DEGREES_360
                 )
-                CompassAzimuth(angle, accelerometerAccuracy, magnetometerAccuracy)
+                Azimuth(angle, accelerometerAccuracy, magnetometerAccuracy)
             } catch (_: Exception) {
                 null
             }
-        }.filterNotNull()
+        }.filterNotNull().flowOn(coroutineContext)
 }
 
-private fun SensorManager.getAccuracyFlow(sensor: Sensor?): Flow<CompassAccuracy?> =
+private fun SensorManager.getAccuracyFlow(sensor: Sensor): Flow<CompassAccuracy?> =
     callbackFlow {
-        if (sensor == null) throw CompassHardwareException()
         // Some devices don't seem to trigger the listener below, so send a null accuracy
         // indicating we don't have one right away. If we later get an accuracy, it'll be sent.
         trySend(null)
