@@ -49,28 +49,28 @@ class CompassViewModelTest {
     }
 
     @Test
-    fun testInitialStateIsSensorMissingStateWhenCompassMissing() = runTest {
+    fun testInitialStateIsSensorMissingStateWhenCompassMissing() {
         subject = CompassViewModel(null, locator, settings)
 
-        subject.state.test { expectMostRecentItem().shouldBeInstanceOf<CompassState.SensorsMissing>() }
+        subject.state.value.shouldBeInstanceOf<CompassState.SensorsMissing>()
     }
 
     @Test
-    fun testInitialStateIsLoadingStateWhenCompassPresent() = runTest {
-        subject.state.test { expectMostRecentItem().shouldBeInstanceOf<CompassState.Loading>() }
+    fun testInitialStateIsLoadingStateWhenCompassPresent() {
+        subject.state.value.shouldBeInstanceOf<CompassState.Loading>()
     }
 
     @Test
     fun testDataEmittedOnceLoaded() = runTest {
+        val expectedAzimuth = Azimuth(
+            angle = Angle.Degrees(0f),
+            accelerometerAccuracy = CompassAccuracy.HIGH,
+            magnetometerAccuracy = CompassAccuracy.HIGH
+        )
+        val expectedCompassMode = CompassMode.MAGNETIC_NORTH
+        val expectedCompassNorthVibration = CompassNorthVibration.NONE
         subject.state.test {
-            awaitItem() // Ignore the loading state
-            val expectedAzimuth = Azimuth(
-                angle = Angle.Degrees(0f),
-                accelerometerAccuracy = CompassAccuracy.HIGH,
-                magnetometerAccuracy = CompassAccuracy.HIGH
-            )
-            val expectedCompassMode = CompassMode.MAGNETIC_NORTH
-            val expectedCompassNorthVibration = CompassNorthVibration.NONE
+            awaitItem() // Loading state
 
             settings.setCompassMode(expectedCompassMode)
             settings.setCompassNorthVibration(expectedCompassNorthVibration)
@@ -86,31 +86,85 @@ class CompassViewModelTest {
     }
 
     @Test
-    fun testDeclinationEmittedWhenLocationAvailable() = runTest {
+    fun testDataEmittedWhenAzimuthChanges() = runTest {
+        val initialAzimuth = Azimuth(
+            angle = Angle.Degrees(1f),
+            accelerometerAccuracy = CompassAccuracy.HIGH,
+            magnetometerAccuracy = CompassAccuracy.HIGH
+        )
+        val expectedAzimuth = initialAzimuth.copy(angle = Angle.Degrees(2f))
         subject.state.test {
-            awaitItem() // Ignore the loading state
-            val expectedDeclination = Angle.Degrees(1f)
+            awaitItem() // Loading state
             settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
             settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(
-                Azimuth(
-                    angle = Angle.Degrees(0f),
-                    accelerometerAccuracy = CompassAccuracy.HIGH,
-                    magnetometerAccuracy = CompassAccuracy.HIGH
-                )
-            )
+            compass.setAzimuth(initialAzimuth)
+            awaitItem() // Initial data state
+
+            compass.setAzimuth(expectedAzimuth)
+
+            val result = awaitItem()
+            result.shouldBeInstanceOf<CompassState.Data>()
+            result.azimuth.shouldBe(expectedAzimuth)
+        }
+    }
+
+    @Test
+    fun testDataEmittedWhenDeclinationChanges() = runTest {
+        val expectedDeclination = Angle.Degrees(1f)
+        subject.state.test {
+            awaitItem() // Loading state
+            settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+            settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+            compass.setAzimuth(Azimuth(Angle.Degrees(0f)))
+            awaitItem() // Initial data state
+
             locator.setLocation(
                 Location(
                     timestamp = Clock.System.now(),
-                    coordinates = Coordinates(latitude = 0.0, longitude = 0.0),
+                    coordinates = Coordinates(0.0, 0.0),
                     magneticDeclination = expectedDeclination
                 )
             )
 
-            val state = // Wait for the first state with a declination
-                awaitItem().takeIf { it is CompassState.Data && it.declination != null } ?: awaitItem()
-            state.shouldBeInstanceOf<CompassState.Data>()
-            state.declination.shouldBe(expectedDeclination)
+            val result = awaitItem()
+            result.shouldBeInstanceOf<CompassState.Data>()
+            result.declination.shouldBe(expectedDeclination)
+        }
+    }
+
+    @Test
+    fun testDataEmittedWhenCompassModeChanges() = runTest {
+        val expectedMode = CompassMode.TRUE_NORTH
+        subject.state.test {
+            awaitItem() // Loading state
+            settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+            settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+            compass.setAzimuth(Azimuth(Angle.Degrees(0f)))
+            awaitItem() // Initial data state
+
+            settings.setCompassMode(expectedMode)
+
+            val result = awaitItem()
+            result.shouldBeInstanceOf<CompassState.Data>()
+            result.mode.shouldBe(expectedMode)
+        }
+    }
+
+    @Test
+    fun testDataEmittedWhenCompassNorthVibrationChanges() = runTest {
+        val expectedVibration = CompassNorthVibration.SHORT
+        subject.state.test {
+            awaitItem() // Loading state
+            settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+            settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+            compass.setAzimuth(Azimuth(Angle.Degrees(0f)))
+            awaitItem() // Initial data state
+
+            settings.setCompassNorthVibration(expectedVibration)
+
+            val result = awaitItem()
+            result.shouldBeInstanceOf<CompassState.Data>()
+            result.northVibration.shouldBe(expectedVibration)
         }
     }
 }
