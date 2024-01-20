@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface Locator {
 
     /**
-     * Hot [Flow] that constantly emits the most recent location of the device as it changes
+     * [Flow] that constantly emits the most recent location of the device as it changes
      */
     val location: Flow<Location>
 }

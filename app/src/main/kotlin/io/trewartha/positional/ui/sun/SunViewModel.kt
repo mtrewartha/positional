@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.location.Locator
 import io.trewartha.positional.data.sun.SolarTimes
-import io.trewartha.positional.domain.location.GetLocationUseCase
 import io.trewartha.positional.domain.sun.GetSolarTimesUseCase
 import io.trewartha.positional.ui.utils.flow.ForViewModel
 import kotlinx.coroutines.delay
@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -28,7 +27,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -37,22 +35,12 @@ import kotlin.time.Duration.Companion.seconds
  */
 @HiltViewModel
 class SunViewModel @Inject constructor(
-    getLocationUseCase: GetLocationUseCase,
+    locator: Locator,
     private val getDailyTwilightTimes: GetSolarTimesUseCase,
 ) : ViewModel() {
 
     private val location: Flow<Location> =
-        getLocationUseCase()
-            .retry { cause ->
-                if (cause is SecurityException) {
-                    Timber.w("Waiting for location permissions to be granted")
-                    delay(1.seconds)
-                    true
-                } else {
-                    throw cause
-                }
-            }
-            .shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
+        locator.location.shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
 
     private val today: LocalDate
         get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date

@@ -14,11 +14,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.retry
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -68,7 +70,16 @@ class AospLocator @Inject constructor(
             Timber.d("Starting location flow")
         }.onEach {
             Timber.d("Location update received")
+        }.retry { cause ->
+            if (cause is SecurityException) {
+                delay(PERMISSION_RETRY_INTERVAL_MS)
+                true
+            } else {
+                Timber.w(cause, "Unable to request location updates")
+                false
+            }
         }.flowOn(coroutineContext)
 }
 
 private const val LOCATION_UPDATE_INTERVAL_MS = 1_000L
+private const val PERMISSION_RETRY_INTERVAL_MS = 1_000L

@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.data.location.Coordinates
+import io.trewartha.positional.data.location.CoordinatesFormat
 import io.trewartha.positional.data.location.Location
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.measurement.Distance
@@ -59,9 +60,7 @@ import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun LocationPermissionGrantedContent(
-    location: Location?,
-    accuracyVisibility: LocationAccuracyVisibility?,
-    units: Units?,
+    state: LocationState,
     snackbarHostState: SnackbarHostState,
     onCopyClick: (Coordinates?) -> Unit,
     onMapClick: (Coordinates?, Instant?) -> Unit,
@@ -69,7 +68,10 @@ fun LocationPermissionGrantedContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val placeholdersVisible = location == null || accuracyVisibility == null || units == null
+    val location = (state as? LocationState.Data)?.location
+    val units = (state as? LocationState.Data)?.units
+    val accuracyVisibility = (state as? LocationState.Data)?.accuracyVisibility
+    val placeholdersVisible = state is LocationState.Loading
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -313,7 +315,7 @@ private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
 
 @PreviewLightDark
 @Composable
-private fun LocatingPreview() {
+private fun LoadingPreview() {
     PositionalTheme {
         Surface {
             val context = LocalContext.current
@@ -322,9 +324,7 @@ private fun LocatingPreview() {
                 LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
             ) {
                 LocationPermissionGrantedContent(
-                    location = null,
-                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
-                    units = Units.METRIC,
+                    state = LocationState.Loading,
                     snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},
                     onMapClick = { _, _ -> },
@@ -341,7 +341,7 @@ private fun LocatingPreview() {
 @PreviewScreenSizes
 @Preview
 @Composable
-private fun LocatedPreview() {
+private fun DataPreview() {
     PositionalTheme {
         Surface {
             val context = LocalContext.current
@@ -350,20 +350,26 @@ private fun LocatedPreview() {
                 LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
             ) {
                 LocationPermissionGrantedContent(
-                    location = Location(
-                        timestamp = Instant.DISTANT_PAST,
-                        coordinates = Coordinates(latitude = 123.456789, longitude = 123.456789),
-                        horizontalAccuracy = Distance.Meters(123.45678f),
-                        bearing = Angle.Degrees(123.45678f),
-                        bearingAccuracy = Angle.Degrees(123.45678f),
-                        altitude = Distance.Meters(123.45678f),
-                        altitudeAccuracy = Distance.Meters(123.45678f),
-                        magneticDeclination = Angle.Degrees(1f),
-                        speed = Speed.KilometersPerHour(123.45678f),
-                        speedAccuracy = Speed.KilometersPerHour(123.45678f),
+                    state = LocationState.Data(
+                        location = Location(
+                            timestamp = Instant.DISTANT_PAST,
+                            coordinates = Coordinates(
+                                latitude = 123.456789,
+                                longitude = 123.456789
+                            ),
+                            horizontalAccuracy = Distance.Meters(123.45678f),
+                            bearing = Angle.Degrees(123.45678f),
+                            bearingAccuracy = Angle.Degrees(123.45678f),
+                            altitude = Distance.Meters(123.45678f),
+                            altitudeAccuracy = Distance.Meters(123.45678f),
+                            magneticDeclination = Angle.Degrees(1f),
+                            speed = Speed.KilometersPerHour(123.45678f),
+                            speedAccuracy = Speed.KilometersPerHour(123.45678f),
+                        ),
+                        coordinatesFormat = CoordinatesFormat.DD,
+                        accuracyVisibility = LocationAccuracyVisibility.SHOW,
+                        units = Units.METRIC,
                     ),
-                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
-                    units = Units.METRIC,
                     snackbarHostState = SnackbarHostState(),
                     onCopyClick = {},
                     onMapClick = { _, _ -> },

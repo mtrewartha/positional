@@ -87,28 +87,24 @@ fun NavGraphBuilder.locationView(
         popExitTransition = bottomNavPopExitTransition()
     ) {
         val viewModel: LocationViewModel = hiltViewModel()
-        val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()
-        val location by viewModel.location.collectAsStateWithLifecycle()
-        val accuracyVisibility by viewModel.accuracyVisibility.collectAsStateWithLifecycle()
-        val units by viewModel.units.collectAsStateWithLifecycle()
+        val state by viewModel.state.collectAsStateWithLifecycle()
         val context = LocalContext.current
         val locale = LocalLocale.current
         CompositionLocalProvider(
-            LocalCoordinatesFormatter provides when (coordinatesFormat) {
-                CoordinatesFormat.DD, null -> DecimalDegreesFormatter(context, locale)
-                CoordinatesFormat.DDM -> DegreesDecimalMinutesFormatter(context, locale)
-                CoordinatesFormat.DMS -> DegreesMinutesSecondsFormatter(context, locale)
-                CoordinatesFormat.MGRS -> MgrsFormatter(context)
-                CoordinatesFormat.UTM -> UtmFormatter(context, locale)
-            }
+            LocalCoordinatesFormatter provides
+                    when ((state as? LocationState.Data)?.coordinatesFormat) {
+                        CoordinatesFormat.DD, null -> DecimalDegreesFormatter(context, locale)
+                        CoordinatesFormat.DDM -> DegreesDecimalMinutesFormatter(context, locale)
+                        CoordinatesFormat.DMS -> DegreesMinutesSecondsFormatter(context, locale)
+                        CoordinatesFormat.MGRS -> MgrsFormatter(context)
+                        CoordinatesFormat.UTM -> UtmFormatter(context, locale)
+                    }
         ) {
             val coordinatesFormatter = LocalCoordinatesFormatter.current
             LocationView(
-                location = location,
-                accuracyVisibility = accuracyVisibility,
-                units = units,
-                contentPadding = contentPadding,
-                snackbarHostState = snackbarHostState,
+                state,
+                contentPadding,
+                snackbarHostState,
                 onShareClick = click@{ coordinates ->
                     val formattedCoordinates =
                         coordinates?.let { coordinatesFormatter.formatForCopy(it) } ?: return@click
@@ -122,9 +118,7 @@ fun NavGraphBuilder.locationView(
 
 @Composable
 private fun LocationView(
-    location: Location?,
-    accuracyVisibility: LocationAccuracyVisibility?,
-    units: Units?,
+    state: LocationState,
     contentPadding: PaddingValues,
     snackbarHostState: SnackbarHostState,
     onShareClick: (Coordinates?) -> Unit,
@@ -141,9 +135,7 @@ private fun LocationView(
     val dateTimeFormatter = LocalDateTimeFormatter.current
 
     LocationPermissionGrantedContent(
-        location = location,
-        accuracyVisibility = accuracyVisibility,
-        units = units,
+        state = state,
         snackbarHostState = snackbarHostState,
         onCopyClick = { coordinates ->
             coroutineScope.launch {
@@ -231,28 +223,9 @@ private fun shareCoordinates(context: Context, formattedCoordinates: String) {
 
 @PreviewLightDark
 @PreviewScreenSizes
-@Composable
-private fun PermissionNotGrantedPreview() {
-    PositionalTheme {
-        Surface {
-            LocationView(
-                location = null,
-                accuracyVisibility = LocationAccuracyVisibility.SHOW,
-                units = null,
-                contentPadding = PaddingValues(),
-                snackbarHostState = SnackbarHostState(),
-                onShareClick = {},
-                onHelpClick = {}
-            )
-        }
-    }
-}
-
-@PreviewLightDark
-@PreviewScreenSizes
 @Preview
 @Composable
-private fun LocatingPreview() {
+private fun LoadingPreview() {
     PositionalTheme {
         val context = LocalContext.current
         val locale = LocalLocale.current
@@ -261,9 +234,7 @@ private fun LocatingPreview() {
         ) {
             Surface {
                 LocationView(
-                    location = null,
-                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
-                    units = null,
+                    state = LocationState.Loading,
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
                     onShareClick = {},
@@ -279,7 +250,7 @@ private fun LocatingPreview() {
 @PreviewScreenSizes
 @Preview
 @Composable
-private fun LocatedPreview() {
+private fun DataPreview() {
     PositionalTheme {
         val context = LocalContext.current
         val locale = LocalLocale.current
@@ -288,23 +259,26 @@ private fun LocatedPreview() {
         ) {
             Surface {
                 LocationView(
-                    location = Location(
-                        timestamp = Instant.DISTANT_PAST,
-                        coordinates = Coordinates(
-                            latitude = 123.456789,
-                            longitude = 123.456789
+                    state = LocationState.Data(
+                        location = Location(
+                            timestamp = Instant.DISTANT_PAST,
+                            coordinates = Coordinates(
+                                latitude = 123.456789,
+                                longitude = 123.456789
+                            ),
+                            horizontalAccuracy = Distance.Meters(123.45678f),
+                            bearing = Angle.Degrees(123.45678f),
+                            bearingAccuracy = Angle.Degrees(123.45678f),
+                            altitude = Distance.Meters(123.45678f),
+                            altitudeAccuracy = Distance.Meters(123.45678f),
+                            magneticDeclination = Angle.Degrees(1f),
+                            speed = Speed.KilometersPerHour(123.45678f),
+                            speedAccuracy = Speed.KilometersPerHour(123.45678f),
                         ),
-                        horizontalAccuracy = Distance.Meters(123.45678f),
-                        bearing = Angle.Degrees(123.45678f),
-                        bearingAccuracy = Angle.Degrees(123.45678f),
-                        altitude = Distance.Meters(123.45678f),
-                        altitudeAccuracy = Distance.Meters(123.45678f),
-                        magneticDeclination = Angle.Degrees(1f),
-                        speed = Speed.KilometersPerHour(123.45678f),
-                        speedAccuracy = Speed.KilometersPerHour(123.45678f),
+                        coordinatesFormat = CoordinatesFormat.DD,
+                        accuracyVisibility = LocationAccuracyVisibility.SHOW,
+                        units = Units.METRIC
                     ),
-                    accuracyVisibility = LocationAccuracyVisibility.SHOW,
-                    units = Units.METRIC,
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
                     onShareClick = {},
