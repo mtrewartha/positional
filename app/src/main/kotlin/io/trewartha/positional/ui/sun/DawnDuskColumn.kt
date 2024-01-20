@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.HorizontalDivider
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.State
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.utils.AutoShrinkingText
 import io.trewartha.positional.ui.utils.placeholder
@@ -25,13 +26,12 @@ import kotlinx.datetime.LocalTime
 
 @Composable
 fun DawnDuskColumn(
-    astronomicalDawn: LocalTime?,
-    nauticalDawn: LocalTime?,
-    civilDawn: LocalTime?,
-    civilDusk: LocalTime?,
-    nauticalDusk: LocalTime?,
-    astronomicalDusk: LocalTime?,
-    showPlaceholders: Boolean,
+    astronomicalDawn: State<LocalTime?, *>,
+    nauticalDawn: State<LocalTime?, *>,
+    civilDawn: State<LocalTime?, *>,
+    civilDusk: State<LocalTime?, *>,
+    nauticalDusk: State<LocalTime?, *>,
+    astronomicalDusk: State<LocalTime?, *>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -43,21 +43,18 @@ fun DawnDuskColumn(
             label = stringResource(R.string.sun_label_dawn_dusk_civil),
             dawn = civilDawn,
             dusk = civilDusk,
-            showPlaceholders = showPlaceholders,
             modifier = Modifier.fillMaxWidth()
         )
         DawnDuskRow(
             label = stringResource(R.string.sun_label_dawn_dusk_nautical),
             dawn = nauticalDawn,
             dusk = nauticalDusk,
-            showPlaceholders = showPlaceholders,
             modifier = Modifier.fillMaxWidth()
         )
         DawnDuskRow(
             label = stringResource(R.string.sun_label_dawn_dusk_astronomical),
             dawn = astronomicalDawn,
             dusk = astronomicalDusk,
-            showPlaceholders = showPlaceholders,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -97,9 +94,8 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
 @Composable
 private fun DawnDuskRow(
     label: String,
-    dawn: LocalTime?,
-    dusk: LocalTime?,
-    showPlaceholders: Boolean,
+    dawn: State<LocalTime?, *>,
+    dusk: State<LocalTime?, *>,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -109,7 +105,6 @@ private fun DawnDuskRow(
     ) {
         TwilightTime(
             time = dawn,
-            showPlaceholder = showPlaceholders,
             modifier = Modifier.weight(1f, fill = true)
         )
         AutoShrinkingText(
@@ -122,24 +117,19 @@ private fun DawnDuskRow(
         )
         TwilightTime(
             time = dusk,
-            showPlaceholder = showPlaceholders,
             modifier = Modifier.weight(1f, fill = true)
         )
     }
 }
 
 @Composable
-private fun TwilightTime(
-    time: LocalTime?,
-    showPlaceholder: Boolean,
-    modifier: Modifier = Modifier
-) {
+private fun TwilightTime(time: State<LocalTime?, *>, modifier: Modifier = Modifier) {
     AutoShrinkingText(
-        text = time?.let { LocalDateTimeFormatter.current.formatTime(it) }
+        text = time.dataOrNull?.let { LocalDateTimeFormatter.current.formatTime(it) }
             ?: stringResource(R.string.sun_text_time_none),
         modifier = modifier
             .defaultMinSize(minWidth = 64.dp)
-            .placeholder(showPlaceholder),
+            .placeholder(time is State.Loading),
         maxLines = 1,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.bodyLarge
@@ -152,13 +142,12 @@ private fun LoadingPreview() {
     PositionalTheme {
         Surface {
             DawnDuskColumn(
-                astronomicalDawn = null,
-                nauticalDawn = null,
-                civilDawn = null,
-                civilDusk = null,
-                nauticalDusk = null,
-                astronomicalDusk = null,
-                showPlaceholders = true
+                astronomicalDawn = State.Loading<LocalTime?, Nothing>(),
+                nauticalDawn = State.Loading<LocalTime?, Nothing>(),
+                civilDawn = State.Loading<LocalTime?, Nothing>(),
+                civilDusk = State.Loading<LocalTime?, Nothing>(),
+                nauticalDusk = State.Loading<LocalTime?, Nothing>(),
+                astronomicalDusk = State.Loading<LocalTime?, Nothing>()
             )
         }
     }
@@ -170,13 +159,12 @@ private fun LoadedPreview() {
     PositionalTheme {
         Surface {
             DawnDuskColumn(
-                astronomicalDawn = LocalTime(12, 0, 0),
-                nauticalDawn = LocalTime(12, 0, 1),
-                civilDawn = LocalTime(12, 0, 2),
-                civilDusk = null,
-                nauticalDusk = null,
-                astronomicalDusk = null,
-                showPlaceholders = false
+                astronomicalDawn = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 0)),
+                nauticalDawn = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 1)),
+                civilDawn = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 2)),
+                civilDusk = State.Loaded<LocalTime?, Nothing>(null),
+                nauticalDusk = State.Loaded<LocalTime?, Nothing>(null),
+                astronomicalDusk = State.Loaded<LocalTime?, Nothing>(null)
             )
         }
     }

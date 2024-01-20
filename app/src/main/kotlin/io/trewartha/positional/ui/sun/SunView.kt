@@ -32,9 +32,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.trewartha.positional.R
-import io.trewartha.positional.data.sun.SolarTimes
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.State
 import io.trewartha.positional.ui.bottomNavEnterTransition
 import io.trewartha.positional.ui.bottomNavExitTransition
 import io.trewartha.positional.ui.bottomNavPopEnterTransition
@@ -45,6 +45,7 @@ import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -57,13 +58,9 @@ fun NavGraphBuilder.sunView(navController: NavController, contentPadding: Paddin
         popExitTransition = bottomNavPopExitTransition()
     ) {
         val viewModel: SunViewModel = hiltViewModel()
-        val todaysDate by viewModel.todaysDate.collectAsStateWithLifecycle()
-        val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
-        val selectedDateTwilights by viewModel.selectedDateTwilights.collectAsStateWithLifecycle()
+        val state by viewModel.state.collectAsStateWithLifecycle()
         SunView(
-            todaysDate = todaysDate,
-            selectedDate = selectedDate,
-            selectedDateTwilights = selectedDateTwilights,
+            state = state,
             contentPadding = contentPadding,
             onSelectedDateDecrement = viewModel::onSelectedDateDecrement,
             onDateSelection = viewModel::onSelectedDateChange,
@@ -76,9 +73,7 @@ fun NavGraphBuilder.sunView(navController: NavController, contentPadding: Paddin
 
 @Composable
 private fun SunView(
-    todaysDate: LocalDate?,
-    selectedDate: LocalDate?,
-    selectedDateTwilights: SolarTimes?,
+    state: SunState,
     contentPadding: PaddingValues,
     onSelectedDateDecrement: () -> Unit,
     onDateSelection: (LocalDate) -> Unit,
@@ -101,19 +96,17 @@ private fun SunView(
             modifier = Modifier.fillMaxWidth()
         ) {
             SunriseSunsetColumn(
-                sunrise = selectedDateTwilights?.sunrise,
-                sunset = selectedDateTwilights?.sunset,
-                showPlaceholders = selectedDateTwilights == null,
+                sunrise = state.sunrise,
+                sunset = state.sunset,
                 modifier = Modifier.fillMaxWidth()
             )
             DawnDuskColumn(
-                astronomicalDawn = selectedDateTwilights?.astronomicalDawn,
-                nauticalDawn = selectedDateTwilights?.nauticalDawn,
-                civilDawn = selectedDateTwilights?.civilDawn,
-                civilDusk = selectedDateTwilights?.civilDusk,
-                nauticalDusk = selectedDateTwilights?.nauticalDusk,
-                astronomicalDusk = selectedDateTwilights?.astronomicalDusk,
-                showPlaceholders = selectedDateTwilights == null,
+                astronomicalDawn = state.astronomicalDawn,
+                nauticalDawn = state.nauticalDawn,
+                civilDawn = state.civilDawn,
+                civilDusk = state.civilDusk,
+                nauticalDusk = state.nauticalDusk,
+                astronomicalDusk = state.astronomicalDusk,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -121,7 +114,7 @@ private fun SunView(
         HelpButton(onClick = onHelpClick)
         Spacer(modifier = Modifier.height(24.dp))
         SunDateControls(
-            selectedDate = selectedDate,
+            selectedDate = state.selectedDate,
             onPreviousDayClick = onSelectedDateDecrement,
             onDateSelection = onDateSelection,
             onNextDayClick = onSelectedDateIncrement,
@@ -129,7 +122,7 @@ private fun SunView(
         Spacer(modifier = Modifier.height(24.dp))
         OutlinedButton(
             onClick = onJumpToTodayClick,
-            enabled = todaysDate != null && todaysDate != selectedDate
+            enabled = state.todaysDate != state.selectedDate
         ) {
             Text(stringResource(R.string.sun_button_today))
         }
@@ -151,9 +144,18 @@ private fun HelpButton(onClick: () -> Unit) {
 private fun LoadingPreview() {
     PositionalTheme {
         SunView(
-            todaysDate = null,
-            selectedDate = null,
-            selectedDateTwilights = null,
+            state = SunState(
+                todaysDate = LocalDate(2024, Month.JANUARY, 1),
+                selectedDate = LocalDate(2024, Month.JANUARY, 1),
+                astronomicalDawn = State.Loading(),
+                nauticalDawn = State.Loading(),
+                civilDawn = State.Loading(),
+                sunrise = State.Loading(),
+                sunset = State.Loading(),
+                civilDusk = State.Loading(),
+                nauticalDusk = State.Loading(),
+                astronomicalDusk = State.Loading()
+            ),
             contentPadding = PaddingValues(),
             onSelectedDateDecrement = {},
             onDateSelection = {},
@@ -175,17 +177,17 @@ private fun LoadedPreview() {
             ) {
                 val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
                 SunView(
-                    todaysDate = today,
-                    selectedDate = today,
-                    selectedDateTwilights = SolarTimes(
-                        astronomicalDawn = null,
-                        nauticalDawn = null,
-                        civilDawn = LocalTime(11, 58, 0),
-                        sunrise = LocalTime(11, 59, 0),
-                        sunset = LocalTime(12, 1, 0),
-                        civilDusk = LocalTime(12, 2, 0),
-                        nauticalDusk = null,
-                        astronomicalDusk = null,
+                    state = SunState(
+                        todaysDate = LocalDate(2024, Month.JANUARY, 1),
+                        selectedDate = LocalDate(2024, Month.JANUARY, 1),
+                        astronomicalDawn = State.Loaded(LocalTime(12, 0, 0)),
+                        nauticalDawn = State.Loaded(LocalTime(12, 0, 0)),
+                        civilDawn = State.Loaded(LocalTime(12, 0, 0)),
+                        sunrise = State.Loaded(LocalTime(12, 0, 0)),
+                        sunset = State.Loaded(LocalTime(12, 0, 0)),
+                        civilDusk = State.Loaded(LocalTime(12, 0, 0)),
+                        nauticalDusk = State.Loaded(LocalTime(12, 0, 0)),
+                        astronomicalDusk = State.Loaded(LocalTime(12, 0, 0))
                     ),
                     contentPadding = PaddingValues(),
                     onSelectedDateDecrement = {},

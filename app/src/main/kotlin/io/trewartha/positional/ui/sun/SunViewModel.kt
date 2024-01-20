@@ -3,10 +3,10 @@ package io.trewartha.positional.ui.sun
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.trewartha.positional.data.location.Location
+import io.trewartha.positional.data.location.Coordinates
 import io.trewartha.positional.data.location.Locator
-import io.trewartha.positional.data.sun.SolarTimes
-import io.trewartha.positional.domain.sun.GetSolarTimesUseCase
+import io.trewartha.positional.data.sun.SolarTimesRepository
+import io.trewartha.positional.ui.State
 import io.trewartha.positional.ui.utils.flow.ForViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -30,40 +31,21 @@ import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-/**
- * View model for the Sun view
- */
 @HiltViewModel
 class SunViewModel @Inject constructor(
+    private val clock: Clock,
     locator: Locator,
-    private val getDailyTwilightTimes: GetSolarTimesUseCase,
+    private val solarTimesRepository: SolarTimesRepository
 ) : ViewModel() {
 
-    private val location: Flow<Location> =
-        locator.location.shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
+    private val coordinates: Flow<Coordinates> =
+        locator.location.map { it.coordinates }
+            .shareIn(viewModelScope, SharingStarted.ForViewModel, replay = 1)
 
     private val today: LocalDate
-        get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        get() = clock.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 
-    /**
-     * The currently selected date
-     */
-    val selectedDate: StateFlow<LocalDate>
-        get() = _date
-    private val _date = MutableStateFlow(today)
-
-    /**
-     * Twilight times on the selected date at the device's current location
-     */
-    val selectedDateTwilights: StateFlow<SolarTimes?> =
-        combine(selectedDate, location) { date, location ->
-            getDailyTwilightTimes(location.coordinates, date)
-        }.stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
-
-    /**
-     * Today's date
-     */
-    val todaysDate: StateFlow<LocalDate> =
+    private val todaysDate: StateFlow<LocalDate> =
         flow {
             while (viewModelScope.isActive) {
                 emit(today)
@@ -71,31 +53,54 @@ class SunViewModel @Inject constructor(
             }
         }.distinctUntilChanged().stateIn(viewModelScope, SharingStarted.ForViewModel, today)
 
-    /**
-     * Callback to tell the view model that the user has selected a date
-     */
+    private val selectedDate = MutableStateFlow(todaysDate.value)
+
+    val state: StateFlow<SunState> =
+        combine(todaysDate, selectedDate, coordinates) { todaysDate, selectedDate, coordinates ->
+            with(solarTimesRepository) {
+                SunState(
+                    todaysDate = todaysDate,
+                    selectedDate = selectedDate,
+                    astronomicalDawn = State.Loaded(getAstronomicalDawn(coordinates, selectedDate)),
+                    nauticalDawn = State.Loaded(getNauticalDawn(coordinates, selectedDate)),
+                    civilDawn = State.Loaded(getCivilDawn(coordinates, selectedDate)),
+                    sunrise = State.Loaded(getSunrise(coordinates, selectedDate)),
+                    sunset = State.Loaded(getSunset(coordinates, selectedDate)),
+                    civilDusk = State.Loaded(getCivilDusk(coordinates, selectedDate)),
+                    nauticalDusk = State.Loaded(getNauticalDusk(coordinates, selectedDate)),
+                    astronomicalDusk = State.Loaded(getAstronomicalDusk(coordinates, selectedDate))
+                )
+            }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.ForViewModel,
+            initialValue = SunState(
+                todaysDate = todaysDate.value,
+                selectedDate = selectedDate.value,
+                astronomicalDawn = State.Loading(),
+                nauticalDawn = State.Loading(),
+                civilDawn = State.Loading(),
+                sunrise = State.Loading(),
+                sunset = State.Loading(),
+                civilDusk = State.Loading(),
+                nauticalDusk = State.Loading(),
+                astronomicalDusk = State.Loading()
+            )
+        )
+
     fun onSelectedDateChange(date: LocalDate) {
-        _date.update { date }
+        selectedDate.update { date }
     }
 
-    /**
-     * Callback to tell the view model that the user wants to change the selected date to today
-     */
     fun onSelectedDateChangedToToday() {
-        _date.update { today }
+        selectedDate.update { today }
     }
 
-    /**
-     * Callback to tell the view model that the user wants to decrement the selected date by one day
-     */
     fun onSelectedDateDecrement() {
-        _date.update { it - DatePeriod(days = 1) }
+        selectedDate.update { it - DatePeriod(days = 1) }
     }
 
-    /**
-     * Callback to tell the view model that the user wants to increment the selected date by one day
-     */
     fun onSelectedDateIncrement() {
-        _date.update { it + DatePeriod(days = 1) }
+        selectedDate.update { it + DatePeriod(days = 1) }
     }
 }

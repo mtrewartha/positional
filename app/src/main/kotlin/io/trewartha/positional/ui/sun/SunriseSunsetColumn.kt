@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import io.trewartha.positional.R
 import io.trewartha.positional.ui.HorizontalDivider
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.State
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.utils.AutoShrinkingText
 import io.trewartha.positional.ui.utils.placeholder
@@ -24,9 +25,8 @@ import kotlinx.datetime.LocalTime
 
 @Composable
 fun SunriseSunsetColumn(
-    sunrise: LocalTime?,
-    sunset: LocalTime?,
-    showPlaceholders: Boolean,
+    sunrise: State<LocalTime?, *>,
+    sunset: State<LocalTime?, *>,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -37,7 +37,6 @@ fun SunriseSunsetColumn(
         SunriseSunsetRow(
             sunrise = sunrise,
             sunset = sunset,
-            showPlaceholders = showPlaceholders,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -76,21 +75,18 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
 
 @Composable
 private fun SunriseSunsetRow(
-    sunrise: LocalTime?,
-    sunset: LocalTime?,
-    showPlaceholders: Boolean,
+    sunrise: State<LocalTime?, *>,
+    sunset: State<LocalTime?, *>,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         SunriseSunsetTime(
             localTime = sunrise,
-            showPlaceholder = showPlaceholders,
             modifier = Modifier.weight(1f)
         )
         Spacer(modifier = Modifier.weight(1f))
         SunriseSunsetTime(
             localTime = sunset,
-            showPlaceholder = showPlaceholders,
             modifier = Modifier.weight(1f)
         )
     }
@@ -98,14 +94,13 @@ private fun SunriseSunsetRow(
 
 @Composable
 private fun SunriseSunsetTime(
-    localTime: LocalTime?,
-    showPlaceholder: Boolean,
+    localTime: State<LocalTime?, *>,
     modifier: Modifier = Modifier
 ) {
     AutoShrinkingText(
-        text = localTime?.let { LocalDateTimeFormatter.current.formatTime(it) }
+        text = localTime.dataOrNull?.let { LocalDateTimeFormatter.current.formatTime(it) }
             ?: stringResource(R.string.sun_text_time_none),
-        modifier = modifier.placeholder(visible = showPlaceholder),
+        modifier = modifier.placeholder(visible = localTime is State.Loading),
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
         maxLines = 1
@@ -118,9 +113,8 @@ private fun LoadingPreview() {
     PositionalTheme {
         Surface {
             SunriseSunsetColumn(
-                sunrise = null,
-                sunset = null,
-                showPlaceholders = true
+                sunrise = State.Loading<LocalTime?, Nothing>(),
+                sunset = State.Loading<LocalTime?, Nothing>()
             )
         }
     }
@@ -132,9 +126,8 @@ private fun LoadedPreview() {
     PositionalTheme {
         Surface {
             SunriseSunsetColumn(
-                sunrise = LocalTime(12, 0, 0),
-                sunset = null,
-                showPlaceholders = false
+                sunrise = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 0)),
+                sunset = State.Loaded<LocalTime?, Nothing>(null)
             )
         }
     }

@@ -9,12 +9,16 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.datetime.Clock
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Provides
+    fun clock(): Clock = Clock.System
 
     @Provides
     fun coroutineContext(): CoroutineContext = Dispatchers.Default
