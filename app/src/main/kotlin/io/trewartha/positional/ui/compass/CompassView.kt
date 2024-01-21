@@ -58,6 +58,7 @@ import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.ui.CompassNorthVibration
 import io.trewartha.positional.ui.NavDestination
 import io.trewartha.positional.ui.PositionalTheme
+import io.trewartha.positional.ui.State
 import io.trewartha.positional.ui.bottomNavEnterTransition
 import io.trewartha.positional.ui.bottomNavExitTransition
 import io.trewartha.positional.ui.bottomNavPopEnterTransition
@@ -90,7 +91,7 @@ fun NavGraphBuilder.compassView(navController: NavController, contentPadding: Pa
 
 @Composable
 private fun CompassView(
-    state: CompassState,
+    state: State<CompassData, CompassError>,
     contentPadding: PaddingValues,
     onHelpClick: () -> Unit
 ) {
@@ -118,12 +119,13 @@ private fun CompassView(
             .padding(dimensionResource(R.dimen.standard_padding)),
     ) {
         when (state) {
-            is CompassState.SensorsMissing ->
+            is State.Error ->
                 SensorsMissingContent(
                     onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
                     Modifier.fillMaxSize()
                 )
-            is CompassState.SensorsPresent ->
+            is State.Loading,
+            is State.Loaded ->
                 SensorsPresentContent(state, onHelpClick, Modifier.fillMaxSize())
         }
     }
@@ -173,7 +175,7 @@ private fun SensorsMissingContent(
 
 @Composable
 private fun SensorsPresentContent(
-    state: CompassState.SensorsPresent,
+    state: State<CompassData, *>,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -187,14 +189,14 @@ private fun SensorsPresentContent(
             AccuracyHelpDialog(onDismissRequest = { showAccuracyHelpDialog = false })
         }
         val context = LocalContext.current
-        val baseAzimuth = (state as? CompassState.Data)?.let { data ->
+        val baseAzimuth = state.dataOrNull?.let { data ->
             when (data.mode) {
                 CompassMode.MAGNETIC_NORTH -> data.azimuth.angle
                 CompassMode.TRUE_NORTH -> data.declination?.let { data.azimuth.angle + it }
             }
         }
         val adjustedAzimuth = baseAzimuth?.let { adjustAzimuthForDisplayRotation(context, it) }
-        val northVibration = (state as? CompassState.Data)?.northVibration
+        val northVibration = state.dataOrNull?.northVibration
         Compass(
             adjustedAzimuth,
             northVibration,
@@ -206,7 +208,7 @@ private fun SensorsPresentContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val declination = (state as? CompassState.Data)?.declination?.inDegrees()?.value
+            val declination = state.dataOrNull?.declination?.inDegrees()?.value
             DeclinationText(declination)
             HelpButton(onHelpClick)
         }
@@ -268,7 +270,7 @@ private fun SensorsMissingPreview() {
     PositionalTheme {
         Surface {
             CompassView(
-                state = CompassState.SensorsMissing,
+                state = State.Error(CompassError.SensorsMissing),
                 contentPadding = PaddingValues(),
                 onHelpClick = {}
             )
@@ -282,7 +284,7 @@ private fun SensorsPresentLoadingPreview() {
     PositionalTheme {
         Surface {
             CompassView(
-                state = CompassState.Loading,
+                state = State.Loading,
                 contentPadding = PaddingValues(),
                 onHelpClick = {}
             )
@@ -298,11 +300,13 @@ private fun SensorsPresentLoadedPreview() {
     PositionalTheme {
         Surface {
             CompassView(
-                state = CompassState.Data(
-                    azimuth = Azimuth(Angle.Degrees(45f)),
-                    declination = Angle.Degrees(1f),
-                    mode = CompassMode.TRUE_NORTH,
-                    northVibration = CompassNorthVibration.SHORT
+                state = State.Loaded(
+                    CompassData(
+                        azimuth = Azimuth(Angle.Degrees(45f)),
+                        declination = Angle.Degrees(1f),
+                        mode = CompassMode.TRUE_NORTH,
+                        northVibration = CompassNorthVibration.SHORT
+                    )
                 ),
                 contentPadding = PaddingValues(),
                 onHelpClick = {}

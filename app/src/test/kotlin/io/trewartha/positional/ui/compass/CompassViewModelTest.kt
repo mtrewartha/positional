@@ -14,6 +14,7 @@ import io.trewartha.positional.data.location.TestLocator
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.settings.TestSettingsRepository
 import io.trewartha.positional.data.ui.CompassNorthVibration
+import io.trewartha.positional.ui.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -52,12 +53,12 @@ class CompassViewModelTest {
     fun testInitialStateIsSensorMissingStateWhenCompassMissing() {
         subject = CompassViewModel(null, locator, settings)
 
-        subject.state.value.shouldBeInstanceOf<CompassState.SensorsMissing>()
+        subject.state.value.shouldBeInstanceOf<State.Error<CompassError.SensorsMissing>>()
     }
 
     @Test
     fun testInitialStateIsLoadingStateWhenCompassPresent() {
-        subject.state.value.shouldBeInstanceOf<CompassState.Loading>()
+        subject.state.value.shouldBeInstanceOf<State.Loading>()
     }
 
     @Test
@@ -77,11 +78,13 @@ class CompassViewModelTest {
             compass.setAzimuth(expectedAzimuth)
 
             val state = awaitItem()
-            state.shouldBeInstanceOf<CompassState.Data>()
-            state.azimuth.shouldBe(expectedAzimuth)
-            state.declination.shouldBeNull()
-            state.mode.shouldBe(expectedCompassMode)
-            state.northVibration.shouldBe(expectedCompassNorthVibration)
+            state.shouldBeInstanceOf<State.Loaded<CompassData>>()
+            with(state.data) {
+                azimuth.shouldBe(expectedAzimuth)
+                declination.shouldBeNull()
+                mode.shouldBe(expectedCompassMode)
+                northVibration.shouldBe(expectedCompassNorthVibration)
+            }
         }
     }
 
@@ -103,8 +106,8 @@ class CompassViewModelTest {
             compass.setAzimuth(expectedAzimuth)
 
             val result = awaitItem()
-            result.shouldBeInstanceOf<CompassState.Data>()
-            result.azimuth.shouldBe(expectedAzimuth)
+            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+            result.data.azimuth.shouldBe(expectedAzimuth)
         }
     }
 
@@ -127,8 +130,8 @@ class CompassViewModelTest {
             )
 
             val result = awaitItem()
-            result.shouldBeInstanceOf<CompassState.Data>()
-            result.declination.shouldBe(expectedDeclination)
+            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+            result.data.declination.shouldBe(expectedDeclination)
         }
     }
 
@@ -145,8 +148,8 @@ class CompassViewModelTest {
             settings.setCompassMode(expectedMode)
 
             val result = awaitItem()
-            result.shouldBeInstanceOf<CompassState.Data>()
-            result.mode.shouldBe(expectedMode)
+            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+            result.data.mode.shouldBe(expectedMode)
         }
     }
 
@@ -163,8 +166,8 @@ class CompassViewModelTest {
             settings.setCompassNorthVibration(expectedVibration)
 
             val result = awaitItem()
-            result.shouldBeInstanceOf<CompassState.Data>()
-            result.northVibration.shouldBe(expectedVibration)
+            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+            result.data.northVibration.shouldBe(expectedVibration)
         }
     }
 }

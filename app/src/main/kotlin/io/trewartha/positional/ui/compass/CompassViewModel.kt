@@ -7,13 +7,14 @@ import io.trewartha.positional.data.compass.Compass
 import io.trewartha.positional.data.location.Locator
 import io.trewartha.positional.data.measurement.Angle
 import io.trewartha.positional.data.settings.SettingsRepository
+import io.trewartha.positional.ui.State
 import io.trewartha.positional.ui.utils.flow.ForViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -31,12 +32,12 @@ class CompassViewModel @Inject constructor(
         .distinctUntilChanged()
         .onStart { emit(null) }
 
-    val state: StateFlow<CompassState> =
+    val state: StateFlow<State<CompassData, CompassError>> =
         if (compass == null) {
-            flowOf(CompassState.SensorsMissing).stateIn(
+            emptyFlow<State<CompassData, CompassError>>().stateIn(
                 viewModelScope,
                 SharingStarted.ForViewModel,
-                initialValue = CompassState.SensorsMissing
+                initialValue = State.Error(CompassError.SensorsMissing)
             )
         } else {
             combine(
@@ -45,11 +46,7 @@ class CompassViewModel @Inject constructor(
                 settings.compassMode,
                 settings.compassNorthVibration
             ) { reading, declination, mode, northVibration ->
-                CompassState.Data(reading, declination, mode, northVibration)
-            }.stateIn(
-                viewModelScope,
-                SharingStarted.ForViewModel,
-                initialValue = CompassState.Loading
-            )
+                State.Loaded(CompassData(reading, declination, mode, northVibration))
+            }.stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = State.Loading)
         }
 }
