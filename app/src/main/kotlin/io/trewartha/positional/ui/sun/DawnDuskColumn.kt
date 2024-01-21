@@ -142,12 +142,12 @@ private fun LoadingPreview() {
     PositionalTheme {
         Surface {
             DawnDuskColumn(
-                astronomicalDawn = State.Loading<LocalTime?, Nothing>(),
-                nauticalDawn = State.Loading<LocalTime?, Nothing>(),
-                civilDawn = State.Loading<LocalTime?, Nothing>(),
-                civilDusk = State.Loading<LocalTime?, Nothing>(),
-                nauticalDusk = State.Loading<LocalTime?, Nothing>(),
-                astronomicalDusk = State.Loading<LocalTime?, Nothing>()
+                astronomicalDawn = State.Loading,
+                nauticalDawn = State.Loading,
+                civilDawn = State.Loading,
+                civilDusk = State.Loading,
+                nauticalDusk = State.Loading,
+                astronomicalDusk = State.Loading
             )
         }
     }
@@ -159,12 +159,12 @@ private fun LoadedPreview() {
     PositionalTheme {
         Surface {
             DawnDuskColumn(
-                astronomicalDawn = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 0)),
-                nauticalDawn = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 1)),
-                civilDawn = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 2)),
-                civilDusk = State.Loaded<LocalTime?, Nothing>(null),
-                nauticalDusk = State.Loaded<LocalTime?, Nothing>(null),
-                astronomicalDusk = State.Loaded<LocalTime?, Nothing>(null)
+                astronomicalDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 0)),
+                nauticalDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 1)),
+                civilDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 2)),
+                civilDusk = State.Loaded<LocalTime?>(null),
+                nauticalDusk = State.Loaded<LocalTime?>(null),
+                astronomicalDusk = State.Loaded<LocalTime?>(null)
             )
         }
     }

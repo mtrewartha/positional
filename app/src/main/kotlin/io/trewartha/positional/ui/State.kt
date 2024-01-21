@@ -3,16 +3,16 @@ package io.trewartha.positional.ui
 import androidx.compose.runtime.Immutable
 
 @Immutable
-sealed interface State<T, E> {
+sealed interface State<out T, out E> {
 
     @Immutable
-    class Loading<T, E> : State<T, E>
+    data object Loading : State<Nothing, Nothing>
 
     @Immutable
-    data class Error<T, E>(val error: E) : State<T, E>
+    data class Error<out E>(val error: E) : State<Nothing, E>
 
     @Immutable
-    data class Loaded<T, E>(val data: T) : State<T, E>
+    data class Loaded<out T>(val data: T) : State<T, Nothing>
 
     val dataOrNull: T?
         get() = (this as? Loaded)?.data

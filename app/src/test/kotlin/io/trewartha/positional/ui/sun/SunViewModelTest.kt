@@ -78,7 +78,7 @@ class SunViewModelTest {
                 astronomicalDusk
             )
         }
-        for (time in times) time.shouldBeInstanceOf<State.Loading<LocalTime?, *>>()
+        for (time in times) time.shouldBeInstanceOf<State.Loading>()
     }
 
     @Test
@@ -132,21 +132,21 @@ class SunViewModelTest {
             subject.onSelectedDateChange(jan2nd)
             val result = awaitItem()
 
-            result.astronomicalDawn.shouldBeInstanceOf<LoadedTime>()
+            result.astronomicalDawn.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedAstronomicalDawn)
-            result.nauticalDawn.shouldBeInstanceOf<LoadedTime>()
+            result.nauticalDawn.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedNauticalDawn)
-            result.civilDawn.shouldBeInstanceOf<LoadedTime>()
+            result.civilDawn.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedCivilDawn)
-            result.sunrise.shouldBeInstanceOf<LoadedTime>()
+            result.sunrise.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedSunrise)
-            result.sunset.shouldBeInstanceOf<LoadedTime>()
+            result.sunset.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedSunset)
-            result.civilDusk.shouldBeInstanceOf<LoadedTime>()
+            result.civilDusk.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedCivilDusk)
-            result.nauticalDusk.shouldBeInstanceOf<LoadedTime>()
+            result.nauticalDusk.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedNauticalDusk)
-            result.astronomicalDusk.shouldBeInstanceOf<LoadedTime>()
+            result.astronomicalDusk.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedAstronomicalDusk)
         }
     }
@@ -178,24 +178,22 @@ class SunViewModelTest {
 
             result.todaysDate.shouldBe(jan1st)
             result.selectedDate.shouldBe(jan1st)
-            result.astronomicalDawn.shouldBeInstanceOf<LoadedTime>()
+            result.astronomicalDawn.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedAstronomicalDawn)
-            result.nauticalDawn.shouldBeInstanceOf<LoadedTime>()
+            result.nauticalDawn.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedNauticalDawn)
-            result.civilDawn.shouldBeInstanceOf<LoadedTime>()
+            result.civilDawn.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedCivilDawn)
-            result.sunrise.shouldBeInstanceOf<LoadedTime>()
+            result.sunrise.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedSunrise)
-            result.sunset.shouldBeInstanceOf<LoadedTime>()
+            result.sunset.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedSunset)
-            result.civilDusk.shouldBeInstanceOf<LoadedTime>()
+            result.civilDusk.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedCivilDusk)
-            result.nauticalDusk.shouldBeInstanceOf<LoadedTime>()
+            result.nauticalDusk.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedNauticalDusk)
-            result.astronomicalDusk.shouldBeInstanceOf<LoadedTime>()
+            result.astronomicalDusk.shouldBeInstanceOf<State.Loaded<LocalTime?>>()
                 .dataOrNull.shouldBe(expectedAstronomicalDusk)
         }
     }
 }
-
-typealias LoadedTime = State.Loaded<LocalTime?, Nothing>

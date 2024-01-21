@@ -113,8 +113,8 @@ private fun LoadingPreview() {
     PositionalTheme {
         Surface {
             SunriseSunsetColumn(
-                sunrise = State.Loading<LocalTime?, Nothing>(),
-                sunset = State.Loading<LocalTime?, Nothing>()
+                sunrise = State.Loading,
+                sunset = State.Loading
             )
         }
     }
@@ -126,8 +126,8 @@ private fun LoadedPreview() {
     PositionalTheme {
         Surface {
             SunriseSunsetColumn(
-                sunrise = State.Loaded<LocalTime?, Nothing>(LocalTime(12, 0, 0)),
-                sunset = State.Loaded<LocalTime?, Nothing>(null)
+                sunrise = State.Loaded<LocalTime?>(LocalTime(12, 0, 0)),
+                sunset = State.Loaded<LocalTime?>(null)
             )
         }
     }

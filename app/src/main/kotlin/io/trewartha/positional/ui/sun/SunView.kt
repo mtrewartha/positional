@@ -42,12 +42,9 @@ import io.trewartha.positional.ui.bottomNavPopExitTransition
 import io.trewartha.positional.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.locals.LocalLocale
 import io.trewartha.positional.ui.utils.format.SystemDateTimeFormatter
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 fun NavGraphBuilder.sunView(navController: NavController, contentPadding: PaddingValues) {
     composable(
@@ -147,14 +144,14 @@ private fun LoadingPreview() {
             state = SunState(
                 todaysDate = LocalDate(2024, Month.JANUARY, 1),
                 selectedDate = LocalDate(2024, Month.JANUARY, 1),
-                astronomicalDawn = State.Loading(),
-                nauticalDawn = State.Loading(),
-                civilDawn = State.Loading(),
-                sunrise = State.Loading(),
-                sunset = State.Loading(),
-                civilDusk = State.Loading(),
-                nauticalDusk = State.Loading(),
-                astronomicalDusk = State.Loading()
+                astronomicalDawn = State.Loading,
+                nauticalDawn = State.Loading,
+                civilDawn = State.Loading,
+                sunrise = State.Loading,
+                sunset = State.Loading,
+                civilDusk = State.Loading,
+                nauticalDusk = State.Loading,
+                astronomicalDusk = State.Loading
             ),
             contentPadding = PaddingValues(),
             onSelectedDateDecrement = {},
@@ -175,7 +172,6 @@ private fun LoadedPreview() {
             CompositionLocalProvider(
                 LocalDateTimeFormatter provides SystemDateTimeFormatter(locale)
             ) {
-                val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
                 SunView(
                     state = SunState(
                         todaysDate = LocalDate(2024, Month.JANUARY, 1),

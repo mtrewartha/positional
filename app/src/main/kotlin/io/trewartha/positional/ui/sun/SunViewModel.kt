@@ -77,14 +77,14 @@ class SunViewModel @Inject constructor(
             initialValue = SunState(
                 todaysDate = todaysDate.value,
                 selectedDate = selectedDate.value,
-                astronomicalDawn = State.Loading(),
-                nauticalDawn = State.Loading(),
-                civilDawn = State.Loading(),
-                sunrise = State.Loading(),
-                sunset = State.Loading(),
-                civilDusk = State.Loading(),
-                nauticalDusk = State.Loading(),
-                astronomicalDusk = State.Loading()
+                astronomicalDawn = State.Loading,
+                nauticalDawn = State.Loading,
+                civilDawn = State.Loading,
+                sunrise = State.Loading,
+                sunset = State.Loading,
+                civilDusk = State.Loading,
+                nauticalDusk = State.Loading,
+                astronomicalDusk = State.Loading
             )
         )
 
