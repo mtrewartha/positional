@@ -19,7 +19,7 @@ jobs:
       - name: 'Set up the Android SDK'
         uses: android-actions/setup-android@v3
       - name: 'Run tests'
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: test
       - name: 'Publish test report'
