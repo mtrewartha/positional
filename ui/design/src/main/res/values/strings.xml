@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui_design_cancel">Cancel</string>
+    <string name="ui_design_dash" translatable="false">—</string>
+    <string name="ui_design_ok">OK</string>
+    <string name="ui_design_privacy_policy">Privacy policy</string>
+    <string name="ui_design_save">Save</string>
+    <string name="ui_design_up">Up</string>
+</resources>

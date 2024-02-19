@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="TileView">
-        <attr name="labelText" format="reference" />
-        <attr name="valueText" format="reference" />
-        <attr name="unitText" format="reference" />
-    </declare-styleable>
-</resources>

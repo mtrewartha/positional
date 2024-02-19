@@ -1,5 +1,0 @@
-<resources>
-    <dimen name="standard_padding">16dp</dimen>
-
-    <dimen name="settings_row_arrangement_spacing">16dp</dimen>
-</resources>

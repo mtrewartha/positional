@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -15,6 +16,25 @@ dependencyResolutionManagement {
     }
 }
 
-include(":domain")
-include(":data")
-include(":app")
+rootProject.name = "positional"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+include(
+    ":app",
+    ":model:compass",
+    ":model:core",
+    ":model:location",
+    ":model:settings",
+    ":model:sun",
+    ":data:compass",
+    ":data:location",
+    ":data:settings",
+    ":data:sun",
+    ":ui:compass",
+    ":ui:core",
+    ":ui:design",
+    ":ui:location",
+    ":ui:sun",
+    ":ui:settings"
+)

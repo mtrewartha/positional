@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="ui_settings_row_arrangement_spacing">16dp</dimen>
+</resources>
