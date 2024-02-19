@@ -3,9 +3,10 @@ accompanist = "0.34.0"
 android-tools-common = "34.0.0"
 android-tools-desugarJdkLibs = "2.0.4"
 android-tools-gradle = "8.2.2"
-android-tools = "34.0."
+android-tools = "34.0.0"
 androidx-activity = "1.8.2"
 androidx-activity-compose = "1.8.2"
+androidx-appcompat = "1.6.1"
 androidx-compose-bom = "2024.02.00"
 androidx-compose-compiler = "1.5.9"
 androidx-compose-material3 = "1.2.0"
@@ -39,15 +40,13 @@ kotlin = "1.9.22"
 kotlinx-coroutines = "1.8.0"
 kotlinx-datetime = "0.5.0"
 markwon = "4.6.2"
-protobuf = "3.25.2"
+protobuf = "3.25.3"
 protobuf-plugin = "0.9.4"
 robolectric = "4.11.1"
 sunrise-sunset = "1.2"
 timber = "5.0.1"
 turbine = "1.0.0"
 junit = "4.13.2"
-espressoCore = "3.5.1"
-appcompat = "1.6.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-tools-gradle" }
@@ -58,19 +57,17 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-positional-kotlin-android = { id = "io.trewartha.positional.library.kotlin.android", version="unspecified" }
-positional-kotlin-jvm = { id = "io.trewartha.positional.library.kotlin.jvm", version="unspecified" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 
 [libraries]
-accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
+#accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 android-tools-build = { group = "com.android.tools.build", name = "gradle", version.ref = "android-tools-gradle" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "android-tools-common" }
 android-tools-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-tools-desugarJdkLibs" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
