@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     implementation(project(":model:location"))
+    implementation(libs.kotlinx.coroutines.test)
 }
