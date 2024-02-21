@@ -50,8 +50,6 @@ dependencies {
     implementation(libs.google.hilt.android)
     implementation(libs.timber)
 
-    androidTestImplementation(libs.junit)
-
     testImplementation(project(":data:settings"))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)

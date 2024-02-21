@@ -60,7 +60,6 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 
 [libraries]
-#accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 android-tools-build = { group = "com.android.tools.build", name = "gradle", version.ref = "android-tools-gradle" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "android-tools-common" }
@@ -93,7 +92,7 @@ androidx-navigation-runtime-ktx = { module = "androidx.navigation:navigation-run
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
-androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 androidx-test-ext-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-test-ext-junit" }
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
 composePlaceholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholder" }
@@ -130,4 +129,3 @@ robolectric-playServices = { module = "org.robolectric:shadows-playservices", ve
 sunriseSunset = { module = "com.luckycatlabs:SunriseSunsetCalculator", version.ref = "sunrise-sunset" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
