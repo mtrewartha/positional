@@ -34,7 +34,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testAstronomicalDawnAtCoordinatesOnDate() {
+    fun `Getting astronomical dawn returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getAstronomicalDawn(mitadDelMundo, winterSolstice2023)
@@ -43,7 +43,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoAstronomicalDawnAtCoordinatesOnDate() {
+    fun `Getting astronomical dawn when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getAstronomicalDawn(northOfLongyearbyen, winterSolstice2023)
@@ -52,7 +52,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNauticalDawnAtCoordinatesOnDate() {
+    fun `Getting nautical dawn returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getNauticalDawn(mitadDelMundo, winterSolstice2023)
@@ -61,7 +61,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoNauticalDawnAtCoordinatesOnDate() {
+    fun `Getting nautical dawn when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getNauticalDawn(northOfLongyearbyen, winterSolstice2023)
@@ -70,7 +70,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testCivilDawnAtCoordinatesOnDate() {
+    fun `Getting civil dawn returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getCivilDawn(mitadDelMundo, winterSolstice2023)
@@ -79,7 +79,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoCivilDawnAtCoordinatesOnDate() {
+    fun `Getting civil dawn when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getCivilDawn(northOfLongyearbyen, winterSolstice2023)
@@ -88,7 +88,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testSunriseAtCoordinatesOnDate() {
+    fun `Getting sunrise returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getSunrise(mitadDelMundo, winterSolstice2023)
@@ -97,7 +97,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoSunriseAtCoordinatesOnDate() {
+    fun `Getting sunrise when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getSunrise(northOfLongyearbyen, winterSolstice2023)
@@ -106,7 +106,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testSunsetAtCoordinatesOnDate() {
+    fun `Getting sunset returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getSunset(mitadDelMundo, winterSolstice2023)
@@ -115,7 +115,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoSunsetAtCoordinatesOnDate() {
+    fun `Getting sunset when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getSunset(northOfLongyearbyen, winterSolstice2023)
@@ -124,7 +124,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testCivilDuskAtCoordinatesOnDate() {
+    fun `Getting civil dusk returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getCivilDusk(mitadDelMundo, winterSolstice2023)
@@ -133,7 +133,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoCivilDuskAtCoordinatesOnDate() {
+    fun `Getting civil dusk when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getCivilDusk(northOfLongyearbyen, winterSolstice2023)
@@ -142,7 +142,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNauticalDuskAtCoordinatesOnDate() {
+    fun `Getting nautical dusk returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getNauticalDusk(mitadDelMundo, winterSolstice2023)
@@ -151,7 +151,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoNauticalDuskAtCoordinatesOnDate() {
+    fun `Getting nautical dusk when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getNauticalDusk(northOfLongyearbyen, winterSolstice2023)
@@ -160,7 +160,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testAstronomicalDuskAtCoordinatesOnDate() {
+    fun `Getting astronomical dusk returns correct time`() {
         TimeZone.setDefault(mitadDelMundoTimeZone)
 
         val result = subject.getAstronomicalDusk(mitadDelMundo, winterSolstice2023)
@@ -169,7 +169,7 @@ class LibrarySolarTimesRepositoryTest {
     }
 
     @Test
-    fun testNoAstronomicalDuskAtCoordinatesOnDate() {
+    fun `Getting astronomical dusk when there is none returns null`() {
         TimeZone.setDefault(longyearbyenTimeZone)
 
         val result = subject.getAstronomicalDusk(northOfLongyearbyen, winterSolstice2023)
