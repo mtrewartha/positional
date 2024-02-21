@@ -24,14 +24,14 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun testFormatForDisplayReturnsTwoLines() {
+    fun formatForDisplayReturnsTwoLines() {
         val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
 
         result.size.shouldBe(2)
     }
 
     @Test
-    fun testCommaDecimalSeparatorForCopy() {
+    fun commaDecimalSeparatorUsedForCopyInAppropriateLocales() {
         val subject = createFormatter(Locale.FRANCE)
 
         val result = subject.formatForCopy(Coordinates(1.0, 2.0))
@@ -40,7 +40,7 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun testCommaDecimalSeparatorForDisplay() {
+    fun commaDecimalSeparatorUsedForDisplayInAppropriateLocales() {
         val subject = createFormatter(Locale.FRANCE)
 
         val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
@@ -49,7 +49,7 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun testPeriodDecimalSeparatorForCopy() {
+    fun periodDecimalSeparatorUsedForCopyInAppropriateLocales() {
         val subject = createFormatter(Locale.US)
 
         val result = subject.formatForCopy(Coordinates(1.0, 2.0))
@@ -58,7 +58,7 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun testPeriodDecimalSeparatorForDisplay() {
+    fun periodDecimalSeparatorUsedForDisplayInAppropriateLocales() {
         val subject = createFormatter(Locale.US)
 
         val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
@@ -67,7 +67,7 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun testRoundingOfLatitudeAndLongitudeForCopy() {
+    fun latitudeAndLongitudeRoundedForCopy() {
         val result = subject.formatForCopy(Coordinates(1.2345678, 2.3456789))
 
         withClue("Latitude and longitude should be rounded to the nearest 5th decimal place") {
@@ -76,7 +76,7 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun testRoundingOfLatitudeAndLongitudeForDisplay() {
+    fun latitudeAndLongitudeRoundedForDisplay() {
         val result = subject.formatForDisplay(Coordinates(1.2345678, 2.3456789))
 
         withClue("Latitude and longitude should be rounded to the nearest 5th decimal place") {
