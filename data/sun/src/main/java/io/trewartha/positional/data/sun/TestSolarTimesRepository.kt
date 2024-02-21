@@ -20,28 +20,28 @@ class TestSolarTimesRepository : SolarTimesRepository {
     private val civilDusks = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
 
     override fun getSunrise(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        sunrises[Pair(coordinates, date)]
+        sunrises.getTimeOrNull(coordinates, date)
 
     override fun getSunset(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        sunsets[Pair(coordinates, date)]
+        sunsets.getTimeOrNull(coordinates, date)
 
     override fun getCivilDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        civilDawns[Pair(coordinates, date)]
+        civilDawns.getTimeOrNull(coordinates, date)
 
     override fun getCivilDusk(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        civilDusks[Pair(coordinates, date)]
+        civilDusks.getTimeOrNull(coordinates, date)
 
     override fun getNauticalDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        nauticalDawns[Pair(coordinates, date)]
+        nauticalDawns.getTimeOrNull(coordinates, date)
 
     override fun getNauticalDusk(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        nauticalDusks[Pair(coordinates, date)]
+        nauticalDusks.getTimeOrNull(coordinates, date)
 
     override fun getAstronomicalDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        astronomicalDawns[Pair(coordinates, date)]
+        astronomicalDawns.getTimeOrNull(coordinates, date)
 
     override fun getAstronomicalDusk(coordinates: Coordinates, date: LocalDate): LocalTime? =
-        astronomicalDusks[Pair(coordinates, date)]
+        astronomicalDusks.getTimeOrNull(coordinates, date)
 
     /**
      * Sets the astronomical dawn time for some given coordinates and a given date
@@ -153,5 +153,17 @@ class TestSolarTimesRepository : SolarTimesRepository {
      */
     fun setSunset(coordinates: Coordinates, date: LocalDate, sunset: LocalTime?) {
         sunsets[Pair(coordinates, date)] = sunset
+    }
+}
+
+private fun Map<Pair<Coordinates, LocalDate>, LocalTime?>.getTimeOrNull(
+    coordinates: Coordinates,
+    date: LocalDate
+): LocalTime? {
+    val key = Pair(coordinates, date)
+    return if (containsKey(key)) {
+        get(key)
+    } else {
+        error("No time (or lack thereof) set for the given coordinates and date")
     }
 }
