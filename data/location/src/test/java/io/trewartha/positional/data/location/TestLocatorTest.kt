@@ -20,7 +20,7 @@ class TestLocatorTest {
     }
 
     @Test
-    fun `Getting the location returns the last set location`() = runTest {
+    fun `Location flow emits the last set location`() = runTest {
         val firstLocation = Location(
             timestamp = Clock.System.now(),
             coordinates = Coordinates(latitude = 1.0, longitude = 2.0),
@@ -35,7 +35,7 @@ class TestLocatorTest {
     }
 
     @Test
-    fun `Setting the location updates the location`() = runTest {
+    fun `Setting the location triggers new location emission`() = runTest {
         val location = Location(
             timestamp = Clock.System.now(),
             coordinates = Coordinates(latitude = 1.0, longitude = 2.0),
