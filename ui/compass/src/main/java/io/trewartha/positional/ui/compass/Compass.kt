@@ -31,10 +31,10 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.android.material.color.MaterialColors.harmonize
-import io.trewartha.positional.ui.design.locals.LocalVibrator
-import io.trewartha.positional.ui.design.modifier.placeholder
 import io.trewartha.positional.model.core.measurement.Angle
 import io.trewartha.positional.model.settings.CompassNorthVibration
+import io.trewartha.positional.ui.design.locals.LocalVibrator
+import io.trewartha.positional.ui.design.modifier.placeholder
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin

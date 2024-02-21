@@ -1,6 +1,5 @@
 package io.trewartha.positional.data.sun
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.model.core.measurement.Coordinates

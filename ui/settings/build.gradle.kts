@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin.Companion.isIncludeCompileClasspath
-
 plugins {
     id("io.trewartha.positional.android.library")
     alias(libs.plugins.google.ksp)

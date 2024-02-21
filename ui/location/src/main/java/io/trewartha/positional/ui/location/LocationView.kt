@@ -1,5 +1,6 @@
 package io.trewartha.positional.ui.location
 
+import io.trewartha.positional.ui.design.R as UIDesignR
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -46,7 +47,6 @@ import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.model.settings.LocationAccuracyVisibility
 import io.trewartha.positional.ui.core.format.DateTimeFormatter
-import io.trewartha.positional.ui.design.R as UIDesignR
 import io.trewartha.positional.ui.design.PositionalTheme
 import io.trewartha.positional.ui.design.locals.LocalDateTimeFormatter
 import io.trewartha.positional.ui.design.locals.LocalLocale

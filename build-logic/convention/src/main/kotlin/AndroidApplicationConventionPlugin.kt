@@ -1,5 +1,4 @@
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.gradle.LibraryExtension
 import io.trewartha.positional.configureFlavors
 import io.trewartha.positional.configureGradleManagedDevices
 import io.trewartha.positional.configureKotlinAndroid
