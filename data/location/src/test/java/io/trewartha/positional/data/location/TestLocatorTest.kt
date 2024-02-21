@@ -1,5 +1,6 @@
 package io.trewartha.positional.data.location
 
+import app.cash.turbine.test
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.model.core.measurement.Coordinates
 import io.trewartha.positional.model.core.measurement.Distance
@@ -35,16 +36,18 @@ class TestLocatorTest {
     }
 
     @Test
-    fun `Setting the location triggers new location emission`() = runTest {
-        val location = Location(
-            timestamp = Clock.System.now(),
-            coordinates = Coordinates(latitude = 1.0, longitude = 2.0),
-            altitude = Distance.Meters(3.0f),
-            magneticDeclination = null
-        )
+    fun `Setting the location triggers emission of set value`() = runTest {
+        subject.location.test {
+            val location = Location(
+                timestamp = Clock.System.now(),
+                coordinates = Coordinates(latitude = 1.0, longitude = 2.0),
+                altitude = Distance.Meters(3.0f),
+                magneticDeclination = null
+            )
 
-        subject.setLocation(location)
+            subject.setLocation(location)
 
-        subject.location.firstOrNull().shouldBe(location)
+            awaitItem().shouldBe(location)
+        }
     }
 }

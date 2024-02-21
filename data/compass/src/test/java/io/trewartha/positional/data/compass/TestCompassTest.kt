@@ -1,5 +1,6 @@
 package io.trewartha.positional.data.compass
 
+import app.cash.turbine.test
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.model.core.measurement.Angle
 import kotlinx.coroutines.flow.firstOrNull
@@ -27,11 +28,13 @@ class TestCompassTest {
     }
 
     @Test
-    fun `Setting the azimuth triggers new azimuth emission`() = runTest {
-        val azimuth = Azimuth(angle = Angle.Degrees(1f))
+    fun `Setting the azimuth triggers emission of set value`() = runTest {
+        subject.azimuth.test {
+            val azimuth = Azimuth(angle = Angle.Degrees(1f))
 
-        subject.setAzimuth(azimuth)
+            subject.setAzimuth(azimuth)
 
-        subject.azimuth.firstOrNull().shouldBe(azimuth)
+            awaitItem().shouldBe(azimuth)
+        }
     }
 }

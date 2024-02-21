@@ -6,4 +6,5 @@ dependencies {
     implementation(project(":model:location"))
 
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }
