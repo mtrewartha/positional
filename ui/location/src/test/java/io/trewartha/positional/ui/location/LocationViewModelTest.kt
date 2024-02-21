@@ -43,12 +43,12 @@ class LocationViewModelTest {
     }
 
     @Test
-    fun testInitialLoadingState() {
+    fun `Initial state is loading`() {
         subject.state.value.shouldBe(LocationState.Loading)
     }
 
     @Test
-    fun testDataEmittedOnceLoaded() = runTest {
+    fun `Data emitted once loaded`() = runTest {
         val expectedLocation = Location(Clock.System.now(), Coordinates(1.0, 2.0))
         val expectedUnits = Units.METRIC
         val expectedCoordinatesFormat = CoordinatesFormat.DD
@@ -71,7 +71,7 @@ class LocationViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenLocationChanges() = runTest {
+    fun `Data emitted when location changes`() = runTest {
         val expectedLocation = Location(Clock.System.now(), Coordinates(1.0, 1.0))
         subject.state.test {
             awaitItem() // Loading state
@@ -90,7 +90,7 @@ class LocationViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenCoordinatesFormatChanges() = runTest {
+    fun `Data emitted when coordinates format changes`() = runTest {
         val expectedCoordinatesFormat = CoordinatesFormat.DDM
         subject.state.test {
             awaitItem() // Loading state
@@ -109,7 +109,7 @@ class LocationViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenUnitsChange() = runTest {
+    fun `Data emitted when units change`() = runTest {
         val expectedUnits = Units.IMPERIAL
         subject.state.test {
             awaitItem() // Loading state
@@ -128,7 +128,7 @@ class LocationViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenLocationAccuracyVisibilityChanges() = runTest {
+    fun `Data emitted when location accuracy visibility changes`() = runTest {
         val expectedVisibility = LocationAccuracyVisibility.HIDE
         subject.state.test {
             awaitItem() // Loading state

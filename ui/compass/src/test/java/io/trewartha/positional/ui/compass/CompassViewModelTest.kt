@@ -50,19 +50,19 @@ class CompassViewModelTest {
     }
 
     @Test
-    fun testInitialStateIsSensorMissingStateWhenCompassMissing() {
+    fun `Initial state reflects sensors missing when compass missing`() {
         subject = CompassViewModel(null, locator, settings)
 
         subject.state.value.shouldBeInstanceOf<State.Error<CompassError.SensorsMissing>>()
     }
 
     @Test
-    fun testInitialStateIsLoadingStateWhenCompassPresent() {
+    fun `Initial state is loading when compass present`() {
         subject.state.value.shouldBeInstanceOf<State.Loading>()
     }
 
     @Test
-    fun testDataEmittedOnceLoaded() = runTest {
+    fun `Data emitted once loaded`() = runTest {
         val expectedAzimuth = Azimuth(
             angle = Angle.Degrees(0f),
             accelerometerAccuracy = CompassAccuracy.HIGH,
@@ -89,7 +89,7 @@ class CompassViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenAzimuthChanges() = runTest {
+    fun `Data emitted when azimuth changes`() = runTest {
         val initialAzimuth = Azimuth(
             angle = Angle.Degrees(1f),
             accelerometerAccuracy = CompassAccuracy.HIGH,
@@ -112,7 +112,7 @@ class CompassViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenDeclinationChanges() = runTest {
+    fun `Data emitted when declination changes`() = runTest {
         val expectedDeclination = Angle.Degrees(1f)
         subject.state.test {
             awaitItem() // Loading state
@@ -136,7 +136,7 @@ class CompassViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenCompassModeChanges() = runTest {
+    fun `Data emitted when compass mode changes`() = runTest {
         val expectedMode = CompassMode.TRUE_NORTH
         subject.state.test {
             awaitItem() // Loading state
@@ -154,7 +154,7 @@ class CompassViewModelTest {
     }
 
     @Test
-    fun testDataEmittedWhenCompassNorthVibrationChanges() = runTest {
+    fun `Data emitted when compass north vibration changes`() = runTest {
         val expectedVibration = CompassNorthVibration.SHORT
         subject.state.test {
             awaitItem() // Loading state

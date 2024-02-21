@@ -55,17 +55,17 @@ class SunViewModelTest {
     }
 
     @Test
-    fun testInitialStateHasCorrectDateForToday() {
+    fun `Initial state's date for today is correct`() {
         subject.state.value.todaysDate.shouldBe(LocalDate(2024, Month.JANUARY, 1))
     }
 
     @Test
-    fun testInitialStateSelectedDayIsToday() {
+    fun `Initial state's selected day is today`() {
         subject.state.value.selectedDate.shouldBe(subject.state.value.todaysDate)
     }
 
     @Test
-    fun testInitialStateIndicatesEachTimeIsLoading() {
+    fun `Initial state indicates each time is loading`() {
         val times = with(subject.state.value) {
             listOf(
                 astronomicalDawn,
@@ -82,7 +82,7 @@ class SunViewModelTest {
     }
 
     @Test
-    fun testSelectedDateUpdatesWhenUserSelectsNewDate() = runTest {
+    fun `Selected date updates when user selects new date`() = runTest {
         subject.state.test {
             awaitItem() // Ignore the current state
             val coordinates = Coordinates(0.0, 0.0)
@@ -105,7 +105,7 @@ class SunViewModelTest {
     }
 
     @Test
-    fun testTimesUpdatesWhenUserSelectsNewDate() = runTest {
+    fun `Times updates when user selects new date`() = runTest {
         subject.state.test {
             awaitItem() // Ignore the current state
             val coordinates = Coordinates(0.0, 0.0)
@@ -152,7 +152,7 @@ class SunViewModelTest {
     }
 
     @Test
-    fun testTimesUpdatesWhenLocationChanges() = runTest {
+    fun `Times updates when location changes`() = runTest {
         subject.state.test {
             val coordinates = Coordinates(0.0, 0.0)
             val expectedAstronomicalDawn = LocalTime(0, 0, 1)
