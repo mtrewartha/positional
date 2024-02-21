@@ -2,13 +2,12 @@ package io.trewartha.positional.model.core.measurement
 
 import io.kotest.matchers.floats.shouldBeExactly
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.trewartha.positional.model.core.measurement.Speed
 import kotlin.test.Test
 
 class SpeedTest {
 
     @Test
-    fun testConversionFromKilometersPerHourToMetersPerSecond() {
+    fun `Conversion from KPH to M per S returns converted value`() {
         val kilometersPerHour = Speed.KilometersPerHour(1f)
 
         val result = kilometersPerHour.inMetersPerSecond()
@@ -18,7 +17,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromKilometersPerHourToMilesPerHour() {
+    fun `Conversion from KPH to MPH returns converted value`() {
         val kilometersPerHour = Speed.KilometersPerHour(1f)
 
         val result = kilometersPerHour.inMilesPerHour()
@@ -28,7 +27,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromKilometersPerHourToKilometersPerHour() {
+    fun `Conversion from KPH to KPH returns original value`() {
         val kilometersPerHour = Speed.KilometersPerHour(1f)
 
         val result = kilometersPerHour.inKilometersPerHour()
@@ -38,7 +37,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromMetersPerSecondToMetersPerSecond() {
+    fun `Conversion from M per S to M per S returns original value`() {
         val metersPerSecond = Speed.MetersPerSecond(1f)
 
         val result = metersPerSecond.inMetersPerSecond()
@@ -48,7 +47,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromMetersPerSecondToMilesPerHour() {
+    fun `Conversion from M per S to MPH returns converted value`() {
         val metersPerSecond = Speed.MetersPerSecond(1f)
 
         val result = metersPerSecond.inMilesPerHour()
@@ -58,7 +57,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromMetersPerSecondToKilometersPerHour() {
+    fun `Conversion from M per S to KPH returns converted value`() {
         val metersPerSecond = Speed.MetersPerSecond(1f)
 
         val result = metersPerSecond.inKilometersPerHour()
@@ -68,7 +67,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromMilesPerHourToMetersPerSecond() {
+    fun `Conversion from MPH to M per S returns converted value`() {
         val milesPerHour = Speed.MilesPerHour(1f)
 
         val result = milesPerHour.inMetersPerSecond()
@@ -78,7 +77,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromMilesPerHourToMilesPerHour() {
+    fun `Conversion from MPH to MPH returns original value`() {
         val milesPerHour = Speed.MilesPerHour(1f)
 
         val result = milesPerHour.inMilesPerHour()
@@ -88,7 +87,7 @@ class SpeedTest {
     }
 
     @Test
-    fun testConversionFromMilesPerHourToKilometersPerHour() {
+    fun `Conversion from MPH to KPH returns converted value`() {
         val milesPerHour = Speed.MilesPerHour(1f)
 
         val result = milesPerHour.inKilometersPerHour()

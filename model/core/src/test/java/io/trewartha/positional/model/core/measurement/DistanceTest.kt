@@ -2,13 +2,12 @@ package io.trewartha.positional.model.core.measurement
 
 import io.kotest.matchers.floats.shouldBeExactly
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.trewartha.positional.model.core.measurement.Distance
 import kotlin.test.Test
 
 class DistanceTest {
 
     @Test
-    fun testConversionFromFeetToFeet() {
+    fun `Conversion from feet to feet returns original feet`() {
         val feet = Distance.Feet(1f)
 
         val result = feet.inFeet()
@@ -18,7 +17,7 @@ class DistanceTest {
     }
 
     @Test
-    fun testConversionFromFeetToMeters() {
+    fun `Conversion from feet to meters returns correct distance in meters`() {
         val feet = Distance.Feet(1f)
 
         val result = feet.inMeters()
@@ -28,7 +27,7 @@ class DistanceTest {
     }
 
     @Test
-    fun testConversionFromMetersToFeet() {
+    fun `Conversion from meters to feet returns correct distance in feet`() {
         val meters = Distance.Meters(1f)
 
         val result = meters.inFeet()
@@ -38,7 +37,7 @@ class DistanceTest {
     }
 
     @Test
-    fun testConversionFromMetersToMeters() {
+    fun `Conversion from meters to meters returns original meters`() {
         val meters = Distance.Meters(1f)
 
         val result = meters.inMeters()
