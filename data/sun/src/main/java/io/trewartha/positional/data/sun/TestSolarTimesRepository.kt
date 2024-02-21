@@ -159,11 +159,4 @@ class TestSolarTimesRepository : SolarTimesRepository {
 private fun Map<Pair<Coordinates, LocalDate>, LocalTime?>.getTimeOrNull(
     coordinates: Coordinates,
     date: LocalDate
-): LocalTime? {
-    val key = Pair(coordinates, date)
-    return if (containsKey(key)) {
-        get(key)
-    } else {
-        error("No time (or lack thereof) set for the given coordinates and date")
-    }
-}
+): LocalTime? = get(Pair(coordinates, date))

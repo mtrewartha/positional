@@ -38,11 +38,6 @@ class TestSolarTimesRepositoryTest {
     }
 
     @Test
-    fun `Getting sunrise throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getSunrise(coordinates, date) }
-    }
-
-    @Test
     fun `Getting sunset returns one if present`() {
         subject.setSunset(coordinates, date, expectedValue)
 
@@ -54,11 +49,6 @@ class TestSolarTimesRepositoryTest {
         subject.setSunset(coordinates, date, null)
 
         subject.getSunset(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting sunset throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getSunset(coordinates, date) }
     }
 
     @Test
@@ -76,11 +66,6 @@ class TestSolarTimesRepositoryTest {
     }
 
     @Test
-    fun `Getting civil dawn throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getCivilDawn(coordinates, date) }
-    }
-
-    @Test
     fun `Getting civil dusk returns one if present`() {
         subject.setCivilDusk(coordinates, date, expectedValue)
 
@@ -92,11 +77,6 @@ class TestSolarTimesRepositoryTest {
         subject.setCivilDusk(coordinates, date, null)
 
         subject.getCivilDusk(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting civil dusk throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getCivilDusk(coordinates, date) }
     }
 
     @Test
@@ -114,11 +94,6 @@ class TestSolarTimesRepositoryTest {
     }
 
     @Test
-    fun `Getting nautical dawn throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getNauticalDawn(coordinates, date) }
-    }
-
-    @Test
     fun `Getting nautical dusk returns one if present`() {
         subject.setNauticalDusk(coordinates, date, expectedValue)
 
@@ -130,11 +105,6 @@ class TestSolarTimesRepositoryTest {
         subject.setNauticalDusk(coordinates, date, null)
 
         subject.getNauticalDusk(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting nautical dusk throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getNauticalDusk(coordinates, date) }
     }
 
     @Test
@@ -152,11 +122,6 @@ class TestSolarTimesRepositoryTest {
     }
 
     @Test
-    fun `Getting astronomical dawn throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getAstronomicalDawn(coordinates, date) }
-    }
-
-    @Test
     fun `Getting astronomical dusk returns one if present`() {
         subject.setAstronomicalDusk(coordinates, date, expectedValue)
 
@@ -168,10 +133,5 @@ class TestSolarTimesRepositoryTest {
         subject.setAstronomicalDusk(coordinates, date, null)
 
         subject.getAstronomicalDusk(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting astronomical dusk throws IllegalStateException if unset`() {
-        shouldThrow<IllegalStateException> { subject.getAstronomicalDusk(coordinates, date) }
     }
 }
