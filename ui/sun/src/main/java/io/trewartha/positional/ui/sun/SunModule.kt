@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import io.trewartha.positional.data.sun.LibrarySolarTimesRepository
+import io.trewartha.positional.data.sun.MainSolarTimesRepository
 import io.trewartha.positional.data.sun.SolarTimesRepository
 
 @Module
@@ -13,6 +13,6 @@ interface SunModule {
 
     @Binds
     fun solarTimesRepository(
-        librarySolarTimesRepository: LibrarySolarTimesRepository
+        mainSolarTimesRepository: MainSolarTimesRepository
     ): SolarTimesRepository
 }

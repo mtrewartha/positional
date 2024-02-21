@@ -11,7 +11,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
-class LibrarySolarTimesRepositoryTest {
+class MainSolarTimesRepositoryTest {
 
     private val northOfLongyearbyen = Coordinates(89.000, 15.490)
     private val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
@@ -25,7 +25,7 @@ class LibrarySolarTimesRepositoryTest {
     @BeforeTest
     fun setUp() {
         originalDefaultTimeZone = TimeZone.getDefault()
-        subject = LibrarySolarTimesRepository()
+        subject = MainSolarTimesRepository()
     }
 
     @AfterTest
