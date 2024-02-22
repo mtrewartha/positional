@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":ui:settings:generateAospDebugProto" />
+          <option value=":data:settings:generateAospDebugProto" />
         </list>
       </option>
       <option name="vmOptions" />

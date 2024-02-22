@@ -7,9 +7,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":model:location"))
+    api(project(":model:location"))
+    api(libs.javax.inject)
+
     implementation(libs.androidx.core)
-    implementation(libs.javax.inject)
     implementation(libs.timber)
 
     "gmsApi"(libs.google.playServices.location)
