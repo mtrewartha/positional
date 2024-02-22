@@ -27,7 +27,7 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
-    fun testCompassModeDefaultAndSetAndGet() = runTest {
+    fun `Compass mode reflects default then latest set value`() = runTest {
         subject.compassMode.test {
             withClue("Default compass mode should be true north") {
                 awaitItem().shouldBe(CompassMode.TRUE_NORTH)
@@ -44,7 +44,7 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
-    fun testCoordinatesFormatDefaultAndSetAndGet() = runTest {
+    fun `Coordinates format reflects default then latest set value`() = runTest {
         subject.coordinatesFormat.test {
             withClue("Default coordinates format should be decimal degrees") {
                 awaitItem().shouldBe(CoordinatesFormat.DD)
@@ -73,7 +73,7 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
-    fun testLocationAccuracyVisibilityDefaultAndSetAndGet() = runTest {
+    fun `Location accuracy visibility reflects default then latest set value`() = runTest {
         subject.locationAccuracyVisibility.test {
             withClue("Default location accuracy visibility value should be 'show'") {
                 awaitItem().shouldBe(LocationAccuracyVisibility.SHOW)
@@ -90,7 +90,7 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
-    fun testThemeDefaultAndSetAndGet() = runTest {
+    fun `Theme reflects default then latest set value`() = runTest {
         subject.theme.test {
             withClue("Default theme should be 'device'") {
                 awaitItem().shouldBe(Theme.DEVICE)
@@ -111,7 +111,7 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
-    fun testUnitsDefaultAndSetAndGet() = runTest {
+    fun `Units reflect default then latest set value`() = runTest {
         subject.units.test {
             withClue("Default units should be metric") {
                 awaitItem().shouldBe(Units.IMPERIAL)
@@ -128,7 +128,7 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
-    fun testCompassNorthVibrationDefaultAndSetAndGet() = runTest {
+    fun `Compass north vibration reflects default then latest set value`() = runTest {
         subject.compassNorthVibration.test {
             withClue("Default compass north vibration should be medium") {
                 awaitItem().shouldBe(CompassNorthVibration.MEDIUM)
