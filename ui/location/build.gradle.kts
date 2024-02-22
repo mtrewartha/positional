@@ -27,9 +27,6 @@ dependencies {
     api(project(":model:location"))
     api(libs.androidx.compose.runtime)
 
-    "gmsApi"(libs.google.playServices.location)
-    "gmsImplementation"(libs.kotlinx.coroutines.playServices)
-
     implementation(project(":data:location"))
     implementation(project(":data:settings"))
     implementation(project(":model:core"))
