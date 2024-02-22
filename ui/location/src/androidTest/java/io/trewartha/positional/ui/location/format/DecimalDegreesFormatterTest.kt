@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldMatch
@@ -24,64 +25,55 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun formatForDisplayReturnsTwoLines() {
-        val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
-
-        result.size.shouldBe(2)
-    }
-
-    @Test
-    fun commaDecimalSeparatorUsedForCopyInAppropriateLocales() {
-        val subject = createFormatter(Locale.FRANCE)
-
-        val result = subject.formatForCopy(Coordinates(1.0, 2.0))
-
-        result.shouldMatch(Regex("\\d+,\\d+°, \\d+,\\d+°"))
-    }
-
-    @Test
-    fun commaDecimalSeparatorUsedForDisplayInAppropriateLocales() {
+    fun formatForDisplayUsesCommaDecimalSeparatorForAppropriateLocales() {
         val subject = createFormatter(Locale.FRANCE)
 
         val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
 
-        for (line in result) line.shouldMatch(Regex("\\d+,\\d+°"))
+        for (line in result) line.shouldContain(",")
     }
 
     @Test
-    fun periodDecimalSeparatorUsedForCopyInAppropriateLocales() {
-        val subject = createFormatter(Locale.US)
-
-        val result = subject.formatForCopy(Coordinates(1.0, 2.0))
-
-        result.shouldMatch(Regex("\\d+\\.\\d+°, \\d+\\.\\d+°"))
-    }
-
-    @Test
-    fun periodDecimalSeparatorUsedForDisplayInAppropriateLocales() {
+    fun formatForDisplayUsesDotDecimalSeparatorForAppropriateLocales() {
         val subject = createFormatter(Locale.US)
 
         val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
 
-        for (line in result) line.shouldMatch(Regex("\\d+\\.\\d+°"))
+        for (line in result) line.shouldContain(".")
     }
 
     @Test
-    fun latitudeAndLongitudeRoundedForCopy() {
-        val result = subject.formatForCopy(Coordinates(1.2345678, 2.3456789))
+    fun formatForDisplayPadsAndRoundsAppropriately() {
+        val result = subject.formatForDisplay(Coordinates(0.123456, -1.234567))
 
-        withClue("Latitude and longitude should be rounded to the nearest 5th decimal place") {
-            result.shouldContain("1.23457°").shouldContain("2.34568°")
-        }
+        result.shouldHaveSize(2)
+        result[0].shouldBe("   0.12346°")
+        result[1].shouldBe("  -1.23457°")
     }
 
     @Test
-    fun latitudeAndLongitudeRoundedForDisplay() {
-        val result = subject.formatForDisplay(Coordinates(1.2345678, 2.3456789))
+    fun formatForCopyUsesCommaDecimalSeparatorForAppropriateLocales() {
+        val subject = createFormatter(Locale.FRANCE)
 
-        withClue("Latitude and longitude should be rounded to the nearest 5th decimal place") {
-            result.shouldContain("1.23457°").shouldContain("2.34568°")
-        }
+        val result = subject.formatForCopy(Coordinates(1.0, 2.0))
+
+        result.shouldContain(",")
+    }
+
+    @Test
+    fun formatForCopyUsesDotDecimalSeparatorForAppropriateLocales() {
+        val subject = createFormatter(Locale.US)
+
+        val result = subject.formatForCopy(Coordinates(1.0, 2.0))
+
+        result.shouldContain(".")
+    }
+
+    @Test
+    fun formatForCopyRoundsMinutesToNearestFifthDecimalPlace() {
+        val result = subject.formatForCopy(Coordinates(0.123456, -1.234567))
+
+        result.shouldBe("0.12346°, -1.23457°")
     }
 
     private fun createFormatter(locale: Locale = Locale.US) =

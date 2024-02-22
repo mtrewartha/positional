@@ -15,19 +15,17 @@ class DecimalDegreesFormatter(
 
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
         listOf(
-            formatLatitudeOrLongitude(coordinates?.latitude),
-            formatLatitudeOrLongitude(coordinates?.longitude),
+            coordinates?.latitude?.let { FORMAT_DISPLAY.format(locale, it) },
+            coordinates?.longitude?.let { FORMAT_DISPLAY.format(locale, it) }
         )
 
     override fun formatForCopy(coordinates: Coordinates): String =
         context.getString(
             R.string.ui_location_coordinates_copy_format_dd,
-            formatLatitudeOrLongitude(coordinates.latitude),
-            formatLatitudeOrLongitude(coordinates.longitude)
+            FORMAT_COPY.format(locale, coordinates.latitude),
+            FORMAT_COPY.format(locale, coordinates.longitude)
         )
-
-    private fun formatLatitudeOrLongitude(latitudeOrLongitude: Double?) =
-        latitudeOrLongitude?.let { FORMAT.format(locale, it) }
 }
 
-private const val FORMAT = "%3.5f°"
+private const val FORMAT_COPY = "%.5f°"
+private const val FORMAT_DISPLAY = "%10.5f°"
