@@ -17,30 +17,31 @@ class DegreesDecimalMinutesFormatter(
 
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
         listOf(
-            coordinates?.latitude?.let { formatLatitude(it) },
-            coordinates?.longitude?.let { formatLongitude(it) }
+            coordinates?.latitude?.let { formatForDisplay(it) },
+            coordinates?.longitude?.let { formatForDisplay(it) }
         )
 
     override fun formatForCopy(coordinates: Coordinates): String =
         context.getString(
             R.string.ui_location_coordinates_copy_format_ddm,
-            formatLatitude(coordinates.latitude),
-            formatLongitude(coordinates.longitude)
+            formatForCopy(coordinates.latitude),
+            formatForCopy(coordinates.longitude)
         )
 
-    private fun formatLatitude(latitude: Double): String {
-        val components = convert(latitude, FORMAT_MINUTES).split(':')
+    private fun formatForCopy(value: Double): String {
+        val components = convert(value, FORMAT_MINUTES).split(':')
         val degrees = components[0].toInt()
         val minutes = components[1].normalizeDecimalSeparator().toFloat()
-        return FORMAT.format(locale, degrees, minutes)
+        return FORMAT_COPY.format(locale, degrees, minutes)
     }
 
-    private fun formatLongitude(longitude: Double): String {
-        val components = convert(longitude, FORMAT_MINUTES).split(':')
+    private fun formatForDisplay(value: Double): String {
+        val components = convert(value, FORMAT_MINUTES).split(':')
         val degrees = components[0].toInt()
         val minutes = components[1].normalizeDecimalSeparator().toFloat()
-        return FORMAT.format(locale, degrees, minutes)
+        return FORMAT_DISPLAY.format(locale, degrees, minutes)
     }
 }
 
-private const val FORMAT = "%1\$3d° %2\$2.3f'"
+private const val FORMAT_COPY = "%1d° %2$.3f'"
+private const val FORMAT_DISPLAY = "%1\$4d° %2\$06.3f'"
