@@ -2,6 +2,7 @@ import com.android.build.gradle.LibraryExtension
 import io.trewartha.positional.configureFlavors
 import io.trewartha.positional.configureGradleManagedDevices
 import io.trewartha.positional.configureKotlinAndroid
+import io.trewartha.positional.configureTestLogger
 import io.trewartha.positional.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+                apply("com.adarshr.test-logger")
             }
 
             extensions.configure<LibraryExtension> {
@@ -28,6 +30,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_")
                         .lowercase() + "_"
             }
+
+            configureTestLogger()
+
             dependencies {
                 add("androidTestImplementation", libs.findLibrary("androidx.test.core").get())
                 add("androidTestImplementation", libs.findLibrary("androidx.test.ext.junit.ktx").get())

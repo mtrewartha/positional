@@ -21,6 +21,7 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     compileOnly(libs.android.tools.build)
     compileOnly(libs.kotlin.gradle)
+    compileOnly(libs.testLogger)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 

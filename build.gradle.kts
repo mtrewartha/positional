@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.google.firebase.crashlytics) apply false
     alias(libs.plugins.protobuf) apply false
+    alias(libs.plugins.testLogger) apply false
 }
 
 tasks.register("clean", Delete::class) {

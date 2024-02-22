@@ -1,6 +1,7 @@
 dependencyResolutionManagement {
     repositories {
         google()
+        gradlePluginPortal()
         mavenCentral()
     }
     // Use the same version catalog as the root project

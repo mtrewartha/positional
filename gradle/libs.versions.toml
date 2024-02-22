@@ -45,6 +45,7 @@ protobuf = "3.25.3"
 protobuf-plugin = "0.9.4"
 robolectric = "4.11.1"
 sunrise-sunset = "1.2"
+testLogger = "4.0.0"
 timber = "5.0.1"
 turbine = "1.0.0"
 junit = "4.13.2"
@@ -59,6 +60,7 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
+testLogger = { id = "com.adarshr.test-logger", version.ref = "testLogger" }
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
@@ -128,5 +130,6 @@ protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", ve
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 robolectric-playServices = { module = "org.robolectric:shadows-playservices", version.ref = "robolectric" }
 sunriseSunset = { module = "com.luckycatlabs:SunriseSunsetCalculator", version.ref = "sunrise-sunset" }
+testLogger = { module = "com.adarshr:gradle-test-logger-plugin", version.ref = "testLogger" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
