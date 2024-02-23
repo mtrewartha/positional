@@ -16,7 +16,7 @@ It's that simple.
 ## Free? Open source?
 
 Yup. It's free and open source because I think it provides such basic information that everyone
-should have access to it without compromising their privacy. Everything in the app is free. I
+should have access to without compromising their privacy. Everything in the app is free. I
 might add some donation functionality later, but we'll see. I just enjoy slowly crafting this in
 my spare time and hope you all can enjoy it, too :)
 
