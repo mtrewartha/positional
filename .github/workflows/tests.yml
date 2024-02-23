@@ -26,27 +26,29 @@ jobs:
 
       - name: 'Run unit tests'
         run: ./gradlew test
-  android_tests:
-    name: 'Android tests'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Check out the repository'
-        uses: actions/checkout@v4
-
-      - name: 'Set up Java'
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: 'Set up Gradle'
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: 'Set up the Android SDK'
-        uses: android-actions/setup-android@v3
-
-      - name: 'Run AOSP tests'
-        run: ./gradlew aospGroupCheck
-
-      - name: 'Run GMS tests'
-        run: ./gradlew gmsGroupCheck
+#  DISABLE THESE UNTIL AGP 8.4.X is stable or maybe beta/RC. See the issue below:
+#  https://issuetracker.google.com/issues/287312019
+#  android_tests:
+#    name: 'Android tests'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: 'Check out the repository'
+#        uses: actions/checkout@v4
+#
+#      - name: 'Set up Java'
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'zulu'
+#          java-version: '17'
+#
+#      - name: 'Set up Gradle'
+#        uses: gradle/actions/setup-gradle@v3
+#
+#      - name: 'Set up the Android SDK'
+#        uses: android-actions/setup-android@v3
+#
+#      - name: 'Run AOSP tests'
+#        run: ./gradlew aospGroupCheck
+#
+#      - name: 'Run GMS tests'
+#        run: ./gradlew gmsGroupCheck
