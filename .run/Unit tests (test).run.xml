@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="generateProto" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Unit tests (test)" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -10,7 +10,8 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":data:settings:generateAospDebugProto" />
+          <option value="test" />
+          <option value="--rerun" />
         </list>
       </option>
       <option name="vmOptions" />
