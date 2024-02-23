@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 context(Project)
-internal fun CommonExtension<*, *, *, *, *>.configureKotlinAndroid() {
+internal fun CommonExtension<*, *, *, *, *, *>.configureKotlinAndroid() {
     compileSdk = 34
 
     defaultConfig {

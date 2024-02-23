@@ -2,7 +2,7 @@ package io.trewartha.positional
 
 import com.android.build.api.dsl.CommonExtension
 
-internal fun CommonExtension<*, *, *, *, *>.configureFlavors() {
+internal fun CommonExtension<*, *, *, *, *, *>.configureFlavors() {
     flavorDimensions += "androidVariant"
     productFlavors {
         create("aosp") {

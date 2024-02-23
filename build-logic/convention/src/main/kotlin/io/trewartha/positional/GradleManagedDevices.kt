@@ -5,7 +5,7 @@ import com.android.build.api.dsl.ManagedVirtualDevice
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.invoke
 
-internal fun CommonExtension<*, *, *, *, *>.configureGradleManagedDevices() {
+internal fun CommonExtension<*, *, *, *, *, *>.configureGradleManagedDevices() {
     testOptions {
         managedDevices {
             devices {
