@@ -33,7 +33,6 @@ dependencies {
     implementation(project(":model:settings"))
     implementation(project(":ui:core"))
     implementation(project(":ui:design"))
-    implementation(files("libs/worldwind.jar")) // TODO: Make this an implementation dependency and use new Kotlin version
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.material.icons.extended)
@@ -46,6 +45,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.google.hilt.android)
     implementation(libs.timber)
+    implementation(libs.worldwind)
 
     testImplementation(project(":data:settings"))
     testImplementation(libs.kotlinx.coroutines.test)

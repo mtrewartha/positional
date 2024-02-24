@@ -1,8 +1,8 @@
 package io.trewartha.positional.ui.location.format
 
 import android.content.Context
-import gov.nasa.worldwind.geom.Angle
-import gov.nasa.worldwind.geom.coords.MGRSCoord
+import earth.worldwind.geom.Angle.Companion.degrees
+import earth.worldwind.geom.coords.MGRSCoord
 import io.trewartha.positional.model.core.measurement.Coordinates
 import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.ui.location.R
@@ -26,10 +26,7 @@ class MgrsFormatter(private val context: Context) : CoordinatesFormatter {
     }
 
     private fun Coordinates.toMgrsCoordinates(): MGRSCoord =
-        MGRSCoord.fromLatLon(
-            Angle.fromDegreesLatitude(latitude),
-            Angle.fromDegreesLongitude(longitude)
-        )
+        MGRSCoord.fromLatLon(latitude.degrees, longitude.degrees)
 
     private companion object {
         private const val MGRS_COORDINATES_SIZE = 3

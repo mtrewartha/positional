@@ -48,7 +48,7 @@ sunrise-sunset = "1.2"
 testLogger = "4.0.0"
 timber = "5.0.1"
 turbine = "1.0.0"
-junit = "4.13.2"
+worldwind = "1.4.10"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-tools-gradle" }
@@ -133,3 +133,4 @@ sunriseSunset = { module = "com.luckycatlabs:SunriseSunsetCalculator", version.r
 testLogger = { module = "com.adarshr:gradle-test-logger-plugin", version.ref = "testLogger" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+worldwind = { module = "earth.worldwind:worldwind", version.ref = "worldwind" }

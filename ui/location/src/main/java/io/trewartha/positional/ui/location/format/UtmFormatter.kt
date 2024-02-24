@@ -1,8 +1,8 @@
 package io.trewartha.positional.ui.location.format
 
 import android.content.Context
-import gov.nasa.worldwind.geom.Angle
-import gov.nasa.worldwind.geom.coords.UTMCoord
+import earth.worldwind.geom.Angle.Companion.degrees
+import earth.worldwind.geom.coords.UTMCoord
 import io.trewartha.positional.model.core.measurement.Coordinates
 import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.ui.location.R
@@ -16,15 +16,15 @@ class UtmFormatter(
     override val format = CoordinatesFormat.UTM
 
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
-        coordinates?.toUtmCoordinates()
-            ?.let {
+        coordinates?.let {
+            coordinates.toUtmCoordinates().let { utmCoordinates ->
                 listOf(
-                    formatZone(it.zone, it.latitude.degrees),
-                    formatEasting(it.easting, locale),
-                    formatNorthing(it.northing, locale)
+                    formatZone(utmCoordinates.zone, it.latitude),
+                    formatEasting(utmCoordinates.easting, locale),
+                    formatNorthing(utmCoordinates.northing, locale)
                 )
             }
-            ?: List(UTM_COORDINATES_SIZE) { null }
+        } ?: List(UTM_COORDINATES_SIZE) { null }
 
     override fun formatForCopy(coordinates: Coordinates): String {
         val formattedLines = formatForDisplay(coordinates).map { it.orEmpty() }
@@ -72,15 +72,10 @@ class UtmFormatter(
         "$zone${getUtmLatBand(latitudeDegrees)}"
 
     private fun Coordinates.toUtmCoordinates(): UTMCoord =
-        UTMCoord.fromLatLon(
-            Angle.fromDegreesLatitude(latitude),
-            Angle.fromDegreesLongitude(longitude)
-        )
-
-    companion object {
-        private const val NUMBER_FORMAT = "%7.0f"
-        private const val EASTING_FORMAT = NUMBER_FORMAT + "m E"
-        private const val NORTHING_FORMAT = NUMBER_FORMAT + "m N"
-        private const val UTM_COORDINATES_SIZE = 3
-    }
+        UTMCoord.fromLatLon(latitude.degrees, longitude.degrees)
 }
+
+private const val NUMBER_FORMAT = "%7.0f"
+private const val EASTING_FORMAT = NUMBER_FORMAT + "m E"
+private const val NORTHING_FORMAT = NUMBER_FORMAT + "m N"
+private const val UTM_COORDINATES_SIZE = 3
