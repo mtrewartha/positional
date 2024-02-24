@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [ 21, 23, 33 ]
+        api-level: [ 21, 34 ]
         target: [ default, google_apis ]
     steps:
       - name: 'Check out the repository'
