@@ -26,9 +26,13 @@ jobs:
 
       - name: 'Run unit tests'
         run: ./gradlew test
-  android_tests:
+  android_tests: # Based on https://github.com/ReactiveCircus/android-emulator-runner
     name: 'Android tests'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [ 21, 23, 33 ]
+        target: [ default, google_apis ]
     steps:
       - name: 'Check out the repository'
         uses: actions/checkout@v4
@@ -39,26 +43,35 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: 'Set up Java'
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
       - name: 'Set up Gradle'
         uses: gradle/actions/setup-gradle@v3
 
-      - name: 'Set up the Android SDK'
-        uses: android-actions/setup-android@v3
+      - name: 'Restore AVD cache'
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
-      # Once AGP 8.4.X is stable, collapse all of the individual Gradle invocations for
-      # module-specific aospGroupCheck tasks into a single invocation of './gradlew aospGroupCheck'
-      # https://issuetracker.google.com/issues/287312019
-      - name: 'Run AOSP tests'
-        run: ./gradlew :ui:location:aospGroupCheck
+      - name: 'Create AVD and generate snapshot for cache'
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
 
-      # Once AGP 8.4.X is stable, collapse all of the individual Gradle invocations for
-      # module-specific gmsGroupCheck tasks into a single invocation of './gradlew gmsGroupCheck'
-      # https://issuetracker.google.com/issues/287312019
-      - name: 'Run GMS tests'
-        run: ./gradlew :ui:location:gmsGroupCheck
+      - name: 'Run Android tests'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          disable-animations: true
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          force-avd-creation: false
+          script: ./gradlew connectedCheck
