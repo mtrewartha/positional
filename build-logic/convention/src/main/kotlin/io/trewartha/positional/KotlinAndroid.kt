@@ -29,6 +29,8 @@ internal fun CommonExtension<*, *, *, *, *, *>.configureKotlinAndroid() {
 
     configureKotlin()
 
+    testOptions.unitTests.isIncludeAndroidResources = true
+
     dependencies {
         add("coreLibraryDesugaring", libs.findLibrary("android.tools.desugarJdkLibs").get())
 

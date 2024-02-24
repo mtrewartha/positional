@@ -1,7 +1,5 @@
 package io.trewartha.positional.ui.location.format
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -9,12 +7,14 @@ import io.trewartha.positional.model.core.measurement.Coordinates
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import java.util.Locale
 
-@RunWith(AndroidJUnit4::class)
-class DegreesDecimalMinutesFormatterTest {
+@RunWith(RobolectricTestRunner::class)
+class DecimalDegreesFormatterTest {
 
-    private lateinit var subject: DegreesDecimalMinutesFormatter
+    private lateinit var subject: DecimalDegreesFormatter
 
     @Before
     fun setUp() {
@@ -22,7 +22,7 @@ class DegreesDecimalMinutesFormatterTest {
     }
 
     @Test
-    fun formatForDisplayUsesCommaDecimalSeparatorForAppropriateLocales() {
+    fun `Formatting for display uses comma decimal separator for appropriate locales`() {
         val subject = createFormatter(Locale.FRANCE)
 
         val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
@@ -31,7 +31,7 @@ class DegreesDecimalMinutesFormatterTest {
     }
 
     @Test
-    fun formatForDisplayUsesDotDecimalSeparatorForAppropriateLocales() {
+    fun `Formatting for display uses dot decimal separator for appropriate locales`() {
         val subject = createFormatter(Locale.US)
 
         val result = subject.formatForDisplay(Coordinates(1.0, 2.0))
@@ -40,16 +40,16 @@ class DegreesDecimalMinutesFormatterTest {
     }
 
     @Test
-    fun formatForDisplayPadsAndRoundsAppropriately() {
+    fun `Formatting for display pads and rounds appropriately`() {
         val result = subject.formatForDisplay(Coordinates(0.123456, -1.234567))
 
         result.shouldHaveSize(2)
-        result[0].shouldBe("   0° 07.407'")
-        result[1].shouldBe("  -1° 14.074'")
+        result[0].shouldBe("   0.12346°")
+        result[1].shouldBe("  -1.23457°")
     }
 
     @Test
-    fun formatForCopyUsesCommaDecimalSeparatorForAppropriateLocales() {
+    fun `Formatting for copy uses comma decimal separator for appropriate locales`() {
         val subject = createFormatter(Locale.FRANCE)
 
         val result = subject.formatForCopy(Coordinates(1.0, 2.0))
@@ -58,7 +58,7 @@ class DegreesDecimalMinutesFormatterTest {
     }
 
     @Test
-    fun formatForCopyUsesDotDecimalSeparatorForAppropriateLocales() {
+    fun `Formatting for copy uses dot decimal separator for appropriate locales`() {
         val subject = createFormatter(Locale.US)
 
         val result = subject.formatForCopy(Coordinates(1.0, 2.0))
@@ -67,15 +67,12 @@ class DegreesDecimalMinutesFormatterTest {
     }
 
     @Test
-    fun formatForCopyRoundsMinutesToNearestThirdDecimalPlace() {
+    fun `Formatting for copy rounds minutes to nearest fifth decimal place`() {
         val result = subject.formatForCopy(Coordinates(0.123456, -1.234567))
 
-        result.shouldBe("0° 7.407', -1° 14.074'")
+        result.shouldBe("0.12346°, -1.23457°")
     }
 
     private fun createFormatter(locale: Locale = Locale.US) =
-        DegreesDecimalMinutesFormatter(
-            InstrumentationRegistry.getInstrumentation().targetContext,
-            locale
-        )
+        DecimalDegreesFormatter(RuntimeEnvironment.getApplication(), locale)
 }
