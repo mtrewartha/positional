@@ -2,28 +2,28 @@ package io.trewartha.positional.data.compass
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
-import io.trewartha.positional.model.core.measurement.Angle
+import io.trewartha.positional.model.core.measurement.degrees
 import kotlin.test.Test
 
 class AzimuthTest {
 
     @Test
     fun `Constructor does not throw IllegalArgumentException when angle is between 0 and 360`() {
-        shouldNotThrow<IllegalArgumentException> { Azimuth(Angle.Degrees(0f)) }
+        shouldNotThrow<IllegalArgumentException> { Azimuth(0.degrees) }
     }
 
     @Test
     fun `Constructor throws IllegalArgumentException when angle is less than zero`() {
-        shouldThrow<IllegalArgumentException> { Azimuth(Angle.Degrees(-0.0001f)) }
+        shouldThrow<IllegalArgumentException> { Azimuth((-0.0001).degrees) }
     }
 
     @Test
     fun `Constructor throws IllegalArgumentException when angle is equal to 360`() {
-        shouldThrow<IllegalArgumentException> { Azimuth(Angle.Degrees(360f)) }
+        shouldThrow<IllegalArgumentException> { Azimuth(360.degrees) }
     }
 
     @Test
     fun `Constructor throws IllegalArgumentException when angle is greater than 360`() {
-        shouldThrow<IllegalArgumentException> { Azimuth(Angle.Degrees(361f)) }
+        shouldThrow<IllegalArgumentException> { Azimuth(361.degrees) }
     }
 }

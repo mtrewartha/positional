@@ -17,6 +17,8 @@
     <string name="ui_location_coordinates_copy_format_dms">%1$s, %2$s</string>
     <string name="ui_location_coordinates_copy_format_mgrs">%1$s %2$s %3$s</string>
     <string name="ui_location_coordinates_copy_content_description">Copy coordinates</string>
+    <string name="ui_location_coordinates_utm_hemisphere_north">N</string>
+    <string name="ui_location_coordinates_utm_hemisphere_south">S</string>
     <string name="ui_location_dialog_map_error_button_confirm" translatable="false">@string/ui_design_ok</string>
     <string name="ui_location_dialog_map_error_text">There doesn\'t seem to be a map app installed on your device that supports \"geo\" links. You could install an app like Google Maps or something similar and try again.</string>
     <string name="ui_location_dialog_map_error_title">No map app found</string>

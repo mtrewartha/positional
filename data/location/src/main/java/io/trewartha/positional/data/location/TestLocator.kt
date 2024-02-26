@@ -1,7 +1,8 @@
 package io.trewartha.positional.data.location
 
-import io.trewartha.positional.model.core.measurement.Coordinates
-import io.trewartha.positional.model.core.measurement.Distance
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
+import io.trewartha.positional.model.core.measurement.degrees
+import io.trewartha.positional.model.core.measurement.meters
 import io.trewartha.positional.model.location.Location
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,8 +31,8 @@ class TestLocator : Locator {
     private fun getTestLocation(): Location =
         Location(
             timestamp = Clock.System.now(),
-            coordinates = Coordinates(latitude = 0.0, longitude = 0.0),
-            altitude = Distance.Meters(0.0f),
+            coordinates = GeodeticCoordinates(latitude = 0.degrees, longitude = 0.degrees),
+            altitude = 0.meters,
             magneticDeclination = null
         )
 }

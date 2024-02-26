@@ -2,8 +2,9 @@ package io.trewartha.positional.data.location
 
 import app.cash.turbine.test
 import io.kotest.matchers.shouldBe
-import io.trewartha.positional.model.core.measurement.Coordinates
-import io.trewartha.positional.model.core.measurement.Distance
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
+import io.trewartha.positional.model.core.measurement.degrees
+import io.trewartha.positional.model.core.measurement.meters
 import io.trewartha.positional.model.location.Location
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
@@ -24,11 +25,11 @@ class TestLocatorTest {
     fun `Location flow emits the last set location`() = runTest {
         val firstLocation = Location(
             timestamp = Clock.System.now(),
-            coordinates = Coordinates(latitude = 1.0, longitude = 2.0),
-            altitude = Distance.Meters(3.0f),
+            coordinates = GeodeticCoordinates(latitude = 1.degrees, longitude = 2.degrees),
+            altitude = 3.meters,
             magneticDeclination = null
         )
-        val secondLocation = firstLocation.copy(altitude = Distance.Meters(4.0f))
+        val secondLocation = firstLocation.copy(altitude = 4.meters)
         subject.setLocation(firstLocation)
         subject.setLocation(secondLocation)
 
@@ -40,8 +41,8 @@ class TestLocatorTest {
         subject.location.test {
             val location = Location(
                 timestamp = Clock.System.now(),
-                coordinates = Coordinates(latitude = 1.0, longitude = 2.0),
-                altitude = Distance.Meters(3.0f),
+                coordinates = GeodeticCoordinates(latitude = 1.degrees, longitude = 2.degrees),
+                altitude = 3.meters,
                 magneticDeclination = null
             )
 

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.android.material.color.MaterialColors.harmonize
 import io.trewartha.positional.model.core.measurement.Angle
+import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.settings.CompassNorthVibration
 import io.trewartha.positional.ui.design.locals.LocalVibrator
 import io.trewartha.positional.ui.design.modifier.placeholder
@@ -162,7 +163,8 @@ private fun CompassRose(
         } else {
             DEGREES_360 - (-lastAnimatedAzimuth % DEGREES_360)
         }
-        val azimuthDegrees = azimuth.inDegrees().value.takeIf { it.isFinite() } ?: AZIMUTH_DEFAULT
+        val azimuthDegrees = azimuth.inDegrees().value.takeIf { it.isFinite() }?.toFloat()
+            ?: AZIMUTH_DEFAULT
         if (modLastAnimatedAzimuth != azimuthDegrees) {
             val clockwiseDiff = if (azimuthDegrees > modLastAnimatedAzimuth) {
                 modLastAnimatedAzimuth + DEGREES_360 - azimuthDegrees
@@ -352,6 +354,6 @@ private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 @Composable
 private fun CompassPreview() {
     Surface(Modifier.size(600.dp, 300.dp)) {
-        Compass(azimuth = Angle.Degrees(25f), northVibration = CompassNorthVibration.SHORT)
+        Compass(azimuth = 25.degrees, northVibration = CompassNorthVibration.SHORT)
     }
 }

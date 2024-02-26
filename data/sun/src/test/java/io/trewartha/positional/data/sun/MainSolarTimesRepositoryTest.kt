@@ -2,7 +2,8 @@ package io.trewartha.positional.data.sun
 
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.trewartha.positional.model.core.measurement.Coordinates
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
+import io.trewartha.positional.model.core.measurement.degrees
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
@@ -13,9 +14,9 @@ import kotlin.test.Test
 
 class MainSolarTimesRepositoryTest {
 
-    private val northOfLongyearbyen = Coordinates(89.000, 15.490)
+    private val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
     private val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
-    private val mitadDelMundo = Coordinates(-0.00217, -78.45581)
+    private val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
     private val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
     private val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
     private lateinit var originalDefaultTimeZone: TimeZone

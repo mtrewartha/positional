@@ -22,7 +22,7 @@ sealed interface Angle {
      */
     @JvmInline
     value class Degrees @Throws(IllegalArgumentException::class) constructor(
-        val value: Float
+        val value: Double
     ) : Angle {
 
         init {
@@ -38,4 +38,19 @@ sealed interface Angle {
     }
 }
 
-private const val DEGREES_360 = 360f
+/**
+ * Create an angle in degrees with the magnitude of this value
+ */
+val Double.degrees: Angle.Degrees get() = Angle.Degrees(this)
+
+/**
+ * Create an angle in degrees with the magnitude of this value
+ */
+val Float.degrees: Angle.Degrees get() = Angle.Degrees(toDouble())
+
+/**
+ * Create an angle in degrees with the magnitude of this value
+ */
+val Int.degrees: Angle.Degrees get() = Angle.Degrees(toDouble())
+
+private const val DEGREES_360 = 360.0

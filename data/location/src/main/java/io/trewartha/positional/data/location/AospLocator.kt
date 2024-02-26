@@ -14,9 +14,12 @@ import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.core.location.LocationRequestCompat
 import androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY
 import io.trewartha.positional.model.core.measurement.Angle
-import io.trewartha.positional.model.core.measurement.Coordinates
 import io.trewartha.positional.model.core.measurement.Distance
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.model.core.measurement.Speed
+import io.trewartha.positional.model.core.measurement.degrees
+import io.trewartha.positional.model.core.measurement.meters
+import io.trewartha.positional.model.core.measurement.mps
 import io.trewartha.positional.model.location.Location
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -94,7 +97,7 @@ class AospLocator @Inject constructor(
 
 internal fun android.location.Location.toLocation(): Location = Location(
     timestamp = timestamp,
-    coordinates = Coordinates(latitude, longitude),
+    coordinates = GeodeticCoordinates(latitude.degrees, longitude.degrees),
     horizontalAccuracy = horizontalAccuracy,
     bearing = bearingObject,
     bearingAccuracy = bearingAccuracy,
@@ -107,7 +110,7 @@ internal fun android.location.Location.toLocation(): Location = Location(
 
 internal val android.location.Location.altitudeObject: Distance?
     get() = if (hasAltitude()) {
-        Distance.Meters(altitude.toFloat())
+        altitude.meters
     } else {
         null
     }
@@ -118,14 +121,14 @@ internal val android.location.Location.altitudeAccuracy: Distance?
         hasVerticalAccuracy() &&
         verticalAccuracyMeters >= 0
     ) {
-        Distance.Meters(verticalAccuracyMeters)
+        verticalAccuracyMeters.meters
     } else {
         null
     }
 
 internal val android.location.Location.bearingObject: Angle?
     get() = if (this.hasBearing() && speed >= MIN_SPEED_THRESHOLD) {
-        Angle.Degrees(this.bearing)
+        this.bearing.degrees
     } else {
         null
     }
@@ -136,14 +139,14 @@ internal val android.location.Location.bearingAccuracy: Angle?
         hasBearingAccuracy() &&
         speed >= MIN_SPEED_THRESHOLD
     ) {
-        Angle.Degrees(bearingAccuracyDegrees)
+        bearingAccuracyDegrees.degrees
     } else {
         null
     }
 
 internal val android.location.Location.horizontalAccuracy: Distance?
     get() = if (SDK_INT >= Build.VERSION_CODES.O && hasAccuracy()) {
-        Distance.Meters(accuracy)
+        accuracy.meters
     } else {
         null
     }
@@ -161,7 +164,7 @@ internal val android.location.Location.magneticDeclination: Angle?
         // https://earthscience.stackexchange.com/a/9613
         val alt = altitude.toFloat().takeIf { hasAltitude() && it.isFinite() } ?: 0f
         val millis = timestamp.toEpochMilliseconds()
-        Angle.Degrees(GeomagneticField(lat, lon, alt, millis).declination)
+        GeomagneticField(lat, lon, alt, millis).declination.degrees
     } catch (exception: IllegalArgumentException) {
         Timber.w(exception, "Unable to calculate magnetic declination")
         null
@@ -169,7 +172,7 @@ internal val android.location.Location.magneticDeclination: Angle?
 
 internal val android.location.Location.speedObject: Speed?
     get() = if (hasSpeed() && speed >= MIN_SPEED_THRESHOLD) {
-        Speed.MetersPerSecond(speed)
+        speed.mps
     } else {
         null
     }
@@ -180,7 +183,7 @@ internal val android.location.Location.speedAccuracy: Speed?
         hasSpeedAccuracy() &&
         speedAccuracyMetersPerSecond > 0
     ) {
-        Speed.MetersPerSecond(speedAccuracyMetersPerSecond)
+        speedAccuracyMetersPerSecond.mps
     } else {
         null
     }

@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import io.trewartha.positional.data.compass.Azimuth
 import io.trewartha.positional.model.core.measurement.Angle
+import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.settings.CompassMode
 import io.trewartha.positional.model.settings.CompassNorthVibration
 import io.trewartha.positional.ui.core.State
@@ -205,7 +206,7 @@ private fun AccuracyHelpDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-private fun DeclinationText(declination: Float?, modifier: Modifier = Modifier) {
+private fun DeclinationText(declination: Double?, modifier: Modifier = Modifier) {
     Text(
         text = stringResource(R.string.ui_compass_declination, declination ?: 0f),
         style = MaterialTheme.typography.labelLarge,
@@ -228,7 +229,7 @@ private fun getDisplayRotation(context: Context): Angle =
         }
     } catch (_: NullPointerException) { // Compose preview causes this
         DEGREES_0
-    }.let { Angle.Degrees(it) }
+    }.degrees
 
 @PreviewLightDark
 @Composable
@@ -268,8 +269,8 @@ private fun SensorsPresentLoadedPreview() {
             CompassView(
                 state = State.Loaded(
                     CompassData(
-                        azimuth = Azimuth(Angle.Degrees(45f)),
-                        declination = Angle.Degrees(1f),
+                        azimuth = Azimuth(45.degrees),
+                        declination = 1.degrees,
                         mode = CompassMode.TRUE_NORTH,
                         northVibration = CompassNorthVibration.SHORT
                     )

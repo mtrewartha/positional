@@ -6,8 +6,9 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.trewartha.positional.data.location.TestLocator
 import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.data.settings.TestSettingsRepository
-import io.trewartha.positional.model.core.measurement.Coordinates
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.model.core.measurement.Units
+import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.model.settings.LocationAccuracyVisibility
@@ -16,7 +17,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.datetime.Clock
+import kotlinx.datetime.Clock.System.now
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -49,7 +50,7 @@ class LocationViewModelTest {
 
     @Test
     fun `Data emitted once loaded`() = runTest {
-        val expectedLocation = Location(Clock.System.now(), Coordinates(1.0, 2.0))
+        val expectedLocation = Location(now(), GeodeticCoordinates(1.degrees, 2.degrees))
         val expectedUnits = Units.METRIC
         val expectedCoordinatesFormat = CoordinatesFormat.DD
         val expectedLocationAccuracyVisibility = LocationAccuracyVisibility.SHOW
@@ -72,13 +73,13 @@ class LocationViewModelTest {
 
     @Test
     fun `Data emitted when location changes`() = runTest {
-        val expectedLocation = Location(Clock.System.now(), Coordinates(1.0, 1.0))
+        val expectedLocation = Location(now(), GeodeticCoordinates(1.degrees, 1.degrees))
         subject.state.test {
             awaitItem() // Loading state
             settings.setCoordinatesFormat(CoordinatesFormat.DD)
             settings.setUnits(Units.METRIC)
             settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(Clock.System.now(), Coordinates(0.0, 0.0)))
+            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
             awaitItem() // Initial data state
 
             locator.setLocation(expectedLocation)
@@ -97,7 +98,7 @@ class LocationViewModelTest {
             settings.setCoordinatesFormat(CoordinatesFormat.DD)
             settings.setUnits(Units.METRIC)
             settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(Clock.System.now(), Coordinates(0.0, 0.0)))
+            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
             awaitItem() // Initial data state
 
             settings.setCoordinatesFormat(expectedCoordinatesFormat)
@@ -116,7 +117,7 @@ class LocationViewModelTest {
             settings.setCoordinatesFormat(CoordinatesFormat.DD)
             settings.setUnits(Units.METRIC)
             settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(Clock.System.now(), Coordinates(0.0, 0.0)))
+            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
             awaitItem() // Initial data state
 
             settings.setUnits(expectedUnits)
@@ -135,7 +136,7 @@ class LocationViewModelTest {
             settings.setCoordinatesFormat(CoordinatesFormat.DD)
             settings.setUnits(Units.METRIC)
             settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(Clock.System.now(), Coordinates(0.0, 0.0)))
+            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
             awaitItem() // Initial data state
 
             settings.setLocationAccuracyVisibility(expectedVisibility)

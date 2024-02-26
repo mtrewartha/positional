@@ -9,8 +9,8 @@ import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.TestCompass
 import io.trewartha.positional.data.location.TestLocator
 import io.trewartha.positional.data.settings.TestSettingsRepository
-import io.trewartha.positional.model.core.measurement.Angle
-import io.trewartha.positional.model.core.measurement.Coordinates
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
+import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.model.settings.CompassMode
 import io.trewartha.positional.model.settings.CompassNorthVibration
@@ -64,7 +64,7 @@ class CompassViewModelTest {
     @Test
     fun `Data emitted once loaded`() = runTest {
         val expectedAzimuth = Azimuth(
-            angle = Angle.Degrees(0f),
+            angle = 0.degrees,
             accelerometerAccuracy = CompassAccuracy.HIGH,
             magnetometerAccuracy = CompassAccuracy.HIGH
         )
@@ -91,11 +91,11 @@ class CompassViewModelTest {
     @Test
     fun `Data emitted when azimuth changes`() = runTest {
         val initialAzimuth = Azimuth(
-            angle = Angle.Degrees(1f),
+            angle = 1.degrees,
             accelerometerAccuracy = CompassAccuracy.HIGH,
             magnetometerAccuracy = CompassAccuracy.HIGH
         )
-        val expectedAzimuth = initialAzimuth.copy(angle = Angle.Degrees(2f))
+        val expectedAzimuth = initialAzimuth.copy(angle = 2.degrees)
         subject.state.test {
             awaitItem() // Loading state
             settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
@@ -113,18 +113,18 @@ class CompassViewModelTest {
 
     @Test
     fun `Data emitted when declination changes`() = runTest {
-        val expectedDeclination = Angle.Degrees(1f)
+        val expectedDeclination = 1.degrees
         subject.state.test {
             awaitItem() // Loading state
             settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
             settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(Azimuth(Angle.Degrees(0f)))
+            compass.setAzimuth(Azimuth(0.degrees))
             awaitItem() // Initial data state
 
             locator.setLocation(
                 Location(
                     timestamp = Clock.System.now(),
-                    coordinates = Coordinates(0.0, 0.0),
+                    coordinates = GeodeticCoordinates(0.degrees, 0.degrees),
                     magneticDeclination = expectedDeclination
                 )
             )
@@ -142,7 +142,7 @@ class CompassViewModelTest {
             awaitItem() // Loading state
             settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
             settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(Azimuth(Angle.Degrees(0f)))
+            compass.setAzimuth(Azimuth(0.degrees))
             awaitItem() // Initial data state
 
             settings.setCompassMode(expectedMode)
@@ -160,7 +160,7 @@ class CompassViewModelTest {
             awaitItem() // Loading state
             settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
             settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(Azimuth(Angle.Degrees(0f)))
+            compass.setAzimuth(Azimuth(0.degrees))
             awaitItem() // Initial data state
 
             settings.setCompassNorthVibration(expectedVibration)

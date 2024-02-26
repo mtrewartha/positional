@@ -8,9 +8,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
-import io.trewartha.positional.data.location.AospLocator
-import io.trewartha.positional.data.location.Locator
-import io.trewartha.positional.data.location.toLocation
 import io.trewartha.positional.model.location.Location
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

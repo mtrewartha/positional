@@ -30,6 +30,6 @@ data class Azimuth @Throws(IllegalArgumentException::class) constructor(
     }
 }
 
-private const val DEGREES_0 = 0f
-private const val DEGREES_360 = 360f
+private const val DEGREES_0 = 0.0
+private const val DEGREES_360 = 360.0
 private val VALID_RANGE = DEGREES_0..<DEGREES_360

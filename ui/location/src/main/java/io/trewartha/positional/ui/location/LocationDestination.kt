@@ -57,7 +57,7 @@ data object LocationDestination : NavDestination.MainNavDestination {
                             CoordinatesFormat.DD, null -> DecimalDegreesFormatter(context, locale)
                             CoordinatesFormat.DDM -> DegreesDecimalMinutesFormatter(context, locale)
                             CoordinatesFormat.DMS -> DegreesMinutesSecondsFormatter(context, locale)
-                            CoordinatesFormat.MGRS -> MgrsFormatter(context)
+                            CoordinatesFormat.MGRS -> MgrsFormatter()
                             CoordinatesFormat.UTM -> UtmFormatter(context, locale)
                         }
             ) {

@@ -2,7 +2,8 @@ package io.trewartha.positional.data.sun
 
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.trewartha.positional.model.core.measurement.Coordinates
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
+import io.trewartha.positional.model.core.measurement.degrees
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
@@ -13,7 +14,7 @@ class TestSolarTimesRepositoryTest {
 
     private lateinit var subject: TestSolarTimesRepository
 
-    private val coordinates = Coordinates(0.0, 0.0)
+    private val coordinates = GeodeticCoordinates(0.degrees, 0.degrees)
     private val date = LocalDate(2000, Month.JANUARY, 1)
     private val expectedValue = LocalTime(1, 2, 3)
 

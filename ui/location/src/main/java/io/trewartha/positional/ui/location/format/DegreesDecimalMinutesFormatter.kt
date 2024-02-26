@@ -3,11 +3,15 @@ package io.trewartha.positional.ui.location.format
 import android.content.Context
 import android.location.Location.FORMAT_MINUTES
 import android.location.Location.convert
+import io.trewartha.positional.model.core.measurement.Angle
 import io.trewartha.positional.model.core.measurement.Coordinates
 import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.ui.location.R
 import java.util.Locale
 
+/**
+ * Formats coordinates as degrees and decimal minutes
+ */
 class DegreesDecimalMinutesFormatter(
     private val context: Context,
     private val locale: Locale
@@ -15,31 +19,28 @@ class DegreesDecimalMinutesFormatter(
 
     override val format = CoordinatesFormat.DDM
 
-    override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
-        listOf(
-            coordinates?.latitude?.let { formatForDisplay(it) },
-            coordinates?.longitude?.let { formatForDisplay(it) }
+    override fun formatForDisplay(coordinates: Coordinates?): List<String?> {
+        val geodeticCoordinates = coordinates?.asGeodeticCoordinates()
+        return listOf(
+            geodeticCoordinates?.latitude?.let { FORMAT_DISPLAY.format(it) },
+            geodeticCoordinates?.longitude?.let { FORMAT_DISPLAY.format(it) }
         )
-
-    override fun formatForCopy(coordinates: Coordinates): String =
-        context.getString(
-            R.string.ui_location_coordinates_copy_format_ddm,
-            formatForCopy(coordinates.latitude),
-            formatForCopy(coordinates.longitude)
-        )
-
-    private fun formatForCopy(value: Double): String {
-        val components = convert(value, FORMAT_MINUTES).split(':')
-        val degrees = components[0].toInt()
-        val minutes = components[1].normalizeDecimalSeparator().toFloat()
-        return FORMAT_COPY.format(locale, degrees, minutes)
     }
 
-    private fun formatForDisplay(value: Double): String {
-        val components = convert(value, FORMAT_MINUTES).split(':')
+    override fun formatForCopy(coordinates: Coordinates): String {
+        val geodeticCoordinates = coordinates.asGeodeticCoordinates()
+        return context.getString(
+            R.string.ui_location_coordinates_copy_format_ddm,
+            FORMAT_COPY.format(geodeticCoordinates.latitude),
+            FORMAT_COPY.format(geodeticCoordinates.longitude)
+        )
+    }
+
+    private fun String.format(angle: Angle): String {
+        val components = convert(angle.inDegrees().value, FORMAT_MINUTES).split(':')
         val degrees = components[0].toInt()
         val minutes = components[1].normalizeDecimalSeparator().toFloat()
-        return FORMAT_DISPLAY.format(locale, degrees, minutes)
+        return format(locale, degrees, minutes)
     }
 }
 

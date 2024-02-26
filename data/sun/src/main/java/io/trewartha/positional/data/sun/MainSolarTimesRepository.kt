@@ -56,7 +56,9 @@ class MainSolarTimesRepository @Inject constructor() : SolarTimesRepository {
 
     private fun createLibraryCalculator(coordinates: Coordinates) =
         SunriseSunsetCalculator(
-            Location(coordinates.latitude, coordinates.longitude),
+            coordinates.asGeodeticCoordinates().let {
+                Location(it.latitude.inDegrees().value, it.longitude.inDegrees().value)
+            },
             java.util.TimeZone.getDefault()
         )
 

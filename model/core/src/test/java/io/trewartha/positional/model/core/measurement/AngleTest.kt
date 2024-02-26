@@ -8,18 +8,18 @@ class AngleTest {
 
     @Test
     fun `IllegalArgumentException thrown when value is infinite`() {
-        shouldThrow<IllegalArgumentException> { Angle.Degrees(Float.POSITIVE_INFINITY) }
-        shouldThrow<IllegalArgumentException> { Angle.Degrees(Float.NEGATIVE_INFINITY) }
+        shouldThrow<IllegalArgumentException> { Double.POSITIVE_INFINITY.degrees }
+        shouldThrow<IllegalArgumentException> { Double.NEGATIVE_INFINITY.degrees }
     }
 
     @Test
     fun `IllegalArgumentException thrown when value is NaN`() {
-        shouldThrow<IllegalArgumentException> { Angle.Degrees(Float.NaN) }
+        shouldThrow<IllegalArgumentException> { Double.NaN.degrees }
     }
 
     @Test
     fun `Conversion from degrees to degrees returns the original degrees`() {
-        val originalDegrees = Angle.Degrees(1f)
+        val originalDegrees = 1.degrees
 
         val result = originalDegrees.inDegrees()
 
@@ -28,15 +28,15 @@ class AngleTest {
 
     @Test
     fun `Addition of two angles sums the angles`() {
-        val result = Angle.Degrees(1f) + Angle.Degrees(2f)
+        val result = 1.degrees + 2.degrees
 
-        result.shouldBe(Angle.Degrees(3f))
+        result.shouldBe(3.degrees)
     }
 
     @Test
     fun `Addition of two angles wraps properly after 360 degrees`() {
-        val result = Angle.Degrees(359f) + Angle.Degrees(2f)
+        val result = 359.degrees + 2.degrees
 
-        result.shouldBe(Angle.Degrees(1f))
+        result.shouldBe(1.degrees)
     }
 }

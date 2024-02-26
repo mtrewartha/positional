@@ -1,34 +1,34 @@
 package io.trewartha.positional.ui.location.format
 
-import android.content.Context
-import earth.worldwind.geom.Angle.Companion.degrees
-import earth.worldwind.geom.coords.MGRSCoord
 import io.trewartha.positional.model.core.measurement.Coordinates
+import io.trewartha.positional.model.core.measurement.Distance
 import io.trewartha.positional.model.settings.CoordinatesFormat
-import io.trewartha.positional.ui.location.R
+import kotlin.math.roundToInt
 
-class MgrsFormatter(private val context: Context) : CoordinatesFormatter {
+/**
+ * Formats coordinates in the Military Grid Reference System (MGRS)
+ */
+class MgrsFormatter : CoordinatesFormatter {
 
     override val format = CoordinatesFormat.MGRS
 
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
-        coordinates?.toMgrsCoordinates()?.toString()?.split(' ')
-            ?: List(MGRS_COORDINATES_SIZE) { null }
+        coordinates?.asMgrsCoordinates()?.let { mgrsCoordinates ->
+            with(mgrsCoordinates) {
+                listOf(
+                    "$zone$band $hundredKMSquareID",
+                    easting.format(),
+                    northing.format(),
+                )
+            }
+        } ?: List(FORMAT_DISPLAY_LINE_COUNT) { null }
 
-    override fun formatForCopy(coordinates: Coordinates): String {
-        val formattedLines = formatForDisplay(coordinates).map { it.orEmpty() }
-        return context.getString(
-            R.string.ui_location_coordinates_copy_format_mgrs,
-            formattedLines[0],
-            formattedLines[1],
-            formattedLines[2],
-        )
-    }
+    override fun formatForCopy(coordinates: Coordinates): String =
+        coordinates.asMgrsCoordinates().toString()
 
-    private fun Coordinates.toMgrsCoordinates(): MGRSCoord =
-        MGRSCoord.fromLatLon(latitude.degrees, longitude.degrees)
-
-    private companion object {
-        private const val MGRS_COORDINATES_SIZE = 3
-    }
+    private fun Distance.format() =
+        this.inMeters().value.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, '0')
 }
+
+private const val FORMAT_DISPLAY_LINE_COUNT = 3
+private const val NUMERICAL_LOCATION_FORMAT = 5

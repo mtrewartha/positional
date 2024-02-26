@@ -45,7 +45,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.google.hilt.android)
     implementation(libs.timber)
-    implementation(libs.worldwind)
 
     testImplementation(project(":data:settings"))
     testImplementation(libs.kotlinx.coroutines.test)

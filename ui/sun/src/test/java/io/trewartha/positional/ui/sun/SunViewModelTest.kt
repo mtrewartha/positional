@@ -5,7 +5,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.trewartha.positional.data.location.TestLocator
 import io.trewartha.positional.data.sun.TestSolarTimesRepository
-import io.trewartha.positional.model.core.measurement.Coordinates
+import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
+import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.ui.core.State
 import kotlinx.coroutines.Dispatchers
@@ -85,7 +86,7 @@ class SunViewModelTest {
     fun `Selected date updates when user selects new date`() = runTest {
         subject.state.test {
             awaitItem() // Ignore the current state
-            val coordinates = Coordinates(0.0, 0.0)
+            val coordinates = GeodeticCoordinates(0.degrees, 0.degrees)
             solarTimesRepository.setAstronomicalDawn(coordinates, jan1st, LocalTime(0, 0, 0))
             solarTimesRepository.setNauticalDawn(coordinates, jan1st, LocalTime(0, 0, 0))
             solarTimesRepository.setCivilDawn(coordinates, jan1st, LocalTime(0, 0, 0))
@@ -108,7 +109,7 @@ class SunViewModelTest {
     fun `Times updates when user selects new date`() = runTest {
         subject.state.test {
             awaitItem() // Ignore the current state
-            val coordinates = Coordinates(0.0, 0.0)
+            val coordinates = GeodeticCoordinates(0.degrees, 0.degrees)
             val expectedAstronomicalDawn = LocalTime(0, 0, 1)
             val expectedNauticalDawn = LocalTime(0, 0, 2)
             val expectedCivilDawn = LocalTime(0, 0, 3)
@@ -154,7 +155,7 @@ class SunViewModelTest {
     @Test
     fun `Times updates when location changes`() = runTest {
         subject.state.test {
-            val coordinates = Coordinates(0.0, 0.0)
+            val coordinates = GeodeticCoordinates(0.degrees, 0.degrees)
             val expectedAstronomicalDawn = LocalTime(0, 0, 1)
             val expectedNauticalDawn = LocalTime(0, 0, 2)
             val expectedCivilDawn = LocalTime(0, 0, 3)

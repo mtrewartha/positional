@@ -68,8 +68,7 @@ class AospCompass @Inject constructor(
             try {
                 SensorManager.getOrientation(rotation, orientation)
                 val angle = Angle.Degrees(
-                    (Math.toDegrees(orientation[0].toDouble())
-                        .toFloat() + DEGREES_360) % DEGREES_360
+                    (Math.toDegrees(orientation[0].toDouble()) + DEGREES_360) % DEGREES_360
                 )
                 Azimuth(angle, accelerometerAccuracy, magnetometerAccuracy)
             } catch (_: Exception) {
@@ -109,7 +108,7 @@ private fun SensorManager.getAccuracyFlow(sensor: Sensor): Flow<CompassAccuracy?
         awaitClose { unregisterListener(listener) }
     }.conflate()
 
-private const val DEGREES_360 = 360f
+private const val DEGREES_360 = 360.0
 private const val MAX_REPORT_LATENCY_US = SensorManager.SENSOR_DELAY_UI
 private const val ROTATION_MATRIX_SIZE = 9
 private const val ROTATION_VECTOR_SIZE = 3
