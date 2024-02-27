@@ -13,9 +13,9 @@ import org.robolectric.RuntimeEnvironment
 import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
-class DecimalDegreesFormatterTest {
+class DegreesMinutesSecondsFormatterTest {
 
-    private lateinit var subject: DecimalDegreesFormatter
+    private lateinit var subject: DegreesMinutesSecondsFormatter
 
     @Before
     fun setUp() {
@@ -43,12 +43,12 @@ class DecimalDegreesFormatterTest {
     @Test
     fun `Formatting for display pads and rounds appropriately`() {
         val result = subject.formatForDisplay(
-            GeodeticCoordinates(0.123456.degrees, (-1.234567).degrees)
+            GeodeticCoordinates(0.123458.degrees, (-1.234567).degrees)
         )
 
         result.shouldHaveSize(2)
-        result[0].shouldBe("   0.12346")
-        result[1].shouldBe("  -1.23457")
+        result[0].shouldBe("   0°  7' 24.45\"")
+        result[1].shouldBe("  -1° 14' 4.44\"")
     }
 
     @Test
@@ -70,14 +70,14 @@ class DecimalDegreesFormatterTest {
     }
 
     @Test
-    fun `Formatting for copy rounds minutes to nearest fifth decimal place`() {
+    fun `Formatting for copy rounds seconds to nearest second decimal place`() {
         val result = subject.formatForCopy(
-            GeodeticCoordinates(0.123456.degrees, (-1.234567).degrees)
+            GeodeticCoordinates(0.123458.degrees, (-1.234567).degrees)
         )
 
-        result.shouldBe("0.12346, -1.23457")
+        result.shouldBe("0° 7' 24.45\", -1° 14' 4.44\"")
     }
 }
 
-private fun createFormatter(locale: Locale = Locale.US) =
-    DecimalDegreesFormatter(RuntimeEnvironment.getApplication(), locale)
+private fun createFormatter(locale: Locale) =
+    DegreesMinutesSecondsFormatter(RuntimeEnvironment.getApplication(), locale)

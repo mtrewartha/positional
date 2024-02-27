@@ -46,4 +46,4 @@ class DegreesMinutesSecondsFormatter(
 }
 
 private const val FORMAT_COPY = "%1\$d° %2\$d' %3\$.2f\""
-private const val FORMAT_DISPLAY = "%1\$3d° %2\$2d' %3\$2.2f\""
+private const val FORMAT_DISPLAY = "%1\$4d° %2\$2d' %3\$2.2f\""
