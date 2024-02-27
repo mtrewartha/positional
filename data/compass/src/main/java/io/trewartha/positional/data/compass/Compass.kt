@@ -1,5 +1,6 @@
 package io.trewartha.positional.data.compass
 
+import io.trewartha.positional.model.compass.Azimuth
 import kotlinx.coroutines.flow.Flow
 
 /**

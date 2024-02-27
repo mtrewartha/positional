@@ -1,4 +1,4 @@
-package io.trewartha.positional.data.compass
+package io.trewartha.positional.model.compass
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow

@@ -2,6 +2,7 @@ package io.trewartha.positional.data.compass
 
 import app.cash.turbine.test
 import io.kotest.matchers.shouldBe
+import io.trewartha.positional.model.compass.Azimuth
 import io.trewartha.positional.model.core.measurement.degrees
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest

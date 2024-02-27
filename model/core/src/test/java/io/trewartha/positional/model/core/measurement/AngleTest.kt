@@ -39,4 +39,13 @@ class AngleTest {
 
         result.shouldBe(1.degrees)
     }
+
+    @Test
+    fun `Conversion to string prints the angle in degrees`() {
+        val angle = 1.degrees
+
+        val result = angle.toString()
+
+        result.shouldBe("1.0°")
+    }
 }

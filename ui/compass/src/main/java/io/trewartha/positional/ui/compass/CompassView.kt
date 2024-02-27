@@ -45,7 +45,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import io.trewartha.positional.data.compass.Azimuth
+import io.trewartha.positional.model.compass.Azimuth
 import io.trewartha.positional.model.core.measurement.Angle
 import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.settings.CompassMode

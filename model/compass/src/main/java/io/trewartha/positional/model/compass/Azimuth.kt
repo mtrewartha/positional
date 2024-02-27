@@ -1,4 +1,4 @@
-package io.trewartha.positional.data.compass
+package io.trewartha.positional.model.compass
 
 import io.trewartha.positional.model.core.measurement.Angle
 
@@ -18,15 +18,46 @@ data class Azimuth @Throws(IllegalArgumentException::class) constructor(
     /**
      * Accuracy of the accelerometer or `null` if unavailable
      */
-    val accelerometerAccuracy: CompassAccuracy? = null,
+    val accelerometerAccuracy: Accuracy? = null,
 
     /**
      * Accuracy of the magnetometer or `null` if unavailable
      */
-    val magnetometerAccuracy: CompassAccuracy? = null
+    val magnetometerAccuracy: Accuracy? = null
 ) {
     init {
         require(angle.inDegrees().value in VALID_RANGE) { "$angle is outside of range 0..<360" }
+    }
+
+    /**
+     * Accuracy of an azimuth
+     */
+    enum class Accuracy {
+
+        /**
+         * Azimuths with this accuracy are not usable and should never be trusted
+         */
+        UNUSABLE,
+
+        /**
+         * Azimuths with this accuracy are unreliable and should rarely be trusted
+         */
+        UNRELIABLE,
+
+        /**
+         * Azimuths with this accuracy are usable but should be treated with caution
+         */
+        LOW,
+
+        /**
+         * Azimuths with this accuracy are usable and can be trusted
+         */
+        MEDIUM,
+
+        /**
+         * Azimuths with this accuracy are very accurate and can be trusted
+         */
+        HIGH
     }
 }
 

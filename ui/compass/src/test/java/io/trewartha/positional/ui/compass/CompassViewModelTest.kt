@@ -4,11 +4,10 @@ import app.cash.turbine.test
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.trewartha.positional.data.compass.Azimuth
-import io.trewartha.positional.data.compass.CompassAccuracy
 import io.trewartha.positional.data.compass.TestCompass
 import io.trewartha.positional.data.location.TestLocator
 import io.trewartha.positional.data.settings.TestSettingsRepository
+import io.trewartha.positional.model.compass.Azimuth
 import io.trewartha.positional.model.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.location.Location
@@ -65,8 +64,8 @@ class CompassViewModelTest {
     fun `Data emitted once loaded`() = runTest {
         val expectedAzimuth = Azimuth(
             angle = 0.degrees,
-            accelerometerAccuracy = CompassAccuracy.HIGH,
-            magnetometerAccuracy = CompassAccuracy.HIGH
+            accelerometerAccuracy = Azimuth.Accuracy.HIGH,
+            magnetometerAccuracy = Azimuth.Accuracy.HIGH
         )
         val expectedCompassMode = CompassMode.MAGNETIC_NORTH
         val expectedCompassNorthVibration = CompassNorthVibration.NONE
@@ -92,8 +91,8 @@ class CompassViewModelTest {
     fun `Data emitted when azimuth changes`() = runTest {
         val initialAzimuth = Azimuth(
             angle = 1.degrees,
-            accelerometerAccuracy = CompassAccuracy.HIGH,
-            magnetometerAccuracy = CompassAccuracy.HIGH
+            accelerometerAccuracy = Azimuth.Accuracy.HIGH,
+            magnetometerAccuracy = Azimuth.Accuracy.HIGH
         )
         val expectedAzimuth = initialAzimuth.copy(angle = 2.degrees)
         subject.state.test {

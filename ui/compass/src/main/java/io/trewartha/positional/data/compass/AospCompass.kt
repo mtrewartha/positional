@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import io.trewartha.positional.model.compass.Azimuth
 import io.trewartha.positional.model.core.measurement.Angle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -29,10 +30,10 @@ class AospCompass @Inject constructor(
 
     private val orientation = FloatArray(ROTATION_VECTOR_SIZE)
 
-    private val accelerometerAccuracy: Flow<CompassAccuracy?> =
+    private val accelerometerAccuracy: Flow<Azimuth.Accuracy?> =
         sensorManager.getAccuracyFlow(accelerometer)
 
-    private val magnetometerAccuracy: Flow<CompassAccuracy?> =
+    private val magnetometerAccuracy: Flow<Azimuth.Accuracy?> =
         sensorManager.getAccuracyFlow(magnetometer)
 
     private val rotation: Flow<FloatArray> =
@@ -77,7 +78,7 @@ class AospCompass @Inject constructor(
         }.filterNotNull().flowOn(coroutineContext)
 }
 
-private fun SensorManager.getAccuracyFlow(sensor: Sensor): Flow<CompassAccuracy?> =
+private fun SensorManager.getAccuracyFlow(sensor: Sensor): Flow<Azimuth.Accuracy?> =
     callbackFlow {
         // Some devices don't seem to trigger the listener below, so send a null accuracy
         // indicating we don't have one right away. If we later get an accuracy, it'll be sent.
@@ -87,15 +88,15 @@ private fun SensorManager.getAccuracyFlow(sensor: Sensor): Flow<CompassAccuracy?
                 trySend(
                     when (accuracy) {
                         SensorManager.SENSOR_STATUS_ACCURACY_HIGH ->
-                            CompassAccuracy.HIGH
+                            Azimuth.Accuracy.HIGH
                         SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM ->
-                            CompassAccuracy.MEDIUM
+                            Azimuth.Accuracy.MEDIUM
                         SensorManager.SENSOR_STATUS_ACCURACY_LOW ->
-                            CompassAccuracy.LOW
+                            Azimuth.Accuracy.LOW
                         SensorManager.SENSOR_STATUS_UNRELIABLE ->
-                            CompassAccuracy.UNRELIABLE
+                            Azimuth.Accuracy.UNRELIABLE
                         else ->
-                            CompassAccuracy.UNUSABLE
+                            Azimuth.Accuracy.UNUSABLE
                     }
                 )
             }
