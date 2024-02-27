@@ -159,17 +159,21 @@ private fun Coordinates(
     modifier: Modifier = Modifier
 ) {
     val formattedCoordinates = LocalCoordinatesFormatter.current.formatForDisplay(coordinates)
-    val maxCoordinateLength = formattedCoordinates.maxOf { it?.length ?: 0 }
-    val joinedPaddedCoordinateLines = formattedCoordinates.joinToString("\n") { coordinate ->
-        coordinate.orEmpty().padStart(maxCoordinateLength)
+    Column(
+        modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        for (formattedCoordinate in formattedCoordinates) {
+            AutoShrinkingText(
+                text = formattedCoordinate ?: PLACEHOLDER_SIZING_TEXT,
+                modifier = Modifier.placeholder(formattedCoordinate == null),
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                style = MaterialTheme.typography.displayLarge,
+            )
+        }
     }
-    AutoShrinkingText(
-        text = joinedPaddedCoordinateLines,
-        modifier = modifier.placeholder(visible = coordinates == null),
-        textAlign = TextAlign.Center,
-        maxLines = formattedCoordinates.size,
-        style = MaterialTheme.typography.displayLarge,
-    )
 }
 
 @Composable
@@ -380,3 +384,7 @@ private fun DataPreview() {
         }
     }
 }
+
+// This helps us show a reasonably sized placeholder that's adaptable to various text scales. This
+// text is not actually visible to the user because a placeholder is shown over it.
+private const val PLACEHOLDER_SIZING_TEXT = "-179.99999"

@@ -196,7 +196,7 @@ private fun DataPreview() {
                         location = Location(
                             timestamp = Instant.DISTANT_PAST,
                             coordinates = GeodeticCoordinates(
-                                latitude = 123.456789.degrees,
+                                latitude = 12.3456789.degrees,
                                 longitude = 123.456789.degrees
                             ),
                             horizontalAccuracy = 123.45678.meters,
