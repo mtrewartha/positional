@@ -1,6 +1,7 @@
 package io.trewartha.positional.model.core.measurement
 
 import io.kotest.matchers.doubles.shouldBeExactly
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlin.test.Test
 
@@ -94,5 +95,26 @@ class SpeedTest {
 
         result.shouldBeInstanceOf<Speed.KilometersPerHour>()
         result.value.shouldBeExactly(1.60934)
+    }
+
+    @Test
+    fun `Speeds in kilometers per hour can be created from extension properties`() {
+        for (number in setOf<Number>(1, 1.23f, 1.23)) {
+            number.kph.shouldBe(Speed.KilometersPerHour(number.toDouble()))
+        }
+    }
+
+    @Test
+    fun `Speeds in miles per hour can be created from extension properties`() {
+        for (number in setOf<Number>(1, 1.23f, 1.23)) {
+            number.mph.shouldBe(Speed.MilesPerHour(number.toDouble()))
+        }
+    }
+
+    @Test
+    fun `Speeds in meters per second can be created from extension properties`() {
+        for (number in setOf<Number>(1, 1.23f, 1.23)) {
+            number.mps.shouldBe(Speed.MetersPerSecond(number.toDouble()))
+        }
     }
 }

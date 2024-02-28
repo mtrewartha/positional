@@ -74,47 +74,17 @@ sealed interface Speed {
 /**
  * Create a speed in kilometers per hour (KPH) with the magnitude of this value
  */
-val Double.kph: Speed.KilometersPerHour get() = Speed.KilometersPerHour(this)
+val Number.kph: Speed.KilometersPerHour get() = Speed.KilometersPerHour(toDouble())
 
 /**
  * Create a speed in miles per hour (MPH) with the magnitude of this value
  */
-val Double.mph: Speed.MilesPerHour get() = Speed.MilesPerHour(this)
+val Number.mph: Speed.MilesPerHour get() = Speed.MilesPerHour(toDouble())
 
 /**
  * Create a speed in meters per second (m/s) with the magnitude of this value
  */
-val Double.mps: Speed.MetersPerSecond get() = Speed.MetersPerSecond(this)
-
-/**
- * Create a speed in kilometers per hour (KPH) with the magnitude of this value
- */
-val Float.kph: Speed.KilometersPerHour get() = Speed.KilometersPerHour(toDouble())
-
-/**
- * Create a speed in miles per hour (MPH) with the magnitude of this value
- */
-val Float.mph: Speed.MilesPerHour get() = Speed.MilesPerHour(toDouble())
-
-/**
- * Create a speed in meters per second (m/s) with the magnitude of this value
- */
-val Float.mps: Speed.MetersPerSecond get() = Speed.MetersPerSecond(toDouble())
-
-/**
- * Create a speed in kilometers per hour (KPH) with the magnitude of this value
- */
-val Int.kph: Speed.KilometersPerHour get() = Speed.KilometersPerHour(toDouble())
-
-/**
- * Create a speed in miles per hour (MPH) with the magnitude of this value
- */
-val Int.mph: Speed.MilesPerHour get() = Speed.MilesPerHour(toDouble())
-
-/**
- * Create a speed in meters per second (m/s) with the magnitude of this value
- */
-val Int.mps: Speed.MetersPerSecond get() = Speed.MetersPerSecond(toDouble())
+val Number.mps: Speed.MetersPerSecond get() = Speed.MetersPerSecond(toDouble())
 
 private const val METERS_PER_SECOND_PER_MILE_PER_HOUR = 0.44704
 private const val METERS_PER_SECOND_PER_KILOMETER_PER_HOUR = 0.277778

@@ -48,4 +48,11 @@ class AngleTest {
 
         result.shouldBe("1.0°")
     }
+
+    @Test
+    fun `Angles in degrees can be created from extension properties`() {
+        for (number in setOf<Number>(1, 1.23f, 1.23)) {
+            number.degrees.shouldBe(Angle.Degrees(number.toDouble()))
+        }
+    }
 }

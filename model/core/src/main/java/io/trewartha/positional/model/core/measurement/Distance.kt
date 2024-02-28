@@ -42,24 +42,14 @@ sealed interface Distance {
 }
 
 /**
- * Create a distance in meters with the magnitude of this value
- */
-val Double.meters: Distance.Meters get() = Distance.Meters(this)
-
-/**
- * Create a distance in meters with the magnitude of this value
- */
-val Float.meters: Distance.Meters get() = Distance.Meters(toDouble())
-
-/**
  * Create a distance in feet with the magnitude of this value
  */
-val Int.feet: Distance.Feet get() = Distance.Feet(toDouble())
+val Number.feet: Distance.Feet get() = Distance.Feet(toDouble())
 
 /**
  * Create a distance in meters with the magnitude of this value
  */
-val Int.meters: Distance.Meters get() = Distance.Meters(toDouble())
+val Number.meters: Distance.Meters get() = Distance.Meters(toDouble())
 
 private const val FEET_PER_METER = 3.28084
 private const val METERS_PER_FOOT = 0.3048
