@@ -28,9 +28,9 @@ class UtmFormatter(
                 )
                 val zoneAndHemisphere = "${utmCoordinates.zone}$hemisphereAbbreviation"
                 val easting =
-                    EASTING_FORMAT.format(locale, utmCoordinates.easting.inMeters().value)
+                    EASTING_FORMAT.format(locale, utmCoordinates.easting.inMeters().magnitude)
                 val northing =
-                    NORTHING_FORMAT.format(locale, utmCoordinates.northing.inMeters().value)
+                    NORTHING_FORMAT.format(locale, utmCoordinates.northing.inMeters().magnitude)
                 listOf(zoneAndHemisphere, easting, northing)
             }
         } ?: List(UTM_COORDINATES_SIZE) { null }

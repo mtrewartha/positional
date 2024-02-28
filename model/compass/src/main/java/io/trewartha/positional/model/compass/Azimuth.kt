@@ -1,6 +1,7 @@
 package io.trewartha.positional.model.compass
 
 import io.trewartha.positional.model.core.measurement.Angle
+import io.trewartha.positional.model.core.measurement.degrees
 
 /**
  * Azimuth angle and accuracies associated with it
@@ -26,7 +27,25 @@ data class Azimuth @Throws(IllegalArgumentException::class) constructor(
     val magnetometerAccuracy: Accuracy? = null
 ) {
     init {
-        require(angle.inDegrees().value in VALID_RANGE) { "$angle is outside of range 0..<360" }
+        require(angle.inDegrees().magnitude in VALID_RANGE) { "$angle is outside of range 0..<360" }
+    }
+
+    /**
+     * Add an angle to the azimuth's angle. If the sum of the azimuth angle and the given angle is
+     * greater than 360°, the result will wrap back into the 0..360° range as appropriate. For
+     * example, adding two azimuths with angles of 359° and 2° will result in an azimuth with an
+     * angle of 1°.
+     *
+     * @param angle Angle to add to the receiver of this call
+     *
+     * @return Azimuth whose angle is the wrapped sum of the two azimuths
+     */
+    operator fun plus(angle: Angle): Azimuth {
+        val degrees = this.angle.inDegrees().magnitude
+        val addendDegrees = angle.inDegrees().magnitude
+        // Add and mod 360 to wrap the result sums below 0 and above 360 back into the 0..360 range
+        val sumDegrees = (((degrees + addendDegrees) + DEGREES_360) % DEGREES_360).degrees
+        return Azimuth(sumDegrees)
     }
 
     /**

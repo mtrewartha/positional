@@ -27,8 +27,9 @@ class MgrsFormatter : CoordinatesFormatter {
         coordinates.asMgrsCoordinates().toString()
 
     private fun Distance.format() =
-        this.inMeters().value.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, '0')
+        this.inMeters().magnitude.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, ZERO)
 }
 
 private const val FORMAT_DISPLAY_LINE_COUNT = 3
 private const val NUMERICAL_LOCATION_FORMAT = 5
+private const val ZERO = '0'

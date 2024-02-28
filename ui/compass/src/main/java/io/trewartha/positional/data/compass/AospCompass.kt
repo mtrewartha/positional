@@ -5,7 +5,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import io.trewartha.positional.model.compass.Azimuth
-import io.trewartha.positional.model.core.measurement.Degrees
+import io.trewartha.positional.model.core.measurement.Angle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -68,8 +68,9 @@ class AospCompass @Inject constructor(
         ) { rotation, accelerometerAccuracy, magnetometerAccuracy ->
             try {
                 SensorManager.getOrientation(rotation, orientation)
-                val angle = Degrees(
-                    (Math.toDegrees(orientation[0].toDouble()) + DEGREES_360) % DEGREES_360
+                val angle = Angle(
+                    (Math.toDegrees(orientation[0].toDouble()) + DEGREES_360) % DEGREES_360,
+                    Angle.Unit.DEGREES
                 )
                 Azimuth(angle, accelerometerAccuracy, magnetometerAccuracy)
             } catch (_: Exception) {

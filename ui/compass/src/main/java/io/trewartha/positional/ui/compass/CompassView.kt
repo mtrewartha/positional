@@ -156,14 +156,14 @@ private fun SensorsPresentContent(
         val context = LocalContext.current
         val baseAzimuth = state.dataOrNull?.let { data ->
             when (data.mode) {
-                CompassMode.MAGNETIC_NORTH -> data.azimuth.angle
-                CompassMode.TRUE_NORTH -> data.declination?.let { data.azimuth.angle + it }
+                CompassMode.MAGNETIC_NORTH -> data.azimuth
+                CompassMode.TRUE_NORTH -> data.declination?.let { data.azimuth + it }
             }
         }
-        val adjustedAzimuth = baseAzimuth?.let { adjustAzimuthForDisplayRotation(context, it) }
+        val adjustedAzimuth = baseAzimuth?.adjustForDisplayRotation(context)
         val northVibration = state.dataOrNull?.northVibration
         Compass(
-            adjustedAzimuth,
+            adjustedAzimuth?.angle,
             northVibration,
             Modifier
                 .sizeIn(maxWidth = 480.dp, maxHeight = 480.dp)
@@ -173,7 +173,7 @@ private fun SensorsPresentContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val declination = state.dataOrNull?.declination?.inDegrees()?.value
+            val declination = state.dataOrNull?.declination?.inDegrees()?.magnitude
             DeclinationText(declination)
             HelpButton(onHelpClick)
         }
@@ -215,9 +215,6 @@ private fun DeclinationText(declination: Double?, modifier: Modifier = Modifier)
     )
 }
 
-private fun adjustAzimuthForDisplayRotation(context: Context, baseAzimuth: Angle): Angle =
-    baseAzimuth.plus(getDisplayRotation(context))
-
 private fun getDisplayRotation(context: Context): Angle =
     try {
         when (ContextCompat.getDisplayOrDefault(context).rotation) {
@@ -230,6 +227,9 @@ private fun getDisplayRotation(context: Context): Angle =
     } catch (_: NullPointerException) { // Compose preview causes this
         DEGREES_0
     }.degrees
+
+private fun Azimuth.adjustForDisplayRotation(context: Context): Azimuth =
+    plus(getDisplayRotation(context))
 
 @PreviewLightDark
 @Composable

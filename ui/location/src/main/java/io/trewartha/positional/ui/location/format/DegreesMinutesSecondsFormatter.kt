@@ -37,7 +37,7 @@ class DegreesMinutesSecondsFormatter(
     }
 
     private fun String.format(angle: Angle): String {
-        val components = convert(angle.inDegrees().value, FORMAT_SECONDS).split(':')
+        val components = convert(angle.inDegrees().magnitude, FORMAT_SECONDS).split(':')
         val degrees = components[0].toInt()
         val minutes = components[1].toInt()
         val seconds = components[2].normalizeDecimalSeparator().toFloat()

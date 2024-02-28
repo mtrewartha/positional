@@ -163,7 +163,7 @@ private fun CompassRose(
         } else {
             DEGREES_360 - (-lastAnimatedAzimuth % DEGREES_360)
         }
-        val azimuthDegrees = azimuth.inDegrees().value.takeIf { it.isFinite() }?.toFloat()
+        val azimuthDegrees = azimuth.inDegrees().magnitude.takeIf { it.isFinite() }?.toFloat()
             ?: AZIMUTH_DEFAULT
         if (modLastAnimatedAzimuth != azimuthDegrees) {
             val clockwiseDiff = if (azimuthDegrees > modLastAnimatedAzimuth) {
@@ -230,7 +230,7 @@ private fun CompassRose(
 private fun DegreesText(azimuth: Angle, modifier: Modifier = Modifier) {
     val degrees = try {
         // The azimuth could round to 360, so don't forget to mod it
-        azimuth.inDegrees().value.roundToInt() % DEGREES_360
+        azimuth.inDegrees().magnitude.roundToInt() % DEGREES_360
     } catch (_: IllegalArgumentException) {
         DEGREES_0
     }
@@ -252,7 +252,7 @@ private fun DegreeSymbolText(modifier: Modifier = Modifier) {
 
 @Composable
 private fun DirectionText(azimuth: Angle, modifier: Modifier = Modifier) {
-    val degrees = azimuth.inDegrees().value.takeIf { it.isFinite() }
+    val degrees = azimuth.inDegrees().magnitude.takeIf { it.isFinite() }
     if (degrees != null) {
         Text(
             text = stringResource(
@@ -341,7 +341,7 @@ private enum class Quadrant { NE, SE, SW, NW }
 private data class TickStyle(val color: Color, val lengthPx: Float, val widthPx: Float)
 
 private val Angle.quadrant: Quadrant
-    get() = when (inDegrees().value) {
+    get() = when (inDegrees().magnitude) {
         in AZIMUTH_N..AZIMUTH_E -> Quadrant.NE
         in AZIMUTH_E..AZIMUTH_S -> Quadrant.SE
         in AZIMUTH_S..AZIMUTH_W -> Quadrant.SW

@@ -34,7 +34,7 @@ class DecimalDegreesFormatter(
         )
     }
 
-    private fun String.format(angle: Angle): String = format(locale, angle.inDegrees().value)
+    private fun String.format(angle: Angle): String = format(locale, angle.inDegrees().magnitude)
 }
 
 private const val FORMAT_COPY = "%.5f"

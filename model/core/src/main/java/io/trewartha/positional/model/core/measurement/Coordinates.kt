@@ -111,7 +111,7 @@ data class MgrsCoordinates(
     }
 
     private fun Distance.format() =
-        this.inMeters().value.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, ZERO)
+        this.inMeters().magnitude.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, ZERO)
 
     private companion object {
         private const val NUMERICAL_LOCATION_FORMAT = 5
@@ -144,8 +144,8 @@ data class UtmCoordinates(
                     Hemisphere.NORTH -> earth.worldwind.geom.coords.Hemisphere.N
                     Hemisphere.SOUTH -> earth.worldwind.geom.coords.Hemisphere.S
                 },
-                easting.inMeters().value,
-                northing.inMeters().value
+                easting.inMeters().magnitude,
+                northing.inMeters().magnitude
             )
             GeodeticCoordinates(
                 worldWindUtmCoord.latitude.asAngle(),
@@ -160,12 +160,12 @@ data class UtmCoordinates(
     override fun asUtmCoordinates(): UtmCoordinates = this
 
     override fun toString(): String {
-        val eastingMeters = easting.inMeters().value.roundToInt()
-        val northingMeters = northing.inMeters().value.roundToInt()
+        val eastingMeters = easting.inMeters().magnitude.roundToInt()
+        val northingMeters = northing.inMeters().magnitude.roundToInt()
         return "$zone$hemisphere ${eastingMeters}m E ${northingMeters}m N"
     }
 }
 
-private fun Angle.asWorldWindAngle(): earth.worldwind.geom.Angle = inDegrees().value.degrees
+private fun Angle.asWorldWindAngle(): earth.worldwind.geom.Angle = inDegrees().magnitude.degrees
 
-private fun earth.worldwind.geom.Angle.asAngle(): Angle = Degrees(inDegrees)
+private fun earth.worldwind.geom.Angle.asAngle(): Angle = Angle(inDegrees, Angle.Unit.DEGREES)

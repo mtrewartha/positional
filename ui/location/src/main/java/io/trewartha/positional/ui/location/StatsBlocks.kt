@@ -34,7 +34,7 @@ fun AccuracyBlock(
                 Units.IMPERIAL ->
                     R.string.ui_location_horizontal_accuracy_imperial to accuracy.inFeet()
             }
-            stringResource(stringResource, convertedAccuracy.value)
+            stringResource(stringResource, convertedAccuracy.magnitude)
         },
         accuracy = null,
         accuracyVisibility = accuracyVisibility,
@@ -62,7 +62,7 @@ fun AltitudeBlock(
                 Units.METRIC -> R.string.ui_location_altitude_metric to altitude.inMeters()
                 Units.IMPERIAL -> R.string.ui_location_altitude_imperial to altitude.inFeet()
             }
-            stringResource(stringResource, convertedAltitude.value)
+            stringResource(stringResource, convertedAltitude.magnitude)
         },
         accuracy = if (accuracy == null || units == null) {
             null
@@ -71,7 +71,7 @@ fun AltitudeBlock(
                 Units.METRIC -> R.string.ui_location_accuracy_metric to accuracy.inMeters()
                 Units.IMPERIAL -> R.string.ui_location_accuracy_imperial to accuracy.inFeet()
             }
-            stringResource(stringResource, convertedAccuracy.value)
+            stringResource(stringResource, convertedAccuracy.magnitude)
         },
         accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
@@ -93,12 +93,12 @@ fun BearingBlock(
         value = if (bearing == null) {
             null
         } else {
-            stringResource(R.string.ui_location_bearing, bearing.inDegrees().value)
+            stringResource(R.string.ui_location_bearing, bearing.inDegrees().magnitude)
         },
         accuracy = if (accuracy == null) {
             null
         } else {
-            stringResource(R.string.ui_location_bearing_accuracy, accuracy.inDegrees().value)
+            stringResource(R.string.ui_location_bearing_accuracy, accuracy.inDegrees().magnitude)
         },
         accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
@@ -125,7 +125,7 @@ fun SpeedBlock(
                 Units.METRIC -> R.string.ui_location_speed_metric to speed.inKilometersPerHour()
                 Units.IMPERIAL -> R.string.ui_location_speed_imperial to speed.inMilesPerHour()
             }
-            stringResource(stringResource, convertedSpeed.value)
+            stringResource(stringResource, convertedSpeed.magnitude)
         },
         accuracy = if (accuracy == null || units == null) {
             null
@@ -134,7 +134,7 @@ fun SpeedBlock(
                 Units.METRIC -> R.string.ui_location_accuracy_metric to accuracy.inKilometersPerHour()
                 Units.IMPERIAL -> R.string.ui_location_accuracy_imperial to accuracy.inMilesPerHour()
             }
-            stringResource(stringResource, convertedAccuracy.value)
+            stringResource(stringResource, convertedAccuracy.magnitude)
         },
         accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
