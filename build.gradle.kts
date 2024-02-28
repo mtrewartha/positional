@@ -14,6 +14,46 @@ plugins {
     alias(libs.plugins.google.firebase.crashlytics) apply false
     alias(libs.plugins.protobuf) apply false
     alias(libs.plugins.testLogger) apply false
+    alias(libs.plugins.kotlinx.kover)
+}
+
+dependencies {
+    kover(project(":app"))
+    kover(project(":model:compass"))
+    kover(project(":model:core"))
+    kover(project(":model:location"))
+    kover(project(":model:settings"))
+    kover(project(":model:sun"))
+    kover(project(":data:compass"))
+    kover(project(":data:location"))
+    kover(project(":data:settings"))
+    kover(project(":data:sun"))
+    kover(project(":ui:compass"))
+    kover(project(":ui:core"))
+    kover(project(":ui:design"))
+    kover(project(":ui:location"))
+    kover(project(":ui:sun"))
+    kover(project(":ui:settings"))
+}
+
+koverReport {
+    filters {
+        excludes {
+            packages(
+                "dagger.hilt.internal.aggregatedroot.codegen",
+                "hilt_aggregated_deps",
+                "io.trewartha.positional.ui.*"
+            )
+            annotatedBy(
+                "androidx.compose.runtime.Composable",
+                "dagger.*"
+            )
+            classes(
+                "*Hilt_*",
+                "io.trewartha.positional.BuildConfig",
+            )
+        }
+    }
 }
 
 tasks.register("clean", Delete::class) {
