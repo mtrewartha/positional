@@ -4,7 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
-class AngleTest {
+class DegreesTest {
 
     @Test
     fun `IllegalArgumentException thrown when value is infinite`() {
@@ -27,21 +27,21 @@ class AngleTest {
     }
 
     @Test
-    fun `Addition of two angles sums the angles`() {
+    fun `Addition of two degrees sums them`() {
         val result = 1.degrees + 2.degrees
 
         result.shouldBe(3.degrees)
     }
 
     @Test
-    fun `Addition of two angles wraps properly after 360 degrees`() {
+    fun `Addition of two degrees wraps properly after 360`() {
         val result = 359.degrees + 2.degrees
 
         result.shouldBe(1.degrees)
     }
 
     @Test
-    fun `Conversion to string prints the angle in degrees`() {
+    fun `Conversion to string returns the degrees with the symbol`() {
         val angle = 1.degrees
 
         val result = angle.toString()
@@ -50,9 +50,9 @@ class AngleTest {
     }
 
     @Test
-    fun `Angles in degrees can be created from extension properties`() {
+    fun `Degrees can be created from extension properties`() {
         for (number in setOf<Number>(1, 1.23f, 1.23)) {
-            number.degrees.shouldBe(Angle.Degrees(number.toDouble()))
+            number.degrees.shouldBe(Degrees(number.toDouble()))
         }
     }
 }

@@ -168,4 +168,4 @@ data class UtmCoordinates(
 
 private fun Angle.asWorldWindAngle(): earth.worldwind.geom.Angle = inDegrees().value.degrees
 
-private fun earth.worldwind.geom.Angle.asAngle(): Angle = Angle.Degrees(inDegrees)
+private fun earth.worldwind.geom.Angle.asAngle(): Angle = Degrees(inDegrees)
