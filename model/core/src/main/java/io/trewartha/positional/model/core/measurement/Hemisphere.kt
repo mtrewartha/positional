@@ -13,5 +13,10 @@ enum class Hemisphere {
     /**
      * Southern hemisphere
      */
-    SOUTH
+    SOUTH;
+
+    override fun toString(): String = when (this) {
+        NORTH -> "N"
+        SOUTH -> "S"
+    }
 }

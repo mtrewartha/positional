@@ -12,33 +12,44 @@ import earth.worldwind.geom.coords.UTMCoord
  */
 data class GeodeticCoordinates(val latitude: Angle, val longitude: Angle) : Coordinates {
 
+    private val isPolar: Boolean
+        get() = latitude.inDegrees().magnitude !in UTM_SOUTHERN_BOUND..UTM_NORTHERN_BOUND
+
     override fun asGeodeticCoordinates(): GeodeticCoordinates = this
 
+    @Suppress("MagicNumber")
     override fun asMgrsCoordinates(): MgrsCoordinates {
-        val components = MGRSCoord.fromLatLon(
+        val components = MGRSCoord
+            .fromLatLon(latitude.asWorldWindAngle(), longitude.asWorldWindAngle())
+            .toString()
+            .trim()
+            .split(" ")
+        return if (isPolar) {
+            MgrsCoordinates(
+                gridZoneDesignator = components[0].substring(0..0), // A or B for south pole, Y or Z for north pole
+                gridSquareID = components[0].substring(1..2), // Two letters for 100km square ID
+                easting = components[1].toInt().meters,
+                northing = components[2].toInt().meters
+            )
+        } else {
+            val zone = components[0].substring(0..1).toInt() // Two digits for UTM zone
+            val latitudeBand = components[0].substring(2..2) // One letter for MGRS latitude band
+            val hundredKID = components[0].substring(3..4) // Two letters for 100 km square ID
+            MgrsCoordinates(
+                gridZoneDesignator = "$zone$latitudeBand",
+                gridSquareID = hundredKID,
+                easting = components[1].toInt().meters,
+                northing = components[2].toInt().meters
+            )
+        }
+    }
+
+    override fun asUtmCoordinates(): UtmCoordinates? {
+        if (isPolar) return null
+        val worldWindUtmCoord = UTMCoord.fromLatLon(
             latitude.asWorldWindAngle(),
             longitude.asWorldWindAngle()
         )
-            .toString()
-            .split(" ")
-        return MgrsCoordinates(
-            zone = components[0].substring(0 until components[0].length - 3).toInt(),
-            band = components[0].substring(components[0].length - 3 until components[0].length - 2),
-            hundredKMSquareID = components[0].substring(components[0].length - 2),
-            easting = components[1].toInt().meters,
-            northing = components[2].toInt().meters
-        )
-    }
-
-    override fun asUtmCoordinates(): UtmCoordinates {
-        val worldWindUtmCoord = try {
-            UTMCoord.fromLatLon(
-                latitude.asWorldWindAngle(),
-                longitude.asWorldWindAngle()
-            )
-        } catch (_: IllegalArgumentException) {
-            throw IllegalArgumentException("Invalid UTM coordinates (might be too close to a pole")
-        }
         return with(worldWindUtmCoord) {
             UtmCoordinates(
                 zone,
@@ -52,5 +63,12 @@ data class GeodeticCoordinates(val latitude: Angle, val longitude: Angle) : Coor
         }
     }
 
-    override fun toString(): String = "$latitude, $longitude"
+    override fun toString(): String = FORMAT.format(
+        latitude.inDegrees().magnitude,
+        longitude.inDegrees().magnitude
+    )
 }
+
+private const val FORMAT = "%.5f, %.5f"
+private const val UTM_NORTHERN_BOUND = 84.0
+private const val UTM_SOUTHERN_BOUND = -80.0

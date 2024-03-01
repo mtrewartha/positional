@@ -19,7 +19,7 @@ class UtmFormatter(
 
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
         coordinates?.let {
-            it.asUtmCoordinates().let { utmCoordinates ->
+            it.asUtmCoordinates()?.let { utmCoordinates ->
                 val hemisphereAbbreviation = context.getString(
                     when (utmCoordinates.hemisphere) {
                         Hemisphere.NORTH -> R.string.ui_location_coordinates_utm_hemisphere_north
@@ -32,7 +32,7 @@ class UtmFormatter(
                 val northing =
                     NORTHING_FORMAT.format(locale, utmCoordinates.northing.inMeters().magnitude)
                 listOf(zoneAndHemisphere, easting, northing)
-            }
+            } ?: List(UTM_COORDINATES_SIZE) { "" }
         } ?: List(UTM_COORDINATES_SIZE) { null }
 
     override fun formatForCopy(coordinates: Coordinates): String =

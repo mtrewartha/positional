@@ -8,16 +8,16 @@ import kotlin.math.roundToInt
  * [Wikipedia article](https://en.wikipedia.org/wiki/Military_Grid_Reference_System) for more
  * information.
  *
- * @property zone MGRS/UTM zone of the coordinates
- * @property band Latitude band of the coordinates
- * @property hundredKMSquareID 100km grid square ID
- * @property easting Easting within 100km grid square
- * @property northing Northing within 100km grid square
+ * @property gridZoneDesignator If the coordinates fall within latitudes of -80° and 84°, then this
+ * should be the UTM zone and MGRS latitude band. If the coordinates fall outside those latitudes,
+ * then this should be one of A, B, Y, or Z. See the link above for more information.
+ * @property gridSquareID 100 km grid square ID
+ * @property easting Easting within 100 km grid square
+ * @property northing Northing within 100 km grid square
  */
 data class MgrsCoordinates(
-    val zone: Int,
-    val band: String,
-    val hundredKMSquareID: String,
+    val gridZoneDesignator: String,
+    val gridSquareID: String,
     val easting: Distance,
     val northing: Distance
 ) : Coordinates {
@@ -29,19 +29,17 @@ data class MgrsCoordinates(
 
     override fun asMgrsCoordinates(): MgrsCoordinates = this
 
-    override fun asUtmCoordinates(): UtmCoordinates = asGeodeticCoordinates().asUtmCoordinates()
+    override fun asUtmCoordinates(): UtmCoordinates? = asGeodeticCoordinates().asUtmCoordinates()
 
     override fun toString(): String {
-        val easting = easting.format()
-        val northing = northing.format()
-        return "$zone$band $hundredKMSquareID $easting $northing"
+        val easting = this.easting.format()
+        val northing = this.northing.format()
+        return "$gridZoneDesignator $gridSquareID $easting $northing"
     }
 
     private fun Distance.format() =
         this.inMeters().magnitude.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, ZERO)
-
-    private companion object {
-        private const val NUMERICAL_LOCATION_FORMAT = 5
-        private const val ZERO = '0'
-    }
 }
+
+private const val NUMERICAL_LOCATION_FORMAT = 5
+private const val ZERO = '0'

@@ -16,7 +16,7 @@ class MgrsFormatter : CoordinatesFormatter {
         coordinates?.asMgrsCoordinates()?.let { mgrsCoordinates ->
             with(mgrsCoordinates) {
                 listOf(
-                    "$zone$band $hundredKMSquareID",
+                    "${gridZoneDesignator} $gridSquareID",
                     easting.format(),
                     northing.format(),
                 )
