@@ -35,6 +35,8 @@ dependencies {
     implementation(project(":ui:design"))
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.appcompat)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)

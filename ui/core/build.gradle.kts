@@ -11,6 +11,8 @@ dependencies {
     ksp(libs.google.hilt.compiler)
 
     implementation(libs.androidx.appcompat)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.navigation.compose)
