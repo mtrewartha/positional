@@ -43,7 +43,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 add("androidTestImplementation", libs.findLibrary("androidx.test.runner").get())
                 add("androidTestImplementation", libs.findLibrary("kotest.assertions.core").get())
                 add("androidTestImplementation", libs.findLibrary("kotlin.test").get())
-                add("androidTestImplementation", libs.findLibrary("kotlin.test").get())
                 add("testImplementation", libs.findLibrary("kotest.assertions.core").get())
                 add("testImplementation", libs.findLibrary("kotlin.test").get())
                 add("testImplementation", libs.findLibrary("robolectric").get())
