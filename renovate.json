@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "prBodyTemplate": "{{{header}}}{{{table}}}{{{warnings}}}{{{notes}}}{{{changelogs}}}{{{controls}}}{{{footer}}}",
   "packageRules": [
     {
       "matchPackagePatterns": [
