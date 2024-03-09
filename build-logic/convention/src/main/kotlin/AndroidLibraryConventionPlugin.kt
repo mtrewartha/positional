@@ -38,14 +38,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             configureTestLogger()
 
             dependencies {
-                add("androidTestImplementation", libs.findLibrary("androidx.test.core").get())
-                add("androidTestImplementation", libs.findLibrary("androidx.test.ext.junit.ktx").get())
-                add("androidTestImplementation", libs.findLibrary("androidx.test.runner").get())
-                add("androidTestImplementation", libs.findLibrary("kotest.assertions.core").get())
                 add("androidTestImplementation", libs.findLibrary("kotlin.test").get())
+                add("androidTestRuntimeOnly", libs.findLibrary("androidx.test.core").get())
+                add("androidTestRuntimeOnly", libs.findLibrary("androidx.test.runner").get())
                 add("testImplementation", libs.findLibrary("kotest.assertions.core").get())
                 add("testImplementation", libs.findLibrary("kotlin.test").get())
-                add("testImplementation", libs.findLibrary("robolectric").get())
+                add("testImplementation", libs.findLibrary("robolectric.core").get())
             }
         }
     }

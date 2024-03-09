@@ -24,16 +24,17 @@ android {
 dependencies {
     ksp(libs.google.hilt.compiler)
 
+    api(project(":data:location"))
+    api(project(":data:settings"))
+    api(project(":model:core"))
     api(project(":model:location"))
+    api(project(":model:settings"))
+    api(project(":ui:core"))
+    api(libs.accompanist.permissions)
     api(libs.androidx.compose.runtime)
+    api(libs.google.hilt.android)
 
-    implementation(project(":data:location"))
-    implementation(project(":data:settings"))
-    implementation(project(":model:core"))
-    implementation(project(":model:settings"))
-    implementation(project(":ui:core"))
     implementation(project(":ui:design"))
-    implementation(libs.accompanist.permissions)
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.compiler)
@@ -45,10 +46,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.google.hilt.android)
     implementation(libs.timber)
 
-    testImplementation(project(":data:settings"))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }

@@ -3,5 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":model:core"))
+    api(project(":model:core"))
+
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotlin.test)
 }

@@ -4,4 +4,7 @@ plugins {
 
 dependencies {
     implementation(libs.worldwind)
+
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotlin.test)
 }

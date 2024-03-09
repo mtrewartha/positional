@@ -18,12 +18,12 @@ android {
 dependencies {
     ksp(libs.google.hilt.compiler)
 
+    api(project(":data:location"))
+    api(project(":data:sun"))
+    api(project(":ui:core"))
     api(libs.androidx.compose.runtime)
 
-    implementation(project(":data:location"))
-    implementation(project(":data:sun"))
     implementation(project(":model:core"))
-    implementation(project(":ui:core"))
     implementation(project(":ui:design"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.compiler)

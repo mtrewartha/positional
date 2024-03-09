@@ -8,4 +8,7 @@ dependencies {
     api(libs.kotlinx.datetime)
 
     implementation(libs.sunriseSunset)
+
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotlin.test)
 }

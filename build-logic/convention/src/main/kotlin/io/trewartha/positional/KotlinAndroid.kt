@@ -33,9 +33,6 @@ internal fun CommonExtension<*, *, *, *, *, *>.configureKotlinAndroid() {
 
     dependencies {
         add("coreLibraryDesugaring", libs.findLibrary("android.tools.desugarJdkLibs").get())
-
-        add("testImplementation", libs.findLibrary("kotest.assertions.core").get())
-        add("testImplementation", libs.findLibrary("kotlin.test").get())
     }
 }
 
@@ -46,11 +43,6 @@ internal fun Project.configureKotlinJvm() {
     }
 
     configureKotlin()
-
-    dependencies {
-        add("testImplementation", libs.findLibrary("kotest.assertions.core").get())
-        add("testImplementation", libs.findLibrary("kotlin.test").get())
-    }
 }
 
 private fun Project.configureKotlin() {

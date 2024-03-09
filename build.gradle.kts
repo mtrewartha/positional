@@ -37,6 +37,20 @@ dependencies {
     kover(project(":ui:settings"))
 }
 
+dependencyAnalysis {
+    issues {
+        all {
+            onUsedTransitiveDependencies {
+                // Ignore transitive dependency suggestions for now, but we may revisit this later.
+                severity("ignore")
+            }
+        }
+    }
+    structure {
+        bundle("kotest-assertions-core") { includeGroup("io.kotest") }
+    }
+}
+
 koverReport {
     filters {
         excludes {

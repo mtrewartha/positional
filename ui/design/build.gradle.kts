@@ -15,8 +15,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":ui:core"))
-
+    api(project(":ui:core"))
     api(libs.androidx.compose.runtime)
 
     implementation(platform(libs.androidx.compose.bom))
@@ -24,7 +23,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.uiTooling)
-    implementation(libs.androidx.core)
     implementation(libs.composePlaceholder.material3)
     implementation(libs.markwon)
 }

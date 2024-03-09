@@ -12,13 +12,13 @@ dependencies {
     api(project(":model:settings"))
     api(libs.kotlinx.coroutines.core)
     api(libs.javax.inject)
+    api(libs.protobuf.java.lite)
 
     implementation(libs.androidx.dataStore)
-    implementation(libs.protobuf.java.lite)
     implementation(libs.protobuf.kotlin.lite)
 
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.robolectric)
+    testImplementation(libs.robolectric.core)
     testImplementation(libs.turbine)
 }
 

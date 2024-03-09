@@ -133,7 +133,7 @@ markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 protobuf-java-lite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+robolectric-core = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 robolectric-playServices = { module = "org.robolectric:shadows-playservices", version.ref = "robolectric" }
 sunriseSunset = { module = "com.luckycatlabs:SunriseSunsetCalculator", version.ref = "sunrise-sunset" }
 testLogger = { module = "com.adarshr:gradle-test-logger-plugin", version.ref = "testLogger" }

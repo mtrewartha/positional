@@ -94,7 +94,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.compose)
     implementation(libs.androidx.navigation.compose)
-
     implementation(libs.google.hilt.android)
     implementation(libs.google.materialComponents)
     implementation(platform(libs.google.firebase.bom))
@@ -102,7 +101,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
 
-    "gmsImplementation"(libs.google.firebase.analytics)
+    gmsImplementation(libs.google.firebase.analytics)
+
+    androidTestRuntimeOnly(libs.androidx.test.runner)
 }
 
 hilt {

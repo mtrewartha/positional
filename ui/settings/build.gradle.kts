@@ -18,10 +18,11 @@ android {
 dependencies {
     ksp(libs.google.hilt.compiler)
 
+    api(project(":data:settings"))
+    api(project(":ui:core"))
     api(libs.androidx.compose.runtime)
+    api(libs.google.hilt.android)
 
-    implementation(project(":data:settings"))
-    implementation(project(":ui:core"))
     implementation(project(":ui:design"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.compiler)
@@ -33,5 +34,4 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.google.hilt.android)
 }
