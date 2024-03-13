@@ -39,6 +39,7 @@ class AospCompass @Inject constructor(
     private val rotation: Flow<FloatArray> =
         callbackFlow {
             val rotationVector = FloatArray(ROTATION_VECTOR_SIZE)
+            val rotationMatrix = FloatArray(ROTATION_MATRIX_SIZE)
             val listener = object : SensorEventListener {
                 override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
                     // Don't do anything
@@ -46,7 +47,6 @@ class AospCompass @Inject constructor(
 
                 override fun onSensorChanged(event: SensorEvent) {
                     System.arraycopy(event.values, 0, rotationVector, 0, rotationVector.size)
-                    val rotationMatrix = FloatArray(ROTATION_MATRIX_SIZE)
                     SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
                     trySend(rotationMatrix)
                 }
