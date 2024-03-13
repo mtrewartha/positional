@@ -1,9 +1,14 @@
 plugins {
-    id("io.trewartha.positional.jvm.library")
+    id("io.trewartha.positional.android.library")
+}
+
+android {
+    namespace = "io.trewartha.positional.data.compass"
 }
 
 dependencies {
     api(project(":model:compass"))
+    api(libs.javax.inject)
     api(libs.kotlinx.coroutines.core)
 
     testImplementation(project(":model:core"))
