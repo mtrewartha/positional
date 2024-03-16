@@ -20,66 +20,56 @@ class GeodeticCoordinatesTest {
 
     @Test
     fun `Conversion to geodetic coordinates returns the original coordinates`() {
-        for (latitude in -90..90) {
-            for (longitude in -180..180) {
-                val coordinates = GeodeticCoordinates(latitude.degrees, longitude.degrees)
+        forGeodeticCoordinates { coordinates ->
+            val result = coordinates.asGeodeticCoordinates()
 
-                val result = coordinates.asGeodeticCoordinates()
-
-                result.shouldBe(coordinates)
-            }
+            result.shouldBe(coordinates)
         }
     }
 
     @Test
     fun `Conversion to MGRS matches the WorldWind conversion`() {
-        for (latitude in -90..90) {
-            for (longitude in -180..180) {
-                val coordinates = GeodeticCoordinates(latitude.degrees, longitude.degrees)
+        forGeodeticCoordinates { coordinates ->
+            val result = coordinates.asMgrsCoordinates().toString()
 
-                val result = coordinates.asMgrsCoordinates().toString()
-
-                val worldWindMgrsConversion = coordinates.toWorldWindMgrsString()
-                withClue("Unexpected result for $coordinates") {
-                    result.filterWordCharacters()
-                        .shouldBe(worldWindMgrsConversion.filterWordCharacters().trimStart('0'))
-                }
+            val worldWindMgrsConversion = coordinates.toWorldWindMgrsString()
+            withClue("Unexpected result for $coordinates") {
+                result.filterWordCharacters()
+                    .shouldBe(worldWindMgrsConversion.filterWordCharacters().trimStart('0'))
             }
         }
     }
 
     @Test
     fun `Conversion to UTM matches the WorldWind conversion`() {
-        for (latitude in -90..90) { // UTM excludes latitudes above 84° and below 80°
-            for (longitude in -180..180) {
-                val coordinates = GeodeticCoordinates(latitude.degrees, longitude.degrees)
+        forGeodeticCoordinates { coordinates ->
+            val result = coordinates.asUtmCoordinates()
 
-                val result = coordinates.asUtmCoordinates()
-
-                val worldWindUtmResult = try {
-                    UTMCoord.fromLatLon(
-                        Angle.fromDegrees(coordinates.latitude.inDegrees().magnitude),
-                        Angle.fromDegrees(coordinates.longitude.inDegrees().magnitude)
+            val latitudeDegrees = coordinates.latitude.inDegrees().magnitude
+            val longitudeDegrees = coordinates.longitude.inDegrees().magnitude
+            val worldWindUtmResult = try {
+                UTMCoord.fromLatLon(
+                    Angle.fromDegrees(latitudeDegrees),
+                    Angle.fromDegrees(longitudeDegrees)
+                )
+            } catch (_: IllegalArgumentException) {
+                null
+            }
+            withClue("Unexpected result for $coordinates") {
+                if (latitudeDegrees > 84.0 || latitudeDegrees < -80) { // UTM doesn't accommodate poles
+                    result.shouldBe(null)
+                } else {
+                    result.shouldNotBeNull()
+                    worldWindUtmResult.shouldNotBeNull()
+                    result.zone.shouldBe(worldWindUtmResult.zone)
+                    result.hemisphere.shouldBe(
+                        when (worldWindUtmResult.hemisphere) {
+                            earth.worldwind.geom.coords.Hemisphere.N -> Hemisphere.NORTH
+                            earth.worldwind.geom.coords.Hemisphere.S -> Hemisphere.SOUTH
+                        }
                     )
-                } catch (_: IllegalArgumentException) {
-                    null
-                }
-                withClue("Unexpected result for $coordinates") {
-                    if (latitude > 84.0 || latitude < -80) { // UTM doesn't accommodate poles
-                        result.shouldBe(null)
-                    } else {
-                        result.shouldNotBeNull()
-                        worldWindUtmResult.shouldNotBeNull()
-                        result.zone.shouldBe(worldWindUtmResult.zone)
-                        result.hemisphere.shouldBe(
-                            when (worldWindUtmResult.hemisphere) {
-                                earth.worldwind.geom.coords.Hemisphere.N -> Hemisphere.NORTH
-                                earth.worldwind.geom.coords.Hemisphere.S -> Hemisphere.SOUTH
-                            }
-                        )
-                        result.easting.shouldBe(worldWindUtmResult.easting.meters)
-                        result.northing.shouldBe(worldWindUtmResult.northing.meters)
-                    }
+                    result.easting.shouldBe(worldWindUtmResult.easting.meters)
+                    result.northing.shouldBe(worldWindUtmResult.northing.meters)
                 }
             }
         }
@@ -112,6 +102,14 @@ class GeodeticCoordinatesTest {
 
         result.shouldStartWith("1.00000")
         result.shouldEndWith("-2.00000")
+    }
+}
+
+private fun forGeodeticCoordinates(test: (GeodeticCoordinates) -> Unit) {
+    for (latitude in -90..90) {
+        for (longitude in -180..180) {
+            test(GeodeticCoordinates(latitude.degrees, longitude.degrees))
+        }
     }
 }
 
