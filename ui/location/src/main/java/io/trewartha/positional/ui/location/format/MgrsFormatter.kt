@@ -2,7 +2,8 @@ package io.trewartha.positional.ui.location.format
 
 import io.trewartha.positional.model.core.measurement.Coordinates
 import io.trewartha.positional.model.core.measurement.Distance
-import io.trewartha.positional.model.settings.CoordinatesFormat
+import io.trewartha.positional.model.core.measurement.MgrsCoordinates.Companion.EASTING_NORTHING_LENGTH
+import io.trewartha.positional.model.core.measurement.MgrsCoordinates.Companion.EASTING_NORTHING_PAD_CHAR
 import kotlin.math.roundToInt
 
 /**
@@ -10,26 +11,23 @@ import kotlin.math.roundToInt
  */
 class MgrsFormatter : CoordinatesFormatter {
 
-    override val format = CoordinatesFormat.MGRS
-
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
         coordinates?.asMgrsCoordinates()?.let { mgrsCoordinates ->
             with(mgrsCoordinates) {
                 listOf(
                     "${gridZoneDesignator} $gridSquareID",
-                    easting.format(),
-                    northing.format(),
+                    EASTING_NORTHING_FORMAT.format(easting.inRoundedMeters()),
+                    EASTING_NORTHING_FORMAT.format(northing.inRoundedMeters()),
                 )
             }
         } ?: List(FORMAT_DISPLAY_LINE_COUNT) { null }
 
     override fun formatForCopy(coordinates: Coordinates): String =
         coordinates.asMgrsCoordinates().toString()
-
-    private fun Distance.format() =
-        this.inMeters().magnitude.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, ZERO)
 }
 
+private fun Distance.inRoundedMeters(): Int = inMeters().magnitude.roundToInt()
+
+private const val EASTING_NORTHING_FORMAT =
+    "%${EASTING_NORTHING_PAD_CHAR}${EASTING_NORTHING_LENGTH}d"
 private const val FORMAT_DISPLAY_LINE_COUNT = 3
-private const val NUMERICAL_LOCATION_FORMAT = 5
-private const val ZERO = '0'

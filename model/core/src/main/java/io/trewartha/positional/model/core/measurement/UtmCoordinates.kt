@@ -20,32 +20,54 @@ data class UtmCoordinates(
     val northing: Distance
 ) : Coordinates {
 
+    private val worldWindUtmCoordinates = try {
+        val hemisphere = when (hemisphere) {
+            Hemisphere.NORTH -> earth.worldwind.geom.coords.Hemisphere.N
+            Hemisphere.SOUTH -> earth.worldwind.geom.coords.Hemisphere.S
+        }
+        require(easting.isFinite && !easting.isNegative) { "Invalid easting: $easting" }
+        require(northing.isFinite && !northing.isNegative) { "Invalid northing: $northing" }
+        val easting = easting.inMeters().magnitude
+        val northing = northing.inMeters().magnitude
+        UTMCoord.fromUTM(zone, hemisphere, easting, northing)
+    } catch (exception: IllegalArgumentException) {
+        throw IllegalArgumentException("Invalid UTM coordinates: $this", exception)
+    }
+
     override fun asGeodeticCoordinates(): GeodeticCoordinates =
         try {
-            val worldWindUtmCoord = UTMCoord.fromUTM(
-                zone,
-                when (hemisphere) {
-                    Hemisphere.NORTH -> earth.worldwind.geom.coords.Hemisphere.N
-                    Hemisphere.SOUTH -> earth.worldwind.geom.coords.Hemisphere.S
-                },
-                easting.inMeters().magnitude,
-                northing.inMeters().magnitude
-            )
             GeodeticCoordinates(
-                worldWindUtmCoord.latitude.asAngle(),
-                worldWindUtmCoord.longitude.asAngle()
+                worldWindUtmCoordinates.latitude.asAngle(),
+                worldWindUtmCoordinates.longitude.asAngle()
             )
         } catch (_: IllegalArgumentException) {
-            throw IllegalArgumentException("Invalid UTM coordinates (might be too close to a pole")
+            throw IllegalArgumentException("Invalid UTM coordinates")
         }
 
     override fun asMgrsCoordinates(): MgrsCoordinates = asGeodeticCoordinates().asMgrsCoordinates()
 
-    override fun asUtmCoordinates(): UtmCoordinates = this
+    override fun asUtmCoordinates(): UtmCoordinates? = this
 
     override fun toString(): String {
-        val eastingMeters = easting.inMeters().magnitude.roundToInt()
-        val northingMeters = northing.inMeters().magnitude.roundToInt()
-        return "$zone$hemisphere ${eastingMeters}m E ${northingMeters}m N"
+        val easting = easting.inRoundedAndPaddedMeters()
+        val northing = northing.inRoundedAndPaddedMeters()
+        return "$zone$hemisphere ${easting}m E ${northing}m N"
+    }
+
+    companion object {
+
+        /**
+         * Number of digits to be used when printing eastings and northings
+         */
+        const val EASTING_NORTHING_LENGTH = 7
+
+        /**
+         * Character to be used to start/left pad printings of eastings and northings
+         */
+        const val EASTING_NORTHING_PAD_CHAR = '0'
     }
 }
+
+private fun Distance.inRoundedAndPaddedMeters(): String =
+    inMeters().magnitude.roundToInt().toString()
+        .padStart(UtmCoordinates.EASTING_NORTHING_LENGTH, UtmCoordinates.EASTING_NORTHING_PAD_CHAR)

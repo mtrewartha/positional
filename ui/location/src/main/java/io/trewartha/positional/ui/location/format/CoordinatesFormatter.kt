@@ -1,17 +1,11 @@
 package io.trewartha.positional.ui.location.format
 
 import io.trewartha.positional.model.core.measurement.Coordinates
-import io.trewartha.positional.model.settings.CoordinatesFormat
 
 /**
  * Formats location coordinates into a list of strings for display to the user
  */
 interface CoordinatesFormatter {
-
-    /**
-     * The [CoordinatesFormat] that this formatter can format coordinates in
-     */
-    val format: CoordinatesFormat
 
     /**
      * Formats some given coordinates into a list of strings suitable for display to the user

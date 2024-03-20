@@ -22,8 +22,18 @@ data class MgrsCoordinates(
     val northing: Distance
 ) : Coordinates {
 
+    private val worldWindMgrsCoordinates = try {
+        require(easting.isFinite && !easting.isNegative) { "Invalid easting: $easting" }
+        require(northing.isFinite && !northing.isNegative) { "Invalid northing: $northing" }
+        val easting = easting.inRoundedAndPaddedMeters()
+        val northing = northing.inRoundedAndPaddedMeters()
+        MGRSCoord.fromString("$gridZoneDesignator $gridSquareID $easting $northing")
+    } catch (exception: IllegalArgumentException) {
+        throw IllegalArgumentException("Invalid MGRS coordinates: $this", exception)
+    }
+
     override fun asGeodeticCoordinates(): GeodeticCoordinates =
-        with(MGRSCoord.fromString(toString())) {
+        with(worldWindMgrsCoordinates) {
             GeodeticCoordinates(latitude.asAngle(), longitude.asAngle())
         }
 
@@ -32,14 +42,27 @@ data class MgrsCoordinates(
     override fun asUtmCoordinates(): UtmCoordinates? = asGeodeticCoordinates().asUtmCoordinates()
 
     override fun toString(): String {
-        val easting = this.easting.format()
-        val northing = this.northing.format()
-        return "$gridZoneDesignator $gridSquareID $easting $northing"
+        val easting = easting.inRoundedAndPaddedMeters()
+        val northing = northing.inRoundedAndPaddedMeters()
+        return "$gridZoneDesignator$gridSquareID$easting$northing"
     }
 
-    private fun Distance.format() =
-        this.inMeters().magnitude.roundToInt().toString().padStart(NUMERICAL_LOCATION_FORMAT, ZERO)
+    companion object {
+
+        /**
+         * Number of digits to be used when printing eastings and northings
+         */
+        const val EASTING_NORTHING_LENGTH = 5
+
+        /**
+         * Character to be used to start/left pad printings of eastings and northings
+         */
+        const val EASTING_NORTHING_PAD_CHAR = '0'
+    }
 }
 
-private const val NUMERICAL_LOCATION_FORMAT = 5
-private const val ZERO = '0'
+private fun Distance.inRoundedAndPaddedMeters(): String =
+    inMeters().magnitude.roundToInt().toString().padStart(
+        MgrsCoordinates.EASTING_NORTHING_LENGTH,
+        MgrsCoordinates.EASTING_NORTHING_PAD_CHAR
+    )

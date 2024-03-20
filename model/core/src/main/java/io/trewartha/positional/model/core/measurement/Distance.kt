@@ -9,6 +9,21 @@ package io.trewartha.positional.model.core.measurement
 data class Distance(val magnitude: Double, val unit: Unit) {
 
     /**
+     * `true` if the distance is finite, `false` if it is negative or positive infinity
+     */
+    val isFinite: Boolean get() = magnitude.isFinite()
+
+    /**
+     * `true` if the distance is negative, `false` if it is positive or zero
+     */
+    val isNegative: Boolean get() = magnitude < 0.0
+
+    /**
+     * `true` if the distance is positive, `false` if it is negative or zero
+     */
+    val isPositive: Boolean get() = magnitude > 0.0
+
+    /**
      * Convert this distance to an equivalent distance in meters
      */
     fun inMeters(): Distance = when (unit) {

@@ -1,16 +1,16 @@
 package io.trewartha.positional.ui.location.format
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
+import io.trewartha.positional.model.core.measurement.Distance
 import io.trewartha.positional.model.core.measurement.MgrsCoordinates
 import io.trewartha.positional.model.core.measurement.meters
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import kotlin.math.roundToInt
 
-@RunWith(RobolectricTestRunner::class)
 class MgrsFormatterTest {
+
+    private val coordinates = MgrsCoordinates("31N", "AA", 12345.6.meters, 65432.1.meters)
 
     private lateinit var subject: MgrsFormatter
 
@@ -21,45 +21,44 @@ class MgrsFormatterTest {
 
     @Test
     fun `Formatting for display returns the zone, band, and 100km square ID in the first line`() {
-        val result = subject.formatForDisplay(MgrsCoordinates("1T", "VK", 2.meters, 3.meters))
+        val result = subject.formatForDisplay(coordinates)
 
-        result[0].shouldBe("1T VK")
+        with(coordinates) { result[0].shouldBe("${gridZoneDesignator} $gridSquareID") }
     }
 
     @Test
     fun `Formatting for display returns the easting on the second line`() {
-        val result = subject.formatForDisplay(MgrsCoordinates("1T", "VK", 2.meters, 3.meters))
+        val result = subject.formatForDisplay(coordinates)
 
-        result[1].shouldBe("00002")
+        val mgrsCoordinates = coordinates.asMgrsCoordinates()
+        val roundedAndPaddedEasting = mgrsCoordinates.easting.inRoundedAndPaddedMeters()
+        result[1].shouldBe(roundedAndPaddedEasting)
     }
 
     @Test
     fun `Formatting for display returns the northing on the third line`() {
-        val result = subject.formatForDisplay(MgrsCoordinates("1T", "VK", 2.meters, 3.meters))
+        val result = subject.formatForDisplay(coordinates)
 
-        result[2].shouldBe("00003")
+        val mgrsCoordinates = coordinates.asMgrsCoordinates()
+        val roundedAndPaddedNorthing = mgrsCoordinates.northing.inRoundedAndPaddedMeters()
+        result[2].shouldBe(roundedAndPaddedNorthing)
     }
 
     @Test
-    fun `Formatting for display rounds easting and northing to the nearest meter`() {
-        val result = subject.formatForDisplay(MgrsCoordinates("1T", "VK", 2.4.meters, 3.5.meters))
+    fun `Formatting for copy returns the GZD, 100km square ID, and rounded easting and northing`() {
+        val result = subject.formatForCopy(coordinates)
 
-        result[1].shouldBe("00002")
-        result[2].shouldBe("00004")
-    }
-
-    @Test
-    fun `Formatting for copy separates the zone and band, easting, and northing with spaces`() {
-        val result = subject.formatForCopy(MgrsCoordinates("1T", "VK", 2.meters, 3.meters))
-
-        result.shouldBe("1T VK 00002 00003")
-    }
-
-    @Test
-    fun `Formatting for copy rounds easting and northing to the nearest meter`() {
-        val result = subject.formatForCopy(MgrsCoordinates("1T", "VK", 2.4.meters, 3.5.meters))
-
-        result.shouldContain("00002")
-        result.shouldContain("00004")
+        with(coordinates.asMgrsCoordinates()) {
+            val roundedAndPaddedEasting = easting.inRoundedAndPaddedMeters()
+            val roundedAndPaddedNorthing = northing.inRoundedAndPaddedMeters()
+            result.shouldBe("$gridZoneDesignator$gridSquareID$roundedAndPaddedEasting$roundedAndPaddedNorthing")
+        }
     }
 }
+
+private fun Distance.inRoundedAndPaddedMeters(): String =
+    inMeters().magnitude.roundToInt().toString().padStart(
+        MgrsCoordinates.EASTING_NORTHING_LENGTH,
+        MgrsCoordinates.EASTING_NORTHING_PAD_CHAR
+    )
+

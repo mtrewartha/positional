@@ -5,7 +5,6 @@ import android.location.Location.FORMAT_SECONDS
 import android.location.Location.convert
 import io.trewartha.positional.model.core.measurement.Angle
 import io.trewartha.positional.model.core.measurement.Coordinates
-import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.ui.location.R
 import java.util.Locale
 
@@ -16,8 +15,6 @@ class DegreesMinutesSecondsFormatter(
     private val context: Context,
     private val locale: Locale
 ) : CoordinatesFormatter {
-
-    override val format = CoordinatesFormat.DMS
 
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> {
         val geodeticCoordinates = coordinates?.asGeodeticCoordinates()
