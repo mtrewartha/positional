@@ -84,7 +84,7 @@ fun CompassView(
             .padding(dimensionResource(UIDesignR.dimen.ui_design_standard_padding)),
     ) {
         when (state) {
-            is State.Error ->
+            is State.Failure ->
                 SensorsMissingContent(
                     onWhyClick = { showMissingSensorDialog = !showMissingSensorDialog },
                     Modifier.fillMaxSize()
@@ -237,7 +237,7 @@ private fun SensorsMissingPreview() {
     PositionalTheme {
         Surface {
             CompassView(
-                state = State.Error(CompassError.SensorsMissing),
+                state = State.Failure(CompassError.SensorsMissing),
                 contentPadding = PaddingValues(),
                 onHelpClick = {}
             )

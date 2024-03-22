@@ -52,7 +52,7 @@ class CompassViewModelTest {
     fun `Initial state reflects sensors missing when compass missing`() {
         subject = CompassViewModel(null, locator, settings)
 
-        subject.state.value.shouldBeInstanceOf<State.Error<CompassError.SensorsMissing>>()
+        subject.state.value.shouldBeInstanceOf<State.Failure<CompassError.SensorsMissing>>()
     }
 
     @Test

@@ -37,7 +37,7 @@ class CompassViewModel @Inject constructor(
             emptyFlow<State<CompassData, CompassError>>().stateIn(
                 viewModelScope,
                 SharingStarted.ForViewModel,
-                initialValue = State.Error(CompassError.SensorsMissing)
+                initialValue = State.Failure(CompassError.SensorsMissing)
             )
         } else {
             combine(
