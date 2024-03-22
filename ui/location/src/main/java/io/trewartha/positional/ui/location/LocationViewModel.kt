@@ -8,7 +8,7 @@ import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.ui.core.State
 import io.trewartha.positional.ui.core.flow.ForViewModel
-import io.trewartha.positional.ui.core.wrapInState
+import io.trewartha.positional.ui.core.asStates
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -22,7 +22,7 @@ class LocationViewModel @Inject constructor(
 ) : ViewModel() {
 
     val location: StateFlow<State<Location, Unit>> = locator.location
-        .wrapInState()
+        .asStates()
         .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = State.Loading)
 
     val settings: StateFlow<State<Settings, Unit>> =
@@ -32,6 +32,6 @@ class LocationViewModel @Inject constructor(
             settings.locationAccuracyVisibility
         ) { coordinatesFormat, units, accuracyVisibility ->
             Settings(coordinatesFormat, units, accuracyVisibility)
-        }.wrapInState()
+        }.asStates()
             .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = State.Loading)
 }

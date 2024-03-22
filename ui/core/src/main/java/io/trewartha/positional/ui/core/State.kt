@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 /**
  * Indicator of state
@@ -62,11 +63,11 @@ sealed interface State<out D, out C> {
 }
 
 /**
- * Overload for [wrapInState] that wraps upstream exceptions in a [State.Failure] of type [Unit].
+ * Overload for [asStates] that wraps upstream exceptions in a [State.Failure] of type [Unit].
  * This is useful if you care about representing the presence of a failure (via [State.Failure]) but
  * don't care about any details of the failure (via [State.Failure.cause]).
  */
-fun <T> Flow<T>.wrapInState(): Flow<State<T, Unit>> = wrapInState { }
+fun <T> Flow<T>.asStates(): Flow<State<T, Unit>> = asStates { }
 
 /**
  * Wrap upstream emissions and exceptions in an appropriate [State] and re-emit them downstream
@@ -80,9 +81,11 @@ fun <T> Flow<T>.wrapInState(): Flow<State<T, Unit>> = wrapInState { }
  * @return Flow that wraps emissions and exceptions from the original flow into an appropriate
  * [State] and re-emits them downstream
  */
-fun <T, C> Flow<T>.wrapInState(transform: (Exception) -> C): Flow<State<T, C>> =
+fun <T, C> Flow<T>.asStates(transform: (Exception) -> C): Flow<State<T, C>> =
     this.map<T, State<T, C>> {
         State.Loaded(it)
+    }.onStart {
+        emit(State.Loading)
     }.catch { throwable ->
         if (throwable is Exception) {
             emit(State.Failure(transform(throwable)))
