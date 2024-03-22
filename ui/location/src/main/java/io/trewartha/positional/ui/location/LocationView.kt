@@ -47,6 +47,7 @@ import io.trewartha.positional.model.core.measurement.meters
 import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.model.settings.LocationAccuracyVisibility
+import io.trewartha.positional.ui.core.State
 import io.trewartha.positional.ui.core.format.DateTimeFormatter
 import io.trewartha.positional.ui.design.PositionalTheme
 import io.trewartha.positional.ui.design.locals.LocalDateTimeFormatter
@@ -62,7 +63,8 @@ import timber.log.Timber
 
 @Composable
 fun LocationView(
-    state: LocationState,
+    locationState: State<Location, Unit>,
+    settingsState: State<Settings, Unit>,
     contentPadding: PaddingValues,
     snackbarHostState: SnackbarHostState,
     onShareClick: (Coordinates?) -> Unit,
@@ -79,8 +81,9 @@ fun LocationView(
     val dateTimeFormatter = LocalDateTimeFormatter.current
 
     LocationPermissionGrantedContent(
-        state = state,
-        snackbarHostState = snackbarHostState,
+        locationState,
+        settingsState,
+        snackbarHostState,
         onCopyClick = { coordinates ->
             coroutineScope.launch {
                 snackbarHostState.currentSnackbarData?.dismiss()
@@ -167,7 +170,8 @@ private fun LoadingPreview() {
         ) {
             Surface {
                 LocationView(
-                    state = LocationState.Loading,
+                    locationState = State.Loading,
+                    settingsState = State.Loading,
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),
                     onShareClick = {},
@@ -183,7 +187,7 @@ private fun LoadingPreview() {
 @PreviewScreenSizes
 @Preview
 @Composable
-private fun DataPreview() {
+private fun LoadedPreview() {
     PositionalTheme {
         val context = LocalContext.current
         val locale = LocalLocale.current
@@ -192,13 +196,10 @@ private fun DataPreview() {
         ) {
             Surface {
                 LocationView(
-                    state = LocationState.Data(
-                        location = Location(
+                    locationState = State.Loaded(
+                        Location(
                             timestamp = Instant.DISTANT_PAST,
-                            coordinates = GeodeticCoordinates(
-                                latitude = 12.3456789.degrees,
-                                longitude = 123.456789.degrees
-                            ),
+                            coordinates = GeodeticCoordinates(12.34567.degrees, 123.45678.degrees),
                             horizontalAccuracy = 123.45678.meters,
                             bearing = 123.45678.degrees,
                             bearingAccuracy = 123.45678.degrees,
@@ -207,10 +208,14 @@ private fun DataPreview() {
                             magneticDeclination = 1.degrees,
                             speed = 123.45678.kph,
                             speedAccuracy = 123.45678.kph,
-                        ),
-                        coordinatesFormat = CoordinatesFormat.DD,
-                        accuracyVisibility = LocationAccuracyVisibility.SHOW,
-                        units = Units.METRIC
+                        )
+                    ),
+                    settingsState = State.Loaded(
+                        Settings(
+                            CoordinatesFormat.DD,
+                            Units.METRIC,
+                            LocationAccuracyVisibility.SHOW
+                        )
                     ),
                     contentPadding = PaddingValues(),
                     snackbarHostState = SnackbarHostState(),

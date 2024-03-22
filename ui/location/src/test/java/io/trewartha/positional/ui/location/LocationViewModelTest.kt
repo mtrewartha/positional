@@ -12,6 +12,7 @@ import io.trewartha.positional.model.core.measurement.degrees
 import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.model.settings.CoordinatesFormat
 import io.trewartha.positional.model.settings.LocationAccuracyVisibility
+import io.trewartha.positional.ui.core.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -44,106 +45,120 @@ class LocationViewModelTest {
     }
 
     @Test
-    fun `Initial state is loading`() {
-        subject.state.value.shouldBe(LocationState.Loading)
+    fun `Initial location state is loading`() {
+        subject.location.value.shouldBe(State.Loading)
     }
 
     @Test
-    fun `Data emitted once loaded`() = runTest {
+    fun `Location state is emitted once loaded`() = runTest {
         val expectedLocation = Location(now(), GeodeticCoordinates(1.degrees, 2.degrees))
+
+        subject.location.test {
+            awaitItem() // Loading state
+
+            locator.setLocation(expectedLocation)
+
+            val state = awaitItem()
+            state.shouldBeInstanceOf<State.Loaded<Location>>()
+            state.data.shouldBe(expectedLocation)
+        }
+    }
+
+    @Test
+    fun `Location state is emitted when location changes`() = runTest {
+        val expectedLocation = Location(now(), GeodeticCoordinates(1.degrees, 1.degrees))
+        subject.location.test {
+            awaitItem() // Loading state
+            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
+            awaitItem() // Initial data state
+
+            locator.setLocation(expectedLocation)
+
+            val state = awaitItem()
+            state.shouldBeInstanceOf<State.Loaded<Location>>()
+            state.data.shouldBe(expectedLocation)
+        }
+    }
+
+    @Test
+    fun `Initial settings state is loading`() {
+        subject.settings.value.shouldBe(State.Loading)
+    }
+
+    @Test
+    fun `Settings state is emitted once loaded`() = runTest {
         val expectedUnits = Units.METRIC
         val expectedCoordinatesFormat = CoordinatesFormat.DD
         val expectedLocationAccuracyVisibility = LocationAccuracyVisibility.SHOW
-        subject.state.test {
+
+        subject.settings.test {
             awaitItem() // Loading state
 
             settings.setCoordinatesFormat(expectedCoordinatesFormat)
             settings.setUnits(expectedUnits)
             settings.setLocationAccuracyVisibility(expectedLocationAccuracyVisibility)
-            locator.setLocation(expectedLocation)
 
-            val data = awaitItem()
-            data.shouldBeInstanceOf<LocationState.Data>()
-            data.location.shouldBe(expectedLocation)
-            data.coordinatesFormat.shouldBe(expectedCoordinatesFormat)
-            data.units.shouldBe(expectedUnits)
-            data.accuracyVisibility.shouldBe(expectedLocationAccuracyVisibility)
+            val state = awaitItem()
+            state.shouldBeInstanceOf<State.Loaded<Settings>>()
+            with(state.data) {
+                coordinatesFormat.shouldBe(expectedCoordinatesFormat)
+                units.shouldBe(expectedUnits)
+                accuracyVisibility.shouldBe(expectedLocationAccuracyVisibility)
+            }
         }
     }
 
     @Test
-    fun `Data emitted when location changes`() = runTest {
-        val expectedLocation = Location(now(), GeodeticCoordinates(1.degrees, 1.degrees))
-        subject.state.test {
-            awaitItem() // Loading state
-            settings.setCoordinatesFormat(CoordinatesFormat.DD)
-            settings.setUnits(Units.METRIC)
-            settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
-            awaitItem() // Initial data state
-
-            locator.setLocation(expectedLocation)
-
-            val data = awaitItem()
-            data.shouldBeInstanceOf<LocationState.Data>()
-            data.location.shouldBe(expectedLocation)
-        }
-    }
-
-    @Test
-    fun `Data emitted when coordinates format changes`() = runTest {
+    fun `Settings state is emitted when coordinates format changes`() = runTest {
         val expectedCoordinatesFormat = CoordinatesFormat.DDM
-        subject.state.test {
+        subject.settings.test {
             awaitItem() // Loading state
             settings.setCoordinatesFormat(CoordinatesFormat.DD)
             settings.setUnits(Units.METRIC)
             settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
             awaitItem() // Initial data state
 
             settings.setCoordinatesFormat(expectedCoordinatesFormat)
 
-            val data = awaitItem()
-            data.shouldBeInstanceOf<LocationState.Data>()
-            data.coordinatesFormat.shouldBe(expectedCoordinatesFormat)
+            val state = awaitItem()
+            state.shouldBeInstanceOf<State.Loaded<Settings>>()
+            state.data.coordinatesFormat.shouldBe(expectedCoordinatesFormat)
         }
     }
 
     @Test
-    fun `Data emitted when units change`() = runTest {
+    fun `Settings state is emitted when units change`() = runTest {
         val expectedUnits = Units.IMPERIAL
-        subject.state.test {
+        subject.settings.test {
             awaitItem() // Loading state
             settings.setCoordinatesFormat(CoordinatesFormat.DD)
             settings.setUnits(Units.METRIC)
             settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
             awaitItem() // Initial data state
 
             settings.setUnits(expectedUnits)
 
-            val data = awaitItem()
-            data.shouldBeInstanceOf<LocationState.Data>()
-            data.units.shouldBe(expectedUnits)
+            val state = awaitItem()
+            state.shouldBeInstanceOf<State.Loaded<Settings>>()
+            state.data.units.shouldBe(expectedUnits)
         }
     }
 
     @Test
-    fun `Data emitted when location accuracy visibility changes`() = runTest {
+    fun `Settings state is emitted when location accuracy visibility changes`() = runTest {
         val expectedVisibility = LocationAccuracyVisibility.HIDE
-        subject.state.test {
+        subject.settings.test {
             awaitItem() // Loading state
             settings.setCoordinatesFormat(CoordinatesFormat.DD)
             settings.setUnits(Units.METRIC)
             settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
             awaitItem() // Initial data state
 
             settings.setLocationAccuracyVisibility(expectedVisibility)
 
-            val data = awaitItem()
-            data.shouldBeInstanceOf<LocationState.Data>()
-            data.accuracyVisibility.shouldBe(expectedVisibility)
+            val state = awaitItem()
+            state.shouldBeInstanceOf<State.Loaded<Settings>>()
+            state.data.accuracyVisibility.shouldBe(expectedVisibility)
         }
     }
 }

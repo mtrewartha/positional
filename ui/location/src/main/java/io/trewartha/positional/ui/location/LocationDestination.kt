@@ -48,12 +48,13 @@ data object LocationDestination : NavDestination.MainNavDestination {
             popExitTransition = bottomNavPopExitTransition()
         ) {
             val viewModel: LocationViewModel = hiltViewModel()
-            val state by viewModel.state.collectAsStateWithLifecycle()
+            val locationState by viewModel.location.collectAsStateWithLifecycle()
+            val settingsState by viewModel.settings.collectAsStateWithLifecycle()
             val context = LocalContext.current
             val locale = LocalLocale.current
             CompositionLocalProvider(
                 LocalCoordinatesFormatter provides
-                        when ((state as? LocationState.Data)?.coordinatesFormat) {
+                        when (settingsState.dataOrNull?.coordinatesFormat) {
                             CoordinatesFormat.DD, null -> DecimalDegreesFormatter(context, locale)
                             CoordinatesFormat.DDM -> DegreesDecimalMinutesFormatter(context, locale)
                             CoordinatesFormat.DMS -> DegreesMinutesSecondsFormatter(context, locale)
@@ -63,7 +64,8 @@ data object LocationDestination : NavDestination.MainNavDestination {
             ) {
                 val coordinatesFormatter = LocalCoordinatesFormatter.current
                 LocationView(
-                    state,
+                    locationState,
+                    settingsState,
                     contentPadding,
                     snackbarHostState,
                     onShareClick = click@{ coordinates ->

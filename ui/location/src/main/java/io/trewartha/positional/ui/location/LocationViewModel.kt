@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.trewartha.positional.data.location.Locator
 import io.trewartha.positional.data.settings.SettingsRepository
+import io.trewartha.positional.model.location.Location
+import io.trewartha.positional.ui.core.State
 import io.trewartha.positional.ui.core.flow.ForViewModel
+import io.trewartha.positional.ui.core.wrapInState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -18,17 +21,17 @@ class LocationViewModel @Inject constructor(
     settings: SettingsRepository
 ) : ViewModel() {
 
-    val state: StateFlow<LocationState> =
+    val location: StateFlow<State<Location, Unit>> = locator.location
+        .wrapInState()
+        .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = State.Loading)
+
+    val settings: StateFlow<State<Settings, Unit>> =
         combine(
-            locator.location,
             settings.coordinatesFormat,
             settings.units,
             settings.locationAccuracyVisibility
-        ) { location, coordinatesFormat, units, accuracyVisibility ->
-            LocationState.Data(location, coordinatesFormat, units, accuracyVisibility)
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.ForViewModel,
-            initialValue = LocationState.Loading
-        )
+        ) { coordinatesFormat, units, accuracyVisibility ->
+            Settings(coordinatesFormat, units, accuracyVisibility)
+        }.wrapInState()
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = State.Loading)
 }
