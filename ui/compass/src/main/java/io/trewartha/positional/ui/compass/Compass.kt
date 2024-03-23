@@ -3,8 +3,8 @@ package io.trewartha.positional.ui.compass
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.North
 import androidx.compose.material3.Icon
@@ -47,13 +47,15 @@ fun Compass(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.placeholder(visible = azimuth == null),
+        modifier = modifier
+            .aspectRatio(1f)
+            .placeholder(visible = azimuth == null),
         contentAlignment = Alignment.Center
     ) {
-        if (azimuth != null) {
-            NorthVibration(azimuth, northVibration)
-            CompassReading(azimuth)
-            CompassRose(azimuth, Modifier.fillMaxSize())
+        (azimuth ?: 0.degrees).let {
+            NorthVibration(it, northVibration)
+            CompassReading(it)
+            CompassRose(it, Modifier.fillMaxSize())
         }
     }
 }
@@ -353,7 +355,7 @@ private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 @PreviewLightDark
 @Composable
 private fun CompassPreview() {
-    Surface(Modifier.size(600.dp, 300.dp)) {
+    Surface {
         Compass(azimuth = 25.degrees, northVibration = CompassNorthVibration.SHORT)
     }
 }
