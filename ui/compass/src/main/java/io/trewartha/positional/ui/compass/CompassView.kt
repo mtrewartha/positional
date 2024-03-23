@@ -30,6 +30,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ import io.trewartha.positional.model.settings.CompassMode
 import io.trewartha.positional.model.settings.CompassNorthVibration
 import io.trewartha.positional.ui.core.State
 import io.trewartha.positional.ui.design.PositionalTheme
+import io.trewartha.positional.ui.design.locals.LocalVibrator
 import io.trewartha.positional.ui.design.modifier.placeholder
 
 @Composable
@@ -266,18 +268,20 @@ private fun SensorsPresentLoadingPreview() {
 private fun SensorsPresentLoadedPreview() {
     PositionalTheme {
         Surface {
-            CompassView(
-                state = State.Loaded(
-                    CompassData(
-                        azimuth = Azimuth(45.degrees),
-                        declination = 1.degrees,
-                        mode = CompassMode.TRUE_NORTH,
-                        northVibration = CompassNorthVibration.SHORT
-                    )
-                ),
-                contentPadding = PaddingValues(),
-                onHelpClick = {}
-            )
+            CompositionLocalProvider(LocalVibrator provides null) {
+                CompassView(
+                    state = State.Loaded(
+                        CompassData(
+                            azimuth = Azimuth(45.degrees),
+                            declination = 1.degrees,
+                            mode = CompassMode.TRUE_NORTH,
+                            northVibration = CompassNorthVibration.SHORT
+                        )
+                    ),
+                    contentPadding = PaddingValues(),
+                    onHelpClick = {}
+                )
+            }
         }
     }
 }

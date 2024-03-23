@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -291,11 +292,12 @@ private fun NorthVibration(azimuth: Angle, northVibration: CompassNorthVibration
             ((previousQuadrant == Quadrant.NW && currentQuadrant == Quadrant.NE) ||
                     (previousQuadrant == Quadrant.NE && currentQuadrant == Quadrant.NW))
     previousQuadrant = currentQuadrant
-    val vibrator = LocalVibrator.current
-    LaunchedEffect(crossedNorth) {
-        if (crossedNorth && northVibration != null) {
-            @Suppress("DEPRECATION") // It matches our needs and goes back pre API 21
-            vibrator.vibrate(northVibration.duration.inWholeMilliseconds)
+    LocalVibrator.current?.let { vibrator ->
+        LaunchedEffect(crossedNorth) {
+            if (crossedNorth && northVibration != null) {
+                @Suppress("DEPRECATION") // It matches our needs and goes back pre API 21
+                vibrator.vibrate(northVibration.duration.inWholeMilliseconds)
+            }
         }
     }
 }
@@ -356,6 +358,8 @@ private fun Float.toRadians(): Float = (this / DEGREES_180 * Math.PI).toFloat()
 @Composable
 private fun CompassPreview() {
     Surface {
-        Compass(azimuth = 25.degrees, northVibration = CompassNorthVibration.SHORT)
+        CompositionLocalProvider(LocalVibrator provides null) {
+            Compass(azimuth = 25.degrees, northVibration = CompassNorthVibration.SHORT)
+        }
     }
 }
