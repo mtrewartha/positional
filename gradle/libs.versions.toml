@@ -36,7 +36,7 @@ google-playServices-testing = "16.0.0"
 google-services = "4.4.1"
 javapoet = { strictly = "1.13.0" }
 javax-inject = "1"
-hilt = "2.51"
+hilt = "2.51.1"
 kotest = "5.8.1"
 kotlin = "1.9.23"
 kotlinx-coroutines = "1.8.0"
