@@ -51,22 +51,24 @@ dependencyAnalysis {
     }
 }
 
-koverReport {
-    filters {
-        excludes {
-            packages(
-                "dagger.hilt.internal.aggregatedroot.codegen",
-                "hilt_aggregated_deps",
-                "io.trewartha.positional.ui.*"
-            )
-            annotatedBy(
-                "androidx.compose.runtime.Composable",
-                "dagger.*"
-            )
-            classes(
-                "*Hilt_*",
-                "io.trewartha.positional.BuildConfig",
-            )
+kover {
+    reports {
+        filters {
+            excludes {
+                packages(
+                    "dagger.hilt.internal.aggregatedroot.codegen",
+                    "hilt_aggregated_deps",
+                    "io.trewartha.positional.ui.*"
+                )
+                annotatedBy(
+                    "androidx.compose.runtime.Composable",
+                    "dagger.*"
+                )
+                classes(
+                    "*Hilt_*",
+                    "io.trewartha.positional.BuildConfig",
+                )
+            }
         }
     }
 }
