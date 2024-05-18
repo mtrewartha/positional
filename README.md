@@ -33,7 +33,7 @@ Check out the intentionally simple [privacy policy](https://github.com/mtrewarth
 
 ## I have a feature request or bug report!
 Great! I encourage you to create an issue here in the GitHub repo so others can see and 
-contribute to the discussion, but feel free to shoot me an email at trewartha.mike@gmail.com,
+contribute to the discussion, but feel free to shoot me an email at positional@trewartha.io,
 too.
 
 ## License
