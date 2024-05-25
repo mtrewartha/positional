@@ -7,12 +7,11 @@
   "packageRules": [
     {
       "matchPackagePatterns": [
-        "androidx.compose.compiler:compiler",
         "org.jetbrains.kotlin.*",
         "com.google.devtools.ksp"
       ],
-      "groupName": "Kotlin and strict dependents",
-      "prHeader": "Kotlin, KSP, and the Compose compiler need to be updated together since KSP and the Compose compiler are strictly tied to Kotlin versions. This PR will aggregate their updates. Once checks are passing because compatible versions are in use, this PR can be merged."
+      "groupName": "Kotlin and KSP",
+      "prHeader": "Kotlin and KSP need to be updated together since each KSP version is tied to a Kotlin version. This PR will aggregate their updates. Once checks are passing because compatible versions are in use, this PR can be merged."
     }
   ]
 }
