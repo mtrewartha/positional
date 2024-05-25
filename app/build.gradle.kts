@@ -3,6 +3,7 @@ import java.nio.file.NoSuchFileException
 
 plugins {
     id("io.trewartha.positional.android.application")
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
@@ -43,7 +44,6 @@ android {
 
     buildFeatures {
         buildConfig = true
-        compose = true
     }
 
     buildTypes {
@@ -59,10 +59,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 
     kotlinOptions {
@@ -86,7 +82,6 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.compose.uiTooling)

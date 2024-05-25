@@ -1,14 +1,12 @@
 [versions]
 accompanist = "0.34.0"
-android-tools-common = "34.0.0"
+android-tools-common = "35.0.0-rc04"
 android-tools-desugarJdkLibs = "2.0.4"
 android-tools-gradle = "8.4.1"
-android-tools = "34.0.0"
 androidx-activity = "1.9.0"
 androidx-activity-compose = "1.9.0"
 androidx-appcompat = "1.6.1"
 androidx-compose-bom = "2024.05.00"
-androidx-compose-compiler = "1.5.14"
 androidx-compose-material3 = "1.2.1"
 androidx-compose-ui = "1.6.7"
 androidx-constraint-layout-compose = "1.0.1"
@@ -29,7 +27,7 @@ composePlaceholder = "1.0.8"
 dagger = "2.51.1"
 google-firebase-bom = "33.0.0"
 google-firebase-crashlytics-gradle = "3.0.1"
-google-ksp = "1.9.24-1.0.20"
+google-ksp = "2.0.0-1.0.21"
 google-materialComponents = "1.12.0"
 google-playServices-location = "21.2.0"
 google-playServices-testing = "16.0.0"
@@ -38,7 +36,7 @@ javapoet = { strictly = "1.13.0" }
 javax-inject = "1"
 hilt = "2.51.1"
 kotest = "5.9.0"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 kotlinx-coroutines = "1.8.1"
 kotlinx-kover = "0.8.0"
 kotlinx-datetime = "0.6.0"
@@ -61,6 +59,7 @@ google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
@@ -75,7 +74,6 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }

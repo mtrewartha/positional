@@ -1,14 +1,12 @@
 import com.android.build.api.dsl.ApplicationExtension
-import io.trewartha.positional.configureFlavors
-import io.trewartha.positional.configureGradleManagedDevices
+import io.trewartha.positional.configureAndroid
 import io.trewartha.positional.configureKotlinAndroid
 import io.trewartha.positional.configureKoverForAndroidLibrary
 import io.trewartha.positional.configureTestLogger
-import io.trewartha.positional.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
 
@@ -22,10 +20,12 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
-                configureKotlinAndroid()
+                configureAndroid()
                 defaultConfig.targetSdk = 34
-                configureFlavors()
-                configureGradleManagedDevices()
+
+                extensions.configure<KotlinAndroidProjectExtension> {
+                    configureKotlinAndroid()
+                }
             }
 
             configureKoverForAndroidLibrary()

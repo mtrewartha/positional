@@ -1,5 +1,6 @@
 plugins {
     id("io.trewartha.positional.android.library")
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
 }
 
@@ -14,7 +15,6 @@ dependencies {
     api(libs.javax.inject)
 
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.navigation.compose)

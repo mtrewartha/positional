@@ -22,13 +22,14 @@ data object SunDestination : NavDestination.MainNavDestination {
     override val navIcon = Icons.Rounded.WbTwilight
     override val navLabelRes = R.string.ui_sun_title
 
-    override fun NavGraphBuilder.composable(
+    context(NavGraphBuilder)
+    override fun composable(
         navController: NavController,
         snackbarHostState: SnackbarHostState,
         contentPadding: PaddingValues
     ) {
         composable(
-            SunDestination.route,
+            route,
             enterTransition = bottomNavEnterTransition(),
             exitTransition = bottomNavExitTransition(SunHelpDestination.route),
             popEnterTransition = bottomNavPopEnterTransition(SunHelpDestination.route),
