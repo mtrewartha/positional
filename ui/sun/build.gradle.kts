@@ -1,18 +1,11 @@
 plugins {
     id("io.trewartha.positional.android.library")
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
 }
 
 android {
     namespace = "io.trewartha.positional.ui.sun"
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
-    }
 }
 
 dependencies {
@@ -26,7 +19,6 @@ dependencies {
     implementation(project(":model:core"))
     implementation(project(":ui:design"))
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)

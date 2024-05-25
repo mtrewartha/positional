@@ -1,18 +1,11 @@
 plugins {
     id("io.trewartha.positional.android.library")
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
 }
 
 android {
     namespace = "io.trewartha.positional.ui.location"
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
-    }
 
     kotlinOptions {
         freeCompilerArgs = freeCompilerArgs +
@@ -37,7 +30,6 @@ dependencies {
     implementation(project(":ui:design"))
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)

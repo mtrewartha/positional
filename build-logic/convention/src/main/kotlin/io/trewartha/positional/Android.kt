@@ -2,10 +2,42 @@ package io.trewartha.positional
 
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ManagedVirtualDevice
+import org.gradle.api.JavaVersion
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.invoke
 
-internal fun CommonExtension<*, *, *, *, *, *>.configureGradleManagedDevices() {
+context(Project)
+internal fun CommonExtension<*, *, *, *, *, *>.configureAndroid() {
+    compileSdk = 34
+
+    defaultConfig {
+        minSdk = 21
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        // Up to Java 17 APIs are available through desugaring
+        // https://developer.android.com/studio/write/java11-minimal-support-table
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
+    }
+
+    testOptions.unitTests.isIncludeAndroidResources = true
+
+    flavorDimensions += "androidVariant"
+    productFlavors {
+        create("aosp") {
+            dimension = "androidVariant"
+        }
+        create("gms") {
+            dimension = "androidVariant"
+        }
+    }
+
     testOptions {
         managedDevices {
             devices {
@@ -31,6 +63,10 @@ internal fun CommonExtension<*, *, *, *, *, *>.configureGradleManagedDevices() {
                 }
             }
         }
+    }
+
+    dependencies {
+        add("coreLibraryDesugaring", libs.findLibrary("android.tools.desugarJdkLibs").get())
     }
 }
 
