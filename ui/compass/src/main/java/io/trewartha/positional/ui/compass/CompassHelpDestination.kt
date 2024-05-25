@@ -15,13 +15,14 @@ data object CompassHelpDestination : NavDestination {
 
     override val route = "compass/help"
 
-    override fun NavGraphBuilder.composable(
+    context(NavGraphBuilder)
+    override fun composable(
         navController: NavController,
         snackbarHostState: SnackbarHostState,
         contentPadding: PaddingValues
     ) {
         composable(
-            CompassHelpDestination.route,
+            route,
             enterTransition = defaultEnterTransition(),
             exitTransition = defaultExitTransition(),
             popEnterTransition = defaultPopEnterTransition(),

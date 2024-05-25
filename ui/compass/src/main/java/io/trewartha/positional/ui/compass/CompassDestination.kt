@@ -27,13 +27,14 @@ data object CompassDestination : NavDestination.MainNavDestination {
     override val navIcon = Icons.Rounded.Explore
     override val navLabelRes = R.string.ui_compass_title
 
-    override fun NavGraphBuilder.composable(
+    context(NavGraphBuilder)
+    override fun composable(
         navController: NavController,
         snackbarHostState: SnackbarHostState,
         contentPadding: PaddingValues
     ) {
         composable(
-            CompassDestination.route,
+            route,
             enterTransition = bottomNavEnterTransition(),
             exitTransition = bottomNavExitTransition(CompassHelpDestination.route),
             popEnterTransition = bottomNavPopEnterTransition(CompassHelpDestination.route),

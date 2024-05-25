@@ -35,13 +35,14 @@ data object LocationDestination : NavDestination.MainNavDestination {
     override val navIcon = Icons.Rounded.MyLocation
     override val navLabelRes = R.string.ui_location_title
 
-    override fun NavGraphBuilder.composable(
+    context(NavGraphBuilder)
+    override fun composable(
         navController: NavController,
         snackbarHostState: SnackbarHostState,
         contentPadding: PaddingValues
     ) {
         composable(
-            LocationDestination.route,
+            route,
             enterTransition = bottomNavEnterTransition(),
             exitTransition = bottomNavExitTransition(LocationHelpDestination.route),
             popEnterTransition = bottomNavPopEnterTransition(LocationHelpDestination.route),
