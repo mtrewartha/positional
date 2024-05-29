@@ -30,7 +30,7 @@ google-firebase-crashlytics-gradle = "3.0.1"
 google-ksp = "2.0.0-1.0.21"
 google-materialComponents = "1.12.0"
 google-playServices-location = "21.2.0"
-google-playServices-testing = "16.0.0"
+google-playServices-testing = "16.1.0"
 google-services = "4.4.1"
 javapoet = { strictly = "1.13.0" }
 javax-inject = "1"
