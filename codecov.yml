@@ -1,11 +1,11 @@
 coverage:
   round: 'down'
-  comment:
-    layout: 'condensed_header, condensed_files, condensed_footer'
-    hide_project_coverage: false
   status:
     project: true
     patch: true
     changes: false
-  github_checks:
-    annotations: true
+comment:
+  layout: 'condensed_header, condensed_files, condensed_footer'
+  hide_project_coverage: false
+github_checks:
+  annotations: true
