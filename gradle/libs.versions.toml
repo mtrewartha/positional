@@ -61,7 +61,7 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
+kotlinx-kover-aggregation = { id = "org.jetbrains.kotlinx.kover.aggregation", version.ref = "kotlinx-kover" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 testLogger = { id = "com.adarshr.test-logger", version.ref = "testLogger" }
 
@@ -126,7 +126,6 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-playServices = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-kotlinx-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinx-kover" }
 markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 protobuf-java-lite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }

@@ -6,9 +6,12 @@
 /build
 /captures
 *.apk
-/local.properties
 keystore
 keystore.properties
+/local.properties
 app/*/release
 app/upload_keystore
 app/upload_keystore.properties
+
+# Kover
+**/kover.artifact

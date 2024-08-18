@@ -20,6 +20,30 @@ rootProject.name = "positional"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+plugins {
+    id("org.jetbrains.kotlinx.kover.aggregation") version "0.8.3"
+}
+
+kover {
+    enableCoverage()
+
+    reports {
+        excludesAnnotatedBy.addAll(
+            "dagger.*",
+            "*.Generated*"
+        )
+        excludedClasses.addAll(
+            "dagger.*",
+            "hilt_aggregated_deps.*",
+            "*Hilt_*",
+            "*_Hilt*",
+            "*.*_*Injector*",
+            "*_*Factory*",
+            "io.trewartha.positional.BuildConfig",
+        )
+    }
+}
+
 include(
     ":app",
     ":model:compass",

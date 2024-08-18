@@ -1,7 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import io.trewartha.positional.configureAndroid
 import io.trewartha.positional.configureKotlinAndroid
-import io.trewartha.positional.configureKoverForAndroidLibrary
 import io.trewartha.positional.configureTestLogger
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,7 +15,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
                 apply("com.adarshr.test-logger")
-                apply("org.jetbrains.kotlinx.kover")
             }
 
             extensions.configure<ApplicationExtension> {
@@ -27,8 +25,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     configureKotlinAndroid()
                 }
             }
-
-            configureKoverForAndroidLibrary()
 
             configureTestLogger()
         }
