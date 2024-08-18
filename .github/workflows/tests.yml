@@ -27,4 +27,9 @@ jobs:
           log-accepted-android-sdk-licenses: false
 
       - name: 'Run unit tests'
-        run: ./gradlew test
+        run: ./gradlew test koverXmlReport
+
+      - name: 'Upload coverage report to Codecov'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
