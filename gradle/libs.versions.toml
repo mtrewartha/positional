@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.34.0"
 android-tools-common = "35.0.0"
-android-tools-desugarJdkLibs = "2.1.0"
+android-tools-desugarJdkLibs = "2.1.1"
 android-tools-gradle = "8.6.0-rc01"
 androidx-activity = "1.9.1"
 androidx-activity-compose = "1.9.1"
