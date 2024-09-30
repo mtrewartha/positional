@@ -21,7 +21,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureAndroid()
-                defaultConfig.targetSdk = 34
+
+                defaultConfig {
+                    consumerProguardFiles("consumer-rules.pro")
+                    targetSdk = 34
+                }
+
                 // The resource prefix is derived from the module name,
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"
                 resourcePrefix =
