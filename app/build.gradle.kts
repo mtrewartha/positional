@@ -36,8 +36,8 @@ android {
 
     defaultConfig {
         applicationId = "io.trewartha.positional"
-        versionCode = 21030101
-        versionName = "3.1.1"
+        versionCode = 21030102
+        versionName = "3.1.2"
 
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
