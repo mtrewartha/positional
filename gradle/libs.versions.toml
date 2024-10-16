@@ -45,7 +45,7 @@ robolectric = "4.13"
 sunrise-sunset = "1.2"
 testLogger = "4.0.0"
 timber = "5.0.1"
-turbine = "1.1.0"
+turbine = "1.2.0"
 worldwind = "1.5.26"
 
 [plugins]
