@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.invoke
 
 context(Project)
 internal fun CommonExtension<*, *, *, *, *, *>.configureAndroid() {
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
