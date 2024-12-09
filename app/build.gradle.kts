@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
-    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.google.dagger.hilt.android)
 }
 
 private val PROPERTIES_FILE_PATH = "app/upload_keystore.properties"
