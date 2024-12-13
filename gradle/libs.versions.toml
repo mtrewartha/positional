@@ -35,7 +35,6 @@ javax-inject = "1"
 kotest = "5.9.1"
 kotlin = "2.1.0"
 kotlinx-coroutines = "1.9.0"
-kotlinx-kover = "0.8.3"
 kotlinx-datetime = "0.6.1"
 markwon = "4.6.2"
 protobuf = "4.29.1"
@@ -58,7 +57,6 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlinx-kover-aggregation = { id = "org.jetbrains.kotlinx.kover.aggregation", version.ref = "kotlinx-kover" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
 testLogger = { id = "com.adarshr.test-logger", version.ref = "testLogger" }
 
