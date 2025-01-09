@@ -2,7 +2,7 @@
 accompanist = "0.37.0"
 android-tools-common = "35.0.0"
 android-tools-desugarJdkLibs = "2.1.4"
-android-tools-gradle = "8.7.3"
+android-tools-gradle = "8.8.0"
 androidx-activity = "1.9.3"
 androidx-activity-compose = "1.9.3"
 androidx-appcompat = "1.7.0"
