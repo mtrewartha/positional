@@ -26,6 +26,6 @@ Positional. The identifier is not tied to any personal information.
 ### Questions or Concerns?
 If you have any concerns regarding this policy or your privacy, please do not hesitate to get in touch. You can
 create a GitHub issue at https://github.com/miketrewartha/positional or you can send an email to Mike Trewartha, the main
-developer of the app, at trewartha.mike@gmail.com.
+developer of the app, at positional@trewartha.io.
 
 That's it :) Thank you for using Positional!
