@@ -126,7 +126,6 @@ protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref 
 protobuf-java-lite = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobuf" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 robolectric-core = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
-robolectric-playServices = { group = "org.robolectric", name = "shadows-playservices", version.ref = "robolectric" }
 sunriseSunset = { group = "com.luckycatlabs", name = "SunriseSunsetCalculator", version.ref = "sunrise-sunset" }
 testLogger = { group = "com.adarshr", name = "gradle-test-logger-plugin", version.ref = "testLogger" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
