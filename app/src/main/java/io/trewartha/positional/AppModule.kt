@@ -9,7 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 

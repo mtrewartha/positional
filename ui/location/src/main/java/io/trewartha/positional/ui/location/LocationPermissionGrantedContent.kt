@@ -55,9 +55,9 @@ import io.trewartha.positional.ui.design.modifier.placeholder
 import io.trewartha.positional.ui.location.format.DecimalDegreesFormatter
 import io.trewartha.positional.ui.location.locals.LocalCoordinatesFormatter
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Instant
 
 @Composable
 fun LocationPermissionGrantedContent(

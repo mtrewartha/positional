@@ -8,9 +8,9 @@ import io.trewartha.positional.model.core.measurement.meters
 import io.trewartha.positional.model.location.Location
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.time.Clock
 
 class TestLocatorTest {
 

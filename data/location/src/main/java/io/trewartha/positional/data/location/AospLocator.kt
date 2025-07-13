@@ -32,11 +32,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retry
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * [Locator] implementation powered by the AOSP [LocationManager]

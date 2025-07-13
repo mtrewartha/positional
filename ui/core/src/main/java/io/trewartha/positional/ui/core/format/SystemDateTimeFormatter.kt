@@ -1,7 +1,5 @@
 package io.trewartha.positional.ui.core.format
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -16,6 +14,8 @@ import java.text.SimpleDateFormat.SHORT
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 class SystemDateTimeFormatter @Inject constructor(locale: Locale) : DateTimeFormatter {
 

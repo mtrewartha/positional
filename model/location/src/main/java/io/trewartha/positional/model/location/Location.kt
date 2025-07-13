@@ -4,7 +4,7 @@ import io.trewartha.positional.model.core.measurement.Angle
 import io.trewartha.positional.model.core.measurement.Coordinates
 import io.trewartha.positional.model.core.measurement.Distance
 import io.trewartha.positional.model.core.measurement.Speed
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 /**
  * Location somewhere on Earth, represented in a decimal degrees latitude, longitude, altitude, and
