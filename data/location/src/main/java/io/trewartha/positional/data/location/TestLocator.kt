@@ -7,7 +7,7 @@ import io.trewartha.positional.model.location.Location
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 
 /**
  * [Locator] implementation for use in testing classes that depend on a [Locator]

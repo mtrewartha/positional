@@ -7,8 +7,8 @@ import io.trewartha.positional.data.location.Locator
 import io.trewartha.positional.data.settings.SettingsRepository
 import io.trewartha.positional.model.location.Location
 import io.trewartha.positional.ui.core.State
-import io.trewartha.positional.ui.core.flow.ForViewModel
 import io.trewartha.positional.ui.core.asStates
+import io.trewartha.positional.ui.core.flow.ForViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
