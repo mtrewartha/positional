@@ -28,23 +28,7 @@ jobs:
 
       - name: 'Run unit tests'
         run: >-
-          ./gradlew
-          :model:compass:test
-          :model:core:test
-          :model:location:test
-          :model:settings:test
-          :model:sun:test
-          :data:compass:testAospRelease :data:compass:testGmsRelease
-          :data:location:testAospRelease :data:location:testGmsRelease
-          :data:settings:testAospRelease :data:settings:testGmsRelease
-          :data:sun:test
-          :ui:compass:testAospRelease :ui:compass:testGmsRelease
-          :ui:core:testAospRelease :ui:core:testGmsRelease
-          :ui:design:testAospRelease :ui:design:testGmsRelease
-          :ui:location:testAospRelease :ui:location:testGmsRelease
-          :ui:settings:testAospRelease :ui:settings:testGmsRelease
-          :ui:sun:testAospRelease :ui:sun:testGmsRelease
-          koverXmlReport
+          ./gradlew test koverXmlReport
 
       - name: 'Upload coverage report to Codecov'
         uses: codecov/codecov-action@v5

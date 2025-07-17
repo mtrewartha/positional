@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "io.trewartha.positional.settings";
+option java_outer_classname = "ThemeProto";
+
+enum Theme {
+  THEME_UNSPECIFIED = 0;
+  THEME_LIGHT = 1;
+  THEME_DARK = 2;
+  THEME_SYSTEM = 3;
+}

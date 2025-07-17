@@ -7,8 +7,8 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import io.trewartha.positional.ui.core.format.DateTimeFormatter
-import io.trewartha.positional.ui.design.locals.LocalDateTimeFormatter
+import io.trewartha.positional.core.ui.format.DateTimeFormatter
+import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint

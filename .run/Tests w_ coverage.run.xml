@@ -1,40 +1,23 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Tests w/ coverage" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
+      <option name="env">
+        <map>
+          <entry key="DEVELOPER_DIR" value="/Applications/Xcode.app/Contents/Developer" />
+        </map>
+      </option>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="--rerun-tasks" />
+      <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value=":model:compass:test" />
-          <option value=":model:core:test" />
-          <option value=":model:location:test" />
-          <option value=":model:settings:test" />
-          <option value=":model:sun:test" />
-          <option value=":data:compass:testAospRelease" />
-          <option value=":data:compass:testGmsRelease" />
-          <option value=":data:location:testAospRelease" />
-          <option value=":data:location:testGmsRelease" />
-          <option value=":data:settings:testAospRelease" />
-          <option value=":data:settings:testGmsRelease" />
-          <option value=":data:sun:test" />
-          <option value=":ui:compass:testAospRelease" />
-          <option value=":ui:compass:testGmsRelease" />
-          <option value=":ui:core:testAospRelease" />
-          <option value=":ui:core:testGmsRelease" />
-          <option value=":ui:design:testAospRelease" />
-          <option value=":ui:design:testGmsRelease" />
-          <option value=":ui:location:testAospRelease" />
-          <option value=":ui:location:testGmsRelease" />
-          <option value=":ui:settings:testAospRelease" />
-          <option value=":ui:settings:testGmsRelease" />
-          <option value=":ui:sun:testAospRelease" />
-          <option value=":ui:sun:testGmsRelease" />
+          <option value="test" />
           <option value="koverHtmlReport" />
+          <option value="--rerun" />
         </list>
       </option>
       <option name="vmOptions" />

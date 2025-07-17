@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "io.trewartha.positional.settings";
+option java_outer_classname = "UnitsProto";
+
+enum Units {
+  UNITS_UNSPECIFIED = 0;
+  UNITS_METRIC = 1;
+  UNITS_IMPERIAL = 2;
+}
