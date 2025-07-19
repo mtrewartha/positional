@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "io.trewartha.positional.settings";
+option java_outer_classname = "CompassModeProto";
+
+enum CompassMode {
+  COMPASS_MODE_UNSPECIFIED = 0;
+  COMPASS_MODE_MAGNETIC_NORTH = 1;
+  COMPASS_MODE_TRUE_NORTH = 2;
+}

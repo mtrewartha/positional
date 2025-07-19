@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Sun -->
+    <string name="ui_sun_button_help_content_description">Help</string>
+    <string name="ui_sun_button_next_day_content_description">Next day</string>
+    <string name="ui_sun_button_previous_day_content_description">Previous day</string>
+    <string name="ui_sun_button_today">Jump to today</string>
+    <string name="ui_sun_label_dawn_dusk_astronomical">Astronomical</string>
+    <string name="ui_sun_label_dawn_dusk_civil">Civil</string>
+    <string name="ui_sun_label_dawn_dusk_nautical">Nautical</string>
+    <string name="ui_sun_text_time_none">@string/core_ui_dash</string>
+    <string name="ui_sun_title">Sun</string>
+    <string name="ui_sun_title_dawn">Dawn</string>
+    <string name="ui_sun_title_dusk">Dusk</string>
+    <string name="ui_sun_title_sunrise">Sunrise</string>
+    <string name="ui_sun_title_sunset">Sunset</string>
+
+    <!-- Sun Help -->
+    <string name="ui_sun_help_title">Sun Help</string>
+    <string name="ui_sun_help_title_compass">Compass</string>
+    <string name="ui_sun_help_title_settings">Settings</string>
+</resources>
