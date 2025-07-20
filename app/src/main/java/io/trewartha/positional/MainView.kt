@@ -43,19 +43,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import io.trewartha.positional.model.settings.Theme
-import io.trewartha.positional.ui.compass.CompassDestination
-import io.trewartha.positional.ui.compass.CompassHelpDestination
-import io.trewartha.positional.ui.core.activity
-import io.trewartha.positional.ui.core.nav.NavDestination
-import io.trewartha.positional.ui.design.PositionalTheme
-import io.trewartha.positional.ui.location.LocationDestination
-import io.trewartha.positional.ui.location.LocationHelpDestination
-import io.trewartha.positional.ui.location.LocationPermissionRequiredContent
-import io.trewartha.positional.ui.settings.SettingsDestination
-import io.trewartha.positional.ui.settings.SettingsViewModel
-import io.trewartha.positional.ui.sun.SunDestination
-import io.trewartha.positional.ui.sun.SunHelpDestination
+import io.trewartha.positional.compass.ui.CompassDestination
+import io.trewartha.positional.compass.ui.CompassHelpDestination
+import io.trewartha.positional.core.ui.PositionalTheme
+import io.trewartha.positional.core.ui.activity
+import io.trewartha.positional.core.ui.nav.NavDestination
+import io.trewartha.positional.location.ui.LocationDestination
+import io.trewartha.positional.location.ui.LocationHelpDestination
+import io.trewartha.positional.location.ui.LocationPermissionRequiredContent
+import io.trewartha.positional.settings.Theme
+import io.trewartha.positional.settings.ui.SettingsDestination
+import io.trewartha.positional.settings.ui.SettingsViewModel
+import io.trewartha.positional.sun.ui.SunDestination
+import io.trewartha.positional.sun.ui.SunHelpDestination
 
 @Composable
 fun MainView(
