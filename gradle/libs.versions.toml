@@ -101,9 +101,9 @@ google-dagger-android = { group = "com.google.dagger", name = "dagger-android", 
 google-dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "google-dagger" }
 google-dagger-core = { group = "com.google.dagger", name = "dagger", version.ref = "google-dagger" }
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "google-firebase-bom" }
-google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 google-firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "google-firebase-crashlytics-gradle" }
-google-firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 google-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-dagger" }
 google-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "google-dagger" }
 google-ksp = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "google-ksp" }
