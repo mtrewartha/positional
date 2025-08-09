@@ -5,8 +5,10 @@ import io.trewartha.positional.configureTestLogger
 import io.trewartha.positional.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
@@ -48,6 +50,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 add("testImplementation", libs.findLibrary("kotlin.test").get())
                 add("testImplementation", libs.findLibrary("robolectric.core").get())
             }
+
+            // https://github.com/gradle/gradle/issues/33619
+            tasks.withType<Test> { failOnNoDiscoveredTests.set(false) }
         }
     }
 }
