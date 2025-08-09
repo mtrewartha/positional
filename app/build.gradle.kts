@@ -91,7 +91,7 @@ dependencies {
     implementation(libs.google.hilt.android)
     implementation(libs.google.materialComponents)
     implementation(platform(libs.google.firebase.bom))
-    implementation(libs.google.firebase.crashlytics.ktx)
+    implementation(libs.google.firebase.crashlytics)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
 
