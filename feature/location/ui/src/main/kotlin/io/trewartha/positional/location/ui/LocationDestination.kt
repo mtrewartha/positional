@@ -33,7 +33,7 @@ data object LocationDestination : NavDestination.MainNavDestination {
 
     override val route = "location"
     override val navIcon = Icons.Rounded.MyLocation
-    override val navLabelRes = R.string.ui_location_title
+    override val navLabelRes = R.string.feature_location_ui_title
 
     context(NavGraphBuilder)
     override fun composable(

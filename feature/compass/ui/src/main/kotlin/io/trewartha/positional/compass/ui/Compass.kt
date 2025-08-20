@@ -261,21 +261,21 @@ private fun DirectionText(azimuth: Angle, modifier: Modifier = Modifier) {
             text = stringResource(
                 when {
                     AZIMUTH_NW_MIN <= degrees && degrees < AZIMUTH_NW_MAX ->
-                        R.string.ui_compass_direction_northwest
+                        R.string.feature_compass_ui_direction_northwest
                     AZIMUTH_NE_MIN <= degrees && degrees < AZIMUTH_NE_MAX ->
-                        R.string.ui_compass_direction_northeast
+                        R.string.feature_compass_ui_direction_northeast
                     AZIMUTH_SW_MIN <= degrees && degrees < AZIMUTH_SW_MAX ->
-                        R.string.ui_compass_direction_southwest
+                        R.string.feature_compass_ui_direction_southwest
                     AZIMUTH_SE_MIN <= degrees && degrees < AZIMUTH_SE_MAX ->
-                        R.string.ui_compass_direction_southeast
+                        R.string.feature_compass_ui_direction_southeast
                     AZIMUTH_E_MIN <= degrees && degrees < AZIMUTH_E_MAX ->
-                        R.string.ui_compass_direction_east
+                        R.string.feature_compass_ui_direction_east
                     AZIMUTH_S_MIN <= degrees && degrees < AZIMUTH_S_MAX ->
-                        R.string.ui_compass_direction_south
+                        R.string.feature_compass_ui_direction_south
                     AZIMUTH_W_MIN <= degrees && degrees < AZIMUTH_W_MAX ->
-                        R.string.ui_compass_direction_west
+                        R.string.feature_compass_ui_direction_west
                     else ->
-                        R.string.ui_compass_direction_north
+                        R.string.feature_compass_ui_direction_north
                 }
             ),
             modifier = modifier,

@@ -18,26 +18,26 @@ fun CoordinatesFormatSetting(
 ) {
     ListSetting(
         icon = Icons.Rounded.Pin,
-        title = stringResource(R.string.ui_settings_coordinates_format_title),
+        title = stringResource(R.string.feature_settings_ui_coordinates_format_title),
         values = CoordinatesFormat.entries.toSet(),
         value = value,
         valueName = { coordinatesFormat ->
             stringResource(
                 when (coordinatesFormat) {
                     CoordinatesFormat.DD ->
-                        R.string.ui_settings_coordinates_format_value_dd_name
+                        R.string.feature_settings_ui_coordinates_format_value_dd_name
                     CoordinatesFormat.DDM ->
-                        R.string.ui_settings_coordinates_format_value_ddm_name
+                        R.string.feature_settings_ui_coordinates_format_value_ddm_name
                     CoordinatesFormat.DMS ->
-                        R.string.ui_settings_coordinates_format_value_dms_name
+                        R.string.feature_settings_ui_coordinates_format_value_dms_name
                     CoordinatesFormat.MGRS ->
-                        R.string.ui_settings_coordinates_format_value_mgrs_name
+                        R.string.feature_settings_ui_coordinates_format_value_mgrs_name
                     CoordinatesFormat.UTM ->
-                        R.string.ui_settings_coordinates_format_value_utm_name
+                        R.string.feature_settings_ui_coordinates_format_value_utm_name
                 }
             )
         },
-        valuesDialogTitle = stringResource(R.string.ui_settings_coordinates_format_dialog_title),
+        valuesDialogTitle = stringResource(R.string.feature_settings_ui_coordinates_format_dialog_title),
         valuesDialogText = null,
         onValueChange = onValueChange,
         modifier = modifier

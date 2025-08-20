@@ -15,24 +15,24 @@ fun CompassNorthVibrationSetting(
 ) {
     ListSetting(
         icon = Icons.Rounded.Vibration,
-        title = stringResource(R.string.ui_settings_compass_north_vibration_title),
+        title = stringResource(R.string.feature_settings_ui_compass_north_vibration_title),
         values = CompassNorthVibration.entries.toSet(),
         value = value,
         valueName = { compassNorthVibration ->
             stringResource(
                 when (compassNorthVibration) {
                     CompassNorthVibration.NONE ->
-                        R.string.ui_settings_compass_north_vibration_value_none
+                        R.string.feature_settings_ui_compass_north_vibration_value_none
                     CompassNorthVibration.SHORT ->
-                        R.string.ui_settings_compass_north_vibration_value_short
+                        R.string.feature_settings_ui_compass_north_vibration_value_short
                     CompassNorthVibration.MEDIUM ->
-                        R.string.ui_settings_compass_north_vibration_value_medium
+                        R.string.feature_settings_ui_compass_north_vibration_value_medium
                     CompassNorthVibration.LONG ->
-                        R.string.ui_settings_compass_north_vibration_value_long
+                        R.string.feature_settings_ui_compass_north_vibration_value_long
                 }
             )
         },
-        valuesDialogTitle = stringResource(R.string.ui_settings_compass_north_vibration_dialog_title),
+        valuesDialogTitle = stringResource(R.string.feature_settings_ui_compass_north_vibration_dialog_title),
         valuesDialogText = null,
         onValueChange = onValueChange,
         modifier = modifier

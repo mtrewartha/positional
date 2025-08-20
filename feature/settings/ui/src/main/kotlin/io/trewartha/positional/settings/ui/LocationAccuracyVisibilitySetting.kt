@@ -16,8 +16,8 @@ fun LocationAccuracyVisibilitySetting(
 ) {
     SwitchSetting(
         icon = Icons.Rounded.Adjust,
-        title = stringResource(R.string.ui_settings_show_accuracies_title),
-        description = { stringResource(R.string.ui_settings_show_accuracies_description) },
+        title = stringResource(R.string.feature_settings_ui_show_accuracies_title),
+        description = { stringResource(R.string.feature_settings_ui_show_accuracies_description) },
         value = when (value) {
             LocationAccuracyVisibility.HIDE -> false
             LocationAccuracyVisibility.SHOW -> true

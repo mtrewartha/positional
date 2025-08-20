@@ -18,20 +18,20 @@ fun CompassModeSetting(
 ) {
     ListSetting(
         icon = Icons.Rounded.North,
-        title = stringResource(R.string.ui_settings_compass_mode_title),
+        title = stringResource(R.string.feature_settings_ui_compass_mode_title),
         values = setOf(CompassMode.MAGNETIC_NORTH, CompassMode.TRUE_NORTH),
         value = value,
         valueName = { compassMode ->
             stringResource(
                 when (compassMode) {
                     CompassMode.MAGNETIC_NORTH ->
-                        R.string.ui_settings_compass_mode_value_magnetic_name
+                        R.string.feature_settings_ui_compass_mode_value_magnetic_name
                     CompassMode.TRUE_NORTH ->
-                        R.string.ui_settings_compass_mode_value_true_name
+                        R.string.feature_settings_ui_compass_mode_value_true_name
                 }
             )
         },
-        valuesDialogTitle = stringResource(R.string.ui_settings_compass_mode_dialog_title),
+        valuesDialogTitle = stringResource(R.string.feature_settings_ui_compass_mode_dialog_title),
         valuesDialogText = null,
         onValueChange = onValueChange,
         modifier = modifier

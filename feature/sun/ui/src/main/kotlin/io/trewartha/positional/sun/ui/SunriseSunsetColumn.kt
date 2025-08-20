@@ -50,7 +50,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             AutoShrinkingText(
-                text = stringResource(R.string.ui_sun_title_sunrise),
+                text = stringResource(R.string.feature_sun_ui_title_sunrise),
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
@@ -63,7 +63,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             AutoShrinkingText(
-                text = stringResource(R.string.ui_sun_title_sunset),
+                text = stringResource(R.string.feature_sun_ui_title_sunset),
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
@@ -98,7 +98,7 @@ private fun SunriseSunsetTime(
 ) {
     AutoShrinkingText(
         text = localTime.dataOrNull?.let { LocalDateTimeFormatter.current.formatTime(it) }
-            ?: stringResource(R.string.ui_sun_text_time_none),
+            ?: stringResource(R.string.feature_sun_ui_text_time_none),
         modifier = modifier.placeholder(visible = localTime is State.Loading),
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,

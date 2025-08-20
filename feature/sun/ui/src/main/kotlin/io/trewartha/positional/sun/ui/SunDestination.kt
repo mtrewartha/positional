@@ -20,7 +20,7 @@ data object SunDestination : NavDestination.MainNavDestination {
 
     override val route = "sun"
     override val navIcon = Icons.Rounded.WbTwilight
-    override val navLabelRes = R.string.ui_sun_title
+    override val navLabelRes = R.string.feature_sun_ui_title
 
     context(NavGraphBuilder)
     override fun composable(

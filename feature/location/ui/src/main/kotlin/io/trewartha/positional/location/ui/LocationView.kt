@@ -72,7 +72,7 @@ fun LocationView(
 ) {
     // Snackbars
     val coroutineScope = rememberCoroutineScope()
-    val coordinatesCopiedMessage = stringResource(R.string.ui_location_snackbar_coordinates_copied)
+    val coordinatesCopiedMessage = stringResource(R.string.feature_location_ui_snackbar_coordinates_copied)
     var showMapError by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val clipboardManager = LocalClipboardManager.current
@@ -117,12 +117,12 @@ private fun MapErrorDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.ui_location_dialog_map_error_button_confirm))
+                Text(stringResource(R.string.feature_location_ui_dialog_map_error_button_confirm))
             }
         },
         icon = { Icon(Icons.Rounded.ErrorOutline, contentDescription = null) },
-        title = { Text(stringResource(R.string.ui_location_dialog_map_error_title)) },
-        text = { Text(stringResource(R.string.ui_location_dialog_map_error_text)) }
+        title = { Text(stringResource(R.string.feature_location_ui_dialog_map_error_title)) },
+        text = { Text(stringResource(R.string.feature_location_ui_dialog_map_error_text)) }
     )
 }
 
@@ -146,7 +146,7 @@ private fun navigateToMap(
     if (coordinates == null || timestamp == null) return
     val localDateTime = timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
     val formattedDateTime = dateTimeFormatter.formatDateTime(localDateTime)
-    val label = context.getString(R.string.ui_location_launch_label, formattedDateTime)
+    val label = context.getString(R.string.feature_location_ui_launch_label, formattedDateTime)
     val geoUri = with(coordinates.asGeodeticCoordinates()) {
         Uri.Builder()
             .scheme("geo")

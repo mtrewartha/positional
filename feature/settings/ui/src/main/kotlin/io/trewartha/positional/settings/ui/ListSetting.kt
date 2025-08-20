@@ -75,7 +75,7 @@ fun <T> ListSetting(
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(
-                dimensionResource(R.dimen.ui_settings_row_arrangement_spacing)
+                dimensionResource(R.dimen.feature_settings_ui_row_arrangement_spacing)
             )
         ) {
             Icon(
@@ -163,12 +163,12 @@ private fun <T> ValuesDialog(
         },
         confirmButton = {
             TextButton(onClick = { onValueChange(selectedValue) }) {
-                Text(stringResource(R.string.ui_settings_theme_dialog_confirm))
+                Text(stringResource(R.string.feature_settings_ui_theme_dialog_confirm))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.ui_settings_theme_dialog_dismiss))
+                Text(stringResource(R.string.feature_settings_ui_theme_dialog_dismiss))
             }
         }
     )

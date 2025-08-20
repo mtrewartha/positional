@@ -25,7 +25,7 @@ data object CompassDestination : NavDestination.MainNavDestination {
 
     override val route = "compass"
     override val navIcon = Icons.Rounded.Explore
-    override val navLabelRes = R.string.ui_compass_title
+    override val navLabelRes = R.string.feature_compass_ui_title
 
     context(NavGraphBuilder)
     override fun composable(
