@@ -8,7 +8,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.invoke
 
-context(Project)
+context(project: Project)
 internal fun CommonExtension<*, *, *, *, *, *>.configureAndroid() {
     compileSdk = 35
 
@@ -65,8 +65,8 @@ internal fun CommonExtension<*, *, *, *, *, *>.configureAndroid() {
         }
     }
 
-    dependencies {
-        add("coreLibraryDesugaring", libs.findLibrary("android.tools.desugarJdkLibs").get())
+    project.dependencies {
+        add("coreLibraryDesugaring", project.libs.findLibrary("android.tools.desugarJdkLibs").get())
     }
 }
 

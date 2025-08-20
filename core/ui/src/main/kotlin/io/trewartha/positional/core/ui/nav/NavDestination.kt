@@ -10,7 +10,7 @@ interface NavDestination {
 
     val route: String
 
-    context(NavGraphBuilder)
+    context(navGraphBuilder: NavGraphBuilder)
     fun composable(
         navController: NavController,
         snackbarHostState: SnackbarHostState,
