@@ -24,15 +24,15 @@ fun AccuracyBlock(
 ) {
     StatBlock(
         icon = Icons.Rounded.Adjust,
-        name = stringResource(R.string.ui_location_label_accuracy),
+        name = stringResource(R.string.feature_location_ui_label_accuracy),
         value = if (accuracy == null || units == null) {
             null
         } else {
             val (stringResource, convertedAccuracy) = when (units) {
                 Units.METRIC ->
-                    R.string.ui_location_horizontal_accuracy_metric to accuracy.inMeters()
+                    R.string.feature_location_ui_horizontal_accuracy_metric to accuracy.inMeters()
                 Units.IMPERIAL ->
-                    R.string.ui_location_horizontal_accuracy_imperial to accuracy.inFeet()
+                    R.string.feature_location_ui_horizontal_accuracy_imperial to accuracy.inFeet()
             }
             stringResource(stringResource, convertedAccuracy.magnitude)
         },
@@ -54,13 +54,13 @@ fun AltitudeBlock(
 ) {
     StatBlock(
         icon = Icons.Rounded.Height,
-        name = stringResource(R.string.ui_location_label_altitude),
+        name = stringResource(R.string.feature_location_ui_label_altitude),
         value = if (altitude == null || units == null) {
             null
         } else {
             val (stringResource, convertedAltitude) = when (units) {
-                Units.METRIC -> R.string.ui_location_altitude_metric to altitude.inMeters()
-                Units.IMPERIAL -> R.string.ui_location_altitude_imperial to altitude.inFeet()
+                Units.METRIC -> R.string.feature_location_ui_altitude_metric to altitude.inMeters()
+                Units.IMPERIAL -> R.string.feature_location_ui_altitude_imperial to altitude.inFeet()
             }
             stringResource(stringResource, convertedAltitude.magnitude)
         },
@@ -68,8 +68,8 @@ fun AltitudeBlock(
             null
         } else {
             val (stringResource, convertedAccuracy) = when (units) {
-                Units.METRIC -> R.string.ui_location_accuracy_metric to accuracy.inMeters()
-                Units.IMPERIAL -> R.string.ui_location_accuracy_imperial to accuracy.inFeet()
+                Units.METRIC -> R.string.feature_location_ui_accuracy_metric to accuracy.inMeters()
+                Units.IMPERIAL -> R.string.feature_location_ui_accuracy_imperial to accuracy.inFeet()
             }
             stringResource(stringResource, convertedAccuracy.magnitude)
         },
@@ -89,16 +89,16 @@ fun BearingBlock(
 ) {
     StatBlock(
         icon = Icons.Rounded.NorthEast,
-        name = stringResource(R.string.ui_location_label_bearing),
+        name = stringResource(R.string.feature_location_ui_label_bearing),
         value = if (bearing == null) {
             null
         } else {
-            stringResource(R.string.ui_location_bearing, bearing.inDegrees().magnitude)
+            stringResource(R.string.feature_location_ui_bearing, bearing.inDegrees().magnitude)
         },
         accuracy = if (accuracy == null) {
             null
         } else {
-            stringResource(R.string.ui_location_bearing_accuracy, accuracy.inDegrees().magnitude)
+            stringResource(R.string.feature_location_ui_bearing_accuracy, accuracy.inDegrees().magnitude)
         },
         accuracyVisibility = accuracyVisibility,
         showPlaceholder = placeholdersVisible,
@@ -117,13 +117,13 @@ fun SpeedBlock(
 ) {
     StatBlock(
         icon = Icons.Rounded.Speed,
-        name = stringResource(R.string.ui_location_label_speed),
+        name = stringResource(R.string.feature_location_ui_label_speed),
         value = if (speed == null || units == null) {
             null
         } else {
             val (stringResource, convertedSpeed) = when (units) {
-                Units.METRIC -> R.string.ui_location_speed_metric to speed.inKilometersPerHour()
-                Units.IMPERIAL -> R.string.ui_location_speed_imperial to speed.inMilesPerHour()
+                Units.METRIC -> R.string.feature_location_ui_speed_metric to speed.inKilometersPerHour()
+                Units.IMPERIAL -> R.string.feature_location_ui_speed_imperial to speed.inMilesPerHour()
             }
             stringResource(stringResource, convertedSpeed.magnitude)
         },
@@ -131,8 +131,8 @@ fun SpeedBlock(
             null
         } else {
             val (stringResource, convertedAccuracy) = when (units) {
-                Units.METRIC -> R.string.ui_location_accuracy_metric to accuracy.inKilometersPerHour()
-                Units.IMPERIAL -> R.string.ui_location_accuracy_imperial to accuracy.inMilesPerHour()
+                Units.METRIC -> R.string.feature_location_ui_accuracy_metric to accuracy.inKilometersPerHour()
+                Units.IMPERIAL -> R.string.feature_location_ui_accuracy_imperial to accuracy.inMilesPerHour()
             }
             stringResource(stringResource, convertedAccuracy.magnitude)
         },

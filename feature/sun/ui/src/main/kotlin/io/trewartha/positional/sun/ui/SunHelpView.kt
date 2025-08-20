@@ -14,8 +14,8 @@ fun SunHelpView(
     modifier: Modifier = Modifier
 ) {
     HelpView(
-        title = { Text(text = stringResource(id = R.string.ui_sun_help_title)) },
-        markdownRes = R.raw.ui_sun_help,
+        title = { Text(text = stringResource(id = R.string.feature_sun_ui_help_title)) },
+        markdownRes = R.raw.feature_sun_ui_help,
         contentPadding = contentPadding,
         onUpClick = onUpClick,
         modifier = modifier

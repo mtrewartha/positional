@@ -68,12 +68,12 @@ fun CompassView(
             onDismissRequest = { showMissingSensorDialog = false },
             confirmButton = {
                 TextButton(onClick = { showMissingSensorDialog = false }) {
-                    Text(stringResource(R.string.ui_compass_missing_hardware_dialog_confirm))
+                    Text(stringResource(R.string.feature_compass_ui_missing_hardware_dialog_confirm))
                 }
             },
             text = {
                 Text(
-                    stringResource(R.string.ui_compass_missing_hardware_dialog_text),
+                    stringResource(R.string.feature_compass_ui_missing_hardware_dialog_text),
                     modifier = Modifier.verticalScroll(rememberScrollState())
                 )
             }
@@ -121,19 +121,19 @@ private fun SensorsMissingContent(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(R.string.ui_compass_missing_hardware_title),
+                text = stringResource(R.string.feature_compass_ui_missing_hardware_title),
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(R.string.ui_compass_missing_hardware_body),
+                text = stringResource(R.string.feature_compass_ui_missing_hardware_body),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(12.dp))
             TextButton(onClick = onWhyClick) {
-                Text(text = stringResource(id = R.string.ui_compass_missing_hardware_button_why))
+                Text(text = stringResource(id = R.string.feature_compass_ui_missing_hardware_button_why))
             }
             Spacer(modifier = Modifier.height(12.dp))
         }
@@ -187,7 +187,7 @@ private fun HelpButton(onClick: () -> Unit) {
     IconButton(onClick) {
         Icon(
             Icons.AutoMirrored.Rounded.HelpOutline,
-            stringResource(R.string.ui_compass_button_help_content_description),
+            stringResource(R.string.feature_compass_ui_button_help_content_description),
         )
     }
 }
@@ -197,8 +197,8 @@ private fun AccuracyHelpDialog(onDismissRequest: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = { Icon(imageVector = Icons.Rounded.Warning, contentDescription = null) },
-        title = { Text(stringResource(R.string.ui_compass_dialog_accuracy_help_title)) },
-        text = { Text(stringResource(R.string.ui_compass_dialog_accuracy_help_text)) },
+        title = { Text(stringResource(R.string.feature_compass_ui_dialog_accuracy_help_title)) },
+        text = { Text(stringResource(R.string.feature_compass_ui_dialog_accuracy_help_text)) },
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
                 Text(stringResource(CoreR.string.core_ui_ok))
@@ -210,7 +210,7 @@ private fun AccuracyHelpDialog(onDismissRequest: () -> Unit) {
 @Composable
 private fun DeclinationText(declination: Double?, modifier: Modifier = Modifier) {
     Text(
-        text = stringResource(R.string.ui_compass_declination, declination ?: 0f),
+        text = stringResource(R.string.feature_compass_ui_declination, declination ?: 0f),
         style = MaterialTheme.typography.labelLarge,
         textAlign = TextAlign.Center,
         modifier = modifier.placeholder(declination == null)

@@ -39,19 +39,19 @@ fun DawnDuskColumn(
     ) {
         HeaderRow(modifier = Modifier.fillMaxWidth())
         DawnDuskRow(
-            label = stringResource(R.string.ui_sun_label_dawn_dusk_civil),
+            label = stringResource(R.string.feature_sun_ui_label_dawn_dusk_civil),
             dawn = civilDawn,
             dusk = civilDusk,
             modifier = Modifier.fillMaxWidth()
         )
         DawnDuskRow(
-            label = stringResource(R.string.ui_sun_label_dawn_dusk_nautical),
+            label = stringResource(R.string.feature_sun_ui_label_dawn_dusk_nautical),
             dawn = nauticalDawn,
             dusk = nauticalDusk,
             modifier = Modifier.fillMaxWidth()
         )
         DawnDuskRow(
-            label = stringResource(R.string.ui_sun_label_dawn_dusk_astronomical),
+            label = stringResource(R.string.feature_sun_ui_label_dawn_dusk_astronomical),
             dawn = astronomicalDawn,
             dusk = astronomicalDusk,
             modifier = Modifier.fillMaxWidth()
@@ -68,7 +68,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             AutoShrinkingText(
-                text = stringResource(R.string.ui_sun_title_dawn),
+                text = stringResource(R.string.feature_sun_ui_title_dawn),
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
@@ -81,7 +81,7 @@ private fun HeaderRow(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             AutoShrinkingText(
-                text = stringResource(R.string.ui_sun_title_dusk),
+                text = stringResource(R.string.feature_sun_ui_title_dusk),
                 style = MaterialTheme.typography.headlineSmall,
                 maxLines = 1
             )
@@ -125,7 +125,7 @@ private fun DawnDuskRow(
 private fun TwilightTime(time: State<LocalTime?, *>, modifier: Modifier = Modifier) {
     AutoShrinkingText(
         text = time.dataOrNull?.let { LocalDateTimeFormatter.current.formatTime(it) }
-            ?: stringResource(R.string.ui_sun_text_time_none),
+            ?: stringResource(R.string.feature_sun_ui_text_time_none),
         modifier = modifier
             .defaultMinSize(minWidth = 64.dp)
             .placeholder(time is State.Loading),

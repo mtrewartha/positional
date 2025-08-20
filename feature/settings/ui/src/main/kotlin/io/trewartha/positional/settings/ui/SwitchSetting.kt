@@ -34,7 +34,7 @@ fun SwitchSetting(
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
-            dimensionResource(R.dimen.ui_settings_row_arrangement_spacing)
+            dimensionResource(R.dimen.feature_settings_ui_row_arrangement_spacing)
         )
     ) {
         Icon(

@@ -88,7 +88,7 @@ fun SunView(
             onClick = onJumpToTodayClick,
             enabled = state.todaysDate != state.selectedDate
         ) {
-            Text(stringResource(R.string.ui_sun_button_today))
+            Text(stringResource(R.string.feature_sun_ui_button_today))
         }
     }
 }
@@ -98,7 +98,7 @@ private fun HelpButton(onClick: () -> Unit) {
     IconButton(onClick = onClick) {
         Icon(
             Icons.AutoMirrored.Rounded.HelpOutline,
-            stringResource(R.string.ui_sun_button_help_content_description),
+            stringResource(R.string.feature_sun_ui_button_help_content_description),
         )
     }
 }

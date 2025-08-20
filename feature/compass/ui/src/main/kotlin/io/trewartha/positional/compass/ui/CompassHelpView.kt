@@ -16,8 +16,8 @@ fun CompassHelpView(
     modifier: Modifier = Modifier
 ) {
     HelpView(
-        title = { Text(text = stringResource(id = R.string.ui_compass_help_title)) },
-        markdownRes = R.raw.ui_compass_help,
+        title = { Text(text = stringResource(id = R.string.feature_compass_ui_help_title)) },
+        markdownRes = R.raw.feature_compass_ui_help,
         contentPadding = contentPadding,
         onUpClick = onUpClick,
         modifier = modifier

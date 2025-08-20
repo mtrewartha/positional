@@ -16,8 +16,8 @@ fun LocationHelpView(
     modifier: Modifier = Modifier
 ) {
     HelpView(
-        title = { Text(text = stringResource(id = R.string.ui_location_help_title)) },
-        markdownRes = R.raw.ui_location_help,
+        title = { Text(text = stringResource(id = R.string.feature_location_ui_help_title)) },
+        markdownRes = R.raw.feature_location_ui_help,
         contentPadding = contentPadding,
         onUpClick = onUpClick,
         modifier = modifier

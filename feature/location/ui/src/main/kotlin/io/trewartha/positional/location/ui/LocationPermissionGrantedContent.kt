@@ -213,7 +213,7 @@ private fun CopyButton(onClick: () -> Unit, enabled: Boolean = true) {
     IconButton(onClick = onClick, enabled = enabled) {
         Icon(
             Icons.Rounded.FileCopy,
-            stringResource(R.string.ui_location_coordinates_copy_content_description),
+            stringResource(R.string.feature_location_ui_coordinates_copy_content_description),
         )
     }
 }
@@ -223,7 +223,7 @@ private fun HelpButton(onClick: () -> Unit) {
     IconButton(onClick = onClick) {
         Icon(
             imageVector = Icons.AutoMirrored.Rounded.HelpOutline,
-            contentDescription = stringResource(R.string.ui_location_button_help_content_description),
+            contentDescription = stringResource(R.string.feature_location_ui_button_help_content_description),
         )
     }
 }
@@ -236,7 +236,7 @@ private fun MapButton(
     IconButton(onClick = onClick, enabled = enabled) {
         Icon(
             Icons.Rounded.Map,
-            stringResource(R.string.ui_location_button_map_content_description),
+            stringResource(R.string.feature_location_ui_button_map_content_description),
         )
     }
 }
@@ -250,9 +250,9 @@ private fun ScreenLockToggleButton(snackbarHostState: SnackbarHostState) {
         // This might look backwards, but it's not. We're setting the message to show *when the
         // state changes from the current value*, not the message to show *for* the current value.
         if (screenLockedOn) {
-            R.string.ui_location_snackbar_screen_unlocked
+            R.string.feature_location_ui_snackbar_screen_unlocked
         } else {
-            R.string.ui_location_snackbar_screen_locked
+            R.string.feature_location_ui_snackbar_screen_locked
         }
     )
     DisposableEffect(screenLockedOn) {
@@ -277,9 +277,9 @@ private fun ScreenLockToggleButton(snackbarHostState: SnackbarHostState) {
             imageVector = Icons.Rounded.ScreenLockPortrait,
             contentDescription = stringResource(
                 if (screenLockedOn) {
-                    R.string.ui_location_button_lock_content_description_on
+                    R.string.feature_location_ui_button_lock_content_description_on
                 } else {
-                    R.string.ui_location_button_lock_content_description_off
+                    R.string.feature_location_ui_button_lock_content_description_off
                 }
             ),
         )
@@ -295,7 +295,7 @@ private fun ShareButton(
     IconButton(onClick = onClick, modifier = modifier, enabled = enabled) {
         Icon(
             Icons.Rounded.Share,
-            stringResource(R.string.ui_location_button_share_content_description),
+            stringResource(R.string.feature_location_ui_button_share_content_description),
         )
     }
 }
@@ -307,7 +307,7 @@ private fun UpdatedAtText(timestamp: Instant?, modifier: Modifier = Modifier) {
         text = localTimestamp
             ?.let {
                 stringResource(
-                    R.string.ui_location_updated_at,
+                    R.string.feature_location_ui_updated_at,
                     LocalDateTimeFormatter.current.formatTime(it)
                 )
             }

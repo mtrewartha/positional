@@ -23,8 +23,8 @@ class UtmFormatter(
             it.asUtmCoordinates()?.let { utmCoordinates ->
                 val hemisphereAbbreviation = context.getString(
                     when (utmCoordinates.hemisphere) {
-                        Hemisphere.NORTH -> R.string.ui_location_coordinates_utm_hemisphere_north
-                        Hemisphere.SOUTH -> R.string.ui_location_coordinates_utm_hemisphere_south
+                        Hemisphere.NORTH -> R.string.feature_location_ui_coordinates_utm_hemisphere_north
+                        Hemisphere.SOUTH -> R.string.feature_location_ui_coordinates_utm_hemisphere_south
                     }
                 )
                 val zoneAndHemisphere = "${utmCoordinates.zone}$hemisphereAbbreviation"

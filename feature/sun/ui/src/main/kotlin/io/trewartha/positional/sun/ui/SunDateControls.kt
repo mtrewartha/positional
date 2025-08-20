@@ -153,7 +153,7 @@ private fun NextButton(
         Icon(
             imageVector = Icons.AutoMirrored.Rounded.NavigateNext,
             contentDescription = stringResource(
-                R.string.ui_sun_button_next_day_content_description
+                R.string.feature_sun_ui_button_next_day_content_description
             )
         )
     }
@@ -173,7 +173,7 @@ private fun PreviousButton(
         Icon(
             imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
             contentDescription = stringResource(
-                R.string.ui_sun_button_previous_day_content_description
+                R.string.feature_sun_ui_button_previous_day_content_description
             )
         )
     }

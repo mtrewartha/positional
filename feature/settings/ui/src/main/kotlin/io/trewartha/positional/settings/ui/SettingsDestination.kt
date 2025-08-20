@@ -25,7 +25,7 @@ data object SettingsDestination : NavDestination.MainNavDestination {
 
     override val route = "settings"
     override val navIcon = Icons.Rounded.Settings
-    override val navLabelRes = R.string.ui_settings_title
+    override val navLabelRes = R.string.feature_settings_ui_title
 
     context(NavGraphBuilder)
     override fun composable(

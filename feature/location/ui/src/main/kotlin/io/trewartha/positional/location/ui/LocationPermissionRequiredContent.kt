@@ -53,13 +53,13 @@ fun LocationPermissionRequiredContent(
                 )
                 Spacer(modifier = Modifier.height(36.dp))
                 Text(
-                    text = stringResource(R.string.ui_location_permission_required_title),
+                    text = stringResource(R.string.feature_location_ui_permission_required_title),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(R.string.ui_location_permission_required_body),
+                    text = stringResource(R.string.feature_location_ui_permission_required_body),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge,
@@ -68,7 +68,7 @@ fun LocationPermissionRequiredContent(
                 val activity = LocalContext.current.activity
                 TextButton(onClick = { activity?.showPrivacyPolicy() }) {
                     Text(
-                        text = stringResource(R.string.ui_location_permission_required_button_privacy_policy),
+                        text = stringResource(R.string.feature_location_ui_permission_required_button_privacy_policy),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -82,7 +82,7 @@ fun LocationPermissionRequiredContent(
                         }
                     }
                 ) {
-                    Text(text = stringResource(id = R.string.ui_location_permission_required_button_ok))
+                    Text(text = stringResource(id = R.string.feature_location_ui_permission_required_button_ok))
                 }
             }
         }

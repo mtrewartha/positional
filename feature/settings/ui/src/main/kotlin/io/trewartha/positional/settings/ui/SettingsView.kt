@@ -56,7 +56,7 @@ fun SettingsView(
     Scaffold(
         topBar = {
             LargeTopAppBar(
-                title = { Text(text = stringResource(R.string.ui_settings_title)) },
+                title = { Text(text = stringResource(R.string.feature_settings_ui_title)) },
                 scrollBehavior = scrollBehavior
             )
         },
@@ -116,14 +116,14 @@ fun SettingsView(
 @Composable
 private fun LicenseButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     TextButton(onClick = onClick, modifier) {
-        Text(text = stringResource(id = R.string.ui_settings_license_title))
+        Text(text = stringResource(id = R.string.feature_settings_ui_license_title))
     }
 }
 
 @Composable
 private fun PrivacyPolicyButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     TextButton(onClick = onClick, modifier) {
-        Text(text = stringResource(id = R.string.ui_settings_privacy_policy_title))
+        Text(text = stringResource(id = R.string.feature_settings_ui_privacy_policy_title))
     }
 }
 

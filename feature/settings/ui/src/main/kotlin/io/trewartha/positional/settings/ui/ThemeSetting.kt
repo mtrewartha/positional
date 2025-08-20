@@ -18,19 +18,19 @@ fun ThemeSetting(
 ) {
     ListSetting(
         icon = Icons.Rounded.DarkMode,
-        title = stringResource(R.string.ui_settings_theme_title),
+        title = stringResource(R.string.feature_settings_ui_theme_title),
         values = Theme.entries.toSet(),
         value = value,
         valueName = { theme ->
             stringResource(
                 when (theme) {
-                    Theme.DEVICE -> R.string.ui_settings_theme_value_device_name
-                    Theme.DARK -> R.string.ui_settings_theme_value_dark_name
-                    Theme.LIGHT -> R.string.ui_settings_theme_value_light_name
+                    Theme.DEVICE -> R.string.feature_settings_ui_theme_value_device_name
+                    Theme.DARK -> R.string.feature_settings_ui_theme_value_dark_name
+                    Theme.LIGHT -> R.string.feature_settings_ui_theme_value_light_name
                 }
             )
         },
-        valuesDialogTitle = stringResource(R.string.ui_settings_theme_dialog_title),
+        valuesDialogTitle = stringResource(R.string.feature_settings_ui_theme_dialog_title),
         valuesDialogText = null,
         onValueChange = onValueChange,
         modifier = modifier

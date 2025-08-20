@@ -27,7 +27,7 @@ class DegreesMinutesSecondsFormatter(
     override fun formatForCopy(coordinates: Coordinates): String {
         val geodeticCoordinates = coordinates.asGeodeticCoordinates()
         return context.getString(
-            R.string.ui_location_coordinates_copy_format_dms,
+            R.string.feature_location_ui_coordinates_copy_format_dms,
             FORMAT_COPY.format(geodeticCoordinates.latitude),
             FORMAT_COPY.format(geodeticCoordinates.longitude)
         )
