@@ -15,13 +15,13 @@ data object LocationHelpDestination : NavDestination {
 
     override val route = "location/help"
 
-    context(NavGraphBuilder)
+    context(navGraphBuilder: NavGraphBuilder)
     override fun composable(
         navController: NavController,
         snackbarHostState: SnackbarHostState,
         contentPadding: PaddingValues
     ) {
-        composable(
+        navGraphBuilder.composable(
             route,
             enterTransition = defaultEnterTransition(),
             exitTransition = defaultExitTransition(),

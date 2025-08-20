@@ -31,7 +31,7 @@ private fun KotlinJvmCompilerOptions.configureWithDefaults(
 
     freeCompilerArgs.addAll(
         "-Xjvm-default=all",
-        "-Xcontext-receivers",
+        "-Xcontext-parameters",
         "-Xinline-classes",
     )
 
