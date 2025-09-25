@@ -9,7 +9,7 @@ import java.util.Locale
 /**
  * Formats coordinates as decimal degrees
  */
-class DecimalDegreesFormatter(
+public class DecimalDegreesFormatter(
     private val context: Context,
     private val locale: Locale
 ) : CoordinatesFormatter {

@@ -8,6 +8,7 @@ import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -21,11 +22,11 @@ import io.trewartha.positional.core.ui.nav.bottomNavExitTransition
 import io.trewartha.positional.core.ui.nav.bottomNavPopEnterTransition
 import io.trewartha.positional.core.ui.nav.bottomNavPopExitTransition
 
-data object CompassDestination : NavDestination.MainNavDestination {
+public data object CompassDestination : NavDestination.MainNavDestination {
 
-    override val route = "compass"
-    override val navIcon = Icons.Rounded.Explore
-    override val navLabelRes = R.string.feature_compass_ui_title
+    override val route: String = "compass"
+    override val navIcon: ImageVector = Icons.Rounded.Explore
+    override val navLabelRes: Int = R.string.feature_compass_ui_title
 
     context(navGraphBuilder: NavGraphBuilder)
     override fun composable(

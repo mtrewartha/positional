@@ -22,7 +22,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.modifier.placeholder
 
 @Composable
-fun SwitchSetting(
+public fun SwitchSetting(
     icon: ImageVector,
     title: String,
     description: @Composable (Boolean) -> String,

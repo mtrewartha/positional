@@ -8,7 +8,7 @@ import io.trewartha.positional.core.measurement.degrees
  *
  * @throws IllegalArgumentException if [angle] is outside of the range 0..<360
  */
-data class Azimuth @Throws(IllegalArgumentException::class) constructor(
+public data class Azimuth @Throws(IllegalArgumentException::class) constructor(
 
     /**
      * Angle from north. A positive angle indicates the user is facing east of north and a negative
@@ -40,7 +40,7 @@ data class Azimuth @Throws(IllegalArgumentException::class) constructor(
      *
      * @return Azimuth whose angle is the wrapped sum of the two azimuths
      */
-    operator fun plus(angle: Angle): Azimuth {
+    public operator fun plus(angle: Angle): Azimuth {
         val degrees = this.angle.inDegrees().magnitude
         val addendDegrees = angle.inDegrees().magnitude
         // Add and mod 360 to wrap the result sums below 0 and above 360 back into the 0..360 range
@@ -51,7 +51,7 @@ data class Azimuth @Throws(IllegalArgumentException::class) constructor(
     /**
      * Accuracy of an azimuth
      */
-    enum class Accuracy {
+    public enum class Accuracy {
 
         /**
          * Azimuths with this accuracy are not usable and should never be trusted

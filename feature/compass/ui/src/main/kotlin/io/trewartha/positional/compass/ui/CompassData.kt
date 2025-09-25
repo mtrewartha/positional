@@ -7,7 +7,7 @@ import io.trewartha.positional.settings.CompassMode
 import io.trewartha.positional.settings.CompassNorthVibration
 
 @Immutable
-data class CompassData(
+public data class CompassData(
     val azimuth: Azimuth,
     val declination: Angle?,
     val mode: CompassMode,

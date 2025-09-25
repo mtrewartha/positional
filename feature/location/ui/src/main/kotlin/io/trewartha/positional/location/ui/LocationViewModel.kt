@@ -16,16 +16,16 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class LocationViewModel @Inject constructor(
+public class LocationViewModel @Inject constructor(
     locator: Locator,
     settings: SettingsRepository
 ) : ViewModel() {
 
-    val location: StateFlow<State<Location, Unit>> = locator.location
+    public val location: StateFlow<State<Location, Unit>> = locator.location
         .asStates()
         .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = State.Loading)
 
-    val settings: StateFlow<State<Settings, Unit>> =
+    public val settings: StateFlow<State<Settings, Unit>> =
         combine(
             settings.coordinatesFormat,
             settings.units,

@@ -3,7 +3,7 @@ package io.trewartha.positional.settings
 /**
  * Geographic coordinates formats
  */
-enum class CoordinatesFormat {
+public enum class CoordinatesFormat {
 
     /**
      * Decimal degrees

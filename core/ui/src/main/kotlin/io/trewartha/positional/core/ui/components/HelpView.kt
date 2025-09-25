@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import io.trewartha.positional.core.ui.R
 
 @Composable
-fun HelpView(
+public fun HelpView(
     title: @Composable () -> Unit,
     @RawRes markdownRes: Int,
     contentPadding: PaddingValues,

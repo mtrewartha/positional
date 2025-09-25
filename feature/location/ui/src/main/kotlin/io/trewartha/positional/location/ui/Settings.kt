@@ -6,7 +6,7 @@ import io.trewartha.positional.settings.CoordinatesFormat
 import io.trewartha.positional.settings.LocationAccuracyVisibility
 
 @Immutable
-data class Settings(
+public data class Settings(
     val coordinatesFormat: CoordinatesFormat,
     val units: Units,
     val accuracyVisibility: LocationAccuracyVisibility

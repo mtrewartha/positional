@@ -15,7 +15,7 @@ import io.trewartha.positional.core.measurement.Units
 import io.trewartha.positional.settings.LocationAccuracyVisibility
 
 @Composable
-fun AccuracyBlock(
+public fun AccuracyBlock(
     accuracy: Distance?,
     units: Units?,
     accuracyVisibility: LocationAccuracyVisibility?,
@@ -44,7 +44,7 @@ fun AccuracyBlock(
 }
 
 @Composable
-fun AltitudeBlock(
+public fun AltitudeBlock(
     altitude: Distance?,
     accuracy: Distance?,
     units: Units?,
@@ -80,7 +80,7 @@ fun AltitudeBlock(
 }
 
 @Composable
-fun BearingBlock(
+public fun BearingBlock(
     bearing: Angle?,
     accuracy: Angle?,
     accuracyVisibility: LocationAccuracyVisibility?,
@@ -107,7 +107,7 @@ fun BearingBlock(
 }
 
 @Composable
-fun SpeedBlock(
+public fun SpeedBlock(
     speed: Speed?,
     accuracy: Speed?,
     units: Units?,

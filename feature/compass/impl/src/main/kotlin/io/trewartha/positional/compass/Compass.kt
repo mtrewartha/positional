@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Compass abstraction that exposes the device's orientation to north as an azimuth
  */
-interface Compass {
+public interface Compass {
 
     /**
      * [Flow] that constantly emits the most recent azimuth
      */
-    val azimuth: Flow<Azimuth>
+    public val azimuth: Flow<Azimuth>
 }

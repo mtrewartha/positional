@@ -33,7 +33,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.activity
 
 @Composable
-fun LocationPermissionRequiredContent(
+public fun LocationPermissionRequiredContent(
     locationPermissionsState: MultiplePermissionsState,
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier

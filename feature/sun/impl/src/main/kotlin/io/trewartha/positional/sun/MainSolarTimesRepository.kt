@@ -13,7 +13,7 @@ import javax.inject.Inject
 /**
  * [SolarTimesRepository] implementation powered by a library
  */
-class MainSolarTimesRepository @Inject constructor() : SolarTimesRepository {
+public class MainSolarTimesRepository @Inject constructor() : SolarTimesRepository {
 
     override fun getAstronomicalDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
         createLibraryCalculator(coordinates)

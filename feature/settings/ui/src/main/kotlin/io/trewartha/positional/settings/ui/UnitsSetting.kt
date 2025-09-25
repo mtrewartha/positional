@@ -11,7 +11,7 @@ import io.trewartha.positional.core.measurement.Units
 import io.trewartha.positional.core.ui.PositionalTheme
 
 @Composable
-fun UnitsSetting(
+public fun UnitsSetting(
     value: Units?,
     onValueChange: (Units) -> Unit,
     modifier: Modifier = Modifier

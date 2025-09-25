@@ -24,7 +24,7 @@ import io.trewartha.positional.core.ui.modifier.placeholder
 import kotlinx.datetime.LocalTime
 
 @Composable
-fun DawnDuskColumn(
+public fun DawnDuskColumn(
     astronomicalDawn: State<LocalTime?, *>,
     nauticalDawn: State<LocalTime?, *>,
     civilDawn: State<LocalTime?, *>,

@@ -8,7 +8,7 @@ import kotlinx.datetime.LocalTime
  * [SolarTimesRepository] implementation intended for easing testing of classes that depend on a
  * [SolarTimesRepository]
  */
-class TestSolarTimesRepository : SolarTimesRepository {
+public class TestSolarTimesRepository : SolarTimesRepository {
 
     private val sunrises = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
     private val sunsets = mutableMapOf<Pair<Coordinates, LocalDate>, LocalTime?>()
@@ -51,7 +51,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param astronomicalDawn Time to set or `null` if no such time should exist at the coordinates
      * on the date
      */
-    fun setAstronomicalDawn(
+    public fun setAstronomicalDawn(
         coordinates: Coordinates,
         date: LocalDate,
         astronomicalDawn: LocalTime?
@@ -67,7 +67,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param astronomicalDusk Time to set or `null` if no such time should exist at the coordinates
      * on the date
      */
-    fun setAstronomicalDusk(
+    public fun setAstronomicalDusk(
         coordinates: Coordinates,
         date: LocalDate,
         astronomicalDusk: LocalTime?
@@ -83,7 +83,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param civilDawn Time to set or `null` if no such time should exist at the coordinates on the
      * date
      */
-    fun setCivilDawn(coordinates: Coordinates, date: LocalDate, civilDawn: LocalTime?) {
+    public fun setCivilDawn(coordinates: Coordinates, date: LocalDate, civilDawn: LocalTime?) {
         civilDawns[Pair(coordinates, date)] = civilDawn
     }
 
@@ -95,7 +95,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param civilDusk Time to set or `null` if no such time should exist at the coordinates on the
      * date
      */
-    fun setCivilDusk(coordinates: Coordinates, date: LocalDate, civilDusk: LocalTime?) {
+    public fun setCivilDusk(coordinates: Coordinates, date: LocalDate, civilDusk: LocalTime?) {
         civilDusks[Pair(coordinates, date)] = civilDusk
     }
 
@@ -107,7 +107,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param nauticalDawn Time to set or `null` if no such time should exist at the coordinates on
      * the date
      */
-    fun setNauticalDawn(
+    public fun setNauticalDawn(
         coordinates: Coordinates,
         date: LocalDate,
         nauticalDawn: LocalTime?
@@ -123,7 +123,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param nauticalDusk Time to set or `null` if no such time should exist at the coordinates on
      * the date
      */
-    fun setNauticalDusk(
+    public fun setNauticalDusk(
         coordinates: Coordinates,
         date: LocalDate,
         nauticalDusk: LocalTime?
@@ -139,7 +139,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param sunrise Time to set or `null` if no such time should exist at the coordinates on the
      * date
      */
-    fun setSunrise(coordinates: Coordinates, date: LocalDate, sunrise: LocalTime?) {
+    public fun setSunrise(coordinates: Coordinates, date: LocalDate, sunrise: LocalTime?) {
         sunrises[Pair(coordinates, date)] = sunrise
     }
 
@@ -151,7 +151,7 @@ class TestSolarTimesRepository : SolarTimesRepository {
      * @param sunset Time to set or `null` if no such time should exist at the coordinates on the
      * date
      */
-    fun setSunset(coordinates: Coordinates, date: LocalDate, sunset: LocalTime?) {
+    public fun setSunset(coordinates: Coordinates, date: LocalDate, sunset: LocalTime?) {
         sunsets[Pair(coordinates, date)] = sunset
     }
 }

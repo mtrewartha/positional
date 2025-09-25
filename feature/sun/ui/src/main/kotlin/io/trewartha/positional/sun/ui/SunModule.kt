@@ -9,10 +9,10 @@ import io.trewartha.positional.sun.SolarTimesRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface SunModule {
+public interface SunModule {
 
     @Binds
-    fun solarTimesRepository(
+    public fun solarTimesRepository(
         mainSolarTimesRepository: MainSolarTimesRepository
     ): SolarTimesRepository
 }

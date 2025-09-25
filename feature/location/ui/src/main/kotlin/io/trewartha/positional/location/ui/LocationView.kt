@@ -62,7 +62,7 @@ import timber.log.Timber
 import kotlin.time.Instant
 
 @Composable
-fun LocationView(
+public fun LocationView(
     locationState: State<Location, Unit>,
     settingsState: State<Settings, Unit>,
     contentPadding: PaddingValues,

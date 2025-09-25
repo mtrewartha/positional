@@ -12,11 +12,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class SettingsModule {
+public class SettingsModule {
 
     @Provides
     @Singleton
-    fun settingsRepository(
+    public fun settingsRepository(
         @ApplicationContext context: Context
     ): SettingsRepository = DataStoreSettingsRepository(context)
 }

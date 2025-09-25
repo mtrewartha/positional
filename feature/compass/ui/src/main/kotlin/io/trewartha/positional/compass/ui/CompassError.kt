@@ -3,8 +3,8 @@ package io.trewartha.positional.compass.ui
 import androidx.compose.runtime.Immutable
 
 @Immutable
-sealed interface CompassError {
+public sealed interface CompassError {
 
     @Immutable
-    data object SensorsMissing : CompassError
+    public data object SensorsMissing : CompassError
 }

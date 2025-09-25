@@ -13,7 +13,7 @@ import kotlin.math.roundToInt
 /**
  * Formats coordinates in the Universal Transverse Mercator (UTM) system
  */
-class UtmFormatter(
+public class UtmFormatter(
     private val context: Context,
     private val locale: Locale
 ) : CoordinatesFormatter {

@@ -7,7 +7,7 @@ import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 @HiltAndroidApp
-class PositionalApplication : Application() {
+public class PositionalApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

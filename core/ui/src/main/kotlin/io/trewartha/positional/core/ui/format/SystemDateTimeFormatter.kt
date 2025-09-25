@@ -17,7 +17,7 @@ import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.time.Instant
 
-class SystemDateTimeFormatter @Inject constructor(locale: Locale) : DateTimeFormatter {
+public class SystemDateTimeFormatter @Inject constructor(locale: Locale) : DateTimeFormatter {
 
     private val dateFormat = SimpleDateFormat.getDateInstance(MEDIUM)
     private val dateTimeFormat = SimpleDateFormat.getDateTimeInstance(MEDIUM, SHORT)

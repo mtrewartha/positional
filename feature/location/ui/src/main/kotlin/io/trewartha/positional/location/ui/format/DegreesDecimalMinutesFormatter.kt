@@ -11,7 +11,7 @@ import java.util.Locale
 /**
  * Formats coordinates as degrees and decimal minutes
  */
-class DegreesDecimalMinutesFormatter(
+public class DegreesDecimalMinutesFormatter(
     private val context: Context,
     private val locale: Locale
 ) : CoordinatesFormatter {

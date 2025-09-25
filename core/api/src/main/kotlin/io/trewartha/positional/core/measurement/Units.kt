@@ -3,7 +3,7 @@ package io.trewartha.positional.core.measurement
 /**
  * Measurement units/system
  */
-enum class Units {
+public enum class Units {
 
     /**
      * Imperial system units

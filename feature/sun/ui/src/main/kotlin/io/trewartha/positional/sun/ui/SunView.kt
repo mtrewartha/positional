@@ -36,7 +36,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 
 @Composable
-fun SunView(
+public fun SunView(
     state: SunState,
     contentPadding: PaddingValues,
     onSelectedDateDecrement: () -> Unit,

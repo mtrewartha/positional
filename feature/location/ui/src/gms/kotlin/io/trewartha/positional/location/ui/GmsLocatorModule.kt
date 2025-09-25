@@ -15,20 +15,20 @@ import io.trewartha.positional.location.Locator
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface GmsLocatorModule {
+public interface GmsLocatorModule {
 
     @Binds
-    fun gmsLocator(gmsLocator: GmsLocator): Locator
+    public fun gmsLocator(gmsLocator: GmsLocator): Locator
 
-    companion object {
+    public companion object {
 
         @Provides
-        fun fusedLocationProviderClient(
+        public fun fusedLocationProviderClient(
             @ApplicationContext context: Context
         ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
         @Provides
-        fun locationManager(
+        public fun locationManager(
             @ApplicationContext context: Context
         ): LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }

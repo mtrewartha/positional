@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import io.trewartha.positional.settings.LocationAccuracyVisibility
 
 @Composable
-fun LocationAccuracyVisibilitySetting(
+public fun LocationAccuracyVisibilitySetting(
     value: LocationAccuracyVisibility?,
     onValueChange: (LocationAccuracyVisibility) -> Unit,
     modifier: Modifier = Modifier

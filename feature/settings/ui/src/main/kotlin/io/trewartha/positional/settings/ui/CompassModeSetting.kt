@@ -11,7 +11,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.settings.CompassMode
 
 @Composable
-fun CompassModeSetting(
+public fun CompassModeSetting(
     value: CompassMode?,
     onValueChange: (CompassMode) -> Unit,
     modifier: Modifier = Modifier

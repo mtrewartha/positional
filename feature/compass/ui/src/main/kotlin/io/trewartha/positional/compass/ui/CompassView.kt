@@ -57,7 +57,7 @@ import io.trewartha.positional.settings.CompassMode
 import io.trewartha.positional.settings.CompassNorthVibration
 
 @Composable
-fun CompassView(
+public fun CompassView(
     state: State<CompassData, CompassError>,
     contentPadding: PaddingValues,
     onHelpClick: () -> Unit

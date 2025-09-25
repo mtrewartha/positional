@@ -10,7 +10,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.components.HelpView
 
 @Composable
-fun CompassHelpView(
+public fun CompassHelpView(
     contentPadding: PaddingValues,
     onUpClick: () -> Unit,
     modifier: Modifier = Modifier

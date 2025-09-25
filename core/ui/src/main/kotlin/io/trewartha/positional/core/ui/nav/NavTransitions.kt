@@ -10,10 +10,10 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
 import kotlin.math.roundToInt
 
-fun bottomNavEnterTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
+public fun bottomNavEnterTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
     { fadeIn() }
 
-fun bottomNavExitTransition(
+public fun bottomNavExitTransition(
     helpRoute: String? = null
 ): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
     {
@@ -26,7 +26,7 @@ fun bottomNavExitTransition(
         }
     }
 
-fun bottomNavPopEnterTransition(
+public fun bottomNavPopEnterTransition(
     helpRoute: String? = null
 ): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
     if (initialState.destination.route == helpRoute) {
@@ -38,19 +38,19 @@ fun bottomNavPopEnterTransition(
     }
 }
 
-fun bottomNavPopExitTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
+public fun bottomNavPopExitTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
     { fadeOut() }
 
-fun defaultEnterTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
+public fun defaultEnterTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
     { fadeIn() + slideIntoContainer(Start, initialOffset = { (it * OFFSET_FACTOR).roundToInt() }) }
 
-fun defaultExitTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
+public fun defaultExitTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
     { fadeOut() + slideOutOfContainer(Start, targetOffset = { (it * OFFSET_FACTOR).roundToInt() }) }
 
-fun defaultPopEnterTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
+public fun defaultPopEnterTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
     { fadeIn() + slideIntoContainer(End, initialOffset = { (it * OFFSET_FACTOR).roundToInt() }) }
 
-fun defaultPopExitTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
+public fun defaultPopExitTransition(): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
     { fadeOut() + slideOutOfContainer(End, targetOffset = { (it * OFFSET_FACTOR).roundToInt() }) }
 
 private const val OFFSET_FACTOR = 0.4f

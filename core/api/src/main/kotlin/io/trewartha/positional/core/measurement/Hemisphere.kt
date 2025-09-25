@@ -3,7 +3,7 @@ package io.trewartha.positional.core.measurement
 /**
  * Hemisphere of Earth
  */
-enum class Hemisphere {
+public enum class Hemisphere {
 
     /**
      * Northern hemisphere

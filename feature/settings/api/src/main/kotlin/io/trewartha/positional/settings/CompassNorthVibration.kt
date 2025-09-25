@@ -6,7 +6,7 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Length of device vibration to trigger when the compass crosses north
  */
-enum class CompassNorthVibration {
+public enum class CompassNorthVibration {
 
     /**
      * No vibration
@@ -39,5 +39,5 @@ enum class CompassNorthVibration {
     /**
      * Duration of the vibration
      */
-    abstract val duration: Duration
+    public abstract val duration: Duration
 }

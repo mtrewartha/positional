@@ -5,7 +5,7 @@ import io.trewartha.positional.core.measurement.Coordinates
 /**
  * Formats location coordinates into a list of strings for display to the user
  */
-interface CoordinatesFormatter {
+public interface CoordinatesFormatter {
 
     /**
      * Formats some given coordinates into a list of strings suitable for display to the user
@@ -17,18 +17,18 @@ interface CoordinatesFormatter {
      * The length of the returned list and the meaning behind each string in it are
      * implementation-dependent.
      */
-    fun formatForDisplay(coordinates: Coordinates?): List<String?>
+    public fun formatForDisplay(coordinates: Coordinates?): List<String?>
 
     /**
      * Formats some given coordinates into a string suitable for copying/pasting or sharing outside
      * of the app
      */
-    fun formatForCopy(coordinates: Coordinates): String
+    public fun formatForCopy(coordinates: Coordinates): String
 
     /**
      * Assumes the string represents a number and normalizes all decimal separators to a period
      */
-    fun String.normalizeDecimalSeparator(): String =
+    public fun String.normalizeDecimalSeparator(): String =
         replace(COMMA, PERIOD)
 }
 
