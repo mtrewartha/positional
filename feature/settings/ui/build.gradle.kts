@@ -11,12 +11,12 @@ android {
 dependencies {
     ksp(libs.google.hilt.compiler)
 
-    api(project(":core:ui"))
-    api(project(":feature:settings:impl"))
+    api(projects.core.ui)
+    api(projects.feature.settings.impl)
     api(libs.androidx.compose.runtime)
     api(libs.google.hilt.android)
 
-    implementation(project(":core:ui"))
+    implementation(projects.core.ui)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":core:api"))
+    api(projects.core.api)
     api(libs.javax.inject)
     api(libs.kotlinx.datetime)
 

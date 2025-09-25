@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    api(project(":feature:location:api"))
+    api(projects.feature.location.api)
     api(libs.javax.inject)
     api(libs.kotlinx.coroutines.core)
 

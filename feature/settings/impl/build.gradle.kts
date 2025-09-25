@@ -8,8 +8,8 @@ android {
 }
 
 dependencies {
-    api(project(":core:api"))
-    api(project(":feature:settings:api"))
+    api(projects.core.api)
+    api(projects.feature.settings.api)
     api(libs.kotlinx.coroutines.core)
     api(libs.javax.inject)
     api(libs.protobuf.java.lite)
