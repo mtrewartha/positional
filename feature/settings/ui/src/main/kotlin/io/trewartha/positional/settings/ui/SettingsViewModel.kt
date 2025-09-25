@@ -18,51 +18,52 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
+public class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    val compassMode: StateFlow<CompassMode?> = settingsRepository.compassMode
+    public val compassMode: StateFlow<CompassMode?> = settingsRepository.compassMode
         .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val compassNorthVibration: StateFlow<CompassNorthVibration?> =
+    public val compassNorthVibration: StateFlow<CompassNorthVibration?> =
         settingsRepository.compassNorthVibration
             .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val coordinatesFormat: StateFlow<CoordinatesFormat?> = settingsRepository.coordinatesFormat
-        .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
+    public val coordinatesFormat: StateFlow<CoordinatesFormat?> =
+        settingsRepository.coordinatesFormat
+            .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val locationAccuracyVisibility: StateFlow<LocationAccuracyVisibility?> =
+    public val locationAccuracyVisibility: StateFlow<LocationAccuracyVisibility?> =
         settingsRepository.locationAccuracyVisibility
             .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val theme: StateFlow<Theme?> = settingsRepository.theme
+    public val theme: StateFlow<Theme?> = settingsRepository.theme
         .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    val units: StateFlow<Units?> = settingsRepository.units
+    public val units: StateFlow<Units?> = settingsRepository.units
         .stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = null)
 
-    fun onCompassModeChange(compassMode: CompassMode) {
+    public fun onCompassModeChange(compassMode: CompassMode) {
         viewModelScope.launch { settingsRepository.setCompassMode(compassMode) }
     }
 
-    fun onCompassNorthVibrationChange(compassNorthVibration: CompassNorthVibration) {
+    public fun onCompassNorthVibrationChange(compassNorthVibration: CompassNorthVibration) {
         viewModelScope.launch { settingsRepository.setCompassNorthVibration(compassNorthVibration) }
     }
 
-    fun onCoordinatesFormatChange(coordinatesFormat: CoordinatesFormat) {
+    public fun onCoordinatesFormatChange(coordinatesFormat: CoordinatesFormat) {
         viewModelScope.launch { settingsRepository.setCoordinatesFormat(coordinatesFormat) }
     }
 
-    fun onLocationAccuracyVisibilityChange(visibility: LocationAccuracyVisibility) {
+    public fun onLocationAccuracyVisibilityChange(visibility: LocationAccuracyVisibility) {
         viewModelScope.launch { settingsRepository.setLocationAccuracyVisibility(visibility) }
     }
 
-    fun onThemeChange(theme: Theme) {
+    public fun onThemeChange(theme: Theme) {
         viewModelScope.launch { settingsRepository.setTheme(theme) }
     }
 
-    fun onUnitsChange(units: Units) {
+    public fun onUnitsChange(units: Units) {
         viewModelScope.launch { settingsRepository.setUnits(units) }
     }
 }

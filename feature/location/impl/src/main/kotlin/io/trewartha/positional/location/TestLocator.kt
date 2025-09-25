@@ -11,7 +11,7 @@ import kotlin.time.Clock
 /**
  * [Locator] implementation for use in testing classes that depend on a [Locator]
  */
-class TestLocator : Locator {
+public class TestLocator : Locator {
 
     override val location: Flow<Location>
         get() = _location.distinctUntilChanged()
@@ -23,7 +23,7 @@ class TestLocator : Locator {
      *
      * @param location the location to set
      */
-    suspend fun setLocation(location: Location = getTestLocation()) {
+    public suspend fun setLocation(location: Location = getTestLocation()) {
         _location.emit(location)
     }
 

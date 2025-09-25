@@ -58,7 +58,7 @@ import io.trewartha.positional.sun.ui.SunDestination
 import io.trewartha.positional.sun.ui.SunHelpDestination
 
 @Composable
-fun MainView(
+public fun MainView(
     viewModel: SettingsViewModel = hiltViewModel(),
     navHostController: NavHostController,
     windowWidthSizeClass: WindowWidthSizeClass

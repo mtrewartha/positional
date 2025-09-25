@@ -42,7 +42,7 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
-fun Compass(
+public fun Compass(
     azimuth: Angle?,
     northVibration: CompassNorthVibration?,
     modifier: Modifier = Modifier

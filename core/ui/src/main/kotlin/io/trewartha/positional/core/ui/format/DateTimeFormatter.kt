@@ -4,13 +4,13 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
-interface DateTimeFormatter {
+public interface DateTimeFormatter {
 
-    fun formatDate(localDate: LocalDate): String
+    public fun formatDate(localDate: LocalDate): String
 
-    fun formatDateTime(localDateTime: LocalDateTime): String
+    public fun formatDateTime(localDateTime: LocalDateTime): String
 
-    fun formatFullDayOfWeek(localDate: LocalDate): String
+    public fun formatFullDayOfWeek(localDate: LocalDate): String
 
-    fun formatTime(localTime: LocalTime, includeSeconds: Boolean = false): String
+    public fun formatTime(localTime: LocalTime, includeSeconds: Boolean = false): String
 }

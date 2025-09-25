@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
-fun AutoShrinkingText(
+public fun AutoShrinkingText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
@@ -62,7 +62,7 @@ fun AutoShrinkingText(
 }
 
 @Composable
-fun AutoShrinkingText(
+public fun AutoShrinkingText(
     text: AnnotatedString,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,

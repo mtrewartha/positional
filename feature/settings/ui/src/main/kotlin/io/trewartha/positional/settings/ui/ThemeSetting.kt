@@ -11,7 +11,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.settings.Theme
 
 @Composable
-fun ThemeSetting(
+public fun ThemeSetting(
     value: Theme?,
     onValueChange: (Theme) -> Unit,
     modifier: Modifier = Modifier

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 /**
  * [Compass] implementation for use in testing classes that depend on a [Compass]
  */
-class TestCompass : Compass {
+public class TestCompass : Compass {
 
     override val azimuth: Flow<Azimuth>
         get() = _azimuth.distinctUntilChanged()
@@ -19,7 +19,7 @@ class TestCompass : Compass {
      *
      * @param azimuth Azimuth to set
      */
-    suspend fun setAzimuth(azimuth: Azimuth) {
+    public suspend fun setAzimuth(azimuth: Azimuth) {
         _azimuth.emit(azimuth)
     }
 }

@@ -6,12 +6,12 @@ package io.trewartha.positional.core.measurement
  * @property magnitude Magnitude/amount/value of the speed
  * @property unit Unit that [magnitude] is/was measured in
  */
-data class Speed(val magnitude: Double, val unit: Unit) {
+public data class Speed(val magnitude: Double, val unit: Unit) {
 
     /**
      * Convert this speed to an equivalent speed in kilometers per hour
      */
-    fun inKilometersPerHour(): Speed = when (unit) {
+    public fun inKilometersPerHour(): Speed = when (unit) {
         Unit.KILOMETERS_PER_HOUR -> this
         Unit.METERS_PER_SECOND -> Speed(magnitude * KPH_PER_MPS, Unit.KILOMETERS_PER_HOUR)
         Unit.MILES_PER_HOUR -> Speed(magnitude * KM_PER_MI, Unit.KILOMETERS_PER_HOUR)
@@ -20,7 +20,7 @@ data class Speed(val magnitude: Double, val unit: Unit) {
     /**
      * Convert this speed to an equivalent speed in meters per second
      */
-    fun inMetersPerSecond(): Speed = when (unit) {
+    public fun inMetersPerSecond(): Speed = when (unit) {
         Unit.KILOMETERS_PER_HOUR -> Speed(magnitude * MPS_PER_KPH, Unit.METERS_PER_SECOND)
         Unit.METERS_PER_SECOND -> this
         Unit.MILES_PER_HOUR -> Speed(magnitude * MPS_PER_MPH, Unit.METERS_PER_SECOND)
@@ -29,7 +29,7 @@ data class Speed(val magnitude: Double, val unit: Unit) {
     /**
      * Convert this speed to an equivalent speed in miles per hour
      */
-    fun inMilesPerHour(): Speed = when (unit) {
+    public fun inMilesPerHour(): Speed = when (unit) {
         Unit.KILOMETERS_PER_HOUR -> Speed(magnitude * MI_PER_KM, Unit.MILES_PER_HOUR)
         Unit.METERS_PER_SECOND -> Speed(magnitude * MPH_PER_MPS, Unit.MILES_PER_HOUR)
         Unit.MILES_PER_HOUR -> this
@@ -44,7 +44,7 @@ data class Speed(val magnitude: Double, val unit: Unit) {
     /**
      * Units that a speed can be measured in
      */
-    enum class Unit {
+    public enum class Unit {
 
         /**
          * Kilometers per hour
@@ -70,24 +70,24 @@ data class Speed(val magnitude: Double, val unit: Unit) {
         /**
          * Java format string that can be used to convert a distance in the unit to a string
          */
-        abstract val format: String
+        public abstract val format: String
     }
 }
 
 /**
  * Create a speed in kilometers per hour (KPH) with the magnitude of this value
  */
-val Number.kph: Speed get() = Speed(toDouble(), Speed.Unit.KILOMETERS_PER_HOUR)
+public val Number.kph: Speed get() = Speed(toDouble(), Speed.Unit.KILOMETERS_PER_HOUR)
 
 /**
  * Create a speed in meters per second (m/s) with the magnitude of this value
  */
-val Number.mps: Speed get() = Speed(toDouble(), Speed.Unit.METERS_PER_SECOND)
+public val Number.mps: Speed get() = Speed(toDouble(), Speed.Unit.METERS_PER_SECOND)
 
 /**
  * Create a speed in miles per hour (MPH) with the magnitude of this value
  */
-val Number.mph: Speed get() = Speed(toDouble(), Speed.Unit.MILES_PER_HOUR)
+public val Number.mph: Speed get() = Speed(toDouble(), Speed.Unit.MILES_PER_HOUR)
 
 private const val FORMAT_KILOMETERS_PER_HOUR = "%,f km/h"
 private const val FORMAT_METERS_PER_SECOND = "%,f m/s"

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 /**
  * [SettingsRepository] implementation for use in testing classes that depend on one
  */
-class TestSettingsRepository : SettingsRepository {
+public class TestSettingsRepository : SettingsRepository {
 
     override val compassMode: Flow<CompassMode>
         get() = _compassMode.distinctUntilChanged()

@@ -11,9 +11,9 @@ import io.trewartha.positional.core.ui.nav.defaultExitTransition
 import io.trewartha.positional.core.ui.nav.defaultPopEnterTransition
 import io.trewartha.positional.core.ui.nav.defaultPopExitTransition
 
-data object LocationHelpDestination : NavDestination {
+public data object LocationHelpDestination : NavDestination {
 
-    override val route = "location/help"
+    override val route: String = "location/help"
 
     context(navGraphBuilder: NavGraphBuilder)
     override fun composable(

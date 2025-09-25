@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import io.trewartha.positional.settings.CompassNorthVibration
 
 @Composable
-fun CompassNorthVibrationSetting(
+public fun CompassNorthVibrationSetting(
     value: CompassNorthVibration?,
     onValueChange: (CompassNorthVibration) -> Unit,
     modifier: Modifier = Modifier

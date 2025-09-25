@@ -6,7 +6,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
 @Immutable
-data class SunState(
+public data class SunState(
     val todaysDate: LocalDate,
     val selectedDate: LocalDate,
     val astronomicalDawn: State<LocalTime?, Nothing>,

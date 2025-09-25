@@ -10,7 +10,7 @@ import com.eygraber.compose.placeholder.placeholder
 import com.eygraber.compose.placeholder.shimmer
 
 @Composable
-fun Modifier.placeholder(visible: Boolean): Modifier = this.placeholder(
+public fun Modifier.placeholder(visible: Boolean): Modifier = this.placeholder(
     visible = visible,
     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
     shape = RoundedCornerShape(16.dp),

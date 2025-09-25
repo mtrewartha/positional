@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class CompassViewModel @Inject constructor(
+public class CompassViewModel @Inject constructor(
     compass: Compass?,
     locator: Locator,
     settings: SettingsRepository
@@ -32,7 +32,7 @@ class CompassViewModel @Inject constructor(
         .distinctUntilChanged()
         .onStart { emit(null) }
 
-    val state: StateFlow<State<CompassData, CompassError>> =
+    public val state: StateFlow<State<CompassData, CompassError>> =
         if (compass == null) {
             emptyFlow<State<CompassData, CompassError>>().stateIn(
                 viewModelScope,

@@ -15,7 +15,7 @@ import kotlin.math.roundToInt
  * @property easting Easting within 100 km grid square
  * @property northing Northing within 100 km grid square
  */
-data class MgrsCoordinates(
+public data class MgrsCoordinates(
     val gridZoneDesignator: String,
     val gridSquareID: String,
     val easting: Distance,
@@ -47,17 +47,17 @@ data class MgrsCoordinates(
         return "$gridZoneDesignator$gridSquareID$easting$northing"
     }
 
-    companion object {
+    public companion object {
 
         /**
          * Number of digits to be used when printing eastings and northings
          */
-        const val EASTING_NORTHING_LENGTH = 5
+        public const val EASTING_NORTHING_LENGTH: Int = 5
 
         /**
          * Character to be used to start/left pad printings of eastings and northings
          */
-        const val EASTING_NORTHING_PAD_CHAR = '0'
+        public const val EASTING_NORTHING_PAD_CHAR: Char = '0'
     }
 }
 

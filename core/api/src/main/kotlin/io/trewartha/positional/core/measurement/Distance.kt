@@ -6,7 +6,7 @@ package io.trewartha.positional.core.measurement
  * @property magnitude Magnitude/amount/value of the distance
  * @property unit Unit that [magnitude] is/was measured in
  */
-data class Distance(val magnitude: Double, val unit: Unit) {
+public data class Distance(val magnitude: Double, val unit: Unit) {
 
     /**
      * `true` if the distance is finite, `false` if it is negative or positive infinity
@@ -26,7 +26,7 @@ data class Distance(val magnitude: Double, val unit: Unit) {
     /**
      * Convert this distance to an equivalent distance in meters
      */
-    fun inMeters(): Distance = when (unit) {
+    public fun inMeters(): Distance = when (unit) {
         Unit.FEET -> Distance(magnitude * M_PER_FT, Unit.METERS)
         Unit.METERS -> this
     }
@@ -34,7 +34,7 @@ data class Distance(val magnitude: Double, val unit: Unit) {
     /**
      * Convert this distance to an equivalent distance in feet
      */
-    fun inFeet(): Distance = when (unit) {
+    public fun inFeet(): Distance = when (unit) {
         Unit.FEET -> this
         Unit.METERS -> Distance(magnitude * FT_PER_M, Unit.FEET)
     }
@@ -44,7 +44,7 @@ data class Distance(val magnitude: Double, val unit: Unit) {
     /**
      * Units that a distance can be measured in
      */
-    enum class Unit {
+    public enum class Unit {
 
         /**
          * Feet
@@ -63,19 +63,19 @@ data class Distance(val magnitude: Double, val unit: Unit) {
         /**
          * Java format string that can be used to convert a distance in the unit to a string
          */
-        abstract val format: String
+        public abstract val format: String
     }
 }
 
 /**
  * Create a distance in feet with the magnitude of this value
  */
-val Number.feet: Distance get() = Distance(toDouble(), Distance.Unit.FEET)
+public val Number.feet: Distance get() = Distance(toDouble(), Distance.Unit.FEET)
 
 /**
  * Create a distance in meters with the magnitude of this value
  */
-val Number.meters: Distance get() = Distance(toDouble(), Distance.Unit.METERS)
+public val Number.meters: Distance get() = Distance(toDouble(), Distance.Unit.METERS)
 
 private const val FORMAT_FEET = "%,f ft"
 private const val FORMAT_METERS = "%,f m"

@@ -23,7 +23,7 @@ import io.trewartha.positional.core.ui.modifier.placeholder
 import kotlinx.datetime.LocalTime
 
 @Composable
-fun SunriseSunsetColumn(
+public fun SunriseSunsetColumn(
     sunrise: State<LocalTime?, *>,
     sunset: State<LocalTime?, *>,
     modifier: Modifier = Modifier,

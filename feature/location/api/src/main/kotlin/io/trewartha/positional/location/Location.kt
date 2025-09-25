@@ -22,7 +22,7 @@ import kotlin.time.Instant
  * @property speed Speed or `null` if unknown
  * @property speedAccuracy Accuracy of the speed or `null` if unknown
  */
-data class Location(
+public data class Location(
     val timestamp: Instant,
     val coordinates: Coordinates,
     val horizontalAccuracy: Distance? = null,

@@ -60,7 +60,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
 @Composable
-fun LocationPermissionGrantedContent(
+public fun LocationPermissionGrantedContent(
     locationState: State<Location, Unit>,
     settingsState: State<Settings, Unit>,
     snackbarHostState: SnackbarHostState,

@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 
 @Composable
-fun HorizontalDivider(modifier: Modifier = Modifier) {
+public fun HorizontalDivider(modifier: Modifier = Modifier) {
     M3HorizontalDivider(modifier = modifier.alpha(ALPHA))
 }
 

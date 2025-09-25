@@ -7,12 +7,12 @@ package io.trewartha.positional.core.measurement
  * @property magnitude Magnitude/value/size of the angle
  * @property unit Unit the angle is measured in
  */
-data class Angle(val magnitude: Double, val unit: Unit) {
+public data class Angle(val magnitude: Double, val unit: Unit) {
 
     /**
      * Convert this angle to degrees if it is not already in degrees
      */
-    fun inDegrees(): Angle = this
+    public fun inDegrees(): Angle = this
 
     /**
      * Add another angle to this angle
@@ -23,7 +23,7 @@ data class Angle(val magnitude: Double, val unit: Unit) {
      * angle's magnitude converted to the same unit as this angle. The result has the same unit as
      * this angle.
      */
-    operator fun plus(other: Angle): Angle = (magnitude + other.inDegrees().magnitude).degrees
+    public operator fun plus(other: Angle): Angle = (magnitude + other.inDegrees().magnitude).degrees
 
     override fun toString(): String = when (unit) {
         Unit.DEGREES -> FORMAT_DEGREES.format(magnitude)
@@ -32,7 +32,7 @@ data class Angle(val magnitude: Double, val unit: Unit) {
     /**
      * Units that an angle can be measured in
      */
-    enum class Unit {
+    public enum class Unit {
 
         /**
          * Degrees
@@ -44,13 +44,13 @@ data class Angle(val magnitude: Double, val unit: Unit) {
         /**
          * Java format string that can be used to convert a distance in the unit to a string
          */
-        abstract val format: String
+        public abstract val format: String
     }
 }
 
 /**
  * Create an angle in degrees with the magnitude of this value
  */
-inline val Number.degrees: Angle get() = Angle(toDouble(), Angle.Unit.DEGREES)
+public inline val Number.degrees: Angle get() = Angle(toDouble(), Angle.Unit.DEGREES)
 
 private const val FORMAT_DEGREES = "%,f°"

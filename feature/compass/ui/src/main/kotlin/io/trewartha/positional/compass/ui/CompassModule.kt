@@ -13,12 +13,12 @@ import io.trewartha.positional.compass.Compass
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface CompassModule {
+public interface CompassModule {
 
-    companion object {
+    public companion object {
 
         @Provides
-        fun compass(sensorManager: SensorManager): Compass? =
+        public fun compass(sensorManager: SensorManager): Compass? =
             try {
                 AospCompass(
                     sensorManager,
@@ -31,7 +31,7 @@ interface CompassModule {
             }
 
         @Provides
-        fun sensorManager(
+        public fun sensorManager(
             @ApplicationContext context: Context
         ): SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }

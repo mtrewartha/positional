@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.onStart
  * @param C Type of cause exposed in cases where state failed to load
  */
 @Immutable
-sealed interface State<out D, out C> {
+public sealed interface State<out D, out C> {
 
     /**
      * State is loading
      */
     @Immutable
-    data object Loading : State<Nothing, Nothing>
+    public data object Loading : State<Nothing, Nothing>
 
     /**
      * State failed to load
@@ -29,7 +29,7 @@ sealed interface State<out D, out C> {
      * @property cause Cause of the failure
      */
     @Immutable
-    data class Failure<out C>(val cause: C) : State<Nothing, C>
+    public data class Failure<out C>(val cause: C) : State<Nothing, C>
 
     /**
      * State was successfully loaded
@@ -39,7 +39,7 @@ sealed interface State<out D, out C> {
      * @property data Data wrapped by the state
      */
     @Immutable
-    data class Loaded<out D>(val data: D) : State<D, Nothing>
+    public data class Loaded<out D>(val data: D) : State<D, Nothing>
 
     /**
      * Data wrapped by the state or `null` if the state is not loaded.
@@ -51,14 +51,14 @@ sealed interface State<out D, out C> {
      * 2. when the data has loaded
      * but was `null`. Make sure your code is aware of this potential pitfall.*
      */
-    val dataOrNull: D?
+    public val dataOrNull: D?
         get() = (this as? Loaded)?.data
 
     /**
      * Cause of the failure to load the state if the state failed to load or `null` if the state
      * has not failed to load
      */
-    val failureCauseOrNull: C?
+    public val failureCauseOrNull: C?
         get() = (this as? Failure)?.cause
 }
 
@@ -67,7 +67,7 @@ sealed interface State<out D, out C> {
  * This is useful if you care about representing the presence of a failure (via [State.Failure]) but
  * don't care about any details of the failure (via [State.Failure.cause]).
  */
-fun <T> Flow<T>.asStates(): Flow<State<T, Unit>> = asStates { }
+public fun <T> Flow<T>.asStates(): Flow<State<T, Unit>> = asStates { }
 
 /**
  * Wrap upstream emissions and exceptions in an appropriate [State] and re-emit them downstream
@@ -81,7 +81,7 @@ fun <T> Flow<T>.asStates(): Flow<State<T, Unit>> = asStates { }
  * @return Flow that wraps emissions and exceptions from the original flow into an appropriate
  * [State] and re-emits them downstream
  */
-fun <T, C> Flow<T>.asStates(transform: (Exception) -> C): Flow<State<T, C>> =
+public fun <T, C> Flow<T>.asStates(transform: (Exception) -> C): Flow<State<T, C>> =
     this.map<T, State<T, C>> {
         State.Loaded(it)
     }.onStart {

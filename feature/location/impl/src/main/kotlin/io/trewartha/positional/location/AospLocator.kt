@@ -40,7 +40,7 @@ import kotlin.time.Instant
 /**
  * [Locator] implementation powered by the AOSP [LocationManager]
  */
-class AospLocator @Inject constructor(
+public class AospLocator @Inject constructor(
     private val locationManager: LocationManager,
     private val coroutineContext: CoroutineContext = Dispatchers.Default
 ) : Locator {

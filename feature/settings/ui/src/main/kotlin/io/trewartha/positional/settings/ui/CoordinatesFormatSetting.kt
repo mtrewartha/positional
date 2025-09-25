@@ -11,7 +11,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.settings.CoordinatesFormat
 
 @Composable
-fun CoordinatesFormatSetting(
+public fun CoordinatesFormatSetting(
     value: CoordinatesFormat?,
     onValueChange: (CoordinatesFormat) -> Unit,
     modifier: Modifier = Modifier

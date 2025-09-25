@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import io.trewartha.positional.core.ui.components.HelpView
 
 @Composable
-fun SunHelpView(
+public fun SunHelpView(
     contentPadding: PaddingValues,
     onUpClick: () -> Unit,
     modifier: Modifier = Modifier

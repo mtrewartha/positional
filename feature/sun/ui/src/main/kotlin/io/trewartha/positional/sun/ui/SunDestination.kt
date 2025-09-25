@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.WbTwilight
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -16,11 +17,11 @@ import io.trewartha.positional.core.ui.nav.bottomNavExitTransition
 import io.trewartha.positional.core.ui.nav.bottomNavPopEnterTransition
 import io.trewartha.positional.core.ui.nav.bottomNavPopExitTransition
 
-data object SunDestination : NavDestination.MainNavDestination {
+public data object SunDestination : NavDestination.MainNavDestination {
 
-    override val route = "sun"
-    override val navIcon = Icons.Rounded.WbTwilight
-    override val navLabelRes = R.string.feature_sun_ui_title
+    override val route: String = "sun"
+    override val navIcon: ImageVector = Icons.Rounded.WbTwilight
+    override val navLabelRes: Int = R.string.feature_sun_ui_title
 
     context(navGraphBuilder: NavGraphBuilder)
     override fun composable(

@@ -6,19 +6,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 
-interface NavDestination {
+public interface NavDestination {
 
-    val route: String
+    public val route: String
 
     context(navGraphBuilder: NavGraphBuilder)
-    fun composable(
+    public fun composable(
         navController: NavController,
         snackbarHostState: SnackbarHostState,
         contentPadding: PaddingValues
     )
 
-    interface MainNavDestination : NavDestination {
-        val navIcon: ImageVector
-        val navLabelRes: Int
+    public interface MainNavDestination : NavDestination {
+        public val navIcon: ImageVector
+        public val navLabelRes: Int
     }
 }

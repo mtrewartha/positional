@@ -9,7 +9,7 @@ import kotlin.math.roundToInt
 /**
  * Formats coordinates in the Military Grid Reference System (MGRS)
  */
-class MgrsFormatter : CoordinatesFormatter {
+public class MgrsFormatter : CoordinatesFormatter {
 
     override fun formatForDisplay(coordinates: Coordinates?): List<String?> =
         coordinates?.asMgrsCoordinates()?.let { mgrsCoordinates ->

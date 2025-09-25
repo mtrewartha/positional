@@ -16,7 +16,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 private const val BASE_TEXT_SIZE_SP = 16f
 
 @Composable
-fun Markdown(
+public fun Markdown(
     content: String,
     modifier: Modifier = Modifier,
 ) {

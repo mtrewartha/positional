@@ -13,7 +13,7 @@ import kotlin.math.roundToInt
  * @property easting Easting within zone
  * @property northing Northing within zone
  */
-data class UtmCoordinates(
+public data class UtmCoordinates(
     val zone: Int,
     val hemisphere: Hemisphere,
     val easting: Distance,
@@ -54,17 +54,17 @@ data class UtmCoordinates(
         return "$zone$hemisphere ${easting}m E ${northing}m N"
     }
 
-    companion object {
+    public companion object {
 
         /**
          * Number of digits to be used when printing eastings and northings
          */
-        const val EASTING_NORTHING_LENGTH = 7
+        public const val EASTING_NORTHING_LENGTH: Int = 7
 
         /**
          * Character to be used to start/left pad printings of eastings and northings
          */
-        const val EASTING_NORTHING_PAD_CHAR = '0'
+        public const val EASTING_NORTHING_PAD_CHAR: Char = '0'
     }
 }
 

@@ -1,17 +1,22 @@
 package io.trewartha.positional
 
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinSingleTargetExtension
 
 internal fun KotlinAndroidProjectExtension.configureKotlinAndroid() {
+    configureKotlin()
     compilerOptions.configureWithDefaults {
         optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
     }
 }
 
 internal fun KotlinJvmProjectExtension.configureKotlinJvm() {
+    configureKotlin()
     compilerOptions.configureWithDefaults()
 }
 
@@ -36,4 +41,8 @@ private fun KotlinJvmCompilerOptions.configureWithDefaults(
     )
 
     extraConfiguration()
+}
+
+internal fun KotlinSingleTargetExtension<*>.configureKotlin() {
+    explicitApi = ExplicitApiMode.Strict
 }

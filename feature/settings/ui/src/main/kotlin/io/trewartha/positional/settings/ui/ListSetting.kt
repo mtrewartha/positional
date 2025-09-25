@@ -41,7 +41,7 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.modifier.placeholder
 
 @Composable
-fun <T> ListSetting(
+public fun <T> ListSetting(
     icon: ImageVector,
     title: String,
     values: Set<T>?,

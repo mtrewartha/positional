@@ -27,7 +27,7 @@ import io.trewartha.positional.core.ui.modifier.placeholder
 import io.trewartha.positional.settings.LocationAccuracyVisibility
 
 @Composable
-fun StatBlock(
+public fun StatBlock(
     icon: ImageVector,
     name: String,
     value: String?,

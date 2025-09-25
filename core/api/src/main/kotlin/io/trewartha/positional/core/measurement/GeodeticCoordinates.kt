@@ -10,7 +10,7 @@ import earth.worldwind.geom.coords.UTMCoord
  * @property latitude Angle of latitude
  * @property longitude Angle of longitude
  */
-data class GeodeticCoordinates(val latitude: Angle, val longitude: Angle) : Coordinates {
+public data class GeodeticCoordinates(val latitude: Angle, val longitude: Angle) : Coordinates {
 
     private val isPolar: Boolean
         get() = latitude.inDegrees().magnitude !in UTM_SOUTHERN_BOUND..UTM_NORTHERN_BOUND

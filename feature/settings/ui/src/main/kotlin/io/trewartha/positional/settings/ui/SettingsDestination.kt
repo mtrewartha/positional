@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -21,11 +22,11 @@ import io.trewartha.positional.core.ui.nav.bottomNavExitTransition
 import io.trewartha.positional.core.ui.nav.bottomNavPopEnterTransition
 import io.trewartha.positional.core.ui.nav.bottomNavPopExitTransition
 
-data object SettingsDestination : NavDestination.MainNavDestination {
+public data object SettingsDestination : NavDestination.MainNavDestination {
 
-    override val route = "settings"
-    override val navIcon = Icons.Rounded.Settings
-    override val navLabelRes = R.string.feature_settings_ui_title
+    override val route: String = "settings"
+    override val navIcon: ImageVector = Icons.Rounded.Settings
+    override val navLabelRes: Int = R.string.feature_settings_ui_title
 
     context(navGraphBuilder: NavGraphBuilder)
     override fun composable(

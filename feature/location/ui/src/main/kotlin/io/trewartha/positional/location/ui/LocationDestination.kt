@@ -8,6 +8,7 @@ import androidx.compose.material.icons.rounded.MyLocation
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,11 +30,11 @@ import io.trewartha.positional.location.ui.format.UtmFormatter
 import io.trewartha.positional.location.ui.locals.LocalCoordinatesFormatter
 import io.trewartha.positional.settings.CoordinatesFormat
 
-data object LocationDestination : NavDestination.MainNavDestination {
+public data object LocationDestination : NavDestination.MainNavDestination {
 
-    override val route = "location"
-    override val navIcon = Icons.Rounded.MyLocation
-    override val navLabelRes = R.string.feature_location_ui_title
+    override val route: String = "location"
+    override val navIcon: ImageVector = Icons.Rounded.MyLocation
+    override val navLabelRes: Int = R.string.feature_location_ui_title
 
     context(navGraphBuilder: NavGraphBuilder)
     override fun composable(

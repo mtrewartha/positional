@@ -13,15 +13,15 @@ import io.trewartha.positional.location.Locator
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface AospLocatorModule {
+public interface AospLocatorModule {
 
     @Binds
-    fun aospLocator(aospLocator: AospLocator): Locator
+    public fun aospLocator(aospLocator: AospLocator): Locator
 
-    companion object {
+    public companion object {
 
         @Provides
-        fun locationManager(
+        public fun locationManager(
             @ApplicationContext context: Context
         ): LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }

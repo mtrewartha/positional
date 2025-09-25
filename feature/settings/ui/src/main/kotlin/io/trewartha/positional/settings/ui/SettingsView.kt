@@ -35,7 +35,7 @@ import io.trewartha.positional.settings.Theme
 
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-fun SettingsView(
+public fun SettingsView(
     compassMode: CompassMode?,
     onCompassModeChange: (CompassMode) -> Unit,
     compassNorthVibration: CompassNorthVibration?,

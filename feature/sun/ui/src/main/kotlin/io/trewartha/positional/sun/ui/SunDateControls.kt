@@ -39,7 +39,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
 @Composable
-fun SunDateControls(
+public fun SunDateControls(
     selectedDate: LocalDate?,
     onPreviousDayClick: () -> Unit,
     onDateSelection: (LocalDate) -> Unit,

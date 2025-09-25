@@ -16,7 +16,7 @@ import javax.inject.Inject
 /**
  * [SettingsRepository] implementation powered by the AndroidX DataStore library
  */
-class DataStoreSettingsRepository @Inject constructor(
+public class DataStoreSettingsRepository @Inject constructor(
     private val context: Context
 ) : SettingsRepository {
 

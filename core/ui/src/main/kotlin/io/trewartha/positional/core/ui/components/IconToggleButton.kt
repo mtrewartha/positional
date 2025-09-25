@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 // this brings things into compliance with the spec:
 // https://m3.material.io/components/icon-buttons/specs
 @Composable
-fun IconToggleButton(
+public fun IconToggleButton(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,

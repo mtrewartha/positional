@@ -32,7 +32,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
-class SunViewModel @Inject constructor(
+public class SunViewModel @Inject constructor(
     private val clock: Clock,
     locator: Locator,
     private val solarTimesRepository: SolarTimesRepository
@@ -55,7 +55,7 @@ class SunViewModel @Inject constructor(
 
     private val selectedDate = MutableStateFlow(todaysDate.value)
 
-    val state: StateFlow<SunState> =
+    public val state: StateFlow<SunState> =
         combine(todaysDate, selectedDate, coordinates) { todaysDate, selectedDate, coordinates ->
             with(solarTimesRepository) {
                 SunState(
@@ -88,19 +88,19 @@ class SunViewModel @Inject constructor(
             )
         )
 
-    fun onSelectedDateChange(date: LocalDate) {
+    public fun onSelectedDateChange(date: LocalDate) {
         selectedDate.update { date }
     }
 
-    fun onSelectedDateChangedToToday() {
+    public fun onSelectedDateChangedToToday() {
         selectedDate.update { today }
     }
 
-    fun onSelectedDateDecrement() {
+    public fun onSelectedDateDecrement() {
         selectedDate.update { it - DatePeriod(days = 1) }
     }
 
-    fun onSelectedDateIncrement() {
+    public fun onSelectedDateIncrement() {
         selectedDate.update { it + DatePeriod(days = 1) }
     }
 }

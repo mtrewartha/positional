@@ -12,10 +12,10 @@ import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+public class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var dateTimeFormatter: DateTimeFormatter
+    public lateinit var dateTimeFormatter: DateTimeFormatter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

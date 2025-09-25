@@ -15,19 +15,19 @@ import kotlin.time.Clock
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+public class AppModule {
 
     @Provides
-    fun clock(): Clock = Clock.System
+    public fun clock(): Clock = Clock.System
 
     @Provides
-    fun coroutineContext(): CoroutineContext = Dispatchers.Default
+    public fun coroutineContext(): CoroutineContext = Dispatchers.Default
 
     @Provides
-    fun locale(): Locale = checkNotNull(LocaleListCompat.getDefault()[0])
+    public fun locale(): Locale = checkNotNull(LocaleListCompat.getDefault()[0])
 
     @Provides
-    fun windowManager(
+    public fun windowManager(
         @ApplicationContext context: Context
     ): WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 }
