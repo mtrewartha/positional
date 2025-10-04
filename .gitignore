@@ -3,7 +3,7 @@
 .idea
 .DS_Store
 .kotlin
-/build
+**/build
 /captures
 *.apk
 keystore

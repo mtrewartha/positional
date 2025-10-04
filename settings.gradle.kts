@@ -46,18 +46,14 @@ kover {
 
 include(
     ":app",
-    ":core:api",
+    ":core:measurement",
     ":core:ui",
-    ":feature:compass:api",
-    ":feature:compass:impl",
+    ":feature:compass",
     ":feature:compass:ui",
-    ":feature:location:api",
-    ":feature:location:impl",
+    ":feature:location",
     ":feature:location:ui",
-    ":feature:settings:api",
-    ":feature:settings:impl",
+    ":feature:settings",
     ":feature:settings:ui",
-    ":feature:sun:api",
-    ":feature:sun:impl",
+    ":feature:sun",
     ":feature:sun:ui",
 )
