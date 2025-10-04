@@ -35,6 +35,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_")
                         .lowercase() + "_"
 
+                testFixtures {
+                    enable = true
+                }
+
                 extensions.configure<KotlinAndroidProjectExtension> {
                     configureKotlinAndroid()
                 }

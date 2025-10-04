@@ -17,15 +17,12 @@ android {
 dependencies {
     ksp(libs.google.hilt.compiler)
 
-    api(projects.core.api)
+    api(projects.core.measurement)
     api(projects.core.ui)
-    api(projects.feature.location.api)
-    api(projects.feature.location.impl)
-    api(projects.feature.settings.api)
-    api(projects.feature.settings.impl)
+    api(projects.feature.location)
+    api(projects.feature.settings)
     api(libs.accompanist.permissions)
     api(libs.androidx.compose.runtime)
-    api(libs.google.hilt.android)
 
     implementation(projects.core.ui)
     implementation(libs.androidx.appcompat)
@@ -40,6 +37,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.timber)
 
+    testImplementation(testFixtures(projects.feature.location))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }

@@ -73,8 +73,9 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.feature.compass.ui)
+    implementation(projects.feature.location)
     implementation(projects.feature.location.ui)
-    implementation(projects.feature.settings.api)
+    implementation(projects.feature.settings)
     implementation(projects.feature.settings.ui)
     implementation(projects.feature.sun.ui)
     implementation(libs.accompanist.permissions)

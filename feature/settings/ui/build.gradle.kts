@@ -12,7 +12,7 @@ dependencies {
     ksp(libs.google.hilt.compiler)
 
     api(projects.core.ui)
-    api(projects.feature.settings.impl)
+    api(projects.feature.settings)
     api(libs.androidx.compose.runtime)
     api(libs.google.hilt.android)
 

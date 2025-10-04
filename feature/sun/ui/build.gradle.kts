@@ -12,13 +12,13 @@ dependencies {
     ksp(libs.google.hilt.compiler)
 
     api(projects.core.ui)
-    api(projects.feature.location.impl)
-    api(projects.feature.sun.impl)
+    api(projects.feature.location)
+    api(projects.feature.sun)
     api(libs.androidx.compose.runtime)
 
-    implementation(projects.core.api)
+    implementation(projects.core.measurement)
     implementation(projects.core.ui)
-    implementation(projects.feature.location.api)
+    implementation(projects.feature.location)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.google.hilt.android)
 
+    testImplementation(testFixtures(projects.feature.location))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.datetime)
     testImplementation(libs.turbine)

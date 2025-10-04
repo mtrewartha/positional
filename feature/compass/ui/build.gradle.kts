@@ -11,17 +11,14 @@ android {
 dependencies {
     ksp(libs.google.hilt.compiler)
 
-    api(projects.core.api)
+    api(projects.core.measurement)
     api(projects.core.ui)
-    api(projects.feature.compass.api)
-    api(projects.feature.compass.impl)
-    api(projects.feature.location.impl)
-    api(projects.feature.settings.api)
-    api(projects.feature.settings.impl)
+    api(projects.feature.compass)
+    api(projects.feature.location)
+    api(projects.feature.settings)
     api(libs.google.hilt.android)
 
     implementation(projects.core.ui)
-    implementation(projects.feature.location.api)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
@@ -36,6 +33,8 @@ dependencies {
     implementation(libs.google.materialComponents)
     implementation(libs.kotlinx.coroutines.core)
 
+    testImplementation(testFixtures(projects.feature.compass))
+    testImplementation(testFixtures(projects.feature.location))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.datetime)
     testImplementation(libs.turbine)
