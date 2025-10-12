@@ -9,8 +9,8 @@ import io.trewartha.positional.core.ui.format.SystemDateTimeFormatter
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-public interface UiCoreModule {
+internal interface FormatterModule {
 
     @Binds
-    public fun dateTimeFormatter(implementation: SystemDateTimeFormatter): DateTimeFormatter
+    fun dateTimeFormatter(implementation: SystemDateTimeFormatter): DateTimeFormatter
 }

@@ -28,9 +28,8 @@ import androidx.compose.ui.unit.dp
 import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.State
-import io.trewartha.positional.core.ui.format.SystemDateTimeFormatter
+import io.trewartha.positional.core.ui.locals.DefaultDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
-import io.trewartha.positional.core.ui.locals.LocalLocale
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
@@ -135,10 +134,7 @@ private fun LoadingPreview() {
 private fun LoadedPreview() {
     PositionalTheme {
         Surface {
-            val locale = LocalLocale.current
-            CompositionLocalProvider(
-                LocalDateTimeFormatter provides SystemDateTimeFormatter(locale)
-            ) {
+            CompositionLocalProvider(LocalDateTimeFormatter provides DefaultDateTimeFormatter) {
                 SunView(
                     state = SunState(
                         todaysDate = LocalDate(2024, Month.JANUARY, 1),

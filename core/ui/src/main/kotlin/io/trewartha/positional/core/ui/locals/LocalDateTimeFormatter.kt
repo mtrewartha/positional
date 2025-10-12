@@ -7,7 +7,7 @@ import io.trewartha.positional.core.ui.format.DateTimeFormatter
 import io.trewartha.positional.core.ui.format.SystemDateTimeFormatter
 
 public val LocalDateTimeFormatter: ProvidableCompositionLocal<DateTimeFormatter> =
-    staticCompositionLocalOf {
-        val locale = checkNotNull(LocaleListCompat.getDefault()[0])
-        SystemDateTimeFormatter(locale)
-    }
+    staticCompositionLocalOf { DefaultDateTimeFormatter }
+
+public val DefaultDateTimeFormatter: DateTimeFormatter =
+    SystemDateTimeFormatter(checkNotNull(LocaleListCompat.getDefault()[0]))

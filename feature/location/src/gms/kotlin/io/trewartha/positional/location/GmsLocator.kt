@@ -27,7 +27,7 @@ import kotlin.coroutines.CoroutineContext
  * [Locator] implementation powered by the GMS [FusedLocationProviderClient] with a fallback in case
  * GMS locations are unavailable
  */
-public class GmsLocator @Inject constructor(
+internal class GmsLocator @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val fallbackAospLocator: AospLocator,
     private val coroutineContext: CoroutineContext = Dispatchers.Default

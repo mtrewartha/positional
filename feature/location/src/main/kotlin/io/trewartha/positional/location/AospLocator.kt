@@ -29,7 +29,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * [Locator] implementation powered by the AOSP [LocationManager]
  */
-public class AospLocator @Inject constructor(
+internal class AospLocator @Inject constructor(
     private val locationManager: LocationManager,
     private val coroutineContext: CoroutineContext = Dispatchers.Default
 ) : Locator {

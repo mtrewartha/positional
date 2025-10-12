@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.timber)
 
     testImplementation(testFixtures(projects.feature.location))
+    testImplementation(testFixtures(projects.feature.settings))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }
