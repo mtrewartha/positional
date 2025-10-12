@@ -13,6 +13,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.jvm")
                 apply("com.adarshr.test-logger")
+                apply("java-test-fixtures")
             }
 
             extensions.configure<JavaPluginExtension> {

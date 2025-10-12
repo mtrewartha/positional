@@ -1,5 +1,6 @@
 plugins {
     id("io.trewartha.positional.android.library")
+    alias(libs.plugins.google.ksp)
     alias(libs.plugins.protobuf)
 }
 
@@ -8,7 +9,10 @@ android {
 }
 
 dependencies {
+    ksp(libs.google.hilt.compiler)
+
     api(projects.core.measurement)
+    api(libs.google.hilt.android)
     api(libs.kotlinx.coroutines.core)
     api(libs.javax.inject)
     api(libs.protobuf.java.lite)

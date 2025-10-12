@@ -1,4 +1,4 @@
-package io.trewartha.positional.compass.ui
+package io.trewartha.positional.compass
 
 import android.content.Context
 import android.hardware.Sensor
@@ -8,17 +8,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.trewartha.positional.compass.AospCompass
-import io.trewartha.positional.compass.Compass
 
 @Module
 @InstallIn(ViewModelComponent::class)
-public interface CompassModule {
+internal interface CompassModule {
 
-    public companion object {
+    companion object {
 
         @Provides
-        public fun compass(sensorManager: SensorManager): Compass? =
+        fun compass(sensorManager: SensorManager): Compass? =
             try {
                 AospCompass(
                     sensorManager,
@@ -31,7 +29,7 @@ public interface CompassModule {
             }
 
         @Provides
-        public fun sensorManager(
+        fun sensorManager(
             @ApplicationContext context: Context
         ): SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }

@@ -15,7 +15,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":feature:settings:impl:generateAospDebugProto" />
+          <option value=":feature:settings:generateAospDebugProto" />
         </list>
       </option>
       <option name="vmOptions" />

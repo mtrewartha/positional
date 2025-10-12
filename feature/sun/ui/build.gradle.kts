@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.google.hilt.android)
 
     testImplementation(testFixtures(projects.feature.location))
+    testImplementation(testFixtures(projects.feature.sun))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.datetime)
     testImplementation(libs.turbine)

@@ -5,15 +5,15 @@ import android.location.LocationManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ViewModelComponent::class)
-public object LocationModule {
+@InstallIn(SingletonComponent::class)
+internal object LocationModule {
 
     @Provides
-    public fun locationManager(
+    fun locationManager(
         @ApplicationContext context: Context
     ): LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 }

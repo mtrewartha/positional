@@ -7,20 +7,20 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ViewModelComponent::class)
-public interface GmsLocatorModule {
+@InstallIn(SingletonComponent::class)
+internal interface GmsLocatorModule {
 
     @Binds
-    public fun gmsLocator(gmsLocator: GmsLocator): Locator
+    fun gmsLocator(gmsLocator: GmsLocator): Locator
 
-    public companion object {
+    companion object {
 
         @Provides
-        public fun fusedLocationProviderClient(
+        fun fusedLocationProviderClient(
             @ApplicationContext context: Context
         ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     }

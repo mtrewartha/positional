@@ -35,6 +35,7 @@ dependencies {
 
     testImplementation(testFixtures(projects.feature.compass))
     testImplementation(testFixtures(projects.feature.location))
+    testImplementation(testFixtures(projects.feature.settings))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.datetime)
     testImplementation(libs.turbine)

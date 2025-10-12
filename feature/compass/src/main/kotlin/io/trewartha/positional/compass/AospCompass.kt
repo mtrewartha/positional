@@ -19,7 +19,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * [Compass] implementation powered by the AOSP [SensorManager]
  */
-public class AospCompass @Inject constructor(
+internal class AospCompass @Inject constructor(
     private val sensorManager: SensorManager,
     accelerometer: Sensor,
     magnetometer: Sensor,
