@@ -17,8 +17,6 @@ dependencies {
     api(libs.androidx.compose.runtime)
 
     implementation(projects.core.measurement)
-    implementation(projects.core.ui)
-    implementation(projects.feature.location)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)

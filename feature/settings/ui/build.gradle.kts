@@ -14,9 +14,7 @@ dependencies {
     api(projects.core.ui)
     api(projects.feature.settings)
     api(libs.androidx.compose.runtime)
-    api(libs.google.hilt.android)
 
-    implementation(projects.core.ui)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
@@ -26,4 +24,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.google.hilt.android)
 }

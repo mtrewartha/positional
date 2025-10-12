@@ -11,9 +11,10 @@ dependencies {
     ksp(libs.google.hilt.compiler)
 
     api(projects.core.measurement)
-    api(libs.javax.inject)
-    api(libs.google.hilt.android)
     api(libs.kotlinx.coroutines.core)
+
+    implementation(libs.google.hilt.android)
+    implementation(libs.javax.inject)
 
     testImplementation(projects.core.measurement)
     testImplementation(libs.kotest.assertions.core)

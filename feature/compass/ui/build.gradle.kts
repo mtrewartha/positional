@@ -16,9 +16,7 @@ dependencies {
     api(projects.feature.compass)
     api(projects.feature.location)
     api(projects.feature.settings)
-    api(libs.google.hilt.android)
 
-    implementation(projects.core.ui)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
@@ -30,6 +28,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.google.hilt.android)
     implementation(libs.google.materialComponents)
     implementation(libs.kotlinx.coroutines.core)
 
