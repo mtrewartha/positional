@@ -24,7 +24,6 @@ dependencies {
     api(libs.accompanist.permissions)
     api(libs.androidx.compose.runtime)
 
-    implementation(projects.core.ui)
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended)

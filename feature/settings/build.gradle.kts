@@ -12,12 +12,12 @@ dependencies {
     ksp(libs.google.hilt.compiler)
 
     api(projects.core.measurement)
-    api(libs.google.hilt.android)
     api(libs.kotlinx.coroutines.core)
-    api(libs.javax.inject)
     api(libs.protobuf.java.lite)
 
     implementation(libs.androidx.dataStore)
+    implementation(libs.google.hilt.android)
+    implementation(libs.javax.inject)
     implementation(libs.protobuf.kotlin.lite)
 
     testImplementation(libs.kotlinx.coroutines.test)

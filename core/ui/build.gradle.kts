@@ -13,7 +13,6 @@ dependencies {
 
     api(libs.androidx.appcompat)
     api(libs.androidx.compose.runtime)
-    api(libs.javax.inject)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
@@ -23,6 +22,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.composePlaceholder.material3)
     implementation(libs.google.hilt.android)
+    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.markwon)
