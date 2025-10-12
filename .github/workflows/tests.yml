@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: 'Set up Gradle'
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - name: 'Set up the Android SDK'
         uses: android-actions/setup-android@v3
