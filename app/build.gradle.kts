@@ -1,8 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.loadProperties
 import java.nio.file.NoSuchFileException
 
 plugins {
-    id("io.trewartha.positional.android.application")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
@@ -17,8 +19,9 @@ private val PROPERTIES_KEY_STORE_FILE = "storeFile"
 private val PROPERTIES_KEY_STORE_PASSWORD = "storePassword"
 
 android {
-
-    namespace = "io.trewartha.positional"
+    buildFeatures {
+        buildConfig = true
+    }
 
     signingConfigs {
         create("release") {
@@ -34,18 +37,6 @@ android {
         }
     }
 
-    defaultConfig {
-        applicationId = "io.trewartha.positional"
-        versionCode = 21030102
-        versionName = "3.1.2"
-
-        testInstrumentationRunnerArguments["clearPackageData"] = "true"
-    }
-
-    buildFeatures {
-        buildConfig = true
-    }
-
     buildTypes {
         debug {
             isDebuggable = true
@@ -55,20 +46,46 @@ android {
         release {
             isDebuggable = false
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
             signingConfig = signingConfigs.getByName("release")
         }
     }
 
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs +
-                "-Xjvm-default=all" +
-                "-opt-in=androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi" +
-                "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi"
+    compileOptions {
+        // Up to Java 17 APIs are available through desugaring
+        // https://developer.android.com/studio/write/java11-minimal-support-table
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
+    }
+
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "io.trewartha.positional"
+
+        versionCode = 21030102
+        versionName = "3.1.2"
+
+        minSdk = 24
+        targetSdk = 35
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    }
+
+    namespace = "io.trewartha.positional"
+
+    flavorDimensions += "androidVariant"
+    productFlavors {
+        create("aosp") { dimension = "androidVariant" }
+        create("gms") { dimension = "androidVariant" }
     }
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.android.tools.desugarJdkLibs)
+
     ksp(libs.google.hilt.compiler)
 
     implementation(projects.core.ui)
@@ -95,7 +112,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
 
-    gmsImplementation(libs.google.firebase.analytics)
+    "gmsImplementation"(libs.google.firebase.analytics)
 
     androidTestRuntimeOnly(libs.androidx.test.runner)
 }
@@ -103,3 +120,22 @@ dependencies {
 hilt {
     enableAggregatingTask = true
 }
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xjvm-default=all",
+            "-Xcontext-parameters",
+            "-Xinline-classes",
+        )
+        jvmTarget = JvmTarget.JVM_17
+        optIn.addAll(
+            "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
+            "com.google.accompanist.permissions.ExperimentalPermissionsApi",
+            "kotlin.time.ExperimentalTime",
+        )
+    }
+}
+
+// https://github.com/gradle/gradle/issues/33619
+tasks.withType<Test> { failOnNoDiscoveredTests.set(false) }

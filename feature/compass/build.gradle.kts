@@ -1,5 +1,5 @@
 plugins {
-    id("io.trewartha.positional.android.library")
+    alias(libs.plugins.positional.library.android)
     alias(libs.plugins.google.ksp)
 }
 

@@ -22,7 +22,8 @@ tasks.withType<KotlinJvmCompile>().configureEach {
 dependencies {
     compileOnly(libs.android.tools.build)
     compileOnly(libs.kotlin.gradle)
-    compileOnly(libs.testLogger)
+    implementation(libs.autonomous.dependencyAnalysis)
+    implementation(libs.testLogger.plugin)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
@@ -30,22 +31,5 @@ tasks {
     validatePlugins {
         enableStricterValidation = true
         failOnWarning = true
-    }
-}
-
-gradlePlugin {
-    plugins {
-        register("androidApplication") {
-            id = "io.trewartha.positional.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
-        }
-        register("androidLibrary") {
-            id = "io.trewartha.positional.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
-        }
-        register("kotlinLibrary") {
-            id = "io.trewartha.positional.jvm.library"
-            implementationClass = "JvmLibraryConventionPlugin"
-        }
     }
 }

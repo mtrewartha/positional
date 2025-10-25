@@ -1,7 +1,7 @@
 plugins {
-    id("io.trewartha.positional.android.library")
     alias(libs.plugins.google.ksp)
-    alias(libs.plugins.protobuf)
+    alias(libs.plugins.positional.library.android)
+    alias(libs.plugins.google.protobuf)
 }
 
 android {
