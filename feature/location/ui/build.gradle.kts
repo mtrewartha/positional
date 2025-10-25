@@ -1,17 +1,11 @@
 plugins {
-    id("io.trewartha.positional.android.library")
+    alias(libs.plugins.positional.library.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
 }
 
 android {
     namespace = "io.trewartha.positional.location.ui"
-
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs +
-                "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi" +
-                "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi"
-    }
 }
 
 dependencies {
@@ -40,4 +34,15 @@ dependencies {
     testImplementation(testFixtures(projects.feature.settings))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
+}
+
+kotlin {
+    compilerOptions {
+        optIn.addAll(
+            "androidx.compose.foundation.layout.ExperimentalLayoutApi",
+            "androidx.compose.material3.ExperimentalMaterial3Api",
+            "com.google.accompanist.permissions.ExperimentalPermissionsApi",
+            "kotlin.time.ExperimentalTime",
+        )
+    }
 }

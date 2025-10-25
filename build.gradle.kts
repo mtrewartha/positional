@@ -5,16 +5,15 @@ buildscript {
 }
 
 plugins {
+    // Specify any plugins here that convention plugins would apply. Convention plugins don't have
+    // access to the version catalog like we do here, so it keeps things tidier if they only have
+    // to use the plugin IDs, even if using manual strings for those is a bit ugly (we can't avoid
+    // that).
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.jvm) apply false
-    alias(libs.plugins.google.ksp) apply false
-    alias(libs.plugins.google.services) apply false
-    alias(libs.plugins.google.firebase.crashlytics) apply false
-    alias(libs.plugins.protobuf) apply false
-    alias(libs.plugins.testLogger) apply false
+
     alias(libs.plugins.autonomous.dependencyAnalysis)
 }
 

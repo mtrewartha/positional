@@ -1,5 +1,5 @@
 plugins {
-    id("io.trewartha.positional.android.library")
+    alias(libs.plugins.positional.library.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.ksp)
 }
@@ -38,4 +38,12 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.datetime)
     testImplementation(libs.turbine)
+}
+
+kotlin {
+    compilerOptions {
+        optIn.addAll(
+            "kotlin.time.ExperimentalTime",
+        )
+    }
 }

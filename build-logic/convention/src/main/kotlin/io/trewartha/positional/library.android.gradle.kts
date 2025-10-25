@@ -1,22 +1,17 @@
 package io.trewartha.positional
 
-import com.android.build.api.dsl.CommonExtension
-import org.gradle.api.JavaVersion
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.invoke
+import org.gradle.accessors.dm.LibrariesForLibs
 
-context(project: Project)
-internal fun CommonExtension<*, *, *, *, *, *>.configureAndroid() {
-    compileSdk = 35
+val libs = the<LibrariesForLibs>()
 
-    defaultConfig {
-        minSdk = 24
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("io.trewartha.positional.dependencyAnalysis")
+    id("io.trewartha.positional.testLogger")
+}
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
+android {
     compileOptions {
         // Up to Java 17 APIs are available through desugaring
         // https://developer.android.com/studio/write/java11-minimal-support-table
@@ -25,16 +20,29 @@ internal fun CommonExtension<*, *, *, *, *, *>.configureAndroid() {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    testOptions.unitTests.isIncludeAndroidResources = true
+    compileSdk = 35
+
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
+        minSdk = 24
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
     flavorDimensions += "androidVariant"
+
     productFlavors {
-        create("aosp") {
-            dimension = "androidVariant"
-        }
-        create("gms") {
-            dimension = "androidVariant"
-        }
+        create("aosp") { dimension = "androidVariant" }
+        create("gms") { dimension = "androidVariant" }
+    }
+
+    // The resource prefix is derived from the module name,
+    // so resources inside ":core:module1" must be prefixed with "core_module1_"
+    resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_")
+        .lowercase() + "_"
+
+    @Suppress("UnstableApiUsage")
+    testFixtures {
+        enable = true
     }
 
     testOptions {
@@ -65,12 +73,38 @@ internal fun CommonExtension<*, *, *, *, *, *>.configureAndroid() {
                 }
             }
         }
-    }
-
-    project.dependencies {
-        add("coreLibraryDesugaring", project.libs.findLibrary("android.tools.desugarJdkLibs").get())
+        unitTests.isIncludeAndroidResources = true
     }
 }
+
+dependencies {
+    coreLibraryDesugaring(libs.android.tools.desugarJdkLibs)
+
+    androidTestImplementation(libs.kotlin.test)
+
+    androidTestRuntimeOnly(libs.androidx.test.core)
+    androidTestRuntimeOnly(libs.androidx.test.runner)
+
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.robolectric.core)
+}
+
+java {
+    sourceCompatibility = JVM_SOURCE_COMPATIBILITY
+    targetCompatibility = JVM_SOURCE_COMPATIBILITY
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(FREE_COMPILER_ARGS)
+        jvmTarget = JVM_TARGET
+    }
+    explicitApi = EXPLICIT_API_MODE
+}
+
+// https://github.com/gradle/gradle/issues/33619
+tasks.withType<Test> { failOnNoDiscoveredTests.set(false) }
 
 private data class TestDevice(
     val device: String,
