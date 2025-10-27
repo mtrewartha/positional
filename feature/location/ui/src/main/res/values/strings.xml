@@ -12,11 +12,12 @@
     <string name="feature_location_ui_button_lock_content_description_off">Lock screen (currently off)</string>
     <string name="feature_location_ui_button_lock_content_description_on">Lock screen (currently on)</string>
     <string name="feature_location_ui_button_share_content_description">Share coordinates</string>
+    <string name="feature_location_ui_coordinates_copy_content_description">Copy coordinates</string>
     <string name="feature_location_ui_coordinates_copy_format_dd">%1$s, %2$s</string>
     <string name="feature_location_ui_coordinates_copy_format_ddm">%1$s, %2$s</string>
     <string name="feature_location_ui_coordinates_copy_format_dms">%1$s, %2$s</string>
     <string name="feature_location_ui_coordinates_copy_format_mgrs">%1$s %2$s %3$s</string>
-    <string name="feature_location_ui_coordinates_copy_content_description">Copy coordinates</string>
+    <string name="feature_location_ui_coordinates_copy_label">Copied coordinates</string>
     <string name="feature_location_ui_coordinates_utm_hemisphere_north">N</string>
     <string name="feature_location_ui_coordinates_utm_hemisphere_south">S</string>
     <string name="feature_location_ui_dialog_map_error_button_confirm" translatable="false">@string/core_ui_ok</string>

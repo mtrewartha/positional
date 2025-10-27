@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -18,8 +16,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import io.trewartha.positional.core.ui.R
 
@@ -40,7 +39,7 @@ public fun HelpView(
                 navigationIcon = {
                     IconButton(onClick = onUpClick) {
                         Icon(
-                            Icons.AutoMirrored.Rounded.ArrowBack,
+                            painterResource(R.drawable.arrow_back_24px),
                             contentDescription = stringResource(id = R.string.core_ui_up)
                         )
                     }
@@ -53,7 +52,7 @@ public fun HelpView(
             bottom = contentPadding.calculateBottomPadding()
         )
     ) { innerContentPadding ->
-        val helpMarkdownContent = LocalContext.current.resources
+        val helpMarkdownContent = LocalResources.current
             .openRawResource(markdownRes).reader().readText()
         Markdown(
             content = helpMarkdownContent,

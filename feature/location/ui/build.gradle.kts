@@ -43,6 +43,7 @@ kotlin {
             "androidx.compose.material3.ExperimentalMaterial3Api",
             "com.google.accompanist.permissions.ExperimentalPermissionsApi",
             "kotlin.time.ExperimentalTime",
+            "kotlinx.coroutines.ExperimentalCoroutinesApi",
         )
     }
 }
