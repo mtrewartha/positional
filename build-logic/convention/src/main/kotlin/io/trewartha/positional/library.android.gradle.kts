@@ -20,7 +20,7 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")

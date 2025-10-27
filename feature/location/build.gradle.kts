@@ -30,7 +30,6 @@ dependencies {
 kotlin {
     compilerOptions {
         optIn.addAll(
-            "androidx.compose.material3.ExperimentalMaterial3Api",
             "kotlin.time.ExperimentalTime",
         )
     }

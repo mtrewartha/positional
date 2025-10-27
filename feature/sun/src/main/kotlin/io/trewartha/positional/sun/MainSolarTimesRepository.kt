@@ -5,7 +5,6 @@ import com.luckycatlabs.sunrisesunset.dto.Location
 import io.trewartha.positional.core.measurement.Coordinates
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
-import kotlinx.datetime.toLocalTime
 import java.util.Calendar
 import java.util.TimeZone
 import javax.inject.Inject
@@ -63,7 +62,7 @@ internal class MainSolarTimesRepository @Inject constructor() : SolarTimesReposi
             TimeZone.getDefault()
         )
 
-    private fun String.asLocalTime(): LocalTime? = takeIf { it != NO_TIME }?.toLocalTime()
+    private fun String.asLocalTime(): LocalTime? = takeIf { it != NO_TIME }?.let(LocalTime::parse)
 }
 
 private fun LocalDate.toCalendar(): Calendar =

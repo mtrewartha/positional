@@ -1,6 +1,7 @@
 package io.trewartha.positional.location.ui
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -27,12 +28,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.Clipboard
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -50,7 +51,6 @@ import io.trewartha.positional.core.ui.format.DateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalLocale
 import io.trewartha.positional.location.Location
-import io.trewartha.positional.location.ui.format.CoordinatesFormatter
 import io.trewartha.positional.location.ui.format.DecimalDegreesFormatter
 import io.trewartha.positional.location.ui.locals.LocalCoordinatesFormatter
 import io.trewartha.positional.settings.CoordinatesFormat
@@ -72,10 +72,11 @@ public fun LocationView(
 ) {
     // Snackbars
     val coroutineScope = rememberCoroutineScope()
-    val coordinatesCopiedMessage = stringResource(R.string.feature_location_ui_snackbar_coordinates_copied)
+    val coordinatesCopiedMessage =
+        stringResource(R.string.feature_location_ui_snackbar_coordinates_copied)
     var showMapError by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val context = LocalContext.current
     val coordinatesFormatter = LocalCoordinatesFormatter.current
     val dateTimeFormatter = LocalDateTimeFormatter.current
@@ -87,9 +88,12 @@ public fun LocationView(
         onCopyClick = { coordinates ->
             coroutineScope.launch {
                 snackbarHostState.currentSnackbarData?.dismiss()
+                clipboard.setCoordinates(
+                    label = context.getString(R.string.feature_location_ui_coordinates_copy_label),
+                    coordinates = coordinatesFormatter.formatForCopy(coordinates)
+                )
                 snackbarHostState.showSnackbar(coordinatesCopiedMessage)
             }
-            copyCoordinates(coordinates, coordinatesFormatter, clipboardManager)
         },
         onMapClick = { coordinates, timestamp ->
             try {
@@ -126,16 +130,6 @@ private fun MapErrorDialog(onDismissRequest: () -> Unit) {
     )
 }
 
-private fun copyCoordinates(
-    coordinates: Coordinates?,
-    coordinatesFormatter: CoordinatesFormatter,
-    clipboardManager: ClipboardManager
-) {
-    if (coordinates == null) return
-    val formattedCoordinates = coordinatesFormatter.formatForCopy(coordinates)
-    clipboardManager.setText(AnnotatedString(formattedCoordinates))
-}
-
 @Throws(ActivityNotFoundException::class)
 private fun navigateToMap(
     context: Context,
@@ -155,6 +149,10 @@ private fun navigateToMap(
             .build()
     }
     context.startActivity(Intent(Intent.ACTION_VIEW, geoUri))
+}
+
+private suspend fun Clipboard.setCoordinates(label: String, coordinates: String) {
+    setClipEntry(ClipEntry(ClipData.newPlainText(label, coordinates)))
 }
 
 @PreviewLightDark

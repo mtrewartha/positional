@@ -64,9 +64,9 @@ public fun LocationPermissionGrantedContent(
     locationState: State<Location, Unit>,
     settingsState: State<Settings, Unit>,
     snackbarHostState: SnackbarHostState,
-    onCopyClick: (Coordinates?) -> Unit,
-    onMapClick: (Coordinates?, Instant?) -> Unit,
-    onShareClick: (Coordinates?) -> Unit,
+    onCopyClick: (Coordinates) -> Unit,
+    onMapClick: (Coordinates, Instant) -> Unit,
+    onShareClick: (Coordinates) -> Unit,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -133,9 +133,9 @@ private fun ButtonRow(
     coordinates: Coordinates?,
     timestamp: Instant?,
     snackbarHostState: SnackbarHostState,
-    onCopyClick: (Coordinates?) -> Unit,
-    onMapClick: (Coordinates?, Instant?) -> Unit,
-    onShareClick: (Coordinates?) -> Unit,
+    onCopyClick: (Coordinates) -> Unit,
+    onMapClick: (Coordinates, Instant) -> Unit,
+    onShareClick: (Coordinates) -> Unit,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -145,11 +145,19 @@ private fun ButtonRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         MapButton(
-            onClick = { onMapClick(coordinates, timestamp) },
+            onClick = {
+                if (coordinates != null && timestamp != null) onMapClick(coordinates, timestamp)
+            },
+            enabled = coordinates != null && timestamp != null
+        )
+        ShareButton(
+            onClick = { if (coordinates != null) onShareClick(coordinates) },
             enabled = coordinates != null
         )
-        ShareButton(onClick = { onShareClick(coordinates) }, enabled = coordinates != null)
-        CopyButton(onClick = { onCopyClick(coordinates) }, enabled = coordinates != null)
+        CopyButton(
+            onClick = { if (coordinates != null) onCopyClick(coordinates) },
+            enabled = coordinates != null
+        )
         ScreenLockToggleButton(snackbarHostState)
         HelpButton(onHelpClick)
     }
@@ -183,9 +191,9 @@ private fun CoordinatesView(
     coordinates: Coordinates?,
     timestamp: Instant?,
     snackbarHostState: SnackbarHostState,
-    onCopyClick: (Coordinates?) -> Unit,
-    onMapClick: (Coordinates?, Instant?) -> Unit,
-    onShareClick: (Coordinates?) -> Unit,
+    onCopyClick: (Coordinates) -> Unit,
+    onMapClick: (Coordinates, Instant) -> Unit,
+    onShareClick: (Coordinates) -> Unit,
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
