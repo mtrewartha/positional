@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -198,7 +197,7 @@ private fun navigateToSettings(context: Context) {
         android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.fromParts("package", context.packageName, null)
     )
-    ContextCompat.startActivity(context, settingsIntent, null)
+    context.startActivity(settingsIntent)
 }
 
 private fun onNavigationItemClick(

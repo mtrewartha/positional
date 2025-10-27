@@ -10,7 +10,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -84,12 +83,9 @@ public data object LocationDestination : NavDestination.MainNavDestination {
 }
 
 private fun shareCoordinates(context: Context, formattedCoordinates: String) {
-    ContextCompat.startActivity(
-        context,
-        Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_TEXT, formattedCoordinates)
-            type = "text/plain"
-        },
-        null
-    )
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        putExtra(Intent.EXTRA_TEXT, formattedCoordinates)
+        type = "text/plain"
+    }
+    context.startActivity(shareIntent)
 }
