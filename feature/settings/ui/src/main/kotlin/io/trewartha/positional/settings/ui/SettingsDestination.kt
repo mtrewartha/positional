@@ -74,12 +74,12 @@ public data object SettingsDestination : NavDestination.MainNavDestination {
 
 private fun navigateToLicense(context: Context) {
     val licenseIntent = Intent(Intent.ACTION_VIEW, LICENSE_URI.toUri())
-    ContextCompat.startActivity(context, licenseIntent, null)
+    context.startActivity(licenseIntent)
 }
 
 private fun navigateToPrivacyPolicy(context: Context) {
     val privacyPolicyIntent = Intent(Intent.ACTION_VIEW, PRIVACY_POLICY_URI.toUri())
-    ContextCompat.startActivity(context, privacyPolicyIntent, null)
+    context.startActivity(privacyPolicyIntent)
 }
 
 private const val LICENSE_URI =
