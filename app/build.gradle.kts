@@ -65,8 +65,8 @@ android {
     defaultConfig {
         applicationId = "io.trewartha.positional"
 
-        versionCode = 21030102
-        versionName = "3.1.2"
+        versionCode = 21030103
+        versionName = "3.1.3"
 
         minSdk = 24
         targetSdk = 36
