@@ -44,7 +44,7 @@ sunrise-sunset = "1.2"
 testLogger-plugin = "4.0.0"
 timber = "5.0.1"
 turbine = "1.2.1"
-worldwind = "1.9.5"
+worldwind = "1.9.6"
 
 [plugins]
 positional-library-android = { id = "io.trewartha.positional.library.android" }
