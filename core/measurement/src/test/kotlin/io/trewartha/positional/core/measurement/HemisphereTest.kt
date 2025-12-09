@@ -6,9 +6,26 @@ import kotlin.test.Test
 class HemisphereTest {
 
     @Test
-    fun `Conversion to string returns first letter`() {
-        for (hemisphere in Hemisphere.entries) {
-            hemisphere.toString().shouldBe(hemisphere.name.first().uppercase())
-        }
+    fun `Given NORTH hemisphere, when converting to string, then returns N`() {
+        // Given
+        val hemisphere = Hemisphere.NORTH
+
+        // When
+        val result = hemisphere.toString()
+
+        // Then
+        result.shouldBe("N")
+    }
+
+    @Test
+    fun `Given SOUTH hemisphere, when converting to string, then returns S`() {
+        // Given
+        val hemisphere = Hemisphere.SOUTH
+
+        // When
+        val result = hemisphere.toString()
+
+        // Then
+        result.shouldBe("S")
     }
 }
