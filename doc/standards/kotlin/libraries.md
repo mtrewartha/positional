@@ -1,15 +1,5 @@
 ### Library Standards
 
-- **Create README.md files** that describe the purpose and usage of each library module. For feature
-  modules, these should be located at the top-level directory of the module. For core/data modules,
-  these should be located in the top level directory of the module. At minimum, README files should
-  include the following sections:
-    - Overview: A brief overview of the library's purpose and functionality
-    - Getting Started: Brief instructions on how to use the library, including Gradle dependencies
-      and key interfaces
-    - Test Fixtures: Description of test fixtures provided by the library and how to use them
-- **Version libraries using Semantic Versioning (SemVer)** (when libraries are published to
-  repositories) to clearly communicate the impact of changes to consumers.
 - **Use Kotlin's explicit API mode** to ensure public APIs are well-defined and intentional.
 - **Document public APIs** using KDocs to provide clear explanations of their purpose and usage.
 - **Hide implementation details** by using `internal` visibility for classes, functions, and
