@@ -1,9 +1,9 @@
 package io.trewartha.positional.core.measurement
 
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
-import kotlin.test.Test
 
-class HemisphereTest {
+class HemisphereTest : AnnotationSpec() {
 
     @Test
     fun `Given NORTH hemisphere, when converting to string, then returns N`() {

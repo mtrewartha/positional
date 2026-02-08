@@ -1,5 +1,9 @@
 package io.trewartha.positional
 
+import org.gradle.accessors.dm.LibrariesForLibs
+
+val libs = the<LibrariesForLibs>()
+
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("io.trewartha.positional.testFixtures.jvm")
@@ -18,4 +22,13 @@ kotlin {
         jvmTarget = JVM_TARGET
     }
     explicitApi = EXPLICIT_API_MODE
+}
+
+dependencies {
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.runner.junit5)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

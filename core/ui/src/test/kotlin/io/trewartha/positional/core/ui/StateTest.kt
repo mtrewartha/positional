@@ -1,13 +1,13 @@
 package io.trewartha.positional.core.ui
 
 import app.cash.turbine.test
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
 
-class StateTest {
+class StateTest : AnnotationSpec() {
 
     @Test
     fun `Getting data or null returns null when state is loading`() {

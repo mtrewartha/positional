@@ -1,5 +1,6 @@
 package io.trewartha.positional.sun
 
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
@@ -8,11 +9,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 import java.util.TimeZone
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
-class MainSolarTimesRepositoryTest {
+class MainSolarTimesRepositoryTest : AnnotationSpec() {
 
     private val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
     private val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
@@ -23,13 +21,13 @@ class MainSolarTimesRepositoryTest {
 
     private lateinit var subject: SolarTimesRepository
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         originalDefaultTimeZone = TimeZone.getDefault()
         subject = MainSolarTimesRepository()
     }
 
-    @AfterTest
+    @AfterEach
     fun tearDown() {
         TimeZone.setDefault(originalDefaultTimeZone)
     }

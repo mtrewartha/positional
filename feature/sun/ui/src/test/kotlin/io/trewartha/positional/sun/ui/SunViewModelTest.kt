@@ -1,6 +1,7 @@
 package io.trewartha.positional.sun.ui
 
 import app.cash.turbine.test
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
@@ -21,13 +22,10 @@ import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.plus
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.time.Clock
 import kotlin.time.Instant
 
-class SunViewModelTest {
+class SunViewModelTest : AnnotationSpec() {
 
     private val timeZone = TimeZone.currentSystemDefault()
     private val jan1st = LocalDate(2024, Month.JANUARY, 1)
@@ -37,7 +35,7 @@ class SunViewModelTest {
     private lateinit var solarTimesRepository: TestSolarTimesRepository
     private lateinit var subject: SunViewModel
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
@@ -50,7 +48,7 @@ class SunViewModelTest {
         subject = SunViewModel(clock, locator, solarTimesRepository)
     }
 
-    @AfterTest
+    @AfterEach
     fun tearDown() {
         Dispatchers.resetMain()
     }

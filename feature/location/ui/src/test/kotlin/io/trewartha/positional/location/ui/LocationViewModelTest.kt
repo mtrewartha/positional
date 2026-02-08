@@ -1,6 +1,7 @@
 package io.trewartha.positional.location.ui
 
 import app.cash.turbine.test
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
@@ -18,18 +19,15 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.time.Clock.System.now
 
-class LocationViewModelTest {
+class LocationViewModelTest : AnnotationSpec() {
 
     private lateinit var locator: TestLocator
     private lateinit var settings: SettingsRepository
     private lateinit var subject: LocationViewModel
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
@@ -39,7 +37,7 @@ class LocationViewModelTest {
         subject = LocationViewModel(locator, settings)
     }
 
-    @AfterTest
+    @AfterEach
     fun tearDown() {
         Dispatchers.resetMain()
     }

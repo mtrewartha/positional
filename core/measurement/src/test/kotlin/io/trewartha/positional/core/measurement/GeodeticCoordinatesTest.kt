@@ -4,14 +4,14 @@ import earth.worldwind.geom.Angle
 import earth.worldwind.geom.coords.MGRSCoord
 import earth.worldwind.geom.coords.UTMCoord
 import io.kotest.assertions.withClue
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldStartWith
-import kotlin.test.Test
 
-class GeodeticCoordinatesTest {
+class GeodeticCoordinatesTest : AnnotationSpec() {
 
     // Many complicated tests would be required to properly verify conversion between coordinates
     // formats. These tests would be difficult to make comprehensive for every location on Earth

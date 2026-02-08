@@ -2,11 +2,11 @@ package io.trewartha.positional.compass
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.degrees
-import kotlin.test.Test
 
-class AzimuthTest {
+class AzimuthTest : AnnotationSpec() {
 
     @Test
     fun `Constructor does not throw IllegalArgumentException when angle is between 0 and 360`() {

@@ -1,5 +1,6 @@
 package io.trewartha.positional.sun
 
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
@@ -7,10 +8,8 @@ import io.trewartha.positional.core.measurement.degrees
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
-class TestSolarTimesRepositoryTest {
+class TestSolarTimesRepositoryTest : AnnotationSpec() {
 
     private lateinit var subject: TestSolarTimesRepository
 
@@ -18,7 +17,7 @@ class TestSolarTimesRepositoryTest {
     private val date = LocalDate(2000, Month.JANUARY, 1)
     private val expectedValue = LocalTime(1, 2, 3)
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         subject = TestSolarTimesRepository()
     }

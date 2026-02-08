@@ -1,18 +1,17 @@
 package io.trewartha.positional.compass
 
 import app.cash.turbine.test
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.degrees
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
-class TestCompassTest {
+class TestCompassTest : AnnotationSpec() {
 
     private lateinit var subject: TestCompass
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         subject = TestCompass()
     }

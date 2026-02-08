@@ -1,21 +1,20 @@
 package io.trewartha.positional.location
 
 import app.cash.turbine.test
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.measurement.meters
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.time.Clock
 
-class TestLocatorTest {
+class TestLocatorTest : AnnotationSpec() {
 
     private lateinit var subject: TestLocator
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         subject = TestLocator()
     }

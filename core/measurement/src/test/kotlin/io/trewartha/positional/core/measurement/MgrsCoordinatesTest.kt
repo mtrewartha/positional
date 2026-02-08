@@ -1,11 +1,11 @@
 package io.trewartha.positional.core.measurement
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import kotlin.math.roundToInt
-import kotlin.test.Test
 
-class MgrsCoordinatesTest {
+class MgrsCoordinatesTest : AnnotationSpec() {
 
     @Test
     fun `Creation of coordinates with an invalid grid zone designator throws an exception`() {

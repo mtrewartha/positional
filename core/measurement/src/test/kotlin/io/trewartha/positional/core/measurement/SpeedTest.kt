@@ -1,10 +1,10 @@
 package io.trewartha.positional.core.measurement
 
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldEndWith
-import kotlin.test.Test
 
-class SpeedTest {
+class SpeedTest : AnnotationSpec() {
 
     @Test
     fun `Speeds in kilometers per hour can be created from extension properties`() {

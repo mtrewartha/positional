@@ -33,7 +33,8 @@ google-protobuf-plugin = "0.9.5"
 google-services = "4.4.4"
 javapoet = { strictly = "1.13.0" }
 javax-inject = "1"
-kotest = "6.0.7"
+junit = "5.12.1"
+kotest = "6.1.3"
 kotlin = "2.2.21"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1-0.6.x-compat"
@@ -115,10 +116,10 @@ google-playServices-location = { group = "com.google.android.gms", name = "play-
 google-playServices-testing = { group = "com.google.android.gms", name = "play-services-base-testing", version.ref = "google-playServices-testing" }
 javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version.ref = "junit" }
 kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotlin-gradle = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-playServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
