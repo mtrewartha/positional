@@ -48,7 +48,9 @@ kover {
 
 include(
     ":app",
+    ":core:error",
     ":core:measurement",
+    ":core:test",
     ":core:ui",
     ":feature:compass",
     ":feature:compass:ui",
