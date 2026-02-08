@@ -1,6 +1,7 @@
 package io.trewartha.positional.compass.ui
 
 import app.cash.turbine.test
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -19,12 +20,9 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.time.Clock
 
-class CompassViewModelTest {
+class CompassViewModelTest : AnnotationSpec() {
 
     private lateinit var subject: CompassViewModel
 
@@ -32,7 +30,7 @@ class CompassViewModelTest {
     private lateinit var locator: TestLocator
     private lateinit var settings: TestSettingsRepository
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
@@ -43,7 +41,7 @@ class CompassViewModelTest {
         subject = CompassViewModel(compass, locator, settings)
     }
 
-    @AfterTest
+    @AfterEach
     fun tearDown() {
         Dispatchers.resetMain()
     }

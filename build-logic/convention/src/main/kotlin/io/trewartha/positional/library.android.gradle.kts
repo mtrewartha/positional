@@ -73,20 +73,24 @@ android {
                 }
             }
         }
-        unitTests.isIncludeAndroidResources = true
+        unitTests {
+            isIncludeAndroidResources = true
+            all { it.useJUnitPlatform() }
+        }
     }
 }
 
 dependencies {
     coreLibraryDesugaring(libs.android.tools.desugarJdkLibs)
 
-    androidTestImplementation(libs.kotlin.test)
+    androidTestImplementation(libs.kotest.assertions.core)
 
     androidTestRuntimeOnly(libs.androidx.test.core)
     androidTestRuntimeOnly(libs.androidx.test.runner)
 
+    testImplementation(libs.junit.vintage.engine)
     testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.robolectric.core)
 }
 
@@ -104,7 +108,10 @@ kotlin {
 }
 
 // https://github.com/gradle/gradle/issues/33619
-tasks.withType<Test> { failOnNoDiscoveredTests.set(false) }
+tasks.withType<Test> {
+    useJUnitPlatform()
+    failOnNoDiscoveredTests.set(false)
+}
 
 private data class TestDevice(
     val device: String,

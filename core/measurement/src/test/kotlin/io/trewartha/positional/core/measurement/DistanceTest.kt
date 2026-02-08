@@ -1,12 +1,12 @@
 package io.trewartha.positional.core.measurement
 
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldEndWith
-import kotlin.test.Test
 
-class DistanceTest {
+class DistanceTest : AnnotationSpec() {
 
     @Test
     fun `Distances in feet can be created with extension properties`() {

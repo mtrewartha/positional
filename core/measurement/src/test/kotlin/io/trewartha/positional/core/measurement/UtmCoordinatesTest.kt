@@ -1,10 +1,10 @@
 package io.trewartha.positional.core.measurement
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
-import kotlin.test.Test
 
-class UtmCoordinatesTest {
+class UtmCoordinatesTest : AnnotationSpec() {
 
     @Test
     fun `Creation of coordinates with an invalid zone throws an exception`() {

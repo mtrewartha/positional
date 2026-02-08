@@ -1,18 +1,17 @@
 package io.trewartha.positional.settings
 
 import app.cash.turbine.test
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.Units
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
-class TestSettingsRepositoryTest {
+class TestSettingsRepositoryTest : AnnotationSpec() {
 
     private lateinit var subject: TestSettingsRepository
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         subject = TestSettingsRepository()
     }

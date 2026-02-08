@@ -17,8 +17,6 @@ dependencies {
     implementation(libs.javax.inject)
 
     testImplementation(projects.core.measurement)
-    testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }

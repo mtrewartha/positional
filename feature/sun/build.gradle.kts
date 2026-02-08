@@ -12,7 +12,4 @@ dependencies {
     implementation(libs.google.hilt.core)
     implementation(libs.javax.inject)
     implementation(libs.sunriseSunset)
-
-    testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotlin.test)
 }

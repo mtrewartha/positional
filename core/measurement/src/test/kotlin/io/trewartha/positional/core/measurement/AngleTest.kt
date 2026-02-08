@@ -1,11 +1,11 @@
 package io.trewartha.positional.core.measurement
 
+import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldNotContain
-import kotlin.test.Test
 
-class AngleTest {
+class AngleTest : AnnotationSpec() {
 
     @Test
     fun `Angles in degrees can be created from extension properties`() {
