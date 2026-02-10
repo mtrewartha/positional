@@ -6,7 +6,6 @@ val libs = the<LibrariesForLibs>()
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
     id("io.trewartha.positional.dependencyAnalysis")
     id("io.trewartha.positional.testLogger")
 }
@@ -40,13 +39,11 @@ android {
     resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_")
         .lowercase() + "_"
 
-    @Suppress("UnstableApiUsage")
     testFixtures {
         enable = true
     }
 
     testOptions {
-        @Suppress("UnstableApiUsage")
         managedDevices {
             localDevices {
                 val pixel7Api33AospAtd = TestDevice("Pixel 7", 33, "aosp-atd")
