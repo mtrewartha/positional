@@ -29,7 +29,7 @@ google-ksp = "2.3.3"
 google-materialComponents = "1.13.0"
 google-playServices-location = "21.3.0"
 google-playServices-testing = "16.2.0"
-google-protobuf-plugin = "0.9.5"
+google-protobuf-plugin = "0.9.6"
 google-services = "4.4.4"
 javapoet = { strictly = "1.13.0" }
 javax-inject = "1"
