@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.loadProperties
 import java.nio.file.NoSuchFileException
 
@@ -128,7 +127,6 @@ kotlin {
             "-Xcontext-parameters",
             "-Xinline-classes",
         )
-        jvmTarget = JvmTarget.JVM_17
         optIn.addAll(
             "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
             "com.google.accompanist.permissions.ExperimentalPermissionsApi",

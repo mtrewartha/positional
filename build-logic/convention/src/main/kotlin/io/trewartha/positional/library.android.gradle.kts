@@ -91,15 +91,9 @@ dependencies {
     testImplementation(libs.robolectric.core)
 }
 
-java {
-    sourceCompatibility = JVM_SOURCE_COMPATIBILITY
-    targetCompatibility = JVM_SOURCE_COMPATIBILITY
-}
-
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll(FREE_COMPILER_ARGS)
-        jvmTarget = JVM_TARGET
     }
     explicitApi = EXPLICIT_API_MODE
 }
