@@ -44,6 +44,7 @@ kotlin {
     compilerOptions {
         optIn.addAll(
             "kotlin.time.ExperimentalTime",
+            "kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
     }
 }

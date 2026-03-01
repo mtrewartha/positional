@@ -39,8 +39,6 @@ public data class Distance(val magnitude: Double, val unit: Unit) {
         Unit.METERS -> Distance(magnitude * FT_PER_M, Unit.FEET)
     }
 
-    override fun toString(): String = unit.format.format(magnitude)
-
     /**
      * Units that a distance can be measured in
      */
@@ -49,21 +47,12 @@ public data class Distance(val magnitude: Double, val unit: Unit) {
         /**
          * Feet
          */
-        FEET {
-            override val format = FORMAT_FEET
-        },
+        FEET,
 
         /**
          * Meters
          */
-        METERS {
-            override val format = FORMAT_METERS
-        };
-
-        /**
-         * Java format string that can be used to convert a distance in the unit to a string
-         */
-        public abstract val format: String
+        METERS
     }
 }
 
@@ -76,9 +65,6 @@ public val Number.feet: Distance get() = Distance(toDouble(), Distance.Unit.FEET
  * Create a distance in meters with the magnitude of this value
  */
 public val Number.meters: Distance get() = Distance(toDouble(), Distance.Unit.METERS)
-
-private const val FORMAT_FEET = "%,f ft"
-private const val FORMAT_METERS = "%,f m"
 
 private const val FT_PER_M = 3.28084
 private const val M_PER_FT = 0.3048

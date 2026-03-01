@@ -1,144 +1,233 @@
 package io.trewartha.positional.settings
 
 import app.cash.turbine.test
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.trewartha.positional.core.measurement.Units
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.test.runTest
 
-class TestSettingsRepositoryTest : AnnotationSpec() {
+class TestSettingsRepositoryTest : DescribeSpec({
 
-    private lateinit var subject: TestSettingsRepository
+    fun sut() = TestSettingsRepository()
 
-    @BeforeEach
-    fun setUp() {
-        subject = TestSettingsRepository()
-    }
+    describe("the compass mode flow") {
+        context("when two values are set in sequence") {
+            it("only the last set value is emitted") {
+                val subject = sut()
+                val firstCompassMode = randomCompassMode()
+                val secondCompassMode = randomCompassMode()
+                subject.setCompassMode(firstCompassMode)
+                subject.setCompassMode(secondCompassMode)
+                subject.compassMode.firstOrNull().shouldBe(secondCompassMode)
+            }
+        }
 
-    @Test
-    fun `Compass mode flow emits the last set compass mode`() = runTest {
-        val firstCompassMode = CompassMode.MAGNETIC_NORTH
-        val secondCompassMode = CompassMode.TRUE_NORTH
-        subject.setCompassMode(firstCompassMode)
-        subject.setCompassMode(secondCompassMode)
+        context("when a value is set") {
+            it("emits the set value") {
+                val subject = sut()
+                subject.compassMode.test {
+                    val compassMode = randomCompassMode()
+                    subject.setCompassMode(compassMode)
+                    awaitItem().shouldBe(compassMode)
+                }
+            }
+        }
 
-        subject.compassMode.firstOrNull().shouldBe(secondCompassMode)
-    }
-
-    @Test
-    fun `Setting the compass mode triggers emission of set value`() = runTest {
-        subject.compassMode.test {
-            val compassMode = CompassMode.MAGNETIC_NORTH
-
-            subject.setCompassMode(compassMode)
-
-            awaitItem().shouldBe(compassMode)
+        context("when the same value is set twice") {
+            it("only emits once") {
+                val subject = sut()
+                subject.compassMode.test {
+                    val compassMode = randomCompassMode()
+                    subject.setCompassMode(compassMode)
+                    awaitItem().shouldBe(compassMode)
+                    subject.setCompassMode(compassMode)
+                    expectNoEvents()
+                }
+            }
         }
     }
 
-    @Test
-    fun `Compass north vibration flow emits the last set compass north vibration`() = runTest {
-        val firstCompassNorthVibration = CompassNorthVibration.LONG
-        val secondCompassNorthVibration = CompassNorthVibration.SHORT
-        subject.setCompassNorthVibration(firstCompassNorthVibration)
-        subject.setCompassNorthVibration(secondCompassNorthVibration)
+    describe("the compass north vibration flow") {
+        context("when two values are set in sequence") {
+            it("only the last set value is emitted") {
+                val subject = sut()
+                val firstCompassNorthVibration = randomCompassNorthVibration()
+                val secondCompassNorthVibration = randomCompassNorthVibration()
+                subject.setCompassNorthVibration(firstCompassNorthVibration)
+                subject.setCompassNorthVibration(secondCompassNorthVibration)
+                subject.compassNorthVibration.firstOrNull().shouldBe(secondCompassNorthVibration)
+            }
+        }
 
-        subject.compassNorthVibration.firstOrNull().shouldBe(secondCompassNorthVibration)
-    }
+        context("when a value is set") {
+            it("emits the set value") {
+                val subject = sut()
+                subject.compassNorthVibration.test {
+                    val compassNorthVibration = randomCompassNorthVibration()
+                    subject.setCompassNorthVibration(compassNorthVibration)
+                    awaitItem().shouldBe(compassNorthVibration)
+                }
+            }
+        }
 
-    @Test
-    fun `Setting the compass north vibration triggers emission of set value`() = runTest {
-        subject.compassNorthVibration.test {
-            val compassNorthVibration = CompassNorthVibration.SHORT
-
-            subject.setCompassNorthVibration(compassNorthVibration)
-
-            awaitItem().shouldBe(compassNorthVibration)
+        context("when the same value is set twice") {
+            it("only emits once") {
+                val subject = sut()
+                subject.compassNorthVibration.test {
+                    val compassNorthVibration = randomCompassNorthVibration()
+                    subject.setCompassNorthVibration(compassNorthVibration)
+                    awaitItem().shouldBe(compassNorthVibration)
+                    subject.setCompassNorthVibration(compassNorthVibration)
+                    expectNoEvents()
+                }
+            }
         }
     }
 
-    @Test
-    fun `Coordinates format flow emits the last set coordinates format`() = runTest {
-        val firstCoordinatesFormat = CoordinatesFormat.DD
-        val secondCoordinatesFormat = CoordinatesFormat.DDM
-        subject.setCoordinatesFormat(firstCoordinatesFormat)
-        subject.setCoordinatesFormat(secondCoordinatesFormat)
+    describe("the coordinates format flow") {
+        context("when two values are set in sequence") {
+            it("only the last set value is emitted") {
+                val subject = sut()
+                val firstCoordinatesFormat = randomCoordinatesFormat()
+                val secondCoordinatesFormat = randomCoordinatesFormat()
+                subject.setCoordinatesFormat(firstCoordinatesFormat)
+                subject.setCoordinatesFormat(secondCoordinatesFormat)
+                subject.coordinatesFormat.firstOrNull().shouldBe(secondCoordinatesFormat)
+            }
+        }
 
-        subject.coordinatesFormat.firstOrNull().shouldBe(secondCoordinatesFormat)
-    }
+        context("when a value is set") {
+            it("emits the set value") {
+                val subject = sut()
+                subject.coordinatesFormat.test {
+                    val coordinatesFormat = randomCoordinatesFormat()
+                    subject.setCoordinatesFormat(coordinatesFormat)
+                    awaitItem().shouldBe(coordinatesFormat)
+                }
+            }
+        }
 
-    @Test
-    fun `Setting the coordinates format triggers emission of set value`() = runTest {
-        subject.coordinatesFormat.test {
-            val coordinatesFormat = CoordinatesFormat.DMS
-
-            subject.setCoordinatesFormat(coordinatesFormat)
-
-            awaitItem().shouldBe(coordinatesFormat)
+        context("when the same value is set twice") {
+            it("only emits once") {
+                val subject = sut()
+                subject.coordinatesFormat.test {
+                    val coordinatesFormat = randomCoordinatesFormat()
+                    subject.setCoordinatesFormat(coordinatesFormat)
+                    awaitItem().shouldBe(coordinatesFormat)
+                    subject.setCoordinatesFormat(coordinatesFormat)
+                    expectNoEvents()
+                }
+            }
         }
     }
 
-    @Test
-    fun `Location accuracy visibility flow emits the last set visibility`() = runTest {
-        val firstVisibility = LocationAccuracyVisibility.SHOW
-        val secondVisibility = LocationAccuracyVisibility.HIDE
-        subject.setLocationAccuracyVisibility(firstVisibility)
-        subject.setLocationAccuracyVisibility(secondVisibility)
+    describe("the location accuracy visibility flow") {
+        context("when two values are set in sequence") {
+            it("only the last set value is emitted") {
+                val subject = sut()
+                val firstVisibility = randomLocationAccuracyVisibility()
+                val secondVisibility = randomLocationAccuracyVisibility()
+                subject.setLocationAccuracyVisibility(firstVisibility)
+                subject.setLocationAccuracyVisibility(secondVisibility)
+                subject.locationAccuracyVisibility.firstOrNull().shouldBe(secondVisibility)
+            }
+        }
 
-        subject.locationAccuracyVisibility.firstOrNull().shouldBe(secondVisibility)
-    }
+        context("when a value is set") {
+            it("emits the set value") {
+                val subject = sut()
+                subject.locationAccuracyVisibility.test {
+                    val visibility = randomLocationAccuracyVisibility()
+                    subject.setLocationAccuracyVisibility(visibility)
+                    awaitItem().shouldBe(visibility)
+                }
+            }
+        }
 
-    @Test
-    fun `Setting the location accuracy visibility triggers emission of set value`() = runTest {
-        subject.locationAccuracyVisibility.test {
-            val visibility = LocationAccuracyVisibility.HIDE
-
-            subject.setLocationAccuracyVisibility(visibility)
-
-            awaitItem().shouldBe(visibility)
+        context("when the same value is set twice") {
+            it("only emits once") {
+                val subject = sut()
+                subject.locationAccuracyVisibility.test {
+                    val visibility = randomLocationAccuracyVisibility()
+                    subject.setLocationAccuracyVisibility(visibility)
+                    awaitItem().shouldBe(visibility)
+                    subject.setLocationAccuracyVisibility(visibility)
+                    expectNoEvents()
+                }
+            }
         }
     }
 
-    @Test
-    fun `Theme flow emits the last set theme`() = runTest {
-        val firstTheme = Theme.DARK
-        val secondTheme = Theme.LIGHT
-        subject.setTheme(firstTheme)
-        subject.setTheme(secondTheme)
+    describe("the theme flow") {
+        context("when two values are set in sequence") {
+            it("only the last set value is emitted") {
+                val subject = sut()
+                val firstTheme = randomTheme()
+                val secondTheme = randomTheme()
+                subject.setTheme(firstTheme)
+                subject.setTheme(secondTheme)
+                subject.theme.firstOrNull().shouldBe(secondTheme)
+            }
+        }
 
-        subject.theme.firstOrNull().shouldBe(secondTheme)
-    }
+        context("when a value is set") {
+            it("emits the set value") {
+                val subject = sut()
+                subject.theme.test {
+                    val theme = randomTheme()
+                    subject.setTheme(theme)
+                    awaitItem().shouldBe(theme)
+                }
+            }
+        }
 
-    @Test
-    fun `Setting the theme triggers emission of set value`() = runTest {
-        subject.theme.test {
-            val theme = Theme.LIGHT
-
-            subject.setTheme(theme)
-
-            awaitItem().shouldBe(theme)
+        context("when the same value is set twice") {
+            it("only emits once") {
+                val subject = sut()
+                subject.theme.test {
+                    val theme = randomTheme()
+                    subject.setTheme(theme)
+                    awaitItem().shouldBe(theme)
+                    subject.setTheme(theme)
+                    expectNoEvents()
+                }
+            }
         }
     }
 
-    @Test
-    fun `Units flow emits the last set units`() = runTest {
-        val firstUnits = Units.METRIC
-        val secondUnits = Units.IMPERIAL
-        subject.setUnits(firstUnits)
-        subject.setUnits(secondUnits)
+    describe("the units flow") {
+        context("when two values are set in sequence") {
+            it("only the last set value is emitted") {
+                val subject = sut()
+                val firstUnits = randomUnits()
+                val secondUnits = randomUnits()
+                subject.setUnits(firstUnits)
+                subject.setUnits(secondUnits)
+                subject.units.firstOrNull().shouldBe(secondUnits)
+            }
+        }
 
-        subject.units.firstOrNull().shouldBe(secondUnits)
-    }
+        context("when a value is set") {
+            it("emits the set value") {
+                val subject = sut()
+                subject.units.test {
+                    val units = randomUnits()
+                    subject.setUnits(units)
+                    awaitItem().shouldBe(units)
+                }
+            }
+        }
 
-    @Test
-    fun `Setting the units triggers emission of set value`() = runTest {
-        subject.units.test {
-            val units = Units.METRIC
-
-            subject.setUnits(units)
-
-            awaitItem().shouldBe(units)
+        context("when the same value is set twice") {
+            it("only emits once") {
+                val subject = sut()
+                subject.units.test {
+                    val units = randomUnits()
+                    subject.setUnits(units)
+                    awaitItem().shouldBe(units)
+                    subject.setUnits(units)
+                    expectNoEvents()
+                }
+            }
         }
     }
-}
+})

@@ -16,7 +16,11 @@ dependencies {
     implementation(libs.google.hilt.android)
     implementation(libs.javax.inject)
 
-    testImplementation(projects.core.measurement)
+    testFixturesImplementation(projects.core.test)
+    testFixturesImplementation(testFixtures(projects.core.measurement))
+
+    testImplementation(testFixtures(projects.core.measurement))
+    testImplementation(libs.kotest.property)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }
