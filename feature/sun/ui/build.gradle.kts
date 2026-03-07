@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.google.hilt.android)
 
+    testImplementation(projects.core.test)
     testImplementation(testFixtures(projects.feature.location))
     testImplementation(testFixtures(projects.feature.sun))
     testImplementation(libs.kotlinx.coroutines.test)

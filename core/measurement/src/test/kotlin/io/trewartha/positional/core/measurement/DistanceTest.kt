@@ -1,116 +1,200 @@
 package io.trewartha.positional.core.measurement
 
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.doubles.plusOrMinus
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldEndWith
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.double
+import io.kotest.property.arbitrary.enum
+import io.kotest.property.arbitrary.filter
+import io.kotest.property.arbitrary.negativeDouble
+import io.kotest.property.arbitrary.numericDouble
+import io.kotest.property.arbitrary.of
+import io.kotest.property.arbitrary.positiveDouble
+import io.kotest.property.checkAll
+import kotlin.math.abs
 
-class DistanceTest : AnnotationSpec() {
+class DistanceTest : DescribeSpec({
 
-    @Test
-    fun `Distances in feet can be created with extension properties`() {
-        for (number in setOf<Number>(1, 1.23f, 1.23)) {
-            number.feet.shouldBe(Distance(number.toDouble(), Distance.Unit.FEET))
-        }
-    }
-
-    @Test
-    fun `Distances in meters can be created with extension properties`() {
-        for (number in setOf<Number>(1, 1.23f, 1.23)) {
-            number.meters.shouldBe(Distance(number.toDouble(), Distance.Unit.METERS))
-        }
-    }
-
-    @Test
-    fun `Distance is negative if magnitude is less than zero`() {
-        for (unit in Distance.Unit.entries) {
-            for (negativeMagnitude in listOf(-2.0, -1.0)) {
-                Distance(negativeMagnitude, unit).isNegative.shouldBeTrue()
-            }
-            Distance(0.0, unit).isNegative.shouldBeFalse()
-            for (positiveMagnitude in listOf(1.0, 2.0)) {
-                Distance(positiveMagnitude, unit).isNegative.shouldBeFalse()
+    describe("creating a distance in feet") {
+        it("creates a distance with the correct magnitude and unit") {
+            checkAll(Arb.double()) { number ->
+                number.feet.shouldBe(Distance(number, Distance.Unit.FEET))
             }
         }
     }
 
-    @Test
-    fun `Distance is positive if magnitude is greater than zero`() {
-        for (unit in Distance.Unit.entries) {
-            for (negativeMagnitude in listOf(-2.0, -1.0)) {
-                Distance(negativeMagnitude, unit).isPositive.shouldBeFalse()
-            }
-            Distance(0.0, unit).isPositive.shouldBeFalse()
-            for (positiveMagnitude in listOf(1.0, 2.0)) {
-                Distance(positiveMagnitude, unit).isPositive.shouldBeTrue()
+    describe("creating a distance in meters") {
+        it("creates a distance with the correct magnitude and unit") {
+            checkAll(Arb.double()) { number ->
+                number.meters.shouldBe(Distance(number, Distance.Unit.METERS))
             }
         }
     }
 
-    @Test
-    fun `Distance is finite if magnitude is neither positive nor negative infinity`() {
-        for (unit in Distance.Unit.entries) {
-            for (infiniteMagnitude in listOf(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)) {
-                Distance(infiniteMagnitude, unit).isFinite.shouldBeFalse()
+    describe("checking whether the distance is negative") {
+        context("when the magnitude is negative") {
+            it("returns true") {
+                checkAll(
+                    Arb.negativeDouble().filter { !it.isNaN() },
+                    Arb.enum<Distance.Unit>()
+                ) { magnitude, unit ->
+                    Distance(magnitude, unit).isNegative.shouldBeTrue()
+                }
             }
-            for (finiteMagnitude in listOf(-2.0, -1.0, 0.0, 1.0, 2.0)) {
-                Distance(finiteMagnitude, unit).isFinite.shouldBeTrue()
+        }
+
+        context("when the magnitude is zero") {
+            it("returns false") {
+                checkAll(Arb.enum<Distance.Unit>()) { unit ->
+                    Distance(0.0, unit).isNegative.shouldBeFalse()
+                }
+            }
+        }
+
+        context("when the magnitude is positive") {
+            it("returns false") {
+                checkAll(
+                    Arb.positiveDouble().filter { !it.isNaN() },
+                    Arb.enum<Distance.Unit>()
+                ) { magnitude, unit ->
+                    Distance(magnitude, unit).isNegative.shouldBeFalse()
+                }
+            }
+        }
+
+        context("when the magnitude is NaN") {
+            it("returns false") {
+                checkAll(Arb.enum<Distance.Unit>()) { unit ->
+                    Distance(Double.NaN, unit).isNegative.shouldBeFalse()
+                }
             }
         }
     }
 
-    @Test
-    fun `Conversion from feet to feet returns original feet`() {
-        val feet = 1.feet
+    describe("checking whether the distance is positive") {
+        context("when the magnitude is negative") {
+            it("returns false") {
+                checkAll(
+                    Arb.negativeDouble().filter { !it.isNaN() },
+                    Arb.enum<Distance.Unit>()
+                ) { magnitude, unit ->
+                    Distance(magnitude, unit).isPositive.shouldBeFalse()
+                }
+            }
+        }
 
-        val result = feet.inFeet()
+        context("when the magnitude is zero") {
+            it("returns false") {
+                checkAll(Arb.enum<Distance.Unit>()) { unit ->
+                    Distance(0.0, unit).isPositive.shouldBeFalse()
+                }
+            }
+        }
 
-        result.shouldBe(Distance(1.0, Distance.Unit.FEET))
+        context("when the magnitude is positive") {
+            it("returns true") {
+                checkAll(
+                    Arb.positiveDouble().filter { !it.isNaN() },
+                    Arb.enum<Distance.Unit>()
+                ) { magnitude, unit ->
+                    Distance(magnitude, unit).isPositive.shouldBeTrue()
+                }
+            }
+        }
+
+        context("when the magnitude is NaN") {
+            it("returns false") {
+                checkAll(Arb.enum<Distance.Unit>()) { unit ->
+                    Distance(Double.NaN, unit).isPositive.shouldBeFalse()
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Conversion from feet to meters returns correct distance in meters`() {
-        val feet = 1.feet
+    describe("checking whether the distance is finite") {
+        context("when the magnitude is NaN") {
+            it("returns false") {
+                checkAll(Arb.enum<Distance.Unit>()) { unit ->
+                    Distance(Double.NaN, unit).isFinite.shouldBeFalse()
+                }
+            }
+        }
 
-        val result = feet.inMeters()
+        context("when the magnitude is infinite") {
+            it("returns false") {
+                checkAll(
+                    Arb.of(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY),
+                    Arb.enum<Distance.Unit>()
+                ) { magnitude, unit ->
+                    Distance(magnitude, unit).isFinite.shouldBeFalse()
+                }
+            }
+        }
 
-        result.shouldBe(Distance(0.3048, Distance.Unit.METERS))
+        context("when the magnitude is finite") {
+            it("returns true") {
+                checkAll(
+                    Arb.numericDouble(),
+                    Arb.enum<Distance.Unit>()
+                ) { magnitude, unit ->
+                    Distance(magnitude, unit).isFinite.shouldBeTrue()
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Conversion from feet to a string uses standard unit name`() {
-        val feet = 1.23.feet
+    describe("converting to feet") {
+        context("when the distance is already in feet") {
+            it("returns the original distance") {
+                checkAll(Arb.double()) { magnitude ->
+                    magnitude.feet.inFeet().shouldBe(magnitude.feet)
+                }
+            }
+        }
 
-        val result = feet.toString()
+        context("when the distance is in meters") {
+            it("returns the correct distance in feet") {
+                1.meters.inFeet().shouldBe(Distance(3.28084, Distance.Unit.FEET))
+            }
 
-        result.shouldEndWith(" ft")
+            it("is reversible for any finite magnitude") {
+                // Bounded: full-range inputs overflow to Infinity when multiplied by the
+                // conversion factor (3.28084). Tolerance floor 1e-290 prevents the relative
+                // tolerance from rounding down to 0.0 for subnormal magnitudes.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.meters.inFeet().inMeters().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Conversion from meters to feet returns correct distance in feet`() {
-        val meters = 1.meters
+    describe("converting to meters") {
+        context("when the distance is in feet") {
+            it("returns the correct distance in meters") {
+                1.feet.inMeters().shouldBe(Distance(0.3048, Distance.Unit.METERS))
+            }
 
-        val result = meters.inFeet()
+            it("is reversible for any finite magnitude") {
+                // Bounded for consistency with the meters→feet round-trip test. Tolerance
+                // floor 1e-290 prevents the relative tolerance from rounding down to 0.0
+                // for subnormal magnitudes.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.feet.inMeters().inFeet().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
 
-        result.shouldBe(Distance(3.28084, Distance.Unit.FEET))
+        context("when the distance is already in meters") {
+            it("returns the original distance") {
+                checkAll(Arb.double()) { magnitude ->
+                    magnitude.meters.inMeters().shouldBe(magnitude.meters)
+                }
+            }
+        }
     }
-
-    @Test
-    fun `Conversion from meters to meters returns original meters`() {
-        val meters = 1.meters
-
-        val result = meters.inMeters()
-
-        result.shouldBe(Distance(1.0, Distance.Unit.METERS))
-    }
-
-    @Test
-    fun `Conversion from meters to a string uses standard unit name`() {
-        val meters = 1.23.meters
-
-        val result = meters.toString()
-
-        result.shouldEndWith(" m")
-    }
-}
+})

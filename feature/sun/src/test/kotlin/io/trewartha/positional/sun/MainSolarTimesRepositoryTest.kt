@@ -1,6 +1,6 @@
 package io.trewartha.positional.sun
 
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
@@ -10,169 +10,263 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 import java.util.TimeZone
 
-class MainSolarTimesRepositoryTest : AnnotationSpec() {
+class MainSolarTimesRepositoryTest : DescribeSpec({
 
-    private val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
-    private val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
-    private val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
-    private val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
-    private val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
-    private lateinit var originalDefaultTimeZone: TimeZone
+    fun sut() = MainSolarTimesRepository()
 
-    private lateinit var subject: SolarTimesRepository
+    describe("getting astronomical dawn") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getAstronomicalDawn(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(4, 53))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
 
-    @BeforeEach
-    fun setUp() {
-        originalDefaultTimeZone = TimeZone.getDefault()
-        subject = MainSolarTimesRepository()
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getAstronomicalDawn(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
 
-    @AfterEach
-    fun tearDown() {
-        TimeZone.setDefault(originalDefaultTimeZone)
+    describe("getting nautical dawn") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getNauticalDawn(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(5, 19))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
+
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getNauticalDawn(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Getting astronomical dawn returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
+    describe("getting civil dawn") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getCivilDawn(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(5, 46))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
 
-        val result = subject.getAstronomicalDawn(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(4, 53))
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getCivilDawn(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Getting astronomical dawn when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
+    describe("getting sunrise") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getSunrise(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(6, 8))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
 
-        val result = subject.getAstronomicalDawn(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getSunrise(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Getting nautical dawn returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
+    describe("getting sunset") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getSunset(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(18, 16))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
 
-        val result = subject.getNauticalDawn(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(5, 19))
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getSunset(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Getting nautical dawn when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
+    describe("getting civil dusk") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getCivilDusk(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(18, 38))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
 
-        val result = subject.getNauticalDawn(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getCivilDusk(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Getting civil dawn returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
+    describe("getting nautical dusk") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getNauticalDusk(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(19, 4))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
 
-        val result = subject.getCivilDawn(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(5, 46))
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getNauticalDusk(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Getting civil dawn when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
+    describe("getting astronomical dusk") {
+        context("for a location near the equator on the winter solstice") {
+            it("returns the correct time") {
+                val originalTimeZone = TimeZone.getDefault()
+                val mitadDelMundo = GeodeticCoordinates((-0.00217).degrees, (-78.45581).degrees)
+                val mitadDelMundoTimeZone = TimeZone.getTimeZone("America/Guayaquil")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(mitadDelMundoTimeZone)
+                try {
+                    sut().getAstronomicalDusk(mitadDelMundo, winterSolstice2023).shouldBe(LocalTime(19, 31))
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
 
-        val result = subject.getCivilDawn(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
+        context("for a location near the north pole on the winter solstice") {
+            it("returns null") {
+                val originalTimeZone = TimeZone.getDefault()
+                val northOfLongyearbyen = GeodeticCoordinates(89.degrees, 15.490.degrees)
+                val longyearbyenTimeZone = TimeZone.getTimeZone("Europe/Oslo")
+                val winterSolstice2023 = LocalDate(2023, Month.DECEMBER, 21)
+                TimeZone.setDefault(longyearbyenTimeZone)
+                try {
+                    sut().getAstronomicalDusk(northOfLongyearbyen, winterSolstice2023).shouldBeNull()
+                } finally {
+                    TimeZone.setDefault(originalTimeZone)
+                }
+            }
+        }
     }
-
-    @Test
-    fun `Getting sunrise returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
-
-        val result = subject.getSunrise(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(6, 8))
-    }
-
-    @Test
-    fun `Getting sunrise when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
-
-        val result = subject.getSunrise(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
-    }
-
-    @Test
-    fun `Getting sunset returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
-
-        val result = subject.getSunset(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(18, 16))
-    }
-
-    @Test
-    fun `Getting sunset when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
-
-        val result = subject.getSunset(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
-    }
-
-    @Test
-    fun `Getting civil dusk returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
-
-        val result = subject.getCivilDusk(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(18, 38))
-    }
-
-    @Test
-    fun `Getting civil dusk when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
-
-        val result = subject.getCivilDusk(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
-    }
-
-    @Test
-    fun `Getting nautical dusk returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
-
-        val result = subject.getNauticalDusk(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(19, 4))
-    }
-
-    @Test
-    fun `Getting nautical dusk when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
-
-        val result = subject.getNauticalDusk(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
-    }
-
-    @Test
-    fun `Getting astronomical dusk returns correct time`() {
-        TimeZone.setDefault(mitadDelMundoTimeZone)
-
-        val result = subject.getAstronomicalDusk(mitadDelMundo, winterSolstice2023)
-
-        result.shouldBe(LocalTime(19, 31))
-    }
-
-    @Test
-    fun `Getting astronomical dusk when there is none returns null`() {
-        TimeZone.setDefault(longyearbyenTimeZone)
-
-        val result = subject.getAstronomicalDusk(northOfLongyearbyen, winterSolstice2023)
-
-        result.shouldBeNull()
-    }
-}
+})

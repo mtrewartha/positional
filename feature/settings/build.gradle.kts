@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.javax.inject)
     implementation(libs.protobuf.kotlin.lite)
 
+    testFixturesImplementation(projects.core.test)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric.core)
     testImplementation(libs.turbine)

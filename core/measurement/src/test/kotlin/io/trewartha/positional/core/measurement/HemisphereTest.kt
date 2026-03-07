@@ -1,31 +1,21 @@
 package io.trewartha.positional.core.measurement
 
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-class HemisphereTest : AnnotationSpec() {
+class HemisphereTest : DescribeSpec({
 
-    @Test
-    fun `Given NORTH hemisphere, when converting to string, then returns N`() {
-        // Given
-        val hemisphere = Hemisphere.NORTH
+    describe("converting to a string") {
+        context("when the hemisphere is north") {
+            it("returns N") {
+                Hemisphere.NORTH.toString().shouldBe("N")
+            }
+        }
 
-        // When
-        val result = hemisphere.toString()
-
-        // Then
-        result.shouldBe("N")
+        context("when the hemisphere is south") {
+            it("returns S") {
+                Hemisphere.SOUTH.toString().shouldBe("S")
+            }
+        }
     }
-
-    @Test
-    fun `Given SOUTH hemisphere, when converting to string, then returns S`() {
-        // Given
-        val hemisphere = Hemisphere.SOUTH
-
-        // When
-        val result = hemisphere.toString()
-
-        // Then
-        result.shouldBe("S")
-    }
-}
+})

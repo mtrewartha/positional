@@ -1,52 +1,65 @@
 package io.trewartha.positional.location
 
 import app.cash.turbine.test
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.measurement.meters
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.test.runTest
-import kotlin.time.Clock
 
-class TestLocatorTest : AnnotationSpec() {
+class TestLocatorTest : DescribeSpec({
 
-    private lateinit var subject: TestLocator
+    fun sut(): TestLocator = TestLocator()
 
-    @BeforeEach
-    fun setUp() {
-        subject = TestLocator()
-    }
+    describe("the location flow") {
+        context("when a location is set") {
+            it("emits the set location") {
+                val subject = sut()
+                val location = randomLocation()
+                subject.location.test {
+                    subject.setLocation(location)
+                    awaitItem().shouldBe(location)
+                }
+            }
+        }
 
-    @Test
-    fun `Location flow emits the last set location`() = runTest {
-        val firstLocation = Location(
-            timestamp = Clock.System.now(),
-            coordinates = GeodeticCoordinates(latitude = 1.degrees, longitude = 2.degrees),
-            altitude = 3.meters,
-            magneticDeclination = null
-        )
-        val secondLocation = firstLocation.copy(altitude = 4.meters)
-        subject.setLocation(firstLocation)
-        subject.setLocation(secondLocation)
+        context("when two different locations are set in sequence") {
+            it("emits only the latest location") {
+                val subject = sut()
+                val firstLocation = randomLocation()
+                val secondLocation = randomLocation()
+                subject.setLocation(firstLocation)
+                subject.setLocation(secondLocation)
+                subject.location.firstOrNull().shouldBe(secondLocation)
+            }
+        }
 
-        subject.location.firstOrNull().shouldBe(secondLocation)
-    }
+        context("when the same location is set twice") {
+            it("only emits once") {
+                val subject = sut()
+                val location = randomLocation()
+                subject.location.test {
+                    subject.setLocation(location)
+                    awaitItem() // consume first emission
+                    subject.setLocation(location)
+                    expectNoEvents()
+                }
+            }
+        }
 
-    @Test
-    fun `Setting the location triggers emission of set value`() = runTest {
-        subject.location.test {
-            val location = Location(
-                timestamp = Clock.System.now(),
-                coordinates = GeodeticCoordinates(latitude = 1.degrees, longitude = 2.degrees),
-                altitude = 3.meters,
-                magneticDeclination = null
-            )
-
-            subject.setLocation(location)
-
-            awaitItem().shouldBe(location)
+        context("when no specific location is provided") {
+            it("emits a location at the origin with zero altitude") {
+                val subject = sut()
+                subject.location.test {
+                    subject.setLocation()
+                    val emitted = awaitItem()
+                    emitted.coordinates.shouldBe(
+                        GeodeticCoordinates(latitude = 0.degrees, longitude = 0.degrees)
+                    )
+                    emitted.altitude.shouldBe(0.meters)
+                }
+            }
         }
     }
-}
+})

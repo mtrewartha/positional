@@ -5,3 +5,11 @@ plugins {
 dependencies {
     api(libs.kotest.property)
 }
+
+kotlin {
+    compilerOptions {
+        optIn.addAll(
+            "kotlin.time.ExperimentalTime",
+        )
+    }
+}

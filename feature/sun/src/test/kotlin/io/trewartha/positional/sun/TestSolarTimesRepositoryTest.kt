@@ -1,136 +1,374 @@
 package io.trewartha.positional.sun
 
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.trewartha.positional.core.measurement.GeodeticCoordinates
-import io.trewartha.positional.core.measurement.degrees
+import io.trewartha.positional.core.measurement.randomGeodeticCoordinates
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 
-class TestSolarTimesRepositoryTest : AnnotationSpec() {
+class TestSolarTimesRepositoryTest : DescribeSpec({
 
-    private lateinit var subject: TestSolarTimesRepository
+    fun sut() = TestSolarTimesRepository()
 
-    private val coordinates = GeodeticCoordinates(0.degrees, 0.degrees)
-    private val date = LocalDate(2000, Month.JANUARY, 1)
-    private val expectedValue = LocalTime(1, 2, 3)
+    describe("getting sunrise") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setSunrise(coordinates, date, expectedValue)
+                subject.getSunrise(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-    @BeforeEach
-    fun setUp() {
-        subject = TestSolarTimesRepository()
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setSunrise(coordinates, date, null)
+                subject.getSunrise(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getSunrise(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setSunrise(coordinates, date, initialValue)
+                subject.setSunrise(coordinates, date, newValue)
+                subject.getSunrise(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
 
-    @Test
-    fun `Getting sunrise returns one if present`() {
-        subject.setSunrise(coordinates, date, expectedValue)
+    describe("getting sunset") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setSunset(coordinates, date, expectedValue)
+                subject.getSunset(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-        subject.getSunrise(coordinates, date).shouldBe(expectedValue)
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setSunset(coordinates, date, null)
+                subject.getSunset(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getSunset(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setSunset(coordinates, date, initialValue)
+                subject.setSunset(coordinates, date, newValue)
+                subject.getSunset(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
 
-    @Test
-    fun `Getting sunrise returns null if not present`() {
-        subject.setSunrise(coordinates, date, null)
+    describe("getting civil dawn") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setCivilDawn(coordinates, date, expectedValue)
+                subject.getCivilDawn(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-        subject.getSunrise(coordinates, date).shouldBeNull()
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setCivilDawn(coordinates, date, null)
+                subject.getCivilDawn(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getCivilDawn(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setCivilDawn(coordinates, date, initialValue)
+                subject.setCivilDawn(coordinates, date, newValue)
+                subject.getCivilDawn(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
 
-    @Test
-    fun `Getting sunset returns one if present`() {
-        subject.setSunset(coordinates, date, expectedValue)
+    describe("getting civil dusk") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setCivilDusk(coordinates, date, expectedValue)
+                subject.getCivilDusk(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-        subject.getSunset(coordinates, date).shouldBe(expectedValue)
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setCivilDusk(coordinates, date, null)
+                subject.getCivilDusk(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getCivilDusk(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setCivilDusk(coordinates, date, initialValue)
+                subject.setCivilDusk(coordinates, date, newValue)
+                subject.getCivilDusk(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
 
-    @Test
-    fun `Getting sunset returns null if not present`() {
-        subject.setSunset(coordinates, date, null)
+    describe("getting nautical dawn") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setNauticalDawn(coordinates, date, expectedValue)
+                subject.getNauticalDawn(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-        subject.getSunset(coordinates, date).shouldBeNull()
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setNauticalDawn(coordinates, date, null)
+                subject.getNauticalDawn(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getNauticalDawn(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setNauticalDawn(coordinates, date, initialValue)
+                subject.setNauticalDawn(coordinates, date, newValue)
+                subject.getNauticalDawn(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
 
-    @Test
-    fun `Getting civil dawn returns one if present`() {
-        subject.setCivilDawn(coordinates, date, expectedValue)
+    describe("getting nautical dusk") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setNauticalDusk(coordinates, date, expectedValue)
+                subject.getNauticalDusk(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-        subject.getCivilDawn(coordinates, date).shouldBe(expectedValue)
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setNauticalDusk(coordinates, date, null)
+                subject.getNauticalDusk(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getNauticalDusk(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setNauticalDusk(coordinates, date, initialValue)
+                subject.setNauticalDusk(coordinates, date, newValue)
+                subject.getNauticalDusk(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
 
-    @Test
-    fun `Getting civil dawn returns null if not present`() {
-        subject.setCivilDawn(coordinates, date, null)
+    describe("getting astronomical dawn") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setAstronomicalDawn(coordinates, date, expectedValue)
+                subject.getAstronomicalDawn(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-        subject.getCivilDawn(coordinates, date).shouldBeNull()
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setAstronomicalDawn(coordinates, date, null)
+                subject.getAstronomicalDawn(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getAstronomicalDawn(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setAstronomicalDawn(coordinates, date, initialValue)
+                subject.setAstronomicalDawn(coordinates, date, newValue)
+                subject.getAstronomicalDawn(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
 
-    @Test
-    fun `Getting civil dusk returns one if present`() {
-        subject.setCivilDusk(coordinates, date, expectedValue)
+    describe("getting astronomical dusk") {
+        context("when a non-null value has been set") {
+            it("returns the set value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val expectedValue = LocalTime(1, 2, 3)
+                subject.setAstronomicalDusk(coordinates, date, expectedValue)
+                subject.getAstronomicalDusk(coordinates, date).shouldBe(expectedValue)
+            }
+        }
 
-        subject.getCivilDusk(coordinates, date).shouldBe(expectedValue)
+        context("when a null value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.setAstronomicalDusk(coordinates, date, null)
+                subject.getAstronomicalDusk(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when no value has been set") {
+            it("returns null") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                subject.getAstronomicalDusk(coordinates, date).shouldBeNull()
+            }
+        }
+
+        context("when a value has been overwritten with a new value") {
+            it("returns the new value") {
+                val subject = sut()
+                val coordinates = randomGeodeticCoordinates()
+                val date = LocalDate(2000, Month.JANUARY, 1)
+                val initialValue = LocalTime(1, 2, 3)
+                val newValue = LocalTime(4, 5, 6)
+                subject.setAstronomicalDusk(coordinates, date, initialValue)
+                subject.setAstronomicalDusk(coordinates, date, newValue)
+                subject.getAstronomicalDusk(coordinates, date).shouldBe(newValue)
+            }
+        }
     }
-
-    @Test
-    fun `Getting civil dusk returns null if not present`() {
-        subject.setCivilDusk(coordinates, date, null)
-
-        subject.getCivilDusk(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting nautical dawn returns one if present`() {
-        subject.setNauticalDawn(coordinates, date, expectedValue)
-
-        subject.getNauticalDawn(coordinates, date).shouldBe(expectedValue)
-    }
-
-    @Test
-    fun `Getting nautical dawn returns null if not present`() {
-        subject.setNauticalDawn(coordinates, date, null)
-
-        subject.getNauticalDawn(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting nautical dusk returns one if present`() {
-        subject.setNauticalDusk(coordinates, date, expectedValue)
-
-        subject.getNauticalDusk(coordinates, date).shouldBe(expectedValue)
-    }
-
-    @Test
-    fun `Getting nautical dusk returns null if not present`() {
-        subject.setNauticalDusk(coordinates, date, null)
-
-        subject.getNauticalDusk(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting astronomical dawn returns one if present`() {
-        subject.setAstronomicalDawn(coordinates, date, expectedValue)
-
-        subject.getAstronomicalDawn(coordinates, date).shouldBe(expectedValue)
-    }
-
-    @Test
-    fun `Getting astronomical dawn returns null if not present`() {
-        subject.setAstronomicalDawn(coordinates, date, null)
-
-        subject.getAstronomicalDawn(coordinates, date).shouldBeNull()
-    }
-
-    @Test
-    fun `Getting astronomical dusk returns one if present`() {
-        subject.setAstronomicalDusk(coordinates, date, expectedValue)
-
-        subject.getAstronomicalDusk(coordinates, date).shouldBe(expectedValue)
-    }
-
-    @Test
-    fun `Getting astronomical dusk returns null if not present`() {
-        subject.setAstronomicalDusk(coordinates, date, null)
-
-        subject.getAstronomicalDusk(coordinates, date).shouldBeNull()
-    }
-}
+})

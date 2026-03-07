@@ -23,6 +23,8 @@ dependencies {
 
     gmsImplementation(libs.kotlinx.coroutines.playServices)
 
+    testFixturesImplementation(projects.core.test)
+    testFixturesImplementation(testFixtures(projects.core.measurement))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }
