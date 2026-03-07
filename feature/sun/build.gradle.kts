@@ -12,4 +12,6 @@ dependencies {
     implementation(libs.google.hilt.core)
     implementation(libs.javax.inject)
     implementation(libs.sunriseSunset)
+
+    testImplementation(testFixtures(projects.core.measurement))
 }

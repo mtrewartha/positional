@@ -6,7 +6,7 @@ import io.trewartha.positional.core.measurement.degrees
 /**
  * Azimuth angle and accuracies associated with it
  *
- * @throws IllegalArgumentException if [angle] is outside of the range 0..<360
+ * @throws IllegalArgumentException if [angle] is outside the range [0, 360)
  */
 public data class Azimuth @Throws(IllegalArgumentException::class) constructor(
 
@@ -27,7 +27,9 @@ public data class Azimuth @Throws(IllegalArgumentException::class) constructor(
     val magnetometerAccuracy: Accuracy? = null
 ) {
     init {
-        require(angle.inDegrees().magnitude in VALID_RANGE) { "$angle is outside of range 0..<360" }
+        require(angle.inDegrees().magnitude in VALID_RANGE) {
+            "$angle is outside of range [0, 360)"
+        }
     }
 
     /**

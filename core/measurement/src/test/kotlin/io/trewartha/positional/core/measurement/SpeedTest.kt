@@ -1,137 +1,197 @@
 package io.trewartha.positional.core.measurement
 
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.doubles.plusOrMinus
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldEndWith
+import io.kotest.matchers.string.shouldNotContain
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.double
+import io.kotest.property.arbitrary.numericDouble
+import io.kotest.property.checkAll
+import kotlin.math.abs
 
-class SpeedTest : AnnotationSpec() {
+class SpeedTest : DescribeSpec({
 
-    @Test
-    fun `Speeds in kilometers per hour can be created from extension properties`() {
-        for (number in setOf<Number>(1, 1.23f, 1.23)) {
-            number.kph.shouldBe(Speed(number.toDouble(), Speed.Unit.KILOMETERS_PER_HOUR))
+    describe("creating a speed in kilometers per hour") {
+        it("creates a speed with the correct magnitude and unit") {
+            val numbers = setOf<Number>(1, 1.23f, 1.23)
+            for (number in numbers) {
+                number.kph.shouldBe(Speed(number.toDouble(), Speed.Unit.KILOMETERS_PER_HOUR))
+            }
         }
     }
 
-    @Test
-    fun `Speeds in meters per second can be created from extension properties`() {
-        for (number in setOf<Number>(1, 1.23f, 1.23)) {
-            number.mps.shouldBe(Speed(number.toDouble(), Speed.Unit.METERS_PER_SECOND))
+    describe("creating a speed in meters per second") {
+        it("creates a speed with the correct magnitude and unit") {
+            val numbers = setOf<Number>(1, 1.23f, 1.23)
+            for (number in numbers) {
+                number.mps.shouldBe(Speed(number.toDouble(), Speed.Unit.METERS_PER_SECOND))
+            }
         }
     }
 
-    @Test
-    fun `Speeds in miles per hour can be created from extension properties`() {
-        for (number in setOf<Number>(1, 1.23f, 1.23)) {
-            number.mph.shouldBe(Speed(number.toDouble(), Speed.Unit.MILES_PER_HOUR))
+    describe("creating a speed in miles per hour") {
+        it("creates a speed with the correct magnitude and unit") {
+            val numbers = setOf<Number>(1, 1.23f, 1.23)
+            for (number in numbers) {
+                number.mph.shouldBe(Speed(number.toDouble(), Speed.Unit.MILES_PER_HOUR))
+            }
         }
     }
 
-    @Test
-    fun `Conversion from kilometers per hour to meters per second returns converted value`() {
-        val kilometersPerHour = 1.kph
+    describe("converting to kilometers per hour") {
+        context("when the speed is already in kilometers per hour") {
+            it("returns the original speed") {
+                checkAll(Arb.double()) { magnitude ->
+                    magnitude.kph.inKilometersPerHour().shouldBe(magnitude.kph)
+                }
+            }
+        }
 
-        val result = kilometersPerHour.inMetersPerSecond()
+        context("when the speed is in meters per second") {
+            it("returns the correct converted speed") {
+                1.mps.inKilometersPerHour().shouldBe(Speed(3.6, Speed.Unit.KILOMETERS_PER_HOUR))
+            }
 
-        result.shouldBe(Speed(0.277778, Speed.Unit.METERS_PER_SECOND))
+            it("is reversible for any finite magnitude") {
+                // Bounded: full-range inputs overflow to Infinity when multiplied by the
+                // conversion factor (3.6). Tolerance floor 1e-290 prevents the relative
+                // tolerance from rounding down to 0.0 for subnormal magnitudes.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.mps.inKilometersPerHour().inMetersPerSecond().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
+
+        context("when the speed is in miles per hour") {
+            it("returns the correct converted speed") {
+                1.mph.inKilometersPerHour().shouldBe(Speed(1.60934, Speed.Unit.KILOMETERS_PER_HOUR))
+            }
+
+            it("is reversible for any finite magnitude") {
+                // Bounded: full-range inputs overflow to Infinity when multiplied by the
+                // conversion factor (1.60934). Tolerance floor 1e-290 prevents the relative
+                // tolerance from rounding down to 0.0 for subnormal magnitudes.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.mph.inKilometersPerHour().inMilesPerHour().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Conversion from kilometers per hour to miles per hour returns converted value`() {
-        val kilometersPerHour = 1.kph
+    describe("converting to meters per second") {
+        context("when the speed is in kilometers per hour") {
+            it("returns the correct converted speed") {
+                1.kph.inMetersPerSecond().shouldBe(Speed(0.277778, Speed.Unit.METERS_PER_SECOND))
+            }
 
-        val result = kilometersPerHour.inMilesPerHour()
+            it("is reversible for any finite magnitude") {
+                // Bounded for consistency with other round-trip tests. Tolerance floor 1e-290
+                // prevents the relative tolerance from rounding down to 0.0 for subnormals.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.kph.inMetersPerSecond().inKilometersPerHour().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
 
-        result.shouldBe(Speed(0.621371, Speed.Unit.MILES_PER_HOUR))
+        context("when the speed is already in meters per second") {
+            it("returns the original speed") {
+                checkAll(Arb.double()) { magnitude ->
+                    magnitude.mps.inMetersPerSecond().shouldBe(magnitude.mps)
+                }
+            }
+        }
+
+        context("when the speed is in miles per hour") {
+            it("returns the correct converted speed") {
+                1.mph.inMetersPerSecond().shouldBe(Speed(0.44704, Speed.Unit.METERS_PER_SECOND))
+            }
+
+            it("is reversible for any finite magnitude") {
+                // Bounded for consistency with other round-trip tests. Tolerance floor 1e-290
+                // prevents the relative tolerance from rounding down to 0.0 for subnormals.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.mph.inMetersPerSecond().inMilesPerHour().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Conversion from kilometers per hour to kilometers per hour returns original value`() {
-        val kilometersPerHour = 1.kph
+    describe("converting to miles per hour") {
+        context("when the speed is in kilometers per hour") {
+            it("returns the correct converted speed") {
+                1.kph.inMilesPerHour().shouldBe(Speed(0.621371, Speed.Unit.MILES_PER_HOUR))
+            }
 
-        val result = kilometersPerHour.inKilometersPerHour()
+            it("is reversible for any finite magnitude") {
+                // Bounded for consistency with other round-trip tests. Tolerance floor 1e-290
+                // prevents the relative tolerance from rounding down to 0.0 for subnormals.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.kph.inMilesPerHour().inKilometersPerHour().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
 
-        result.shouldBe(Speed(1.0, Speed.Unit.KILOMETERS_PER_HOUR))
+        context("when the speed is in meters per second") {
+            it("returns the correct converted speed") {
+                1.mps.inMilesPerHour().shouldBe(Speed(2.236936, Speed.Unit.MILES_PER_HOUR))
+            }
+
+            it("is reversible for any finite magnitude") {
+                // Bounded: full-range inputs overflow to Infinity when multiplied by the
+                // conversion factor (2.236936). Tolerance floor 1e-290 prevents the relative
+                // tolerance from rounding down to 0.0 for subnormal magnitudes.
+                checkAll(Arb.numericDouble(min = -1e100, max = 1e100)) { magnitude ->
+                    val roundTripped = magnitude.mps.inMilesPerHour().inMetersPerSecond().magnitude
+                    roundTripped.shouldBe(magnitude plusOrMinus maxOf(abs(magnitude) * 1e-4, 1e-290))
+                }
+            }
+        }
+
+        context("when the speed is already in miles per hour") {
+            it("returns the original speed") {
+                checkAll(Arb.double()) { magnitude ->
+                    magnitude.mph.inMilesPerHour().shouldBe(magnitude.mph)
+                }
+            }
+        }
     }
 
-    @Test
-    fun `Conversion from kilometers per hour to string uses standard unit name`() {
-        val kilometersPerHour = 1234.56.kph
+    describe("converting to a string") {
+        context("when the speed is in kilometers per hour") {
+            it("ends with the unit abbreviation and has no whitespace in the numeric portion") {
+                checkAll(Arb.double()) { magnitude ->
+                    val result = magnitude.kph.toString()
+                    result.shouldEndWith(" km/h")
+                    result.substringBeforeLast(" ").shouldNotContain(Regex("\\s"))
+                }
+            }
+        }
 
-        val result = kilometersPerHour.toString()
+        context("when the speed is in meters per second") {
+            it("ends with the unit abbreviation and has no whitespace in the numeric portion") {
+                checkAll(Arb.double()) { magnitude ->
+                    val result = magnitude.mps.toString()
+                    result.shouldEndWith(" m/s")
+                    result.substringBeforeLast(" ").shouldNotContain(Regex("\\s"))
+                }
+            }
+        }
 
-        result.shouldEndWith(" km/h")
+        context("when the speed is in miles per hour") {
+            it("ends with the unit abbreviation and has no whitespace in the numeric portion") {
+                checkAll(Arb.double()) { magnitude ->
+                    val result = magnitude.mph.toString()
+                    result.shouldEndWith(" mi/h")
+                    result.substringBeforeLast(" ").shouldNotContain(Regex("\\s"))
+                }
+            }
+        }
     }
-
-    @Test
-    fun `Conversion from meters per second to meters per second returns original value`() {
-        val metersPerSecond = 1.mps
-
-        val result = metersPerSecond.inMetersPerSecond()
-
-        result.shouldBe(Speed(1.0, Speed.Unit.METERS_PER_SECOND))
-    }
-
-    @Test
-    fun `Conversion from meters per second to miles per hour returns converted value`() {
-        val metersPerSecond = 1.mps
-
-        val result = metersPerSecond.inMilesPerHour()
-
-        result.shouldBe(Speed(2.236936, Speed.Unit.MILES_PER_HOUR))
-    }
-
-    @Test
-    fun `Conversion from meters per second to kilometers per hour returns converted value`() {
-        val metersPerSecond = 1.mps
-
-        val result = metersPerSecond.inKilometersPerHour()
-
-        result.shouldBe(Speed(3.6, Speed.Unit.KILOMETERS_PER_HOUR))
-    }
-
-    @Test
-    fun `Conversion from meters per second to string uses standard unit name`() {
-        val metersPerSecond = 1234.56.mps
-
-        val result = metersPerSecond.toString()
-
-        result.shouldEndWith(" m/s")
-    }
-
-    @Test
-    fun `Conversion from miles per hour to meters per second returns converted value`() {
-        val milesPerHour = 1.mph
-
-        val result = milesPerHour.inMetersPerSecond()
-
-        result.shouldBe(Speed(0.44704, Speed.Unit.METERS_PER_SECOND))
-    }
-
-    @Test
-    fun `Conversion from miles per hour to miles per hour returns original value`() {
-        val milesPerHour = 1.mph
-
-        val result = milesPerHour.inMilesPerHour()
-
-        result.shouldBe(Speed(1.0, Speed.Unit.MILES_PER_HOUR))
-    }
-
-    @Test
-    fun `Conversion from miles per hour to kilometers per hour returns converted value`() {
-        val milesPerHour = 1.mph
-
-        val result = milesPerHour.inKilometersPerHour()
-
-        result.shouldBe(Speed(1.60934, Speed.Unit.KILOMETERS_PER_HOUR))
-    }
-
-    @Test
-    fun `Conversion from miles per hour to string uses standard unit name`() {
-        val milesPerHour = 1234.56.mph
-
-        val result = milesPerHour.toString()
-
-        result.shouldEndWith(" mi/h")
-    }
-}
+})

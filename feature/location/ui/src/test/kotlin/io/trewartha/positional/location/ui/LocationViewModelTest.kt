@@ -1,162 +1,164 @@
 package io.trewartha.positional.location.ui
 
 import app.cash.turbine.test
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.trewartha.positional.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.core.measurement.Units
-import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.location.Location
 import io.trewartha.positional.location.TestLocator
+import io.trewartha.positional.location.randomLocation
 import io.trewartha.positional.settings.CoordinatesFormat
 import io.trewartha.positional.settings.LocationAccuracyVisibility
-import io.trewartha.positional.settings.SettingsRepository
 import io.trewartha.positional.settings.TestSettingsRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import kotlin.time.Clock.System.now
+import io.trewartha.positional.settings.randomCoordinatesFormat
+import io.trewartha.positional.settings.randomLocationAccuracyVisibility
+import io.trewartha.positional.settings.randomUnits
 
-class LocationViewModelTest : AnnotationSpec() {
+class LocationViewModelTest : DescribeSpec({
 
-    private lateinit var locator: TestLocator
-    private lateinit var settings: SettingsRepository
-    private lateinit var subject: LocationViewModel
+    fun sut(
+        locator: TestLocator = TestLocator(),
+        settings: TestSettingsRepository = TestSettingsRepository(),
+    ): LocationViewModel = LocationViewModel(locator, settings)
 
-    @BeforeEach
-    fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-
-        locator = TestLocator()
-        settings = TestSettingsRepository()
-
-        subject = LocationViewModel(locator, settings)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `Initial location state is loading`() {
-        subject.location.value.shouldBe(State.Loading)
-    }
-
-    @Test
-    fun `Location state is emitted once loaded`() = runTest {
-        val expectedLocation = Location(now(), GeodeticCoordinates(1.degrees, 2.degrees))
-
-        subject.location.test {
-            awaitItem() // Loading state
-
-            locator.setLocation(expectedLocation)
-
-            val state = awaitItem()
-            state.shouldBeInstanceOf<State.Loaded<Location>>()
-            state.data.shouldBe(expectedLocation)
+    describe("the location state") {
+        context("just after initialization") {
+            it("is loading") {
+                sut().location.value.shouldBe(State.Loading)
+            }
         }
-    }
 
-    @Test
-    fun `Location state is emitted when location changes`() = runTest {
-        val expectedLocation = Location(now(), GeodeticCoordinates(1.degrees, 1.degrees))
-        subject.location.test {
-            awaitItem() // Loading state
-            locator.setLocation(Location(now(), GeodeticCoordinates(0.degrees, 0.degrees)))
-            awaitItem() // Initial data state
+        context("when the locator emits a location") {
+            it("becomes loaded with the emitted location") {
+                val locator = TestLocator()
+                val expectedLocation = randomLocation()
+                sut(locator = locator).location.test {
+                    awaitItem() // Loading state
 
-            locator.setLocation(expectedLocation)
+                    locator.setLocation(expectedLocation)
 
-            val state = awaitItem()
-            state.shouldBeInstanceOf<State.Loaded<Location>>()
-            state.data.shouldBe(expectedLocation)
+                    val state = awaitItem()
+                    state.shouldBeInstanceOf<State.Loaded<Location>>()
+                    state.data.shouldBe(expectedLocation)
+                }
+            }
         }
-    }
 
-    @Test
-    fun `Initial settings state is loading`() {
-        subject.settings.value.shouldBe(State.Loading)
-    }
+        context("when the location changes") {
+            it("is updated with the new location") {
+                val locator = TestLocator()
+                val subject = sut(locator = locator)
+                val expectedLocation = randomLocation()
+                subject.location.test {
+                    awaitItem() // Loading state
+                    locator.setLocation(randomLocation())
+                    awaitItem() // Initial data state
 
-    @Test
-    fun `Settings state is emitted once loaded`() = runTest {
-        val expectedUnits = Units.METRIC
-        val expectedCoordinatesFormat = CoordinatesFormat.DD
-        val expectedLocationAccuracyVisibility = LocationAccuracyVisibility.SHOW
+                    locator.setLocation(expectedLocation)
 
-        subject.settings.test {
-            awaitItem() // Loading state
-
-            settings.setCoordinatesFormat(expectedCoordinatesFormat)
-            settings.setUnits(expectedUnits)
-            settings.setLocationAccuracyVisibility(expectedLocationAccuracyVisibility)
-
-            val state = awaitItem()
-            state.shouldBeInstanceOf<State.Loaded<Settings>>()
-            with(state.data) {
-                coordinatesFormat.shouldBe(expectedCoordinatesFormat)
-                units.shouldBe(expectedUnits)
-                accuracyVisibility.shouldBe(expectedLocationAccuracyVisibility)
+                    val state = awaitItem()
+                    state.shouldBeInstanceOf<State.Loaded<Location>>()
+                    state.data.shouldBe(expectedLocation)
+                }
             }
         }
     }
 
-    @Test
-    fun `Settings state is emitted when coordinates format changes`() = runTest {
-        val expectedCoordinatesFormat = CoordinatesFormat.DDM
-        subject.settings.test {
-            awaitItem() // Loading state
-            settings.setCoordinatesFormat(CoordinatesFormat.DD)
-            settings.setUnits(Units.METRIC)
-            settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            awaitItem() // Initial data state
+    describe("the settings state") {
+        context("just after initialization") {
+            it("is loading") {
+                sut().settings.value.shouldBe(State.Loading)
+            }
+        }
 
-            settings.setCoordinatesFormat(expectedCoordinatesFormat)
+        context("when all settings are emitted") {
+            it("becomes loaded with the correct values") {
+                val settings = TestSettingsRepository()
+                val subject = sut(settings = settings)
+                val expectedUnits = randomUnits()
+                val expectedCoordinatesFormat = randomCoordinatesFormat()
+                val expectedLocationAccuracyVisibility = randomLocationAccuracyVisibility()
+                subject.settings.test {
+                    awaitItem() // Loading state
 
-            val state = awaitItem()
-            state.shouldBeInstanceOf<State.Loaded<Settings>>()
-            state.data.coordinatesFormat.shouldBe(expectedCoordinatesFormat)
+                    settings.setCoordinatesFormat(expectedCoordinatesFormat)
+                    settings.setUnits(expectedUnits)
+                    settings.setLocationAccuracyVisibility(expectedLocationAccuracyVisibility)
+
+                    val state = awaitItem()
+                    state.shouldBeInstanceOf<State.Loaded<Settings>>()
+                    with(state.data) {
+                        coordinatesFormat.shouldBe(expectedCoordinatesFormat)
+                        units.shouldBe(expectedUnits)
+                        accuracyVisibility.shouldBe(expectedLocationAccuracyVisibility)
+                    }
+                }
+            }
+        }
+
+        context("when the coordinates format changes") {
+            it("is updated with the new coordinates format") {
+                val settings = TestSettingsRepository()
+                val subject = sut(settings = settings)
+                val expectedCoordinatesFormat = CoordinatesFormat.DDM
+                subject.settings.test {
+                    awaitItem() // Loading state
+                    settings.setCoordinatesFormat(CoordinatesFormat.DD)
+                    settings.setUnits(Units.METRIC)
+                    settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
+                    awaitItem() // Initial data state
+
+                    settings.setCoordinatesFormat(expectedCoordinatesFormat)
+
+                    val state = awaitItem()
+                    state.shouldBeInstanceOf<State.Loaded<Settings>>()
+                    state.data.coordinatesFormat.shouldBe(expectedCoordinatesFormat)
+                }
+            }
+        }
+
+        context("when the units change") {
+            it("is updated with the new units") {
+                val settings = TestSettingsRepository()
+                val subject = sut(settings = settings)
+                val expectedUnits = Units.IMPERIAL
+                subject.settings.test {
+                    awaitItem() // Loading state
+                    settings.setCoordinatesFormat(CoordinatesFormat.DD)
+                    settings.setUnits(Units.METRIC)
+                    settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
+                    awaitItem() // Initial data state
+
+                    settings.setUnits(expectedUnits)
+
+                    val state = awaitItem()
+                    state.shouldBeInstanceOf<State.Loaded<Settings>>()
+                    state.data.units.shouldBe(expectedUnits)
+                }
+            }
+        }
+
+        context("when the location accuracy visibility changes") {
+            it("is updated with the new visibility") {
+                val settings = TestSettingsRepository()
+                val subject = sut(settings = settings)
+                val expectedVisibility = LocationAccuracyVisibility.HIDE
+                subject.settings.test {
+                    awaitItem() // Loading state
+                    settings.setCoordinatesFormat(CoordinatesFormat.DD)
+                    settings.setUnits(Units.METRIC)
+                    settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
+                    awaitItem() // Initial data state
+
+                    settings.setLocationAccuracyVisibility(expectedVisibility)
+
+                    val state = awaitItem()
+                    state.shouldBeInstanceOf<State.Loaded<Settings>>()
+                    state.data.accuracyVisibility.shouldBe(expectedVisibility)
+                }
+            }
         }
     }
-
-    @Test
-    fun `Settings state is emitted when units change`() = runTest {
-        val expectedUnits = Units.IMPERIAL
-        subject.settings.test {
-            awaitItem() // Loading state
-            settings.setCoordinatesFormat(CoordinatesFormat.DD)
-            settings.setUnits(Units.METRIC)
-            settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            awaitItem() // Initial data state
-
-            settings.setUnits(expectedUnits)
-
-            val state = awaitItem()
-            state.shouldBeInstanceOf<State.Loaded<Settings>>()
-            state.data.units.shouldBe(expectedUnits)
-        }
-    }
-
-    @Test
-    fun `Settings state is emitted when location accuracy visibility changes`() = runTest {
-        val expectedVisibility = LocationAccuracyVisibility.HIDE
-        subject.settings.test {
-            awaitItem() // Loading state
-            settings.setCoordinatesFormat(CoordinatesFormat.DD)
-            settings.setUnits(Units.METRIC)
-            settings.setLocationAccuracyVisibility(LocationAccuracyVisibility.SHOW)
-            awaitItem() // Initial data state
-
-            settings.setLocationAccuracyVisibility(expectedVisibility)
-
-            val state = awaitItem()
-            state.shouldBeInstanceOf<State.Loaded<Settings>>()
-            state.data.accuracyVisibility.shouldBe(expectedVisibility)
-        }
-    }
-}
+})

@@ -6,4 +6,9 @@ dependencies {
     implementation(libs.worldwind) {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
     }
+
+    testFixturesImplementation(projects.core.test)
+    testFixturesImplementation(libs.kotlin.reflect)
+
+    testImplementation(libs.kotest.property)
 }

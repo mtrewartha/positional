@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.timber)
 
+    testImplementation(testFixtures(projects.core.measurement))
     testImplementation(testFixtures(projects.feature.location))
     testImplementation(testFixtures(projects.feature.settings))
     testImplementation(libs.kotlinx.coroutines.test)

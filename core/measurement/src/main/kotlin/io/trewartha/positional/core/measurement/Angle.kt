@@ -23,7 +23,8 @@ public data class Angle(val magnitude: Double, val unit: Unit) {
      * angle's magnitude converted to the same unit as this angle. The result has the same unit as
      * this angle.
      */
-    public operator fun plus(other: Angle): Angle = (magnitude + other.inDegrees().magnitude).degrees
+    public operator fun plus(other: Angle): Angle =
+        (magnitude + other.inDegrees().magnitude).degrees
 
     override fun toString(): String = when (unit) {
         Unit.DEGREES -> FORMAT_DEGREES.format(magnitude)

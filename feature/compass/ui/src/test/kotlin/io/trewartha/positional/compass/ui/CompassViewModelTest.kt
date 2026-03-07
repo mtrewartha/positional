@@ -1,170 +1,182 @@
 package io.trewartha.positional.compass.ui
 
 import app.cash.turbine.test
-import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.trewartha.positional.compass.Azimuth
 import io.trewartha.positional.compass.TestCompass
-import io.trewartha.positional.core.measurement.GeodeticCoordinates
+import io.trewartha.positional.compass.randomAzimuth
 import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.ui.State
-import io.trewartha.positional.location.Location
 import io.trewartha.positional.location.TestLocator
+import io.trewartha.positional.location.randomLocation
 import io.trewartha.positional.settings.CompassMode
 import io.trewartha.positional.settings.CompassNorthVibration
 import io.trewartha.positional.settings.TestSettingsRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import kotlin.time.Clock
 
-class CompassViewModelTest : AnnotationSpec() {
+class CompassViewModelTest : DescribeSpec({
 
-    private lateinit var subject: CompassViewModel
+    fun sut(
+        compass: TestCompass? = TestCompass(),
+        locator: TestLocator = TestLocator(),
+        settings: TestSettingsRepository = TestSettingsRepository(),
+    ): CompassViewModel = CompassViewModel(compass, locator, settings)
 
-    private lateinit var compass: TestCompass
-    private lateinit var locator: TestLocator
-    private lateinit var settings: TestSettingsRepository
+    describe("the state") {
+        context("when compass hardware is missing") {
+            it("reflects sensors missing") {
+                sut(compass = null).state.value
+                    .shouldBeInstanceOf<State.Failure<CompassError.SensorsMissing>>()
+            }
+        }
 
-    @BeforeEach
-    fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+        context("just after initialization with compass hardware present") {
+            it("is loading") {
+                sut().state.value.shouldBeInstanceOf<State.Loading>()
+            }
+        }
 
-        compass = TestCompass()
-        locator = TestLocator()
-        settings = TestSettingsRepository()
+        context("when all dependencies emit values") {
+            it("emits loaded data with the correct values") {
+                val compass = TestCompass()
+                val locator = TestLocator()
+                val settings = TestSettingsRepository()
+                val subject = sut(compass, locator, settings)
+                val expectedAzimuth = randomAzimuth()
+                val expectedCompassMode = CompassMode.MAGNETIC_NORTH
+                val expectedCompassNorthVibration = CompassNorthVibration.NONE
+                subject.state.test {
+                    awaitItem() // Loading state
+                    settings.setCompassMode(expectedCompassMode)
+                    settings.setCompassNorthVibration(expectedCompassNorthVibration)
+                    compass.setAzimuth(expectedAzimuth)
+                    val state = awaitItem()
+                    state.shouldBeInstanceOf<State.Loaded<CompassData>>()
+                    with(state.data) {
+                        azimuth.shouldBe(expectedAzimuth)
+                        declination.shouldBeNull()
+                        mode.shouldBe(expectedCompassMode)
+                        northVibration.shouldBe(expectedCompassNorthVibration)
+                    }
+                }
+            }
+        }
 
-        subject = CompassViewModel(compass, locator, settings)
-    }
+        context("when the azimuth changes") {
+            it("emits updated data with the new azimuth") {
+                val compass = TestCompass()
+                val settings = TestSettingsRepository()
+                val subject = sut(compass = compass, settings = settings)
+                val initialAzimuth = Azimuth(angle = 1.degrees)
+                val expectedAzimuth = Azimuth(angle = 2.degrees)
+                subject.state.test {
+                    awaitItem() // Loading state
+                    settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+                    settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+                    compass.setAzimuth(initialAzimuth)
+                    awaitItem() // Initial data state
 
-    @AfterEach
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+                    compass.setAzimuth(expectedAzimuth)
 
-    @Test
-    fun `Initial state reflects sensors missing when compass missing`() {
-        subject = CompassViewModel(null, locator, settings)
+                    val result = awaitItem()
+                    result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+                    result.data.azimuth.shouldBe(expectedAzimuth)
+                }
+            }
+        }
 
-        subject.state.value.shouldBeInstanceOf<State.Failure<CompassError.SensorsMissing>>()
-    }
+        context("when the declination changes") {
+            it("emits updated data with the new declination") {
+                val compass = TestCompass()
+                val locator = TestLocator()
+                val settings = TestSettingsRepository()
+                val subject = sut(compass = compass, locator = locator, settings = settings)
+                val expectedDeclination = 1.degrees
+                subject.state.test {
+                    awaitItem() // Loading state
+                    settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+                    settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+                    compass.setAzimuth(randomAzimuth())
+                    awaitItem() // Initial data state
 
-    @Test
-    fun `Initial state is loading when compass present`() {
-        subject.state.value.shouldBeInstanceOf<State.Loading>()
-    }
+                    locator.setLocation(randomLocation().copy(magneticDeclination = expectedDeclination))
 
-    @Test
-    fun `Data emitted once loaded`() = runTest {
-        val expectedAzimuth = Azimuth(
-            angle = 0.degrees,
-            accelerometerAccuracy = Azimuth.Accuracy.HIGH,
-            magnetometerAccuracy = Azimuth.Accuracy.HIGH
-        )
-        val expectedCompassMode = CompassMode.MAGNETIC_NORTH
-        val expectedCompassNorthVibration = CompassNorthVibration.NONE
-        subject.state.test {
-            awaitItem() // Loading state
+                    val result = awaitItem()
+                    result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+                    result.data.declination.shouldBe(expectedDeclination)
+                }
+            }
+        }
 
-            settings.setCompassMode(expectedCompassMode)
-            settings.setCompassNorthVibration(expectedCompassNorthVibration)
-            compass.setAzimuth(expectedAzimuth)
+        context("when the compass mode changes") {
+            it("emits updated data with the new mode") {
+                val compass = TestCompass()
+                val settings = TestSettingsRepository()
+                val subject = sut(compass = compass, settings = settings)
+                val expectedMode = CompassMode.TRUE_NORTH
+                subject.state.test {
+                    awaitItem() // Loading state
+                    settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+                    settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+                    compass.setAzimuth(randomAzimuth())
+                    awaitItem() // Initial data state
 
-            val state = awaitItem()
-            state.shouldBeInstanceOf<State.Loaded<CompassData>>()
-            with(state.data) {
-                azimuth.shouldBe(expectedAzimuth)
-                declination.shouldBeNull()
-                mode.shouldBe(expectedCompassMode)
-                northVibration.shouldBe(expectedCompassNorthVibration)
+                    settings.setCompassMode(expectedMode)
+
+                    val result = awaitItem()
+                    result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+                    result.data.mode.shouldBe(expectedMode)
+                }
+            }
+        }
+
+        context("when the compass north vibration changes") {
+            it("emits updated data with the new vibration setting") {
+                val compass = TestCompass()
+                val settings = TestSettingsRepository()
+                val subject = sut(compass = compass, settings = settings)
+                val expectedVibration = CompassNorthVibration.SHORT
+                subject.state.test {
+                    awaitItem() // Loading state
+                    settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+                    settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+                    compass.setAzimuth(randomAzimuth())
+                    awaitItem() // Initial data state
+
+                    settings.setCompassNorthVibration(expectedVibration)
+
+                    val result = awaitItem()
+                    result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+                    result.data.northVibration.shouldBe(expectedVibration)
+                }
+            }
+        }
+
+        context("when a location without declination is emitted after one with declination") {
+            it("emits updated data with null declination") {
+                val compass = TestCompass()
+                val locator = TestLocator()
+                val settings = TestSettingsRepository()
+                val subject = sut(compass = compass, locator = locator, settings = settings)
+                subject.state.test {
+                    awaitItem() // Loading state
+                    settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
+                    settings.setCompassNorthVibration(CompassNorthVibration.NONE)
+                    compass.setAzimuth(randomAzimuth())
+                    awaitItem() // Initial data state (no location yet, declination null)
+
+                    locator.setLocation(randomLocation().copy(magneticDeclination = 5.degrees))
+                    awaitItem() // Data state with non-null declination
+
+                    locator.setLocation(randomLocation().copy(magneticDeclination = null))
+
+                    val result = awaitItem()
+                    result.shouldBeInstanceOf<State.Loaded<CompassData>>()
+                    result.data.declination.shouldBeNull()
+                }
             }
         }
     }
-
-    @Test
-    fun `Data emitted when azimuth changes`() = runTest {
-        val initialAzimuth = Azimuth(
-            angle = 1.degrees,
-            accelerometerAccuracy = Azimuth.Accuracy.HIGH,
-            magnetometerAccuracy = Azimuth.Accuracy.HIGH
-        )
-        val expectedAzimuth = initialAzimuth.copy(angle = 2.degrees)
-        subject.state.test {
-            awaitItem() // Loading state
-            settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
-            settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(initialAzimuth)
-            awaitItem() // Initial data state
-
-            compass.setAzimuth(expectedAzimuth)
-
-            val result = awaitItem()
-            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
-            result.data.azimuth.shouldBe(expectedAzimuth)
-        }
-    }
-
-    @Test
-    fun `Data emitted when declination changes`() = runTest {
-        val expectedDeclination = 1.degrees
-        subject.state.test {
-            awaitItem() // Loading state
-            settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
-            settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(Azimuth(0.degrees))
-            awaitItem() // Initial data state
-
-            locator.setLocation(
-                Location(
-                    timestamp = Clock.System.now(),
-                    coordinates = GeodeticCoordinates(0.degrees, 0.degrees),
-                    magneticDeclination = expectedDeclination
-                )
-            )
-
-            val result = awaitItem()
-            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
-            result.data.declination.shouldBe(expectedDeclination)
-        }
-    }
-
-    @Test
-    fun `Data emitted when compass mode changes`() = runTest {
-        val expectedMode = CompassMode.TRUE_NORTH
-        subject.state.test {
-            awaitItem() // Loading state
-            settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
-            settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(Azimuth(0.degrees))
-            awaitItem() // Initial data state
-
-            settings.setCompassMode(expectedMode)
-
-            val result = awaitItem()
-            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
-            result.data.mode.shouldBe(expectedMode)
-        }
-    }
-
-    @Test
-    fun `Data emitted when compass north vibration changes`() = runTest {
-        val expectedVibration = CompassNorthVibration.SHORT
-        subject.state.test {
-            awaitItem() // Loading state
-            settings.setCompassMode(CompassMode.MAGNETIC_NORTH)
-            settings.setCompassNorthVibration(CompassNorthVibration.NONE)
-            compass.setAzimuth(Azimuth(0.degrees))
-            awaitItem() // Initial data state
-
-            settings.setCompassNorthVibration(expectedVibration)
-
-            val result = awaitItem()
-            result.shouldBeInstanceOf<State.Loaded<CompassData>>()
-            result.data.northVibration.shouldBe(expectedVibration)
-        }
-    }
-}
+})
