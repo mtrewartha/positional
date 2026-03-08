@@ -21,7 +21,9 @@ paths:
   natural English describing the behavior or concept (e.g. `describe("the location flow")` is fine
   because "location" and "flow" are domain/concept terms, not a reference to the `location`
   property identifier). DO NOT use `describe` to encode context into the test; that's what
-  `context` is for. Inside `describe` blocks, use `context` to specify preconditions that will apply
+  `context` is for. DO NOT split a single behavior or aspect across multiple `describe` blocks —
+  all `context` variations for the same behavior belong under one `describe`. Inside `describe`
+  blocks, use `context` to specify preconditions that will apply
   to tests. Inside `context` blocks, use `it` to house assertions of a single test. You may have
   multiple `context` calls in a single `describe` and multiple `it` calls in a single
   `context` (or in a single `describe` if there is no `context`). If there is no context, simply
