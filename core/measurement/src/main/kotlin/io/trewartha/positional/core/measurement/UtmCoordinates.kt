@@ -25,8 +25,8 @@ public data class UtmCoordinates(
             Hemisphere.NORTH -> earth.worldwind.geom.coords.Hemisphere.N
             Hemisphere.SOUTH -> earth.worldwind.geom.coords.Hemisphere.S
         }
-        require(easting.isFinite && !easting.isNegative) { "Invalid easting: $easting" }
-        require(northing.isFinite && !northing.isNegative) { "Invalid northing: $northing" }
+        require(!easting.isNegative) { "Easting must not be negative but was $easting" }
+        require(!northing.isNegative) { "Northing must not be negative but was $northing" }
         val easting = easting.inMeters().magnitude
         val northing = northing.inMeters().magnitude
         UTMCoord.fromUTM(zone, hemisphere, easting, northing)

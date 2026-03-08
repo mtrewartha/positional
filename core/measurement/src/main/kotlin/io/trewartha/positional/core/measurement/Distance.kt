@@ -8,10 +8,9 @@ package io.trewartha.positional.core.measurement
  */
 public data class Distance(val magnitude: Double, val unit: Unit) {
 
-    /**
-     * `true` if the distance is finite, `false` if it is negative or positive infinity
-     */
-    val isFinite: Boolean get() = magnitude.isFinite()
+    init {
+        require(magnitude.isFinite()) { "Distance magnitude must be finite, but was $magnitude" }
+    }
 
     /**
      * `true` if the distance is negative, `false` if it is positive or zero

@@ -23,8 +23,8 @@ public data class MgrsCoordinates(
 ) : Coordinates {
 
     private val worldWindMgrsCoordinates = try {
-        require(easting.isFinite && !easting.isNegative) { "Invalid easting: $easting" }
-        require(northing.isFinite && !northing.isNegative) { "Invalid northing: $northing" }
+        require(!easting.isNegative) { "Easting must not be negative but was $easting" }
+        require(!northing.isNegative) { "Northing must not be negative but was $northing" }
         val easting = easting.inRoundedAndPaddedMeters()
         val northing = northing.inRoundedAndPaddedMeters()
         MGRSCoord.fromString("$gridZoneDesignator $gridSquareID $easting $northing")
