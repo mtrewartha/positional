@@ -9,6 +9,10 @@ package io.trewartha.positional.core.measurement
  */
 public data class Angle(val magnitude: Double, val unit: Unit) {
 
+    init {
+        require(magnitude.isFinite()) { "Angle magnitude must be finite, but was $magnitude" }
+    }
+
     /**
      * Convert this angle to degrees if it is not already in degrees
      */
