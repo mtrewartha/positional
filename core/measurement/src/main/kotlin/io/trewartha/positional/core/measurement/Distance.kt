@@ -13,11 +13,6 @@ public data class Distance(val magnitude: Double, val unit: Unit) {
     }
 
     /**
-     * `true` if the distance is finite, `false` if it is NaN or infinite
-     */
-    val isFinite: Boolean get() = magnitude.isFinite()
-
-    /**
      * `true` if the distance is negative, `false` if it is positive or zero
      */
     val isNegative: Boolean get() = magnitude < 0.0

@@ -16,7 +16,7 @@ import kotlin.math.abs
 
 class DistanceTest : DescribeSpec({
 
-    describe("instantiating a Distance") {
+    describe("creating a Distance") {
         context("with a finite magnitude") {
             it("succeeds") {
                 checkAll(Arb.numericDouble(), Arb.enum<Distance.Unit>()) { magnitude, unit ->
@@ -61,7 +61,7 @@ class DistanceTest : DescribeSpec({
         }
     }
 
-    describe("checking whether the distance is negative") {
+    describe("whether the distance is negative") {
         context("when the magnitude is negative") {
             it("returns true") {
                 checkAll(
@@ -93,7 +93,7 @@ class DistanceTest : DescribeSpec({
         }
     }
 
-    describe("checking whether the distance is positive") {
+    describe("whether the distance is positive") {
         context("when the magnitude is negative") {
             it("returns false") {
                 checkAll(
