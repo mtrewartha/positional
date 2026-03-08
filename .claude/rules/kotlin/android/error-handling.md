@@ -1,4 +1,9 @@
-### Error Handling Standards
+---
+paths:
+  - "**/src/**/*.kt"
+---
+
+# Error Handling Rules
 
 - **Clear, Actionable Errors**: Throw or return clear, unambiguous, actionable types that indicate
   what went wrong so callers can respond appropriately. Re-use existing types (exceptions or

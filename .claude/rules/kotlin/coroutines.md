@@ -1,4 +1,9 @@
-### Coroutines Standards
+---
+paths:
+  - "**/src/**/*.kt"
+---
+
+# Coroutines Rules
 
 - **Well-Defined Scopes**: Strive to launch coroutines in a well-defined scopes that have a proper
   beginning and end (e.g., `viewModelScope`, `lifecycleScope`) to ensure proper cancellation and

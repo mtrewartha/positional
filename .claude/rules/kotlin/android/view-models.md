@@ -1,4 +1,11 @@
-### View Model Standards
+---
+paths:
+  - "**/src/**/*ViewModel.kt"
+  - "**/src/**/*ViewModelSpec.kt"
+  - "**/src/**/*ViewModelTest.kt"
+---
+
+# View Model Rules
 
 - **MVI Architecture**: Follow Model-View-Intent (MVI) architecture with strict unidirectional data
   flow:

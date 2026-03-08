@@ -1,4 +1,4 @@
-### Validation Standards
+# Validation Rules
 
 - **Client-Side for UX**: Use client-side validation to provide immediate user feedback, but ensure
   duplicate checks exist server-side.

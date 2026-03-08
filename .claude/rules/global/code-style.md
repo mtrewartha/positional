@@ -1,4 +1,4 @@
-### Coding Style Standards
+# Code Style Rules
 
 - **Consistent Naming Conventions**: Establish and follow naming conventions for variables,
   functions, classes, and files across the codebase
