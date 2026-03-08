@@ -1,4 +1,9 @@
-### Shell Script Standards
+---
+paths:
+- "**.sh"
+---
+
+# Shell Script Rules
 
 - **Shebang**: Always start shell scripts with a shebang line to specify the interpreter, e.g.
   `#!/bin/bash`

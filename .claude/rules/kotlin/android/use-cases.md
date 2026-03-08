@@ -1,4 +1,11 @@
-### Use Case Standards
+---
+paths:
+  - "**/src/**/UseCase.kt"
+  - "**/src/**/UseCaseSpec.kt"
+  - "**/src/**/UseCaseTest.kt"
+---
+
+# Use Case Rules
 
 - **Single Responsibility**: Each use case should encapsulate a single, well-defined piece of
   business logic that orchestrates interactions between multiple domain abstractions (e.g.

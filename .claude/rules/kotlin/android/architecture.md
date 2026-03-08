@@ -1,4 +1,4 @@
-### Architecture Standards
+# Architecture Rules
 
 - **Clean Architecture-inspired Core, Data, Feature, and App Modules**:
     - Apps are broken into discrete modules that fit into one of four categories:

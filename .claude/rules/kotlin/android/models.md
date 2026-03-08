@@ -1,4 +1,9 @@
-### Models Standards
+---
+paths:
+  - "**/src/**/*.kt"
+---
+
+# Models Rules
 
 - **Data Classes**: Use Kotlin data classes for models to automatically provide useful methods like
   `copy()`, `toString()`, `equals()`, and `hashCode()`.

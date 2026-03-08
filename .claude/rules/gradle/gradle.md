@@ -1,4 +1,11 @@
-### Gradle Standards
+---
+paths:
+- "**.gradle.kts"
+- "**/buildSrc/**/*.kt"
+- "**/build-logic/**/*.kt"
+---
+
+# Gradle Rules
 
 - **Convention Plugins**: Define these in `build-logic` to avoid repeated build logic.
 - **Careful Use of `api` Dependency Configuration**: Only expose dependencies that are actually part

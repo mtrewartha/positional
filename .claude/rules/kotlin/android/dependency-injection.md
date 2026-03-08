@@ -1,4 +1,9 @@
-### Dependency Injection Standards
+---
+paths:
+  - "**/src/**/*.kt"
+---
+
+# Dependency Injection Rules
 
 - **Constructor Injection**: Prefer constructor injection over field injection; only use the latter
   if necessary.

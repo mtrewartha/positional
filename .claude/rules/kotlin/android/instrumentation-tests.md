@@ -1,4 +1,10 @@
-### Instrumentation Tests Standards
+---
+paths:
+  - "**/src/**/androidTest*/**/*Spec.kt"
+  - "**/src/**/androidTest*/**/*Test.kt"
+---
+
+# Instrumentation Tests Rules
 
 - **Suggest Reasonable Changes to Classes**: If a reasonable refactor of a class can isolate it from
   the Android framework to improve its testability, either suggest or do the refactor.

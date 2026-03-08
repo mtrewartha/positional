@@ -1,4 +1,4 @@
-### Library Standards
+# Library Rules
 
 - **Use Kotlin's explicit API mode** to ensure public APIs are well-defined and intentional.
 - **Document public APIs** using KDocs to provide clear explanations of their purpose and usage.

@@ -1,4 +1,9 @@
-### KDocs Standards
+---
+paths:
+  - "**/src/**/*.kt"
+---
+
+# KDocs Rules
 
 - **Document Public Declarations**: Add KDocs for anything exposed by a module (classes, functions,
   properties, etc.) to provide clear explanations of its purpose and usage.

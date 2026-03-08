@@ -1,4 +1,14 @@
-### Repository Standards
+---
+paths:
+  - "**/src/**/*Repository.kt"
+  - "**/src/**/*RepositorySpec.kt"
+  - "**/src/**/*RepositoryTest.kt"
+  - "**/src/**/*Repo.kt"
+  - "**/src/**/*RepoSpec.kt"
+  - "**/src/**/*RepoTest.kt"
+---
+
+# Repository Rules
 
 - **Repositories Like Sets**: Use repository interfaces to provide a simple collection-like
   abstraction for a single domain type that allows adding, removing, getting, and updating items in
