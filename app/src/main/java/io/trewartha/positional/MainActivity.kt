@@ -5,7 +5,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.trewartha.positional.core.ui.format.DateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
@@ -22,10 +21,7 @@ public class MainActivity : AppCompatActivity() {
         setContent {
             CompositionLocalProvider(LocalDateTimeFormatter provides dateTimeFormatter) {
                 val widthSizeClass = calculateWindowSizeClass(activity = this).widthSizeClass
-                MainView(
-                    navHostController = rememberNavController(),
-                    windowWidthSizeClass = widthSizeClass
-                )
+                MainView(windowWidthSizeClass = widthSizeClass)
             }
         }
     }

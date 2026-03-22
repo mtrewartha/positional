@@ -13,13 +13,13 @@ dependencies {
 
     api(libs.androidx.appcompat)
     api(libs.androidx.compose.runtime)
+    api(libs.androidx.navigation3.runtime)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.uiTooling)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.composePlaceholder.material3)
     implementation(libs.google.hilt.android)
     implementation(libs.javax.inject)

@@ -55,6 +55,35 @@ import io.trewartha.positional.core.ui.locals.LocalVibrator
 import io.trewartha.positional.core.ui.modifier.placeholder
 import io.trewartha.positional.settings.CompassMode
 import io.trewartha.positional.settings.CompassNorthVibration
+import android.os.Vibrator
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+
+/**
+ * Connected overload that creates its own [CompassViewModel], collects state, and provides
+ * [LocalVibrator]. Delegates to the stateless [CompassView] overload.
+ */
+@Composable
+public fun CompassView(
+    contentPadding: PaddingValues,
+    onHelpClick: () -> Unit,
+) {
+    val viewModel: CompassViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    CompositionLocalProvider(
+        LocalVibrator provides
+                @Suppress("DEPRECATION")
+                context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    ) {
+        CompassView(
+            state = state,
+            contentPadding = contentPadding,
+            onHelpClick = onHelpClick,
+        )
+    }
+}
 
 @Composable
 public fun CompassView(

@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -38,6 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import io.trewartha.positional.core.measurement.Coordinates
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.core.measurement.Units
@@ -45,13 +49,17 @@ import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.measurement.kph
 import io.trewartha.positional.core.measurement.meters
 import io.trewartha.positional.core.ui.PositionalTheme
-import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.format.DateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalLocale
 import io.trewartha.positional.location.Location
+import io.trewartha.positional.location.ui.format.CoordinatesFormatter
 import io.trewartha.positional.location.ui.format.DecimalDegreesFormatter
+import io.trewartha.positional.location.ui.format.DegreesDecimalMinutesFormatter
+import io.trewartha.positional.location.ui.format.DegreesMinutesSecondsFormatter
+import io.trewartha.positional.location.ui.format.MgrsFormatter
+import io.trewartha.positional.location.ui.format.UtmFormatter
 import io.trewartha.positional.location.ui.locals.LocalCoordinatesFormatter
 import io.trewartha.positional.settings.CoordinatesFormat
 import io.trewartha.positional.settings.LocationAccuracyVisibility
@@ -59,7 +67,46 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
+import java.util.Locale
 import kotlin.time.Instant
+import io.trewartha.positional.core.ui.R as CoreR
+
+/**
+ * Connected overload that creates its own [LocationViewModel], collects state, and provides
+ * [LocalCoordinatesFormatter]. Delegates to the stateless [LocationView] overload.
+ */
+@Composable
+public fun LocationView(
+    contentPadding: PaddingValues,
+    snackbarHostState: SnackbarHostState,
+    onShareClick: (formattedCoordinates: String) -> Unit,
+    onHelpClick: () -> Unit,
+) {
+    val viewModel: LocationViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val locationState by viewModel.location.collectAsStateWithLifecycle()
+    val settingsState by viewModel.settings.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val locale = LocalLocale.current
+    val coordinatesFormat = settingsState.dataOrNull?.coordinatesFormat
+    CompositionLocalProvider(
+        LocalCoordinatesFormatter provides
+                rememberCoordinatesFormatter(context, locale, coordinatesFormat)
+    ) {
+        val coordinatesFormatter = LocalCoordinatesFormatter.current
+        LocationView(
+            locationState = locationState,
+            settingsState = settingsState,
+            contentPadding = contentPadding,
+            snackbarHostState = snackbarHostState,
+            onShareClick = { coordinates ->
+                val formatted = coordinates?.let { coordinatesFormatter.formatForCopy(it) }
+                    ?: return@LocationView
+                onShareClick(formatted)
+            },
+            onHelpClick = onHelpClick,
+        )
+    }
+}
 
 @Composable
 public fun LocationView(
@@ -150,6 +197,22 @@ private fun navigateToMap(
     }
     context.startActivity(Intent(Intent.ACTION_VIEW, geoUri))
 }
+
+@Composable
+private fun rememberCoordinatesFormatter(
+    context: Context,
+    locale: Locale,
+    format: CoordinatesFormat?,
+): CoordinatesFormatter =
+    remember(locale, format) {
+        when (format) {
+            CoordinatesFormat.DD, null -> DecimalDegreesFormatter(context, locale)
+            CoordinatesFormat.DDM -> DegreesDecimalMinutesFormatter(context, locale)
+            CoordinatesFormat.DMS -> DegreesMinutesSecondsFormatter(context, locale)
+            CoordinatesFormat.MGRS -> MgrsFormatter()
+            CoordinatesFormat.UTM -> UtmFormatter(context, locale)
+        }
+    }
 
 private suspend fun Clipboard.setCoordinates(label: String, coordinates: String) {
     setClipEntry(ClipEntry(ClipData.newPlainText(label, coordinates)))

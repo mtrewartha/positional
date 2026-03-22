@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
@@ -105,7 +106,10 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.compose)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.core)
     implementation(libs.google.hilt.android)
     implementation(libs.google.materialComponents)
     implementation(platform(libs.google.firebase.bom))
@@ -126,7 +130,6 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll(
             "-Xjvm-default=all",
-            "-Xcontext-parameters",
             "-Xinline-classes",
         )
         jvmTarget = JvmTarget.JVM_17
