@@ -1,10 +1,10 @@
 ---
 paths:
-- "**.gradle.kts"
-- "**/buildSrc/**/*.kt"
-- "**/build-logic/**/*.kt"
+  - "**.gradle.kts"
+  - "**/buildSrc/**/*.kt"
+  - "**/build-logic/**/*.kt"
+  - "gradle/libs.versions.toml"
 ---
-
 # Gradle Rules
 
 - **Convention Plugins**: Define these in `build-logic` to avoid repeated build logic.
@@ -14,3 +14,5 @@ paths:
   ensuring logic is compatible with the caches.
 - **Multi-Platform Build Logic**: Ensure Gradle build logic (in build-logic or otherwise) works when
   executed on Windows, macOS, Linux, and any other Unix-like systems.
+- **Dependency Versions**: When adding a dependency on a new library or plugin, use the latest
+  stable version.

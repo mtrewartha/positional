@@ -39,7 +39,7 @@ public fun HelpView(
                 navigationIcon = {
                     IconButton(onClick = onUpClick) {
                         Icon(
-                            painterResource(R.drawable.arrow_back_24px),
+                            painterResource(R.drawable.core_ui_arrow_back_24px),
                             contentDescription = stringResource(id = R.string.core_ui_up)
                         )
                     }

@@ -30,9 +30,35 @@ import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.locals.DefaultDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
+import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
+
+/**
+ * Connected overload that creates its own [SunViewModel] and collects state. Delegates to the
+ * stateless [SunView] overload.
+ */
+@Composable
+public fun SunView(
+    contentPadding: PaddingValues,
+    onHelpClick: () -> Unit,
+) {
+    val viewModel: SunViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    SunView(
+        state = state,
+        contentPadding = contentPadding,
+        onSelectedDateDecrement = viewModel::onSelectedDateDecrement,
+        onDateSelection = viewModel::onSelectedDateChange,
+        onSelectedDateIncrement = viewModel::onSelectedDateIncrement,
+        onJumpToTodayClick = viewModel::onSelectedDateChangedToToday,
+        onHelpClick = onHelpClick,
+    )
+}
 
 @Composable
 public fun SunView(

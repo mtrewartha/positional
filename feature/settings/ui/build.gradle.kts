@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.positional.library.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.ksp)
 }
 
@@ -23,8 +24,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.google.hilt.android)
+    implementation(libs.kotlinx.serialization.core)
 }
 
 kotlin {

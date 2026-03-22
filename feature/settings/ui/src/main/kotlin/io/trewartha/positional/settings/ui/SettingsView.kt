@@ -32,6 +32,47 @@ import io.trewartha.positional.settings.CompassNorthVibration
 import io.trewartha.positional.settings.CoordinatesFormat
 import io.trewartha.positional.settings.LocationAccuracyVisibility
 import io.trewartha.positional.settings.Theme
+import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+
+/**
+ * Connected overload that creates its own [SettingsViewModel] and collects all settings state
+ * flows. Delegates to the stateless [SettingsView] overload.
+ */
+@Composable
+public fun SettingsView(
+    contentPadding: PaddingValues,
+    onLicenseClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
+) {
+    val viewModel: SettingsViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val compassMode by viewModel.compassMode.collectAsStateWithLifecycle()
+    val compassNorthVibration by viewModel.compassNorthVibration.collectAsStateWithLifecycle()
+    val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()
+    val locationAccuracyVisibility by viewModel.locationAccuracyVisibility
+        .collectAsStateWithLifecycle()
+    val theme by viewModel.theme.collectAsStateWithLifecycle()
+    val units by viewModel.units.collectAsStateWithLifecycle()
+    SettingsView(
+        compassMode = compassMode,
+        onCompassModeChange = viewModel::onCompassModeChange,
+        compassNorthVibration = compassNorthVibration,
+        onCompassNorthVibrationChange = viewModel::onCompassNorthVibrationChange,
+        coordinatesFormat = coordinatesFormat,
+        onCoordinatesFormatChange = viewModel::onCoordinatesFormatChange,
+        locationAccuracyVisibility = locationAccuracyVisibility,
+        onLocationAccuracyVisibilityChange = viewModel::onLocationAccuracyVisibilityChange,
+        theme = theme,
+        onThemeChange = viewModel::onThemeChange,
+        units = units,
+        contentPadding = contentPadding,
+        onUnitsChange = viewModel::onUnitsChange,
+        onLicenseClick = onLicenseClick,
+        onPrivacyPolicyClick = onPrivacyPolicyClick,
+    )
+}
 
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
