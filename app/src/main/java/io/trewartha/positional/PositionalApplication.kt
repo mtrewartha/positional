@@ -3,11 +3,15 @@ package io.trewartha.positional
 import android.app.Application
 import com.google.firebase.Firebase
 import com.google.firebase.crashlytics.crashlytics
-import dagger.hilt.android.HiltAndroidApp
+import dev.zacsweers.metro.createGraphFactory
+import dev.zacsweers.metrox.android.MetroApplication
 import timber.log.Timber
 
-@HiltAndroidApp
-public class PositionalApplication : Application() {
+public class PositionalApplication : Application(), MetroApplication {
+
+    override val appComponentProviders: AppGraph by lazy {
+        createGraphFactory<AppGraph.Factory>().create(this)
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -15,4 +19,3 @@ public class PositionalApplication : Application() {
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
     }
 }
-

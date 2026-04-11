@@ -31,16 +31,9 @@ kover {
 
     reports {
         excludesAnnotatedBy.addAll(
-            "dagger.*",
             "*.Generated*"
         )
         excludedClasses.addAll(
-            "dagger.*",
-            "hilt_aggregated_deps.*",
-            "*Hilt_*",
-            "*_Hilt*",
-            "*.*_*Injector*",
-            "*_*Factory*",
             "io.trewartha.positional.BuildConfig",
         )
     }
@@ -48,6 +41,7 @@ kover {
 
 include(
     ":app",
+    ":core:di",
     ":core:error",
     ":core:measurement",
     ":core:test",

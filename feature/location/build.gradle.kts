@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.positional.library.android)
-    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -8,8 +8,7 @@ android {
 }
 
 dependencies {
-    ksp(libs.google.hilt.compiler)
-
+    api(projects.core.di)
     api(projects.core.measurement)
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.datetime)
@@ -17,8 +16,6 @@ dependencies {
     gmsApi(libs.google.playServices.location)
 
     implementation(libs.androidx.core)
-    implementation(libs.google.hilt.android)
-    implementation(libs.javax.inject)
     implementation(libs.timber)
 
     gmsImplementation(libs.kotlinx.coroutines.playServices)

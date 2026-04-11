@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.positional.library.android)
-    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -8,13 +8,9 @@ android {
 }
 
 dependencies {
-    ksp(libs.google.hilt.compiler)
-
+    api(projects.core.di)
     api(projects.core.measurement)
     api(libs.kotlinx.coroutines.core)
-
-    implementation(libs.google.hilt.android)
-    implementation(libs.javax.inject)
 
     testFixturesImplementation(projects.core.test)
     testFixturesImplementation(testFixtures(projects.core.measurement))

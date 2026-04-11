@@ -1,16 +1,15 @@
+import java.nio.file.NoSuchFileException
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.properties.loadProperties
-import java.nio.file.NoSuchFileException
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
-    alias(libs.plugins.google.dagger.hilt.android)
+    alias(libs.plugins.metro)
 }
 
 private val PROPERTIES_FILE_PATH = "app/upload_keystore.properties"
@@ -69,7 +68,7 @@ android {
         versionCode = 21030103
         versionName = "3.1.3"
 
-        minSdk = 24
+        minSdk = 28
         targetSdk = 36
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -88,8 +87,7 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.android.tools.desugarJdkLibs)
 
-    ksp(libs.google.hilt.compiler)
-
+    implementation(projects.core.di)
     implementation(projects.core.ui)
     implementation(projects.feature.compass.ui)
     implementation(projects.feature.location)
@@ -103,14 +101,15 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.compose.uiTooling)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.kotlinx.serialization.core)
-    implementation(libs.google.hilt.android)
+    implementation(libs.metro.android)
+    implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
     implementation(libs.google.materialComponents)
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.crashlytics)
@@ -120,10 +119,6 @@ dependencies {
     "gmsImplementation"(libs.google.firebase.analytics)
 
     androidTestRuntimeOnly(libs.androidx.test.runner)
-}
-
-hilt {
-    enableAggregatingTask = true
 }
 
 kotlin {

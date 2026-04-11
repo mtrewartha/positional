@@ -9,7 +9,7 @@
 #### Key Libraries & Tools
 
 - **Concurrency:** [Kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-- **Dependency Injection:** [Hilt](https://dagger.dev/hilt/)
+- **Dependency Injection:** [Metro](https://zacsweers.github.io/metro/latest/)
 - **Key-Value Stores:**
   Protobuf-based [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
 - **Time:** kotlin.time and [Kotlinx.datetime](https://github.com/Kotlin/kotlinx-datetime)

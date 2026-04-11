@@ -39,9 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import io.trewartha.positional.core.measurement.Coordinates
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.core.measurement.Units
@@ -49,6 +49,7 @@ import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.measurement.kph
 import io.trewartha.positional.core.measurement.meters
 import io.trewartha.positional.core.ui.PositionalTheme
+import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.format.DateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
@@ -63,13 +64,12 @@ import io.trewartha.positional.location.ui.format.UtmFormatter
 import io.trewartha.positional.location.ui.locals.LocalCoordinatesFormatter
 import io.trewartha.positional.settings.CoordinatesFormat
 import io.trewartha.positional.settings.LocationAccuracyVisibility
+import java.util.Locale
+import kotlin.time.Instant
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
-import java.util.Locale
-import kotlin.time.Instant
-import io.trewartha.positional.core.ui.R as CoreR
 
 /**
  * Connected overload that creates its own [LocationViewModel], collects state, and provides
@@ -82,7 +82,7 @@ public fun LocationView(
     onShareClick: (formattedCoordinates: String) -> Unit,
     onHelpClick: () -> Unit,
 ) {
-    val viewModel: LocationViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val viewModel: LocationViewModel = metroViewModel(checkNotNull(LocalViewModelStoreOwner.current))
     val locationState by viewModel.location.collectAsStateWithLifecycle()
     val settingsState by viewModel.settings.collectAsStateWithLifecycle()
     val context = LocalContext.current
