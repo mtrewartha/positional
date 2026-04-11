@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.positional.library.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -9,8 +9,7 @@ android {
 }
 
 dependencies {
-    ksp(libs.google.hilt.compiler)
-
+    api(projects.core.di)
     api(libs.androidx.appcompat)
     api(libs.androidx.compose.runtime)
     api(libs.androidx.navigation3.runtime)
@@ -21,8 +20,6 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.uiTooling)
     implementation(libs.composePlaceholder.material3)
-    implementation(libs.google.hilt.android)
-    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.markwon)

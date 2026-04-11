@@ -20,14 +20,20 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import io.trewartha.positional.AppScope
 import kotlin.coroutines.CoroutineContext
 
 /**
  * [Locator] implementation powered by the GMS [FusedLocationProviderClient] with a fallback in case
  * GMS locations are unavailable
  */
-internal class GmsLocator @Inject constructor(
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+@Inject
+public class GmsLocator(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val fallbackAospLocator: AospLocator,
     private val coroutineContext: CoroutineContext = Dispatchers.Default

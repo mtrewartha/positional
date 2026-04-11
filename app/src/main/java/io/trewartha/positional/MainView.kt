@@ -44,7 +44,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.EntryProviderScope
@@ -56,6 +55,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import io.trewartha.positional.compass.ui.CompassHelpNavKey
 import io.trewartha.positional.compass.ui.CompassHelpView
 import io.trewartha.positional.compass.ui.CompassNavKey
@@ -80,7 +80,7 @@ import kotlin.math.roundToInt
 
 @Composable
 public fun MainView(
-    viewModel: SettingsViewModel = hiltViewModel(),
+    viewModel: SettingsViewModel = metroViewModel(),
     windowWidthSizeClass: WindowWidthSizeClass
 ) {
     val theme by viewModel.theme.collectAsStateWithLifecycle()

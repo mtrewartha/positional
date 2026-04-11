@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.positional.library.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -10,8 +10,6 @@ android {
 }
 
 dependencies {
-    ksp(libs.google.hilt.compiler)
-
     api(projects.core.ui)
     api(projects.feature.settings)
     api(libs.androidx.compose.runtime)
@@ -21,11 +19,11 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.uiTooling)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
-    implementation(libs.google.hilt.android)
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
 }
 
 kotlin {

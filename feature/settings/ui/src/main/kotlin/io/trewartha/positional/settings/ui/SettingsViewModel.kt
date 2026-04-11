@@ -2,7 +2,10 @@ package io.trewartha.positional.settings.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import io.trewartha.positional.AppScope
 import io.trewartha.positional.core.measurement.Units
 import io.trewartha.positional.core.ui.flow.ForViewModel
 import io.trewartha.positional.settings.CompassMode
@@ -15,10 +18,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-public class SettingsViewModel @Inject constructor(
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(SettingsViewModel::class)
+@Inject
+public class SettingsViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 

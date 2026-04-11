@@ -1,6 +1,7 @@
 package io.trewartha.positional.compass.ui
 
 import android.content.Context
+import android.os.Vibrator
 import android.view.Surface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,9 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import io.trewartha.positional.compass.Azimuth
 import io.trewartha.positional.core.measurement.Angle
 import io.trewartha.positional.core.measurement.degrees
@@ -55,10 +59,6 @@ import io.trewartha.positional.core.ui.locals.LocalVibrator
 import io.trewartha.positional.core.ui.modifier.placeholder
 import io.trewartha.positional.settings.CompassMode
 import io.trewartha.positional.settings.CompassNorthVibration
-import android.os.Vibrator
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 
 /**
  * Connected overload that creates its own [CompassViewModel], collects state, and provides
@@ -69,7 +69,7 @@ public fun CompassView(
     contentPadding: PaddingValues,
     onHelpClick: () -> Unit,
 ) {
-    val viewModel: CompassViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val viewModel: CompassViewModel = metroViewModel(checkNotNull(LocalViewModelStoreOwner.current))
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     CompositionLocalProvider(

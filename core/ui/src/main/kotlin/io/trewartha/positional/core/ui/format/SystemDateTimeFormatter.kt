@@ -1,5 +1,15 @@
 package io.trewartha.positional.core.ui.format
 
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.trewartha.positional.AppScope
+import java.text.SimpleDateFormat
+import java.text.SimpleDateFormat.MEDIUM
+import java.text.SimpleDateFormat.SHORT
+import java.util.Date
+import java.util.Locale
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -8,16 +18,10 @@ import kotlinx.datetime.atDate
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import java.text.SimpleDateFormat
-import java.text.SimpleDateFormat.MEDIUM
-import java.text.SimpleDateFormat.SHORT
-import java.util.Date
-import java.util.Locale
-import javax.inject.Inject
-import kotlin.time.Clock
-import kotlin.time.Instant
 
-internal class SystemDateTimeFormatter @Inject constructor(locale: Locale) : DateTimeFormatter {
+@ContributesBinding(AppScope::class)
+@Inject
+public class SystemDateTimeFormatter(locale: Locale) : DateTimeFormatter {
 
     private val dateFormat = SimpleDateFormat.getDateInstance(MEDIUM)
     private val dateTimeFormat = SimpleDateFormat.getDateTimeInstance(MEDIUM, SHORT)

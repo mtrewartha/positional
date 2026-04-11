@@ -5,10 +5,10 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.core.measurement.degrees
+import java.util.TimeZone
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
-import java.util.TimeZone
 
 class MainSolarTimesRepositoryTest : DescribeSpec({
 

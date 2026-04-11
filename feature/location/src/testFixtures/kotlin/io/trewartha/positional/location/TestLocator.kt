@@ -3,10 +3,10 @@ package io.trewartha.positional.location
 import io.trewartha.positional.core.measurement.GeodeticCoordinates
 import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.measurement.meters
+import kotlin.time.Clock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlin.time.Clock
 
 /**
  * [Locator] implementation for use in testing classes that depend on a [Locator]

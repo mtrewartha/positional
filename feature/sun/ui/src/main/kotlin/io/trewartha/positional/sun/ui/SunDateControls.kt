@@ -31,12 +31,12 @@ import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.core.ui.modifier.placeholder
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Instant
 
 @Composable
 public fun SunDateControls(

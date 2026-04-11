@@ -2,7 +2,10 @@ package io.trewartha.positional.compass.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import io.trewartha.positional.AppScope
 import io.trewartha.positional.compass.Compass
 import io.trewartha.positional.core.measurement.Angle
 import io.trewartha.positional.core.ui.State
@@ -18,10 +21,11 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
-@HiltViewModel
-public class CompassViewModel @Inject constructor(
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(CompassViewModel::class)
+@Inject
+public class CompassViewModel(
     compass: Compass?,
     locator: Locator,
     settings: SettingsRepository
