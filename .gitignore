@@ -15,3 +15,6 @@ app/upload_keystore.properties
 
 # Kover
 **/kover.artifact
+
+# Git worktrees
+.worktrees/
