@@ -6,13 +6,13 @@ import io.trewartha.positional.core.measurement.Distance
 import io.trewartha.positional.core.measurement.Hemisphere
 import io.trewartha.positional.core.measurement.UtmCoordinates
 import io.trewartha.positional.core.measurement.meters
+import java.util.Locale
+import kotlin.math.roundToInt
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import java.util.Locale
-import kotlin.math.roundToInt
 
 @RunWith(RobolectricTestRunner::class)
 class UtmFormatterTest {

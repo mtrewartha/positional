@@ -2,12 +2,17 @@ package io.trewartha.positional.sun.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import io.trewartha.positional.AppScope
 import io.trewartha.positional.core.measurement.Coordinates
 import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.flow.ForViewModel
 import io.trewartha.positional.location.Locator
 import io.trewartha.positional.sun.SolarTimesRepository
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,12 +32,11 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
-import javax.inject.Inject
-import kotlin.time.Clock
-import kotlin.time.Duration.Companion.seconds
 
-@HiltViewModel
-public class SunViewModel @Inject constructor(
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(SunViewModel::class)
+@Inject
+public class SunViewModel(
     private val clock: Clock,
     locator: Locator,
     private val solarTimesRepository: SolarTimesRepository

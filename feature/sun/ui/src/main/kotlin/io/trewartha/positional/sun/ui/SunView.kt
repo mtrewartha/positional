@@ -19,21 +19,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.locals.DefaultDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
-import androidx.compose.runtime.getValue
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
@@ -47,7 +47,7 @@ public fun SunView(
     contentPadding: PaddingValues,
     onHelpClick: () -> Unit,
 ) {
-    val viewModel: SunViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val viewModel: SunViewModel = metroViewModel(checkNotNull(LocalViewModelStoreOwner.current))
     val state by viewModel.state.collectAsStateWithLifecycle()
     SunView(
         state = state,

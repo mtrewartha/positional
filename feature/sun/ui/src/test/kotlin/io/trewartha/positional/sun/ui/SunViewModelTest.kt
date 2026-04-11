@@ -11,6 +11,7 @@ import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.location.Location
 import io.trewartha.positional.location.TestLocator
 import io.trewartha.positional.sun.TestSolarTimesRepository
+import kotlin.time.Clock
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -19,7 +20,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlin.time.Clock
 
 class SunViewModelTest : DescribeSpec({
 

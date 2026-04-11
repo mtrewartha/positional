@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.positional.library.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -10,15 +10,12 @@ android {
 }
 
 dependencies {
-    ksp(libs.google.hilt.compiler)
-
     api(projects.core.ui)
     api(projects.feature.location)
     api(projects.feature.sun)
     api(libs.androidx.compose.runtime)
 
     implementation(projects.core.measurement)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
@@ -26,8 +23,9 @@ dependencies {
     implementation(libs.androidx.compose.uiTooling)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
-    implementation(libs.google.hilt.android)
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
 
     testImplementation(projects.core.test)
     testImplementation(testFixtures(projects.feature.location))

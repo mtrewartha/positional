@@ -11,6 +11,8 @@ import androidx.core.location.LocationManagerCompat.removeUpdates
 import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.core.location.LocationRequestCompat
 import androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY
+import dev.zacsweers.metro.Inject
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
@@ -23,13 +25,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retry
 import timber.log.Timber
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 /**
  * [Locator] implementation powered by the AOSP [LocationManager]
  */
-internal class AospLocator @Inject constructor(
+@Inject
+public class AospLocator(
     private val locationManager: LocationManager,
     private val coroutineContext: CoroutineContext = Dispatchers.Default
 ) : Locator {

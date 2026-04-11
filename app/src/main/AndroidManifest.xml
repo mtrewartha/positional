@@ -4,6 +4,7 @@
 
     <application
         android:name=".PositionalApplication"
+        android:appComponentFactory="dev.zacsweers.metrox.android.MetroAppComponentFactory"
         android:dataExtractionRules="@xml/backup_rules"
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"

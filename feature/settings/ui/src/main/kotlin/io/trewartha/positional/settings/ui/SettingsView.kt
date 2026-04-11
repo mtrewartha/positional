@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -24,6 +25,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import io.trewartha.positional.core.measurement.Units
 import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.R as CoreR
@@ -32,10 +36,6 @@ import io.trewartha.positional.settings.CompassNorthVibration
 import io.trewartha.positional.settings.CoordinatesFormat
 import io.trewartha.positional.settings.LocationAccuracyVisibility
 import io.trewartha.positional.settings.Theme
-import androidx.compose.runtime.getValue
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 
 /**
  * Connected overload that creates its own [SettingsViewModel] and collects all settings state
@@ -47,7 +47,7 @@ public fun SettingsView(
     onLicenseClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
 ) {
-    val viewModel: SettingsViewModel = hiltViewModel(checkNotNull(LocalViewModelStoreOwner.current))
+    val viewModel: SettingsViewModel = metroViewModel(checkNotNull(LocalViewModelStoreOwner.current))
     val compassMode by viewModel.compassMode.collectAsStateWithLifecycle()
     val compassNorthVibration by viewModel.compassNorthVibration.collectAsStateWithLifecycle()
     val coordinatesFormat by viewModel.coordinatesFormat.collectAsStateWithLifecycle()

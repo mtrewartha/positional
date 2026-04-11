@@ -5,6 +5,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import io.trewartha.positional.core.measurement.Angle
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -13,13 +14,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 /**
  * [Compass] implementation powered by the AOSP [SensorManager]
  */
-internal class AospCompass @Inject constructor(
+public class AospCompass(
     private val sensorManager: SensorManager,
     accelerometer: Sensor,
     magnetometer: Sensor,

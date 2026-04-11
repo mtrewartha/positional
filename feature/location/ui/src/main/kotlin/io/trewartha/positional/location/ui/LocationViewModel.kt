@@ -2,7 +2,10 @@ package io.trewartha.positional.location.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import io.trewartha.positional.AppScope
 import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.asStates
 import io.trewartha.positional.core.ui.flow.ForViewModel
@@ -13,10 +16,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
-@HiltViewModel
-public class LocationViewModel @Inject constructor(
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(LocationViewModel::class)
+@Inject
+public class LocationViewModel(
     locator: Locator,
     settings: SettingsRepository
 ) : ViewModel() {

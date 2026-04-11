@@ -2,17 +2,21 @@ package io.trewartha.positional.sun
 
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator
 import com.luckycatlabs.sunrisesunset.dto.Location
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import io.trewartha.positional.AppScope
 import io.trewartha.positional.core.measurement.Coordinates
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalTime
 import java.util.Calendar
 import java.util.TimeZone
-import javax.inject.Inject
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 
 /**
  * [SolarTimesRepository] implementation powered by a library
  */
-internal class MainSolarTimesRepository @Inject constructor() : SolarTimesRepository {
+@ContributesBinding(AppScope::class)
+@Inject
+public class MainSolarTimesRepository() : SolarTimesRepository {
 
     override fun getAstronomicalDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
         createLibraryCalculator(coordinates)

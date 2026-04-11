@@ -1,9 +1,3 @@
-buildscript {
-    dependencies {
-        classpath(libs.javapoet.get()) // https://github.com/google/dagger/issues/3068
-    }
-}
-
 plugins {
     // Specify any plugins here that convention plugins would apply. Convention plugins don't have
     // access to the version catalog like we do here, so it keeps things tidier if they only have

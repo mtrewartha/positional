@@ -1,23 +1,30 @@
 package io.trewartha.positional.settings
 
+import android.app.Application
 import android.content.Context
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import com.google.protobuf.InvalidProtocolBufferException
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import io.trewartha.positional.AppScope
 import io.trewartha.positional.core.measurement.Units
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import java.io.InputStream
 import java.io.OutputStream
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * [SettingsRepository] implementation powered by the AndroidX DataStore library
  */
-internal class DataStoreSettingsRepository @Inject constructor(
-    private val context: Context
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+@Inject
+public class DataStoreSettingsRepository(
+    private val application: Application
 ) : SettingsRepository {
 
     private val Context.settingsDataStore: DataStore<SettingsProto.Settings> by dataStore(
@@ -26,55 +33,55 @@ internal class DataStoreSettingsRepository @Inject constructor(
     )
 
     override val compassMode: Flow<CompassMode> =
-        context.settingsDataStore.data.map { it.compassMode.toData() }
+        application.settingsDataStore.data.map { it.compassMode.toData() }
 
     override val compassNorthVibration: Flow<CompassNorthVibration> =
-        context.settingsDataStore.data.map { it.compassNorthVibration.toData() }
+        application.settingsDataStore.data.map { it.compassNorthVibration.toData() }
 
     override val coordinatesFormat: Flow<CoordinatesFormat> =
-        context.settingsDataStore.data.map { it.coordinatesFormat.toData() }
+        application.settingsDataStore.data.map { it.coordinatesFormat.toData() }
 
     override val locationAccuracyVisibility: Flow<LocationAccuracyVisibility> =
-        context.settingsDataStore.data.map { it.locationAccuracyVisibility.toData() }
+        application.settingsDataStore.data.map { it.locationAccuracyVisibility.toData() }
 
     override val theme: Flow<Theme> =
-        context.settingsDataStore.data.map { it.theme.toData() }
+        application.settingsDataStore.data.map { it.theme.toData() }
 
     override val units: Flow<Units> =
-        context.settingsDataStore.data.map { it.units.toData() }
+        application.settingsDataStore.data.map { it.units.toData() }
 
     override suspend fun setCompassMode(compassMode: CompassMode) {
-        context.settingsDataStore.updateData {
+        application.settingsDataStore.updateData {
             it.toBuilder().setCompassMode(compassMode.toProto()).build()
         }
     }
 
     override suspend fun setCompassNorthVibration(compassNorthVibration: CompassNorthVibration) {
-        context.settingsDataStore.updateData {
+        application.settingsDataStore.updateData {
             it.toBuilder().setCompassNorthVibration(compassNorthVibration.toProto()).build()
         }
     }
 
     override suspend fun setCoordinatesFormat(coordinatesFormat: CoordinatesFormat) {
-        context.settingsDataStore.updateData {
+        application.settingsDataStore.updateData {
             it.toBuilder().setCoordinatesFormat(coordinatesFormat.toProto()).build()
         }
     }
 
     override suspend fun setLocationAccuracyVisibility(visibility: LocationAccuracyVisibility) {
-        context.settingsDataStore.updateData {
+        application.settingsDataStore.updateData {
             it.toBuilder().setLocationAccuracyVisibility(visibility.toProto()).build()
         }
     }
 
     override suspend fun setTheme(theme: Theme) {
-        context.settingsDataStore.updateData {
+        application.settingsDataStore.updateData {
             it.toBuilder().setTheme(theme.toProto()).build()
         }
     }
 
     override suspend fun setUnits(units: Units) {
-        context.settingsDataStore.updateData {
+        application.settingsDataStore.updateData {
             it.toBuilder().setUnits(units.toProto()).build()
         }
     }
