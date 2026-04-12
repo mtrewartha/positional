@@ -43,7 +43,7 @@ sunrise-sunset = "1.2"
 testLogger-plugin = "4.0.0"
 timber = "5.0.1"
 turbine = "1.2.1"
-worldwind = "1.9.9"
+worldwind = "1.10.4"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-tools-gradle" }
