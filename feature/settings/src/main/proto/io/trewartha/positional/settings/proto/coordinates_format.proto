@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-option java_package = "io.trewartha.positional.settings";
-option java_outer_classname = "CoordinatesFormatProto";
+package io.trewartha.positional.settings.proto;
 
 enum CoordinatesFormat {
   COORDINATES_FORMAT_UNSPECIFIED = 0;

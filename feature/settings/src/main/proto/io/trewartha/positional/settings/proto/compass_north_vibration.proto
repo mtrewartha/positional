@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-option java_package = "io.trewartha.positional.settings";
-option java_outer_classname = "CompassNorthVibrationProto";
+package io.trewartha.positional.settings.proto;
 
 enum CompassNorthVibration {
   COMPASS_NORTH_VIBRATION_UNSPECIFIED = 0;

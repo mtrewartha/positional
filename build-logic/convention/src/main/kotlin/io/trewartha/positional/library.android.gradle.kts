@@ -44,6 +44,11 @@ android {
         enable = true
     }
 
+    packaging {
+        resources.excludes += "META-INF/AL2.0"
+        resources.excludes += "META-INF/LGPL2.1"
+    }
+
     testOptions {
         @Suppress("UnstableApiUsage")
         managedDevices {

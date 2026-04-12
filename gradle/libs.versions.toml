@@ -27,7 +27,6 @@ google-firebase-crashlytics-gradle = "3.0.7"
 google-materialComponents = "1.13.0"
 google-playServices-location = "21.3.0"
 google-playServices-testing = "16.2.0"
-google-protobuf-plugin = "0.9.6"
 google-services = "4.4.4"
 junit = "5.12.1"
 kotest = "6.1.11"
@@ -37,12 +36,12 @@ kotlinx-datetime = "0.7.1-0.6.x-compat"
 kotlinx-serialization = "1.10.0"
 markwon = "4.6.2"
 metro = "0.13.2"
-protobuf = "4.33.2"
 robolectric = "4.16.1"
 sunrise-sunset = "1.2"
 testLogger-plugin = "4.0.0"
 timber = "5.0.1"
 turbine = "1.2.1"
+wire = "6.2.0"
 worldwind = "1.10.4"
 
 [plugins]
@@ -50,7 +49,6 @@ android-application = { id = "com.android.application", version.ref = "android-t
 android-library = { id = "com.android.library", version.ref = "android-tools-gradle" }
 autonomous-dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomous-dependencyAnalysis" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "google-firebase-crashlytics-gradle" }
-google-protobuf = { id = "com.google.protobuf", version.ref = "google-protobuf-plugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -59,6 +57,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 positional-library-android = { id = "io.trewartha.positional.library.android" }
 positional-library-jvm = { id = "io.trewartha.positional.library.jvm" }
+wire = { id = "com.squareup.wire", version.ref = "wire" }
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -119,12 +118,10 @@ kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 markwon = { group = "io.noties.markwon", name = "core", version.ref = "markwon" }
 metro-android = { group = "dev.zacsweers.metro", name = "metrox-android", version.ref = "metro" }
 metro-runtime = { group = "dev.zacsweers.metro", name = "metro-runtime", version.ref = "metro" }
-metro-viewmodel = { group = "dev.zacsweers.metro", name = "metrox-viewmodel", version.ref = "metro" }
-metro-viewmodel-compose = { group = "dev.zacsweers.metro", name = "metrox-viewmodel-compose", version.ref = "metro" }
-protobuf-java-lite = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobuf" }
-protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
-protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+metro-viewModel = { group = "dev.zacsweers.metro", name = "metrox-viewmodel", version.ref = "metro" }
+metro-viewModel-compose = { group = "dev.zacsweers.metro", name = "metrox-viewmodel-compose", version.ref = "metro" }
 robolectric-core = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+wire-runtime = { group = "com.squareup.wire", name = "wire-runtime", version.ref = "wire" }
 sunriseSunset = { group = "com.luckycatlabs", name = "SunriseSunsetCalculator", version.ref = "sunrise-sunset" }
 testLogger-plugin = { group = "com.adarshr", name = "gradle-test-logger-plugin", version.ref = "testLogger-plugin" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }

@@ -6,12 +6,19 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import com.google.protobuf.InvalidProtocolBufferException
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.trewartha.positional.AppScope
 import io.trewartha.positional.core.measurement.Units
+import io.trewartha.positional.settings.proto.CompassMode as WireCompassMode
+import io.trewartha.positional.settings.proto.CompassNorthVibration as WireCompassNorthVibration
+import io.trewartha.positional.settings.proto.CoordinatesFormat as WireCoordinatesFormat
+import io.trewartha.positional.settings.proto.LocationAccuracyVisibility as WireLocationAccuracyVisibility
+import io.trewartha.positional.settings.proto.Settings as WireSettings
+import io.trewartha.positional.settings.proto.Theme as WireTheme
+import io.trewartha.positional.settings.proto.Units as WireUnits
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import kotlinx.coroutines.flow.Flow
@@ -27,22 +34,22 @@ public class DataStoreSettingsRepository(
     private val application: Application
 ) : SettingsRepository {
 
-    private val Context.settingsDataStore: DataStore<SettingsProto.Settings> by dataStore(
+    private val Context.settingsDataStore: DataStore<WireSettings> by dataStore(
         fileName = "settings.proto",
         serializer = SettingsSerializer
     )
 
     override val compassMode: Flow<CompassMode> =
-        application.settingsDataStore.data.map { it.compassMode.toData() }
+        application.settingsDataStore.data.map { it.compass_mode.toData() }
 
     override val compassNorthVibration: Flow<CompassNorthVibration> =
-        application.settingsDataStore.data.map { it.compassNorthVibration.toData() }
+        application.settingsDataStore.data.map { it.compass_north_vibration.toData() }
 
     override val coordinatesFormat: Flow<CoordinatesFormat> =
-        application.settingsDataStore.data.map { it.coordinatesFormat.toData() }
+        application.settingsDataStore.data.map { it.coordinates_format.toData() }
 
     override val locationAccuracyVisibility: Flow<LocationAccuracyVisibility> =
-        application.settingsDataStore.data.map { it.locationAccuracyVisibility.toData() }
+        application.settingsDataStore.data.map { it.location_accuracy_visibility.toData() }
 
     override val theme: Flow<Theme> =
         application.settingsDataStore.data.map { it.theme.toData() }
@@ -52,170 +59,146 @@ public class DataStoreSettingsRepository(
 
     override suspend fun setCompassMode(compassMode: CompassMode) {
         application.settingsDataStore.updateData {
-            it.toBuilder().setCompassMode(compassMode.toProto()).build()
+            it.copy(compass_mode = compassMode.toWire())
         }
     }
 
     override suspend fun setCompassNorthVibration(compassNorthVibration: CompassNorthVibration) {
         application.settingsDataStore.updateData {
-            it.toBuilder().setCompassNorthVibration(compassNorthVibration.toProto()).build()
+            it.copy(compass_north_vibration = compassNorthVibration.toWire())
         }
     }
 
     override suspend fun setCoordinatesFormat(coordinatesFormat: CoordinatesFormat) {
         application.settingsDataStore.updateData {
-            it.toBuilder().setCoordinatesFormat(coordinatesFormat.toProto()).build()
+            it.copy(coordinates_format = coordinatesFormat.toWire())
         }
     }
 
     override suspend fun setLocationAccuracyVisibility(visibility: LocationAccuracyVisibility) {
         application.settingsDataStore.updateData {
-            it.toBuilder().setLocationAccuracyVisibility(visibility.toProto()).build()
+            it.copy(location_accuracy_visibility = visibility.toWire())
         }
     }
 
     override suspend fun setTheme(theme: Theme) {
         application.settingsDataStore.updateData {
-            it.toBuilder().setTheme(theme.toProto()).build()
+            it.copy(theme = theme.toWire())
         }
     }
 
     override suspend fun setUnits(units: Units) {
         application.settingsDataStore.updateData {
-            it.toBuilder().setUnits(units.toProto()).build()
+            it.copy(units = units.toWire())
         }
     }
 }
 
-private object SettingsSerializer : Serializer<SettingsProto.Settings> {
+private object SettingsSerializer : Serializer<WireSettings> {
 
-    override val defaultValue: SettingsProto.Settings = SettingsProto.Settings.getDefaultInstance()
+    override val defaultValue: WireSettings = WireSettings()
 
-    override suspend fun readFrom(input: InputStream): SettingsProto.Settings =
+    override suspend fun readFrom(input: InputStream): WireSettings =
         try {
-            SettingsProto.Settings.parseFrom(input)
-        } catch (exception: InvalidProtocolBufferException) {
+            WireSettings.ADAPTER.decode(input)
+        } catch (exception: IOException) {
             throw CorruptionException("Unable to read protobuf", exception)
         }
 
-    override suspend fun writeTo(t: SettingsProto.Settings, output: OutputStream) =
-        t.writeTo(output)
+    override suspend fun writeTo(t: WireSettings, output: OutputStream) =
+        WireSettings.ADAPTER.encode(output, t)
 }
 
-private fun CompassMode.toProto(): CompassModeProto.CompassMode =
+private fun CompassMode.toWire(): WireCompassMode =
     when (this) {
-        CompassMode.MAGNETIC_NORTH -> CompassModeProto.CompassMode.COMPASS_MODE_MAGNETIC_NORTH
-        CompassMode.TRUE_NORTH -> CompassModeProto.CompassMode.COMPASS_MODE_TRUE_NORTH
+        CompassMode.MAGNETIC_NORTH -> WireCompassMode.COMPASS_MODE_MAGNETIC_NORTH
+        CompassMode.TRUE_NORTH -> WireCompassMode.COMPASS_MODE_TRUE_NORTH
     }
 
-private fun CompassModeProto.CompassMode.toData(): CompassMode =
+private fun WireCompassMode.toData(): CompassMode =
     when (this) {
-        CompassModeProto.CompassMode.COMPASS_MODE_TRUE_NORTH,
-        CompassModeProto.CompassMode.COMPASS_MODE_UNSPECIFIED,
-        CompassModeProto.CompassMode.UNRECOGNIZED -> CompassMode.TRUE_NORTH
-        CompassModeProto.CompassMode.COMPASS_MODE_MAGNETIC_NORTH -> CompassMode.MAGNETIC_NORTH
+        WireCompassMode.COMPASS_MODE_TRUE_NORTH,
+        WireCompassMode.COMPASS_MODE_UNSPECIFIED -> CompassMode.TRUE_NORTH
+        WireCompassMode.COMPASS_MODE_MAGNETIC_NORTH -> CompassMode.MAGNETIC_NORTH
     }
 
-private fun CompassNorthVibration.toProto(): CompassNorthVibrationProto.CompassNorthVibration =
+private fun CompassNorthVibration.toWire(): WireCompassNorthVibration =
     when (this) {
-        CompassNorthVibration.NONE ->
-            CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_NONE
-        CompassNorthVibration.SHORT ->
-            CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_SHORT
-        CompassNorthVibration.MEDIUM ->
-            CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_MEDIUM
-        CompassNorthVibration.LONG ->
-            CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_LONG
+        CompassNorthVibration.NONE -> WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_NONE
+        CompassNorthVibration.SHORT -> WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_SHORT
+        CompassNorthVibration.MEDIUM -> WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_MEDIUM
+        CompassNorthVibration.LONG -> WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_LONG
     }
 
-private fun CompassNorthVibrationProto.CompassNorthVibration.toData(): CompassNorthVibration =
+private fun WireCompassNorthVibration.toData(): CompassNorthVibration =
     when (this) {
-        CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_SHORT ->
-            CompassNorthVibration.SHORT
-        CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_MEDIUM,
-        CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_UNSPECIFIED,
-        CompassNorthVibrationProto.CompassNorthVibration.UNRECOGNIZED ->
-            CompassNorthVibration.MEDIUM
-        CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_LONG ->
-            CompassNorthVibration.LONG
-        CompassNorthVibrationProto.CompassNorthVibration.COMPASS_NORTH_VIBRATION_NONE ->
-            CompassNorthVibration.NONE
+        WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_SHORT -> CompassNorthVibration.SHORT
+        WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_MEDIUM,
+        WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_UNSPECIFIED -> CompassNorthVibration.MEDIUM
+        WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_LONG -> CompassNorthVibration.LONG
+        WireCompassNorthVibration.COMPASS_NORTH_VIBRATION_NONE -> CompassNorthVibration.NONE
     }
 
-private fun CoordinatesFormat.toProto(): CoordinatesFormatProto.CoordinatesFormat =
+private fun CoordinatesFormat.toWire(): WireCoordinatesFormat =
     when (this) {
-        CoordinatesFormat.DD ->
-            CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DECIMAL_DEGREES
-        CoordinatesFormat.DDM ->
-            CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DEGREES_DECIMAL_MINUTES
-        CoordinatesFormat.DMS ->
-            CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DEGREES_MINUTES_SECONDS
-        CoordinatesFormat.MGRS ->
-            CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_MGRS
-        CoordinatesFormat.UTM ->
-            CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_UTM
+        CoordinatesFormat.DD -> WireCoordinatesFormat.COORDINATES_FORMAT_DECIMAL_DEGREES
+        CoordinatesFormat.DDM -> WireCoordinatesFormat.COORDINATES_FORMAT_DEGREES_DECIMAL_MINUTES
+        CoordinatesFormat.DMS -> WireCoordinatesFormat.COORDINATES_FORMAT_DEGREES_MINUTES_SECONDS
+        CoordinatesFormat.MGRS -> WireCoordinatesFormat.COORDINATES_FORMAT_MGRS
+        CoordinatesFormat.UTM -> WireCoordinatesFormat.COORDINATES_FORMAT_UTM
     }
 
-private fun CoordinatesFormatProto.CoordinatesFormat.toData(): CoordinatesFormat =
+private fun WireCoordinatesFormat.toData(): CoordinatesFormat =
     when (this) {
-        CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DECIMAL_DEGREES,
-        CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_UNSPECIFIED,
-        CoordinatesFormatProto.CoordinatesFormat.UNRECOGNIZED ->
-            CoordinatesFormat.DD
-        CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DEGREES_DECIMAL_MINUTES ->
-            CoordinatesFormat.DDM
-        CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_DEGREES_MINUTES_SECONDS ->
-            CoordinatesFormat.DMS
-        CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_MGRS ->
-            CoordinatesFormat.MGRS
-        CoordinatesFormatProto.CoordinatesFormat.COORDINATES_FORMAT_UTM ->
-            CoordinatesFormat.UTM
+        WireCoordinatesFormat.COORDINATES_FORMAT_DECIMAL_DEGREES,
+        WireCoordinatesFormat.COORDINATES_FORMAT_UNSPECIFIED -> CoordinatesFormat.DD
+        WireCoordinatesFormat.COORDINATES_FORMAT_DEGREES_DECIMAL_MINUTES -> CoordinatesFormat.DDM
+        WireCoordinatesFormat.COORDINATES_FORMAT_DEGREES_MINUTES_SECONDS -> CoordinatesFormat.DMS
+        WireCoordinatesFormat.COORDINATES_FORMAT_MGRS -> CoordinatesFormat.MGRS
+        WireCoordinatesFormat.COORDINATES_FORMAT_UTM -> CoordinatesFormat.UTM
     }
 
-private fun LocationAccuracyVisibility.toProto(): LocationAccuracyVisibilityProto.LocationAccuracyVisibility =
+private fun LocationAccuracyVisibility.toWire(): WireLocationAccuracyVisibility =
     when (this) {
         LocationAccuracyVisibility.HIDE ->
-            LocationAccuracyVisibilityProto.LocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_HIDE
+            WireLocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_HIDE
         LocationAccuracyVisibility.SHOW ->
-            LocationAccuracyVisibilityProto.LocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_SHOW
+            WireLocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_SHOW
     }
 
-private fun LocationAccuracyVisibilityProto.LocationAccuracyVisibility.toData(): LocationAccuracyVisibility =
+private fun WireLocationAccuracyVisibility.toData(): LocationAccuracyVisibility =
     when (this) {
-        LocationAccuracyVisibilityProto.LocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_HIDE ->
+        WireLocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_HIDE ->
             LocationAccuracyVisibility.HIDE
-        LocationAccuracyVisibilityProto.LocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_SHOW,
-        LocationAccuracyVisibilityProto.LocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_UNSPECIFIED,
-        LocationAccuracyVisibilityProto.LocationAccuracyVisibility.UNRECOGNIZED ->
+        WireLocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_SHOW,
+        WireLocationAccuracyVisibility.LOCATION_ACCURACY_VISIBILITY_UNSPECIFIED ->
             LocationAccuracyVisibility.SHOW
     }
 
-private fun Theme.toProto(): ThemeProto.Theme =
+private fun Theme.toWire(): WireTheme =
     when (this) {
-        Theme.DEVICE -> ThemeProto.Theme.THEME_SYSTEM
-        Theme.LIGHT -> ThemeProto.Theme.THEME_LIGHT
-        Theme.DARK -> ThemeProto.Theme.THEME_DARK
+        Theme.DEVICE -> WireTheme.THEME_SYSTEM
+        Theme.LIGHT -> WireTheme.THEME_LIGHT
+        Theme.DARK -> WireTheme.THEME_DARK
     }
 
-private fun ThemeProto.Theme.toData(): Theme =
+private fun WireTheme.toData(): Theme =
     when (this) {
-        ThemeProto.Theme.THEME_DARK -> Theme.DARK
-        ThemeProto.Theme.THEME_LIGHT -> Theme.LIGHT
-        ThemeProto.Theme.THEME_SYSTEM,
-        ThemeProto.Theme.THEME_UNSPECIFIED,
-        ThemeProto.Theme.UNRECOGNIZED -> Theme.DEVICE
+        WireTheme.THEME_DARK -> Theme.DARK
+        WireTheme.THEME_LIGHT -> Theme.LIGHT
+        WireTheme.THEME_SYSTEM,
+        WireTheme.THEME_UNSPECIFIED -> Theme.DEVICE
     }
 
-private fun Units.toProto(): UnitsProto.Units =
+private fun Units.toWire(): WireUnits =
     when (this) {
-        Units.IMPERIAL -> UnitsProto.Units.UNITS_IMPERIAL
-        Units.METRIC -> UnitsProto.Units.UNITS_METRIC
+        Units.IMPERIAL -> WireUnits.UNITS_IMPERIAL
+        Units.METRIC -> WireUnits.UNITS_METRIC
     }
 
-private fun UnitsProto.Units.toData(): Units =
+private fun WireUnits.toData(): Units =
     when (this) {
-        UnitsProto.Units.UNITS_IMPERIAL,
-        UnitsProto.Units.UNITS_UNSPECIFIED,
-        UnitsProto.Units.UNRECOGNIZED -> Units.IMPERIAL
-        UnitsProto.Units.UNITS_METRIC -> Units.METRIC
+        WireUnits.UNITS_IMPERIAL,
+        WireUnits.UNITS_UNSPECIFIED -> Units.IMPERIAL
+        WireUnits.UNITS_METRIC -> Units.METRIC
     }
