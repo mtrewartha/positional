@@ -53,10 +53,9 @@ android {
     }
 
     compileOptions {
-        // Up to Java 17 APIs are available through desugaring
         // https://developer.android.com/studio/write/java11-minimal-support-table
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
         isCoreLibraryDesugaringEnabled = true
     }
 
@@ -127,7 +126,7 @@ kotlin {
             "-Xjvm-default=all",
             "-Xinline-classes",
         )
-        jvmTarget = JvmTarget.JVM_17
+        jvmTarget = JvmTarget.JVM_21
         optIn.addAll(
             "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
             "com.google.accompanist.permissions.ExperimentalPermissionsApi",

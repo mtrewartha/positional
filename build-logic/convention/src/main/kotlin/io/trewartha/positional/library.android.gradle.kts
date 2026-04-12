@@ -13,10 +13,9 @@ plugins {
 
 android {
     compileOptions {
-        // Up to Java 17 APIs are available through desugaring
         // https://developer.android.com/studio/write/java11-minimal-support-table
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JVM_SOURCE_COMPATIBILITY
+        targetCompatibility = JVM_SOURCE_COMPATIBILITY
         isCoreLibraryDesugaringEnabled = true
     }
 

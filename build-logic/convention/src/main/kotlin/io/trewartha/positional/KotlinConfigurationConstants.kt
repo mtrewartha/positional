@@ -11,6 +11,6 @@ val FREE_COMPILER_ARGS = listOf(
     "-Xjvm-default=all",
 )
 
-val JVM_SOURCE_COMPATIBILITY = JavaVersion.VERSION_17
+val JVM_SOURCE_COMPATIBILITY = JavaVersion.VERSION_21
 
-val JVM_TARGET = JvmTarget.JVM_17
+val JVM_TARGET = JvmTarget.JVM_21
