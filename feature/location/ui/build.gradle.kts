@@ -26,8 +26,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewModel.ktx)
     implementation(libs.kotlinx.serialization.core)
-    implementation(libs.metro.viewmodel)
-    implementation(libs.metro.viewmodel.compose)
+    implementation(libs.metro.viewModel)
+    implementation(libs.metro.viewModel.compose)
     implementation(libs.timber)
 
     testImplementation(testFixtures(projects.core.measurement))

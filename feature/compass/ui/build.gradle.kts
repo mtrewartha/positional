@@ -28,8 +28,8 @@ dependencies {
     implementation(libs.google.materialComponents)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.core)
-    implementation(libs.metro.viewmodel)
-    implementation(libs.metro.viewmodel.compose)
+    implementation(libs.metro.viewModel)
+    implementation(libs.metro.viewModel.compose)
 
     testImplementation(testFixtures(projects.feature.compass))
     testImplementation(testFixtures(projects.feature.location))

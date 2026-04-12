@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package io.trewartha.positional.settings.proto;
+
+import "io/trewartha/positional/settings/proto/compass_mode.proto";
+import "io/trewartha/positional/settings/proto/compass_north_vibration.proto";
+import "io/trewartha/positional/settings/proto/coordinates_format.proto";
+import "io/trewartha/positional/settings/proto/location_accuracy_visibility.proto";
+import "io/trewartha/positional/settings/proto/theme.proto";
+import "io/trewartha/positional/settings/proto/units.proto";
+
+message Settings {
+  CompassMode compass_mode = 1;
+  CompassNorthVibration compass_north_vibration = 6;
+  CoordinatesFormat coordinates_format = 2;
+  LocationAccuracyVisibility location_accuracy_visibility = 3;
+  Theme theme = 4;
+  Units units = 5;
+}

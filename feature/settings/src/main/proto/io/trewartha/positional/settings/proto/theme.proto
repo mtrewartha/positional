@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-option java_package = "io.trewartha.positional.settings";
-option java_outer_classname = "ThemeProto";
+package io.trewartha.positional.settings.proto;
 
 enum Theme {
   THEME_UNSPECIFIED = 0;
