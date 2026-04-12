@@ -36,7 +36,7 @@ import kotlinx.datetime.toLocalDateTime
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey
 @Inject
-public class SunViewModel(
+internal class SunViewModel(
     private val clock: Clock,
     locator: Locator,
     private val solarTimesRepository: SolarTimesRepository

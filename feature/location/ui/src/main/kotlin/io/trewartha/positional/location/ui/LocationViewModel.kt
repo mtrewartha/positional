@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey
 @Inject
-public class LocationViewModel(
+internal class LocationViewModel(
     locator: Locator,
     settings: SettingsRepository
 ) : ViewModel() {

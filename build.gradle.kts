@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.metro) apply false
 
     alias(libs.plugins.autonomous.dependencyAnalysis)
 }
@@ -22,6 +23,14 @@ dependencyAnalysis {
     }
     structure {
         bundle("kotest-assertions-core") { includeGroup("io.kotest") }
+    }
+}
+
+subprojects {
+    pluginManager.withPlugin("dev.zacsweers.metro") {
+        configure<dev.zacsweers.metro.gradle.MetroPluginExtension> {
+            generateContributionProviders.set(true)
+        }
     }
 }
 
