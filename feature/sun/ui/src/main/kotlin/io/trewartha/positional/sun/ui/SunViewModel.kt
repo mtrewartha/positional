@@ -34,7 +34,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(SunViewModel::class)
+@ViewModelKey
 @Inject
 public class SunViewModel(
     private val clock: Clock,
