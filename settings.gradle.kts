@@ -23,7 +23,7 @@ rootProject.name = "positional"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 plugins {
-    id("org.jetbrains.kotlinx.kover.aggregation") version "0.9.7"
+    id("org.jetbrains.kotlinx.kover.aggregation") version "0.9.8"
 }
 
 kover {
