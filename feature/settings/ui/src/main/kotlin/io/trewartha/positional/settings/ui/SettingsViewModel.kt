@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(SettingsViewModel::class)
+@ViewModelKey
 @Inject
 public class SettingsViewModel(
     private val settingsRepository: SettingsRepository

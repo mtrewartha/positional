@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
-    alias(libs.plugins.metro)
+    id("io.trewartha.positional.metro")
 }
 
 private val PROPERTIES_FILE_PATH = "app/upload_keystore.properties"

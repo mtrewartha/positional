@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.positional.library.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.metro)
 }
 
 android {
