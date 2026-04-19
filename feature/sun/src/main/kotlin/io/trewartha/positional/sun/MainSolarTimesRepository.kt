@@ -16,7 +16,7 @@ import kotlinx.datetime.LocalTime
  */
 @ContributesBinding(AppScope::class)
 @Inject
-public class MainSolarTimesRepository() : SolarTimesRepository {
+internal class MainSolarTimesRepository() : SolarTimesRepository {
 
     override fun getAstronomicalDawn(coordinates: Coordinates, date: LocalDate): LocalTime? =
         createLibraryCalculator(coordinates)

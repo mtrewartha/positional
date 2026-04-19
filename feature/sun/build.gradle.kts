@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.positional.library.jvm)
-    alias(libs.plugins.metro)
 }
 
 dependencies {

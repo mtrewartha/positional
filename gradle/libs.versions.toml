@@ -117,6 +117,7 @@ kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime",
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 markwon = { group = "io.noties.markwon", name = "core", version.ref = "markwon" }
 metro-android = { group = "dev.zacsweers.metro", name = "metrox-android", version.ref = "metro" }
+metro-gradle = { group = "dev.zacsweers.metro", name = "gradle-plugin", version.ref = "metro" }
 metro-runtime = { group = "dev.zacsweers.metro", name = "metro-runtime", version.ref = "metro" }
 metro-viewModel = { group = "dev.zacsweers.metro", name = "metrox-viewmodel", version.ref = "metro" }
 metro-viewModel-compose = { group = "dev.zacsweers.metro", name = "metrox-viewmodel-compose", version.ref = "metro" }

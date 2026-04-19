@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.map
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 @Inject
-public class DataStoreSettingsRepository(
+internal class DataStoreSettingsRepository(
     private val application: Application
 ) : SettingsRepository {
 

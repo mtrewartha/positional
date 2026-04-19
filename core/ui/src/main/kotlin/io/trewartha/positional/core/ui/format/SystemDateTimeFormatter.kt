@@ -21,7 +21,7 @@ import kotlinx.datetime.toLocalDateTime
 
 @ContributesBinding(AppScope::class)
 @Inject
-public class SystemDateTimeFormatter(locale: Locale) : DateTimeFormatter {
+internal class SystemDateTimeFormatter(locale: Locale) : DateTimeFormatter {
 
     private val dateFormat = SimpleDateFormat.getDateInstance(MEDIUM)
     private val dateTimeFormat = SimpleDateFormat.getDateTimeInstance(MEDIUM, SHORT)

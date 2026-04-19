@@ -33,7 +33,7 @@ import kotlin.coroutines.CoroutineContext
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 @Inject
-public class GmsLocator(
+internal class GmsLocator(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val fallbackAospLocator: AospLocator,
     private val coroutineContext: CoroutineContext = Dispatchers.Default

@@ -32,19 +32,23 @@ Anvil-style aggregation and a single `AppScope`.
 
   // For simple interface-to-implementation bindings, use @ContributesBinding on the class:
   @ContributesBinding(AppScope::class)
-  public class MainFooRepository @Inject constructor() : FooRepository {
+  @Inject
+  internal class MainFooRepository() : FooRepository {
       // ...
   }
   ```
-- **Public Visibility for Contributed Types**: All `@ContributesTo` interfaces,
-  `@ContributesBinding` classes, and types they expose must be `public`. Metro's cross-module
-  aggregation cannot access `internal` declarations from other modules.
+- **Visibility for Contributed Types**: `@ContributesTo` interfaces must be `public` since Metro's
+  aggregation requires cross-module access. `@ContributesBinding` and `@ContributesIntoMap` classes
+  should be `internal` — the `generateContributionProviders` feature generates public `@Provides`
+  declarations that expose only the bound type, so the implementation class stays encapsulated.
+  Only keep a contributed class `public` if it is directly referenced from another module (e.g. a
+  ViewModel used cross-module in a Composable).
 - **ViewModel Integration**: ViewModels use `@ContributesIntoMap` with `@ViewModelKey`:
   ```kotlin
   @ContributesIntoMap(AppScope::class)
-  @ViewModelKey(FooViewModel::class)
+  @ViewModelKey
   @Inject
-  public class FooViewModel(
+  internal class FooViewModel(
       fooRepository: FooRepository
   ) : ViewModel()
   ```

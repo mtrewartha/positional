@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.positional.library.android)
-    alias(libs.plugins.metro)
 }
 
 android {

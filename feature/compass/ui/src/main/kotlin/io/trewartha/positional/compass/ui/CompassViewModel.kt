@@ -23,9 +23,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(CompassViewModel::class)
+@ViewModelKey
 @Inject
-public class CompassViewModel(
+internal class CompassViewModel(
     compass: Compass?,
     locator: Locator,
     settings: SettingsRepository
