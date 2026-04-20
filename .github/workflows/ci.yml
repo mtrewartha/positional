@@ -1,12 +1,12 @@
-name: Tests
+name: CI
 on:
   pull_request:
   push:
     branches:
       - 'main'
 jobs:
-  unit_tests:
-    name: 'Unit tests'
+  checks:
+    name: 'Checks'
     runs-on: ubuntu-latest
     steps:
       - name: 'Check out the repository'
@@ -26,11 +26,11 @@ jobs:
         with:
           log-accepted-android-sdk-licenses: false
 
-      - name: 'Run unit tests'
+      - name: 'Run checks w/ test coverage reports'
         run: >-
-          ./gradlew test koverXmlReport
+          ./gradlew check koverXmlReport
 
-      - name: 'Upload coverage report to Codecov'
+      - name: 'Upload test coverage reports to Codecov'
         uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
