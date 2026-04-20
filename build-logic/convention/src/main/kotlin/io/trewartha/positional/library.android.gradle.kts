@@ -6,7 +6,6 @@ val libs = the<LibrariesForLibs>()
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
     id("io.trewartha.positional.dependencyAnalysis")
     id("io.trewartha.positional.metro")
     id("io.trewartha.positional.testLogger")
@@ -108,6 +107,7 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll(FREE_COMPILER_ARGS)
         jvmTarget = JVM_TARGET
+        optIn.addAll(GLOBAL_OPT_INS)
     }
     explicitApi = EXPLICIT_API_MODE
 }

@@ -21,6 +21,7 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll(FREE_COMPILER_ARGS)
         jvmTarget = JVM_TARGET
+        optIn.addAll(GLOBAL_OPT_INS)
     }
     explicitApi = EXPLICIT_API_MODE
 }

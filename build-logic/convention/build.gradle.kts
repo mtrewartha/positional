@@ -16,6 +16,7 @@ tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_21
         freeCompilerArgs.add("-Xcontext-parameters")
+        optIn.add("dev.zacsweers.metro.gradle.ExperimentalMetroGradleApi")
     }
 }
 
