@@ -2,7 +2,7 @@
 accompanist = "0.37.3"
 android-tools-common = "36.1.0"
 android-tools-desugarJdkLibs = "2.1.5"
-android-tools-gradle = "8.13.2"
+android-tools-gradle = "9.1.1"
 androidx-activity = "1.11.0"
 androidx-activity-compose = "1.11.0"
 androidx-appcompat = "1.7.1"
@@ -50,7 +50,6 @@ android-library = { id = "com.android.library", version.ref = "android-tools-gra
 autonomous-dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomous-dependencyAnalysis" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "google-firebase-crashlytics-gradle" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

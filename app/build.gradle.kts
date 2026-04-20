@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
@@ -123,13 +122,13 @@ dependencies {
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll(
-            "-Xjvm-default=all",
-            "-Xinline-classes",
+            "-jvm-default=no-compatibility",
         )
         jvmTarget = JvmTarget.JVM_21
         optIn.addAll(
             "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
             "com.google.accompanist.permissions.ExperimentalPermissionsApi",
+            "kotlin.ExperimentalStdlibApi",
             "kotlin.time.ExperimentalTime",
         )
     }

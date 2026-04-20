@@ -1,6 +1,8 @@
 package io.trewartha.positional.core.ui
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
 public val md_theme_light_primary: Color = Color(0xFF005AC1)
@@ -75,7 +77,7 @@ public val md_theme_dark_sunset: Color = Color(0x4DFFDBA6)
 
 public val seed: Color = Color(0xFF4285F4)
 
-public val lightColorScheme: ColorScheme = ColorScheme(
+public val lightColorScheme: ColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -107,7 +109,7 @@ public val lightColorScheme: ColorScheme = ColorScheme(
     scrim = md_theme_light_scrim
 )
 
-public val darkColorScheme: ColorScheme = ColorScheme(
+public val darkColorScheme: ColorScheme = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,
