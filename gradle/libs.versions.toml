@@ -38,7 +38,6 @@ markwon = "4.6.2"
 metro = "0.13.2"
 robolectric = "4.16.1"
 sunrise-sunset = "1.2"
-testLogger-plugin = "4.0.0"
 timber = "5.0.1"
 turbine = "1.2.1"
 wire = "6.2.0"
@@ -123,7 +122,6 @@ metro-viewModel-compose = { group = "dev.zacsweers.metro", name = "metrox-viewmo
 robolectric-core = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 wire-runtime = { group = "com.squareup.wire", name = "wire-runtime", version.ref = "wire" }
 sunriseSunset = { group = "com.luckycatlabs", name = "SunriseSunsetCalculator", version.ref = "sunrise-sunset" }
-testLogger-plugin = { group = "com.adarshr", name = "gradle-test-logger-plugin", version.ref = "testLogger-plugin" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 worldwind = { group = "earth.worldwind", name = "worldwind", version.ref = "worldwind" }

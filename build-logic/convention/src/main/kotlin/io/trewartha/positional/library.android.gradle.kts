@@ -8,7 +8,6 @@ plugins {
     id("com.android.library")
     id("io.trewartha.positional.dependencyAnalysis")
     id("io.trewartha.positional.metro")
-    id("io.trewartha.positional.testLogger")
 }
 
 android {

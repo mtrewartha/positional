@@ -25,7 +25,6 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     implementation(libs.metro.gradle)
     implementation(libs.autonomous.dependencyAnalysis)
-    implementation(libs.testLogger.plugin)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
