@@ -4,6 +4,9 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
+import io.kotest.property.Exhaustive
+import io.kotest.property.checkAll
+import io.kotest.property.exhaustive.collection
 import io.trewartha.positional.core.test.FakeClock
 import java.util.Locale
 import kotlin.time.Clock
@@ -38,21 +41,21 @@ class SystemDateTimeFormatterTest : DescribeSpec({
     }
 
     describe("formatting the full day of the week") {
-        context("for a Monday") {
-            it("returns 'Monday'") {
-                sut().formatFullDayOfWeek(LocalDate(2024, 1, 15)).shouldBe("Monday")
-            }
-        }
-
-        context("for a Wednesday") {
-            it("returns 'Wednesday'") {
-                sut().formatFullDayOfWeek(LocalDate(2024, 1, 17)).shouldBe("Wednesday")
-            }
-        }
-
-        context("for a Sunday") {
-            it("returns 'Sunday'") {
-                sut().formatFullDayOfWeek(LocalDate(2024, 1, 21)).shouldBe("Sunday")
+        it("returns the full English name of the day") {
+            checkAll(
+                Exhaustive.collection(
+                    listOf(
+                        LocalDate(2024, 1, 15) to "Monday",
+                        LocalDate(2024, 1, 16) to "Tuesday",
+                        LocalDate(2024, 1, 17) to "Wednesday",
+                        LocalDate(2024, 1, 18) to "Thursday",
+                        LocalDate(2024, 1, 19) to "Friday",
+                        LocalDate(2024, 1, 20) to "Saturday",
+                        LocalDate(2024, 1, 21) to "Sunday",
+                    )
+                )
+            ) { (date, expectedDayName) ->
+                sut().formatFullDayOfWeek(date).shouldBe(expectedDayName)
             }
         }
     }
