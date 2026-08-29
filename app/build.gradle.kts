@@ -132,6 +132,7 @@ kotlin {
             "kotlin.time.ExperimentalTime",
         )
     }
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 }
 
 // https://github.com/gradle/gradle/issues/33619
