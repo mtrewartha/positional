@@ -12,7 +12,6 @@ import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.core.location.LocationRequestCompat
 import androidx.core.location.LocationRequestCompat.QUALITY_HIGH_ACCURACY
 import dev.zacsweers.metro.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
@@ -25,6 +24,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retry
 import timber.log.Timber
+import kotlin.coroutines.ContinuationInterceptor
+import kotlin.coroutines.CoroutineContext
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * [Locator] implementation powered by the AOSP [LocationManager]
@@ -36,14 +38,13 @@ public class AospLocator(
 ) : Locator {
 
     override val location: Flow<Location>
-        @SuppressLint("MissingPermission")
-        get() = callbackFlow {
+        @SuppressLint("MissingPermission") get() = callbackFlow {
             val provider = if (SDK_INT >= S) FUSED_PROVIDER else GPS_PROVIDER
             val request = LocationRequestCompat.Builder(LOCATION_UPDATE_INTERVAL_MS)
                 .setMinUpdateIntervalMillis(LOCATION_UPDATE_INTERVAL_MS)
                 .setQuality(QUALITY_HIGH_ACCURACY).build()
-            val callbackExecutor =
-                (this.coroutineContext[CoroutineDispatcher] ?: Dispatchers.Default).asExecutor()
+            val dispatcher = coroutineContext[ContinuationInterceptor] as? CoroutineDispatcher
+            val callbackExecutor = (dispatcher ?: Dispatchers.Default).asExecutor()
             val callback = LocationListenerCompat { androidLocation ->
                 try {
                     val result = trySend(androidLocation.toLocation())
@@ -75,7 +76,7 @@ public class AospLocator(
             Timber.d("Location update received")
         }.retry { cause ->
             if (cause is SecurityException) {
-                delay(PERMISSION_RETRY_INTERVAL_MS)
+                delay(PERMISSION_RETRY_INTERVAL_MS.milliseconds)
                 true
             } else {
                 Timber.w(cause, "Unable to request location updates")
