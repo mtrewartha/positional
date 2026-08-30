@@ -8,6 +8,10 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import io.trewartha.positional.AppScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
@@ -20,10 +24,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
-import io.trewartha.positional.AppScope
+import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -59,8 +60,8 @@ internal class GmsLocator(
             .setMinUpdateIntervalMillis(LOCATION_UPDATE_INTERVAL_MS)
             .setPriority(PRIORITY_HIGH_ACCURACY)
             .build()
-        val executor =
-            (this.coroutineContext[CoroutineDispatcher] ?: Dispatchers.Default).asExecutor()
+        val dispatcher = coroutineContext[ContinuationInterceptor] as? CoroutineDispatcher
+        val executor = (dispatcher ?: Dispatchers.Default).asExecutor()
         val callback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 try {

@@ -23,6 +23,7 @@ kotlin {
         optIn.addAll(GLOBAL_OPT_INS)
     }
     explicitApi = EXPLICIT_API_MODE
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 }
 
 dependencies {

@@ -10,6 +10,9 @@ group = "io.trewartha.positional.buildlogic"
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt())
+    }
 }
 
 tasks.withType<KotlinJvmCompile>().configureEach {
