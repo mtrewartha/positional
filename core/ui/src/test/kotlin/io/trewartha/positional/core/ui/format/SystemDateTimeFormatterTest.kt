@@ -2,8 +2,6 @@ package io.trewartha.positional.core.ui.format
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldNotContain
 import io.kotest.property.Exhaustive
 import io.kotest.property.checkAll
 import io.kotest.property.exhaustive.collection
@@ -31,12 +29,36 @@ class SystemDateTimeFormatterTest : DescribeSpec({
         it("returns the date in medium format") {
             sut().formatDate(LocalDate(2024, 1, 15)).shouldBe("Jan 15, 2024")
         }
+
+        it("returns the same calendar date regardless of the time zone") {
+            checkAll(Exhaustive.collection(timeZones)) { timeZone ->
+                sut(timeZone = timeZone).formatDate(LocalDate(2024, 1, 15))
+                    .shouldBe("Jan 15, 2024")
+            }
+        }
+
+        it("follows the locale") {
+            sut(locale = Locale.GERMANY).formatDate(LocalDate(2024, 1, 15))
+                .shouldBe("15.01.2024")
+        }
     }
 
     describe("formatting a date and time") {
         it("returns the date and time in medium date and short time format") {
             sut().formatDateTime(LocalDateTime(2024, 1, 15, 11, 22, 0))
                 .shouldBe("Jan 15, 2024, 11:22${NNBSP}AM")
+        }
+
+        it("returns the same wall-clock date and time regardless of the time zone") {
+            checkAll(Exhaustive.collection(timeZones)) { timeZone ->
+                sut(timeZone = timeZone).formatDateTime(LocalDateTime(2024, 1, 15, 23, 59, 0))
+                    .shouldBe("Jan 15, 2024, 11:59${NNBSP}PM")
+            }
+        }
+
+        it("follows the locale") {
+            sut(locale = Locale.GERMANY).formatDateTime(LocalDateTime(2024, 1, 15, 11, 22, 0))
+                .shouldBe("15.01.2024, 11:22")
         }
     }
 
@@ -58,21 +80,78 @@ class SystemDateTimeFormatterTest : DescribeSpec({
                 sut().formatFullDayOfWeek(date).shouldBe(expectedDayName)
             }
         }
+
+        it("returns the same day regardless of the time zone") {
+            checkAll(Exhaustive.collection(timeZones)) { timeZone ->
+                sut(timeZone = timeZone).formatFullDayOfWeek(LocalDate(2024, 1, 15))
+                    .shouldBe("Monday")
+            }
+        }
+
+        it("follows the locale") {
+            sut(locale = Locale.GERMANY).formatFullDayOfWeek(LocalDate(2024, 1, 15))
+                .shouldBe("Montag")
+        }
     }
 
     describe("formatting a time") {
         context("when seconds are not requested") {
             it("omits seconds from the result") {
                 sut().formatTime(LocalTime(11, 22, 33), includeSeconds = false)
-                    .shouldNotContain(":33")
+                    .shouldBe("11:22${NNBSP}AM")
+            }
+
+            it("omits seconds by default") {
+                sut().formatTime(LocalTime(11, 22, 33)).shouldBe("11:22${NNBSP}AM")
             }
         }
 
         context("when seconds are requested") {
             it("includes seconds in the result") {
                 sut().formatTime(LocalTime(11, 22, 33), includeSeconds = true)
-                    .shouldContain(":33")
+                    .shouldBe("11:22:33${NNBSP}AM")
             }
+        }
+
+        it("formats midnight as 12 AM") {
+            sut().formatTime(LocalTime(0, 0, 0)).shouldBe("12:00${NNBSP}AM")
+        }
+
+        it("formats noon as 12 PM") {
+            sut().formatTime(LocalTime(12, 0, 0)).shouldBe("12:00${NNBSP}PM")
+        }
+
+        it("formats the last minute of the day as 11:59 PM") {
+            sut().formatTime(LocalTime(23, 59, 59), includeSeconds = true)
+                .shouldBe("11:59:59${NNBSP}PM")
+        }
+
+        it("returns the same wall-clock time regardless of the time zone") {
+            checkAll(Exhaustive.collection(timeZones)) { timeZone ->
+                sut(timeZone = timeZone).formatTime(LocalTime(11, 22, 33), includeSeconds = true)
+                    .shouldBe("11:22:33${NNBSP}AM")
+            }
+        }
+
+        it("returns the same wall-clock time regardless of the clock's current date") {
+            val daylightSavingsTransition = Instant.parse("2024-03-10T12:00:00Z")
+            sut(
+                clock = FakeClock(daylightSavingsTransition),
+                timeZone = TimeZone.of("America/New_York"),
+            ).formatTime(LocalTime(11, 22, 33)).shouldBe("11:22${NNBSP}AM")
+        }
+
+        it("follows the locale") {
+            sut(locale = Locale.GERMANY).formatTime(LocalTime(15, 22, 33), includeSeconds = true)
+                .shouldBe("15:22:33")
         }
     }
 })
+
+private val timeZones = listOf(
+    TimeZone.UTC,
+    TimeZone.of("Asia/Tokyo"),
+    TimeZone.of("America/Los_Angeles"),
+    TimeZone.of("Pacific/Kiritimati"),
+    TimeZone.of("Pacific/Pago_Pago"),
+)
