@@ -48,6 +48,7 @@ import io.trewartha.positional.core.ui.components.AutoShrinkingText
 import io.trewartha.positional.core.ui.components.IconToggleButton
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalLocale
+import io.trewartha.positional.core.ui.locals.PreviewDateTimeFormatter
 import io.trewartha.positional.core.ui.modifier.placeholder
 import io.trewartha.positional.location.Location
 import io.trewartha.positional.location.ui.format.DecimalDegreesFormatter
@@ -335,7 +336,8 @@ private fun LoadingPreview() {
             val context = LocalContext.current
             val locale = LocalLocale.current
             CompositionLocalProvider(
-                LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
+                LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale),
+                LocalDateTimeFormatter provides PreviewDateTimeFormatter,
             ) {
                 LocationPermissionGrantedContent(
                     locationState = State.Loading,
@@ -362,7 +364,8 @@ private fun DataPreview() {
             val context = LocalContext.current
             val locale = LocalLocale.current
             CompositionLocalProvider(
-                LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
+                LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale),
+                LocalDateTimeFormatter provides PreviewDateTimeFormatter,
             ) {
                 LocationPermissionGrantedContent(
                     locationState = State.Loaded(

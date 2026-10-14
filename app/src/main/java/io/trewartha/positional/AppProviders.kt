@@ -9,6 +9,7 @@ import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Clock
 import kotlinx.coroutines.Dispatchers
+import kotlinx.datetime.TimeZone
 
 @ContributesTo(AppScope::class)
 public interface AppProviders {
@@ -21,6 +22,9 @@ public interface AppProviders {
 
     @Provides
     fun locale(): Locale = checkNotNull(LocaleListCompat.getDefault()[0])
+
+    @Provides
+    fun timeZone(): TimeZone = TimeZone.currentSystemDefault()
 
     @Provides
     fun windowManager(application: Application): WindowManager =
