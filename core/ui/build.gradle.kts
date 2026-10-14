@@ -24,7 +24,6 @@ dependencies {
     implementation(libs.markwon)
 
     testImplementation(projects.core.test)
-    testImplementation(libs.kotest.property)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }
