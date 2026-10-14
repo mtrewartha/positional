@@ -1,12 +1,12 @@
 package io.trewartha.positional.core.ui.format
 
-import androidx.core.os.LocaleListCompat
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.trewartha.positional.AppScope
+import java.text.DateFormat
+import java.text.DateFormat.MEDIUM
+import java.text.DateFormat.SHORT
 import java.text.SimpleDateFormat
-import java.text.SimpleDateFormat.MEDIUM
-import java.text.SimpleDateFormat.SHORT
 import java.util.Date
 import java.util.Locale
 import kotlin.time.Clock
@@ -21,52 +21,48 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaZoneId
 import kotlinx.datetime.toLocalDateTime
 
+/**
+ * Formats dates and times using the locale and time zone that are current at the time of each call.
+ *
+ * A new [DateFormat] is created for every call because [DateFormat] instances are not thread-safe
+ * and the locale and time zone may change while the process is alive.
+ */
 @ContributesBinding(AppScope::class)
 @Inject
 internal class SystemDateTimeFormatter(
-    private val clock: Clock = Clock.System,
-    locale: Locale = checkNotNull(LocaleListCompat.getDefault()[0]),
-    private val timeZone: TimeZone = TimeZone.currentSystemDefault(),
+    private val clock: Clock,
+    private val localeProvider: () -> Locale,
+    private val timeZoneProvider: () -> TimeZone,
 ) : DateTimeFormatter {
 
-    private val javaTimeZone = java.util.TimeZone.getTimeZone(timeZone.toJavaZoneId())
-    private val dateFormat = SimpleDateFormat.getDateInstance(MEDIUM, locale)
-        .also { it.timeZone = javaTimeZone }
-    private val dateTimeFormat = SimpleDateFormat.getDateTimeInstance(MEDIUM, SHORT, locale)
-        .also { it.timeZone = javaTimeZone }
-    private val fullDayOfWeekFormat = SimpleDateFormat("EEEE", locale)
-        .also { it.timeZone = javaTimeZone }
-    private val timeFormat = SimpleDateFormat.getTimeInstance(SHORT, locale)
-        .also { it.timeZone = javaTimeZone }
-    private val timeFormatWithSeconds = SimpleDateFormat.getTimeInstance(MEDIUM, locale)
-        .also { it.timeZone = javaTimeZone }
-
-    override fun formatDate(localDate: LocalDate): String =
-        dateFormat.format(localDate.toJavaDate())
-
-    override fun formatDateTime(localDateTime: LocalDateTime): String =
-        dateTimeFormat.format(localDateTime.toJavaDate())
-
-    override fun formatFullDayOfWeek(localDate: LocalDate): String =
-        fullDayOfWeekFormat.format(localDate.toJavaDate())
-
-    override fun formatTime(localTime: LocalTime, includeSeconds: Boolean): String {
-        val today = clock.now().toLocalDateTime(timeZone).date
-        val javaDate = localTime.atDate(today).toInstant(timeZone).toJavaDate()
-        return if (includeSeconds) {
-            timeFormatWithSeconds.format(javaDate)
-        } else {
-            timeFormat.format(javaDate)
-        }
+    override fun formatDate(localDate: LocalDate): String {
+        val timeZone = timeZoneProvider()
+        return DateFormat.getDateInstance(MEDIUM, localeProvider())
+            .formatIn(timeZone, localDate.atTime(0, 0).toInstant(timeZone))
     }
 
-    private fun LocalDate.toInstant(): Instant =
-        atTime(0, 0).toInstant(timeZone)
+    override fun formatDateTime(localDateTime: LocalDateTime): String {
+        val timeZone = timeZoneProvider()
+        return DateFormat.getDateTimeInstance(MEDIUM, SHORT, localeProvider())
+            .formatIn(timeZone, localDateTime.toInstant(timeZone))
+    }
 
-    private fun LocalDate.toJavaDate(): Date = toInstant().toJavaDate()
+    override fun formatFullDayOfWeek(localDate: LocalDate): String {
+        val timeZone = timeZoneProvider()
+        return SimpleDateFormat("EEEE", localeProvider())
+            .formatIn(timeZone, localDate.atTime(0, 0).toInstant(timeZone))
+    }
 
-    private fun LocalDateTime.toJavaDate(): Date =
-        toInstant(timeZone).toJavaDate()
+    override fun formatTime(localTime: LocalTime, includeSeconds: Boolean): String {
+        val timeZone = timeZoneProvider()
+        val today = clock.now().toLocalDateTime(timeZone).date
+        val style = if (includeSeconds) MEDIUM else SHORT
+        return DateFormat.getTimeInstance(style, localeProvider())
+            .formatIn(timeZone, localTime.atDate(today).toInstant(timeZone))
+    }
 
-    private fun Instant.toJavaDate(): Date = Date(toEpochMilliseconds())
+    private fun DateFormat.formatIn(timeZone: TimeZone, instant: Instant): String {
+        this.timeZone = java.util.TimeZone.getTimeZone(timeZone.toJavaZoneId())
+        return format(Date(instant.toEpochMilliseconds()))
+    }
 }

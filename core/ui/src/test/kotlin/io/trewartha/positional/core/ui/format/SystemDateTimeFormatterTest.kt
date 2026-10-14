@@ -15,7 +15,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 
 // Java 21 CLDR data uses U+202F (narrow no-break space) before AM/PM indicators in en-US locale
-private const val NNBSP = ' '
+private const val NNBSP = '\u202F'
 
 class SystemDateTimeFormatterTest : DescribeSpec({
 
@@ -23,7 +23,7 @@ class SystemDateTimeFormatterTest : DescribeSpec({
         clock: Clock = FakeClock(Instant.fromEpochMilliseconds(0)),
         locale: Locale = Locale.US,
         timeZone: TimeZone = TimeZone.UTC,
-    ): SystemDateTimeFormatter = SystemDateTimeFormatter(clock, locale, timeZone)
+    ): SystemDateTimeFormatter = SystemDateTimeFormatter(clock, { locale }, { timeZone })
 
     describe("formatting a date") {
         it("returns the date in medium format") {
@@ -133,12 +133,47 @@ class SystemDateTimeFormatterTest : DescribeSpec({
             }
         }
 
-        it("returns the same wall-clock time regardless of the clock's current date") {
-            val daylightSavingsTransition = Instant.parse("2024-03-10T12:00:00Z")
-            sut(
-                clock = FakeClock(daylightSavingsTransition),
-                timeZone = TimeZone.of("America/New_York"),
-            ).formatTime(LocalTime(11, 22, 33)).shouldBe("11:22${NNBSP}AM")
+        context("when the clock's date is a daylight saving transition") {
+            val newYork = TimeZone.of("America/New_York")
+
+            it("returns the same wall-clock time on the spring-forward date") {
+                sut(clock = FakeClock(Instant.parse("2024-03-10T12:00:00Z")), timeZone = newYork)
+                    .formatTime(LocalTime(11, 22, 33)).shouldBe("11:22${NNBSP}AM")
+            }
+
+            it("shifts a wall-clock time inside the spring-forward gap") {
+                sut(clock = FakeClock(Instant.parse("2024-03-10T12:00:00Z")), timeZone = newYork)
+                    .formatTime(LocalTime(2, 30, 0)).shouldBe("3:30${NNBSP}AM")
+            }
+
+            it("returns the same wall-clock time inside the fall-back overlap") {
+                sut(clock = FakeClock(Instant.parse("2024-11-03T12:00:00Z")), timeZone = newYork)
+                    .formatTime(LocalTime(1, 30, 0)).shouldBe("1:30${NNBSP}AM")
+            }
+        }
+
+        it("follows changes to the time zone") {
+            var timeZone: TimeZone = TimeZone.UTC
+            val clock = FakeClock(Instant.parse("2024-01-15T23:30:00Z"))
+            val subject = SystemDateTimeFormatter(clock, { Locale.US }, { timeZone })
+
+            timeZone = TimeZone.of("Asia/Tokyo")
+
+            subject.formatDate(LocalDate(2024, 1, 15)).shouldBe("Jan 15, 2024")
+            subject.formatTime(LocalTime(0, 30, 0)).shouldBe("12:30${NNBSP}AM")
+        }
+
+        it("follows changes to the locale") {
+            var locale = Locale.US
+            val subject = SystemDateTimeFormatter(
+                FakeClock(Instant.fromEpochMilliseconds(0)),
+                { locale },
+                { TimeZone.UTC },
+            )
+
+            locale = Locale.GERMANY
+
+            subject.formatTime(LocalTime(15, 22, 33), includeSeconds = true).shouldBe("15:22:33")
         }
 
         it("follows the locale") {
