@@ -54,6 +54,7 @@ import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.format.DateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalLocale
+import io.trewartha.positional.core.ui.locals.PreviewDateTimeFormatter
 import io.trewartha.positional.location.Location
 import io.trewartha.positional.location.ui.format.CoordinatesFormatter
 import io.trewartha.positional.location.ui.format.DecimalDegreesFormatter
@@ -227,7 +228,8 @@ private fun LoadingPreview() {
         val context = LocalContext.current
         val locale = LocalLocale.current
         CompositionLocalProvider(
-            LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
+            LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale),
+            LocalDateTimeFormatter provides PreviewDateTimeFormatter,
         ) {
             Surface {
                 LocationView(
@@ -253,7 +255,8 @@ private fun LoadedPreview() {
         val context = LocalContext.current
         val locale = LocalLocale.current
         CompositionLocalProvider(
-            LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale)
+            LocalCoordinatesFormatter provides DecimalDegreesFormatter(context, locale),
+            LocalDateTimeFormatter provides PreviewDateTimeFormatter,
         ) {
             Surface {
                 LocationView(

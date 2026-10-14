@@ -3,9 +3,10 @@ package io.trewartha.positional.core.ui.format
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.trewartha.positional.AppScope
+import java.text.DateFormat
+import java.text.DateFormat.MEDIUM
+import java.text.DateFormat.SHORT
 import java.text.SimpleDateFormat
-import java.text.SimpleDateFormat.MEDIUM
-import java.text.SimpleDateFormat.SHORT
 import java.util.Date
 import java.util.Locale
 import kotlin.time.Clock
@@ -17,45 +18,48 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atDate
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
+import kotlinx.datetime.toJavaZoneId
 import kotlinx.datetime.toLocalDateTime
 
+/**
+ * A [DateTimeFormatter] that formats dates and times for the device's current locale and time zone.
+ */
 @ContributesBinding(AppScope::class)
 @Inject
-internal class SystemDateTimeFormatter(locale: Locale) : DateTimeFormatter {
+internal class SystemDateTimeFormatter(
+    private val clock: Clock,
+    private val localeProvider: () -> Locale,
+    private val timeZoneProvider: () -> TimeZone,
+) : DateTimeFormatter {
 
-    private val dateFormat = SimpleDateFormat.getDateInstance(MEDIUM)
-    private val dateTimeFormat = SimpleDateFormat.getDateTimeInstance(MEDIUM, SHORT)
-    private val fullDayOfWeekFormat = SimpleDateFormat("EEEE", locale)
-    private val timeFormat = SimpleDateFormat.getTimeInstance(SHORT)
-    private val timeFormatWithSeconds = SimpleDateFormat.getTimeInstance(MEDIUM)
-
-    override fun formatDate(localDate: LocalDate): String =
-        dateFormat.format(localDate.toJavaDate())
-
-    override fun formatDateTime(localDateTime: LocalDateTime): String =
-        dateTimeFormat.format(localDateTime.toJavaDate())
-
-    override fun formatFullDayOfWeek(localDate: LocalDate): String =
-        fullDayOfWeekFormat.format(localDate.toJavaDate())
-
-    override fun formatTime(localTime: LocalTime, includeSeconds: Boolean): String {
-        val timeZone = TimeZone.currentSystemDefault()
-        val today = Clock.System.now().toLocalDateTime(timeZone).date
-        val javaDate = localTime.atDate(today).toInstant(timeZone).toJavaDate()
-        return if (includeSeconds) {
-            timeFormatWithSeconds.format(javaDate)
-        } else {
-            timeFormat.format(javaDate)
-        }
+    override fun formatDate(localDate: LocalDate): String {
+        val timeZone = timeZoneProvider()
+        return DateFormat.getDateInstance(MEDIUM, localeProvider())
+            .formatIn(timeZone, localDate.atTime(0, 0).toInstant(timeZone))
     }
 
-    private fun LocalDate.toInstant(): Instant =
-        atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
+    override fun formatDateTime(localDateTime: LocalDateTime): String {
+        val timeZone = timeZoneProvider()
+        return DateFormat.getDateTimeInstance(MEDIUM, SHORT, localeProvider())
+            .formatIn(timeZone, localDateTime.toInstant(timeZone))
+    }
 
-    private fun LocalDate.toJavaDate(): Date = toInstant().toJavaDate()
+    override fun formatFullDayOfWeek(localDate: LocalDate): String {
+        val timeZone = timeZoneProvider()
+        return SimpleDateFormat("EEEE", localeProvider())
+            .formatIn(timeZone, localDate.atTime(0, 0).toInstant(timeZone))
+    }
 
-    private fun LocalDateTime.toJavaDate(): Date =
-        toInstant(TimeZone.currentSystemDefault()).toJavaDate()
+    override fun formatTime(localTime: LocalTime, includeSeconds: Boolean): String {
+        val timeZone = timeZoneProvider()
+        val today = clock.now().toLocalDateTime(timeZone).date
+        val style = if (includeSeconds) MEDIUM else SHORT
+        return DateFormat.getTimeInstance(style, localeProvider())
+            .formatIn(timeZone, localTime.atDate(today).toInstant(timeZone))
+    }
 
-    private fun Instant.toJavaDate(): Date = Date(toEpochMilliseconds())
+    private fun DateFormat.formatIn(timeZone: TimeZone, instant: Instant): String {
+        this.timeZone = java.util.TimeZone.getTimeZone(timeZone.toJavaZoneId())
+        return format(Date(instant.toEpochMilliseconds()))
+    }
 }

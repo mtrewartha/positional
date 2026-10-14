@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
+import io.trewartha.positional.core.ui.locals.PreviewDateTimeFormatter
 import io.trewartha.positional.core.ui.modifier.placeholder
 import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
@@ -198,13 +200,15 @@ private fun LoadingPreview() {
 @Composable
 private fun LoadedPreview() {
     PositionalTheme {
-        Surface {
-            SunDateControls(
-                selectedDate = LocalDate(2020, 1, 1),
-                onPreviousDayClick = {},
-                onDateSelection = {},
-                onNextDayClick = {}
-            )
+        CompositionLocalProvider(LocalDateTimeFormatter provides PreviewDateTimeFormatter) {
+            Surface {
+                SunDateControls(
+                    selectedDate = LocalDate(2020, 1, 1),
+                    onPreviousDayClick = {},
+                    onDateSelection = {},
+                    onNextDayClick = {}
+                )
+            }
         }
     }
 }

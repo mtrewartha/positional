@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,6 +21,7 @@ import io.trewartha.positional.core.ui.State
 import io.trewartha.positional.core.ui.components.AutoShrinkingText
 import io.trewartha.positional.core.ui.components.HorizontalDivider
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
+import io.trewartha.positional.core.ui.locals.PreviewDateTimeFormatter
 import io.trewartha.positional.core.ui.modifier.placeholder
 import kotlinx.datetime.LocalTime
 
@@ -156,15 +158,17 @@ private fun LoadingPreview() {
 @Composable
 private fun LoadedPreview() {
     PositionalTheme {
-        Surface {
-            DawnDuskColumn(
-                astronomicalDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 0)),
-                nauticalDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 1)),
-                civilDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 2)),
-                civilDusk = State.Loaded<LocalTime?>(null),
-                nauticalDusk = State.Loaded<LocalTime?>(null),
-                astronomicalDusk = State.Loaded<LocalTime?>(null)
-            )
+        CompositionLocalProvider(LocalDateTimeFormatter provides PreviewDateTimeFormatter) {
+            Surface {
+                DawnDuskColumn(
+                    astronomicalDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 0)),
+                    nauticalDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 1)),
+                    civilDawn = State.Loaded<LocalTime?>(LocalTime(12, 0, 2)),
+                    civilDusk = State.Loaded<LocalTime?>(null),
+                    nauticalDusk = State.Loaded<LocalTime?>(null),
+                    astronomicalDusk = State.Loaded<LocalTime?>(null)
+                )
+            }
         }
     }
 }

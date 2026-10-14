@@ -32,8 +32,8 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.State
-import io.trewartha.positional.core.ui.locals.DefaultDateTimeFormatter
 import io.trewartha.positional.core.ui.locals.LocalDateTimeFormatter
+import io.trewartha.positional.core.ui.locals.PreviewDateTimeFormatter
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
@@ -132,26 +132,28 @@ private fun HelpButton(onClick: () -> Unit) {
 @Composable
 private fun LoadingPreview() {
     PositionalTheme {
-        SunView(
-            state = SunState(
-                todaysDate = LocalDate(2024, Month.JANUARY, 1),
-                selectedDate = LocalDate(2024, Month.JANUARY, 1),
-                astronomicalDawn = State.Loading,
-                nauticalDawn = State.Loading,
-                civilDawn = State.Loading,
-                sunrise = State.Loading,
-                sunset = State.Loading,
-                civilDusk = State.Loading,
-                nauticalDusk = State.Loading,
-                astronomicalDusk = State.Loading
-            ),
-            contentPadding = PaddingValues(),
-            onSelectedDateDecrement = {},
-            onDateSelection = {},
-            onSelectedDateIncrement = {},
-            onJumpToTodayClick = {},
-            onHelpClick = {}
-        )
+        CompositionLocalProvider(LocalDateTimeFormatter provides PreviewDateTimeFormatter) {
+            SunView(
+                state = SunState(
+                    todaysDate = LocalDate(2024, Month.JANUARY, 1),
+                    selectedDate = LocalDate(2024, Month.JANUARY, 1),
+                    astronomicalDawn = State.Loading,
+                    nauticalDawn = State.Loading,
+                    civilDawn = State.Loading,
+                    sunrise = State.Loading,
+                    sunset = State.Loading,
+                    civilDusk = State.Loading,
+                    nauticalDusk = State.Loading,
+                    astronomicalDusk = State.Loading
+                ),
+                contentPadding = PaddingValues(),
+                onSelectedDateDecrement = {},
+                onDateSelection = {},
+                onSelectedDateIncrement = {},
+                onJumpToTodayClick = {},
+                onHelpClick = {}
+            )
+        }
     }
 }
 
@@ -160,7 +162,7 @@ private fun LoadingPreview() {
 private fun LoadedPreview() {
     PositionalTheme {
         Surface {
-            CompositionLocalProvider(LocalDateTimeFormatter provides DefaultDateTimeFormatter) {
+            CompositionLocalProvider(LocalDateTimeFormatter provides PreviewDateTimeFormatter) {
                 SunView(
                     state = SunState(
                         todaysDate = LocalDate(2024, Month.JANUARY, 1),

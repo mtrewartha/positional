@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.markwon)
 
+    testImplementation(projects.core.test)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }
