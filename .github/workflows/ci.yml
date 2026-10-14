@@ -8,6 +8,9 @@ jobs:
   checks:
     name: 'Checks'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: 'Check out the repository'
         uses: actions/checkout@v6
@@ -20,6 +23,11 @@ jobs:
 
       - name: 'Set up Gradle'
         uses: gradle/actions/setup-gradle@v6
+        with:
+          build-scan-publish: true
+          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
+          build-scan-terms-of-use-agree: 'yes'
+          add-job-summary-as-pr-comment: 'on-failure'
 
       - name: 'Set up the Android SDK'
         uses: android-actions/setup-android@v4
@@ -28,7 +36,7 @@ jobs:
 
       - name: 'Run checks w/ test coverage reports'
         run: >-
-          ./gradlew check koverXmlReport
+          ./gradlew --warn check koverXmlReport
 
       - name: 'Upload test coverage reports to Codecov'
         uses: codecov/codecov-action@v6
