@@ -1,5 +1,6 @@
 package io.trewartha.positional.core.ui.format
 
+import androidx.core.os.LocaleListCompat
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.trewartha.positional.AppScope
@@ -23,9 +24,9 @@ import kotlinx.datetime.toLocalDateTime
 @ContributesBinding(AppScope::class)
 @Inject
 internal class SystemDateTimeFormatter(
-    private val clock: Clock,
-    locale: Locale,
-    private val timeZone: TimeZone,
+    private val clock: Clock = Clock.System,
+    locale: Locale = checkNotNull(LocaleListCompat.getDefault()[0]),
+    private val timeZone: TimeZone = TimeZone.currentSystemDefault(),
 ) : DateTimeFormatter {
 
     private val javaTimeZone = java.util.TimeZone.getTimeZone(timeZone.toJavaZoneId())
