@@ -22,10 +22,7 @@ import kotlinx.datetime.toJavaZoneId
 import kotlinx.datetime.toLocalDateTime
 
 /**
- * Formats dates and times using the locale and time zone that are current at the time of each call.
- *
- * A new [DateFormat] is created for every call because [DateFormat] instances are not thread-safe
- * and the locale and time zone may change while the process is alive.
+ * A [DateTimeFormatter] that formats dates and times for the device's current locale and time zone.
  */
 @ContributesBinding(AppScope::class)
 @Inject
