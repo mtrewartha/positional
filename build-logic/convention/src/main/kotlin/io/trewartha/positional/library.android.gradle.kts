@@ -18,7 +18,7 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
@@ -78,7 +78,14 @@ android {
         }
         unitTests {
             isIncludeAndroidResources = true
-            all { it.useJUnitPlatform() }
+            all {
+                it.useJUnitPlatform()
+                // Robolectric needs access to JDK internals on JDK 17+: https://robolectric.org/getting-started/
+                it.jvmArgs(
+                    "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+                    "--enable-native-access=ALL-UNNAMED",
+                )
+            }
         }
     }
 }

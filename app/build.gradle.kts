@@ -58,7 +58,7 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.trewartha.positional"
@@ -67,7 +67,7 @@ android {
         versionName = "3.1.3"
 
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
