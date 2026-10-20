@@ -1,6 +1,5 @@
-import java.nio.file.NoSuchFileException
+import java.util.Properties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -11,12 +10,6 @@ plugins {
     id("io.trewartha.positional.metro")
 }
 
-private val PROPERTIES_FILE_PATH = "app/upload_keystore.properties"
-private val PROPERTIES_KEY_ALIAS = "keyAlias"
-private val PROPERTIES_KEY_PASSWORD = "keyPassword"
-private val PROPERTIES_KEY_STORE_FILE = "storeFile"
-private val PROPERTIES_KEY_STORE_PASSWORD = "storePassword"
-
 android {
     buildFeatures {
         buildConfig = true
@@ -24,14 +17,15 @@ android {
 
     signingConfigs {
         create("release") {
-            try {
-                val uploadKeystoreProperties = loadProperties(PROPERTIES_FILE_PATH)
-                storeFile = file(uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_FILE))
-                storePassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_STORE_PASSWORD)
-                keyAlias = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_ALIAS)
-                keyPassword = uploadKeystoreProperties.getProperty(PROPERTIES_KEY_PASSWORD)
-            } catch (_: NoSuchFileException) {
-                // Builds can't be signed for upload to store unless properties file is loaded
+            val uploadKeystoreProperties = providers
+                .fileContents(layout.projectDirectory.file("upload_keystore.properties"))
+                .asText
+                .map { text -> Properties().apply { load(text.reader()) } }
+            uploadKeystoreProperties.orNull?.let { properties ->
+                storeFile = file(properties.getProperty("storeFile"))
+                storePassword = properties.getProperty("storePassword")
+                keyAlias = properties.getProperty("keyAlias")
+                keyPassword = properties.getProperty("keyPassword")
             }
         }
     }
