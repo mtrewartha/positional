@@ -41,7 +41,7 @@ robolectric = "4.17"
 sunrise-sunset = "1.2"
 timber = "5.0.1"
 turbine = "1.2.1"
-wire = "6.2.0"
+wire = "6.4.7"
 worldwind = "1.14.2"
 
 [plugins]
