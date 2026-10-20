@@ -122,6 +122,8 @@ public fun LocationView(
     val coroutineScope = rememberCoroutineScope()
     val coordinatesCopiedMessage =
         stringResource(R.string.feature_location_ui_snackbar_coordinates_copied)
+    val coordinatesCopyLabel =
+        stringResource(R.string.feature_location_ui_coordinates_copy_label)
     var showMapError by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val clipboard = LocalClipboard.current
@@ -137,7 +139,7 @@ public fun LocationView(
             coroutineScope.launch {
                 snackbarHostState.currentSnackbarData?.dismiss()
                 clipboard.setCoordinates(
-                    label = context.getString(R.string.feature_location_ui_coordinates_copy_label),
+                    label = coordinatesCopyLabel,
                     coordinates = coordinatesFormatter.formatForCopy(coordinates)
                 )
                 snackbarHostState.showSnackbar(coordinatesCopiedMessage)
