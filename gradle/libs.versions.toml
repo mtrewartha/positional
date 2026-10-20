@@ -42,7 +42,7 @@ sunrise-sunset = "1.2"
 timber = "5.0.1"
 turbine = "1.2.1"
 wire = "7.1.0"
-worldwind = "1.14.2"
+worldwind = "2.1.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-tools-gradle" }
