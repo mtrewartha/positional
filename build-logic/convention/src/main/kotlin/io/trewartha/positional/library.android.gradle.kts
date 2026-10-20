@@ -18,6 +18,7 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
+    buildToolsVersion = libs.versions.android.buildTools.get()
     compileSdk = 37
 
     defaultConfig {

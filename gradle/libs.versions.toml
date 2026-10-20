@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.37.3"
-android-tools-common = "36.1.0"
+android-buildTools = "36.1.0"
 android-tools-desugarJdkLibs = "2.1.5"
 android-tools-gradle = "9.4.1"
 androidx-activity = "1.13.0"
@@ -61,7 +61,6 @@ wire = { id = "com.squareup.wire", version.ref = "wire" }
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 android-tools-build = { group = "com.android.tools.build", name = "gradle", version.ref = "android-tools-gradle" }
-android-tools-common = { group = "com.android.tools", name = "common", version.ref = "android-tools-common" }
 android-tools-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "android-tools-desugarJdkLibs" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
