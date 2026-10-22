@@ -13,21 +13,19 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShortNavigationBar
+import androidx.compose.material3.ShortNavigationBarItem
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.WideNavigationRail
+import androidx.compose.material3.WideNavigationRailItem
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -43,7 +41,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -187,9 +184,9 @@ private fun MainNavigationBar(
     modifier: Modifier = Modifier,
     onItemSelected: (Int) -> Unit,
 ) {
-    NavigationBar(modifier) {
+    ShortNavigationBar(modifier) {
         mainNavKeys.forEachIndexed { index, mainNavKey ->
-            NavigationBarItem(
+            ShortNavigationBarItem(
                 selected = activeMainNavKey == mainNavKey,
                 onClick = { onItemSelected(index) },
                 icon = { Icon(imageVector = mainNavKey.navIcon, null) },
@@ -206,21 +203,16 @@ private fun MainNavigationRail(
     modifier: Modifier = Modifier,
     onItemSelected: (Int) -> Unit,
 ) {
-    NavigationRail(modifier) {
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-        ) {
-            mainNavKeys.forEachIndexed { index, mainNavKey ->
-                NavigationRailItem(
-                    selected = activeMainNavKey == mainNavKey,
-                    onClick = { onItemSelected(index) },
-                    icon = { Icon(imageVector = mainNavKey.navIcon, null) },
-                    label = { Text(stringResource(mainNavKey.navLabelRes)) },
-                )
-            }
+    WideNavigationRail(modifier, arrangement = Arrangement.Center) {
+        mainNavKeys.forEachIndexed { index, mainNavKey ->
+            WideNavigationRailItem(
+                selected = activeMainNavKey == mainNavKey,
+                onClick = { onItemSelected(index) },
+                icon = { Icon(imageVector = mainNavKey.navIcon, null) },
+                label = { Text(stringResource(mainNavKey.navLabelRes)) },
+                railExpanded = false,
+            )
         }
-        Spacer(Modifier.weight(1f))
     }
 }
 
