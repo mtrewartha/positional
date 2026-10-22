@@ -30,6 +30,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -95,10 +96,20 @@ public fun MainView(
             }
         }
     }
-    val systemBarStyle =
-        SystemBarStyle.auto(Color.Transparent.toArgb(), Color.Transparent.toArgb()) { useDarkTheme }
-
-    LocalContext.current.activity?.enableEdgeToEdge(systemBarStyle, systemBarStyle)
+    // Don't use SystemBarStyle.auto here: it leaves system bar contrast enforcement on, which makes
+    // the system draw an opaque scrim over our navigation bar when 3-button navigation is in use.
+    val systemBarStyle = remember(useDarkTheme) {
+        if (useDarkTheme) {
+            SystemBarStyle.dark(Color.Transparent.toArgb())
+        } else {
+            SystemBarStyle.light(Color.Transparent.toArgb(), Color.Transparent.toArgb())
+        }
+    }
+    val activity = LocalContext.current.activity
+    DisposableEffect(activity, systemBarStyle) {
+        activity?.enableEdgeToEdge(systemBarStyle, systemBarStyle)
+        onDispose {}
+    }
 
     PositionalTheme(useDarkTheme = useDarkTheme) {
         val context = LocalContext.current
