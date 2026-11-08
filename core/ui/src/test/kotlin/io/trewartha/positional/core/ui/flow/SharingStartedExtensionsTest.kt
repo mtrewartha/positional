@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldBe
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingCommand
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.test.runTest
 
@@ -19,7 +20,7 @@ class SharingStartedExtensionsTest : DescribeSpec({
                     SharingStarted.ForViewModel.command(subscriptionCount).test {
                         subscriptionCount.value = 1
 
-                        awaitItem().shouldBe(SharingStarted.SharingCommand.START)
+                        awaitItem().shouldBe(SharingCommand.START)
                     }
                 }
             }
@@ -30,7 +31,7 @@ class SharingStartedExtensionsTest : DescribeSpec({
                 runTest {
                     val subscriptionCount = MutableStateFlow(1)
                     SharingStarted.ForViewModel.command(subscriptionCount).test {
-                        awaitItem().shouldBe(SharingStarted.SharingCommand.START)
+                        awaitItem().shouldBe(SharingCommand.START)
 
                         subscriptionCount.value = 0
                         delay(4_999.milliseconds)
@@ -45,12 +46,12 @@ class SharingStartedExtensionsTest : DescribeSpec({
                 runTest {
                     val subscriptionCount = MutableStateFlow(1)
                     SharingStarted.ForViewModel.command(subscriptionCount).test {
-                        awaitItem().shouldBe(SharingStarted.SharingCommand.START)
+                        awaitItem().shouldBe(SharingCommand.START)
 
                         subscriptionCount.value = 0
 
                         awaitItem()
-                            .shouldBe(SharingStarted.SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
+                            .shouldBe(SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
                     }
                 }
             }
@@ -61,7 +62,7 @@ class SharingStartedExtensionsTest : DescribeSpec({
                 runTest {
                     val subscriptionCount = MutableStateFlow(1)
                     SharingStarted.ForViewModel.command(subscriptionCount).test {
-                        awaitItem().shouldBe(SharingStarted.SharingCommand.START)
+                        awaitItem().shouldBe(SharingCommand.START)
 
                         subscriptionCount.value = 0
                         delay(4_999.milliseconds)
