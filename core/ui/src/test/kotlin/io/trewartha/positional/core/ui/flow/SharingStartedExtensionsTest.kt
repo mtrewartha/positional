@@ -8,70 +8,61 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingCommand
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.test.runTest
 
 class SharingStartedExtensionsTest : DescribeSpec({
 
     describe("sharing for a view model") {
         context("when the first subscriber arrives") {
             it("starts sharing") {
-                runTest {
-                    val subscriptionCount = MutableStateFlow(0)
-                    SharingStarted.ForViewModel.command(subscriptionCount).test {
-                        subscriptionCount.value = 1
+                val subscriptionCount = MutableStateFlow(0)
+                SharingStarted.ForViewModel.command(subscriptionCount).test {
+                    subscriptionCount.value = 1
 
-                        awaitItem().shouldBe(SharingCommand.START)
-                    }
+                    awaitItem().shouldBe(SharingCommand.START)
                 }
             }
         }
 
         context("when the last subscriber leaves") {
             it("keeps sharing until just before the stop timeout elapses") {
-                runTest {
-                    val subscriptionCount = MutableStateFlow(1)
-                    SharingStarted.ForViewModel.command(subscriptionCount).test {
-                        awaitItem().shouldBe(SharingCommand.START)
+                val subscriptionCount = MutableStateFlow(1)
+                SharingStarted.ForViewModel.command(subscriptionCount).test {
+                    awaitItem().shouldBe(SharingCommand.START)
 
-                        subscriptionCount.value = 0
-                        delay(4_999.milliseconds)
+                    subscriptionCount.value = 0
+                    delay(4_999.milliseconds)
 
-                        expectNoEvents()
-                        cancelAndIgnoreRemainingEvents()
-                    }
+                    expectNoEvents()
+                    cancelAndIgnoreRemainingEvents()
                 }
             }
 
             it("stops sharing and clears the replay cache once the stop timeout elapses") {
-                runTest {
-                    val subscriptionCount = MutableStateFlow(1)
-                    SharingStarted.ForViewModel.command(subscriptionCount).test {
-                        awaitItem().shouldBe(SharingCommand.START)
+                val subscriptionCount = MutableStateFlow(1)
+                SharingStarted.ForViewModel.command(subscriptionCount).test {
+                    awaitItem().shouldBe(SharingCommand.START)
 
-                        subscriptionCount.value = 0
+                    subscriptionCount.value = 0
 
-                        awaitItem()
-                            .shouldBe(SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
-                    }
+                    awaitItem()
+                        .shouldBe(SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
                 }
             }
         }
 
         context("when a subscriber returns before the stop timeout elapses") {
             it("never stops sharing") {
-                runTest {
-                    val subscriptionCount = MutableStateFlow(1)
-                    SharingStarted.ForViewModel.command(subscriptionCount).test {
-                        awaitItem().shouldBe(SharingCommand.START)
+                val subscriptionCount = MutableStateFlow(1)
+                SharingStarted.ForViewModel.command(subscriptionCount).test {
+                    awaitItem().shouldBe(SharingCommand.START)
 
-                        subscriptionCount.value = 0
-                        delay(4_999.milliseconds)
-                        subscriptionCount.value = 1
-                        delay(10_000.milliseconds)
+                    subscriptionCount.value = 0
+                    delay(4_999.milliseconds)
+                    subscriptionCount.value = 1
+                    delay(10_000.milliseconds)
 
-                        expectNoEvents()
-                        cancelAndIgnoreRemainingEvents()
-                    }
+                    expectNoEvents()
+                    cancelAndIgnoreRemainingEvents()
                 }
             }
         }
