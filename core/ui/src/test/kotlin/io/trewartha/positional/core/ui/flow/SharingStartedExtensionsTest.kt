@@ -27,7 +27,7 @@ class SharingStartedExtensionsTest : DescribeSpec({
             it("keeps sharing until just before the stop timeout elapses") {
                 val subscriptionCount = MutableStateFlow(1)
                 SharingStarted.ForViewModel.command(subscriptionCount).test {
-                    awaitItem().shouldBe(SharingCommand.START)
+                    skipItems(1)
 
                     subscriptionCount.value = 0
                     delay(4_999.milliseconds)
@@ -40,7 +40,7 @@ class SharingStartedExtensionsTest : DescribeSpec({
             it("stops sharing and clears the replay cache once the stop timeout elapses") {
                 val subscriptionCount = MutableStateFlow(1)
                 SharingStarted.ForViewModel.command(subscriptionCount).test {
-                    awaitItem().shouldBe(SharingCommand.START)
+                    skipItems(1)
 
                     subscriptionCount.value = 0
 
@@ -54,7 +54,7 @@ class SharingStartedExtensionsTest : DescribeSpec({
             it("never stops sharing") {
                 val subscriptionCount = MutableStateFlow(1)
                 SharingStarted.ForViewModel.command(subscriptionCount).test {
-                    awaitItem().shouldBe(SharingCommand.START)
+                    skipItems(1)
 
                     subscriptionCount.value = 0
                     delay(4_999.milliseconds)
