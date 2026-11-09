@@ -5,4 +5,5 @@ import io.kotest.engine.concurrency.SpecExecutionMode
 
 object ProjectConfig : AbstractProjectConfig() {
     override val specExecutionMode = SpecExecutionMode.Concurrent
+    override val coroutineTestScope = true
 }
