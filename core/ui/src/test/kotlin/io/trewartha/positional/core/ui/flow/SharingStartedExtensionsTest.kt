@@ -43,8 +43,9 @@ class SharingStartedExtensionsTest : DescribeSpec({
                     skipItems(1)
 
                     subscriptionCount.value = 0
+                    delay(5_000.milliseconds)
 
-                    awaitItem()
+                    expectMostRecentItem()
                         .shouldBe(SharingCommand.STOP_AND_RESET_REPLAY_CACHE)
                 }
             }
