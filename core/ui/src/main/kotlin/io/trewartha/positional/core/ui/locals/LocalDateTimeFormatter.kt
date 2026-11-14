@@ -8,6 +8,7 @@ import java.util.Locale
 import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
 
+/** The [DateTimeFormatter] composables should use to format dates and times */
 public val LocalDateTimeFormatter: ProvidableCompositionLocal<DateTimeFormatter> =
     staticCompositionLocalOf { error("No DateTimeFormatter provided") }
 

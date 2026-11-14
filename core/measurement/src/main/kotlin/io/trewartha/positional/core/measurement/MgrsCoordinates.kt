@@ -47,6 +47,9 @@ public data class MgrsCoordinates(
         return "$gridZoneDesignator$gridSquareID$easting$northing"
     }
 
+    /**
+     * Constants describing the printed form of MGRS coordinates
+     */
     public companion object {
 
         /**

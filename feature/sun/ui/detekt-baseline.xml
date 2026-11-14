@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:DawnDuskColumn.kt:12</ID>
+    <ID>MagicNumber:SunDateControls.kt:2020</ID>
+    <ID>MagicNumber:SunView.kt:12</ID>
+    <ID>MagicNumber:SunView.kt:2024</ID>
+    <ID>MagicNumber:SunriseSunsetColumn.kt:12</ID>
+  </CurrentIssues>
+</SmellBaseline>

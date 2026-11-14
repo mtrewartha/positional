@@ -110,7 +110,7 @@ private fun Preview() {
                     override val revokedPermissions: List<PermissionState> = emptyList()
                     override val shouldShowRationale: Boolean = false
 
-                    override fun launchMultiplePermissionRequest() {}
+                    override fun launchMultiplePermissionRequest() = Unit
                 },
                 onSettingsClick = {},
             )

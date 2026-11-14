@@ -2,6 +2,7 @@ package io.trewartha.positional.core.ui.flow
 
 import kotlinx.coroutines.flow.SharingStarted
 
+/** Sharing strategy for ViewModel state flows that survives brief subscriber gaps such as configuration changes */
 public val SharingStarted.Companion.ForViewModel: SharingStarted
     get() = WhileSubscribed(
         stopTimeoutMillis = VIEW_MODEL_SHARING_STOP_TIMEOUT_MS,

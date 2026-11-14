@@ -6,6 +6,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import io.trewartha.positional.core.ui.nav.MainNavKey
 import kotlinx.serialization.Serializable
 
+/**
+ * Navigation destination for the settings screen
+ */
 @Serializable
 public data object SettingsNavKey : MainNavKey {
     override val navIcon: ImageVector = Icons.Rounded.Settings

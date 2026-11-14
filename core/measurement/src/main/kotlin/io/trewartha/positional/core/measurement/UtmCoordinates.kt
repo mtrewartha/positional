@@ -54,6 +54,9 @@ public data class UtmCoordinates(
         return "$zone$hemisphere ${easting}m E ${northing}m N"
     }
 
+    /**
+     * Constants describing the printed form of UTM coordinates
+     */
     public companion object {
 
         /**

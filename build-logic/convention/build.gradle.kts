@@ -28,6 +28,7 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     implementation(libs.metro.gradle)
     implementation(libs.autonomous.dependencyAnalysis)
+    implementation(libs.detekt.gradle)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
