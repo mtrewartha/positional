@@ -1,4 +1,4 @@
-![CI](https://github.com/mtrewartha/positional/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/mtrewartha/positional/graph/badge.svg?token=FGAW9FOC5Y)](https://codecov.io/gh/mtrewartha/positional)
+![Checks](https://github.com/mtrewartha/positional/actions/workflows/checks.yml/badge.svg) [![codecov](https://codecov.io/gh/mtrewartha/positional/graph/badge.svg?token=FGAW9FOC5Y)](https://codecov.io/gh/mtrewartha/positional)
 
 # Positional
 Minimalist, private, free, and open source Android app for location, compass, and solar times
