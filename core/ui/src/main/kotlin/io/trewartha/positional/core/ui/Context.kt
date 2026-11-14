@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatActivity
 
+/** The [AppCompatActivity] this context belongs to, or null if there is none */
 public val Context.activity: AppCompatActivity?
     get() {
         return when (this) {

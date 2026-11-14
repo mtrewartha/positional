@@ -5,6 +5,20 @@ import io.trewartha.positional.core.ui.State
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
+/**
+ * The solar times for [selectedDate]
+ *
+ * @property todaysDate the current date
+ * @property selectedDate the date the solar times are for
+ * @property astronomicalDawn start of astronomical twilight before sunrise
+ * @property nauticalDawn start of nautical twilight before sunrise
+ * @property civilDawn start of civil twilight before sunrise
+ * @property sunrise time the sun rises
+ * @property sunset time the sun sets
+ * @property civilDusk end of civil twilight after sunset
+ * @property nauticalDusk end of nautical twilight after sunset
+ * @property astronomicalDusk end of astronomical twilight after sunset
+ */
 @Immutable
 public data class SunState(
     val todaysDate: LocalDate,

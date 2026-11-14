@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
     id("io.trewartha.positional.metro")
+    id("io.trewartha.positional.detekt")
 }
 
 android {

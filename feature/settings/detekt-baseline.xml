@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>TooManyFunctions:DataStoreSettingsRepository.kt:io.trewartha.positional.settings.DataStoreSettingsRepository.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

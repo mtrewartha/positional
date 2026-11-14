@@ -64,6 +64,7 @@ public fun Compass(
 @Composable
 private fun CompassReading(azimuth: Angle, modifier: Modifier = Modifier) {
     ConstraintLayout(modifier) {
+        @Suppress("DestructuringDeclarationWithTooManyEntries")
         val (arrowIcon, degreesText, symbolText, directionText) = createRefs()
         val innerContentChain = createVerticalChain(arrowIcon, degreesText, directionText)
         constrain(innerContentChain) {

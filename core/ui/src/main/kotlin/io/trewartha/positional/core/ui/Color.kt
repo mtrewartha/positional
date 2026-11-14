@@ -1,3 +1,5 @@
+@file:Suppress("UndocumentedPublicProperty")
+
 package io.trewartha.positional.core.ui
 
 import androidx.compose.material3.ColorScheme

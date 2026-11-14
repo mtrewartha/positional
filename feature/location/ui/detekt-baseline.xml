@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>TooManyFunctions:LocationPermissionGrantedContent.kt:io.trewartha.positional.location.ui.LocationPermissionGrantedContent.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

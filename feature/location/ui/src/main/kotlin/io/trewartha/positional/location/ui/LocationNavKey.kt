@@ -6,6 +6,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import io.trewartha.positional.core.ui.nav.MainNavKey
 import kotlinx.serialization.Serializable
 
+/**
+ * Navigation destination for the location screen
+ */
 @Serializable
 public data object LocationNavKey : MainNavKey {
     override val navIcon: ImageVector = Icons.Rounded.MyLocation
