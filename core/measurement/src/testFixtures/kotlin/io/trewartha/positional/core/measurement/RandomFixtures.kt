@@ -59,6 +59,8 @@ public fun randomLatitude(): Angle = Arb.double(-90.0..90.0).next(TEST_RANDOM_SO
 public fun randomLongitude(): Angle = Arb.double(-180.0..180.0).next(TEST_RANDOM_SOURCE).degrees
 
 public fun randomMgrsCoordinates(): MgrsCoordinates =
+    // MGRS parts are interdependent (e.g. the grid square's row letter must fit the zone's latitude
+    // band), so assembling one from independently random parts often yields invalid coordinates.
     randomGeodeticCoordinates().asMgrsCoordinates()
 
 public fun randomMgrsEasting(): Distance = Arb.double(0.0..99999.0).next(TEST_RANDOM_SOURCE).meters
