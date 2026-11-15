@@ -28,7 +28,7 @@ jobs:
 
       - name: 'Upload Detekt reports'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: detekt-reports
           path: '**/build/reports/detekt/'
@@ -48,7 +48,7 @@ jobs:
 
       - name: 'Upload Android Lint reports'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*'
@@ -66,7 +66,7 @@ jobs:
 
       - name: 'Upload test results'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: unit-test-results
           path: |
@@ -109,7 +109,7 @@ jobs:
 
       - name: 'Upload test results'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: instrumented-test-results-${{ matrix.flavor }}
           path: '**/build/outputs/androidTest-results/'
