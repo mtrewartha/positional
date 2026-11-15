@@ -42,7 +42,9 @@ jobs:
       - uses: ./.github/actions/setup-build
 
       - name: 'Run Android Lint'
-        run: ./gradlew --warn --continue lint
+        run: >-
+          ./gradlew --warn --continue
+          lintAospDebug lintAospRelease lintGmsDebug lintGmsRelease
 
       - name: 'Upload Android Lint reports'
         if: ${{ !cancelled() }}
