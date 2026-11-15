@@ -11,7 +11,7 @@
 | Intent | Command | Notes |
 |---|---|---|
 | Lint (Kotlin) | `./gradlew detekt` | Config: `detekt.yml` over Detekt defaults; per-module `detekt-baseline.xml` |
-| Lint (Android) | `./gradlew lintAospDebug lintAospRelease lintGmsDebug lintGmsRelease` | |
+| Lint (Android) | `./gradlew lintAospDebug lintAospRelease lintGmsDebug lintGmsRelease` | Every Android module has these four variants; plain `lint` checks only the default one. Pure-Kotlin modules have no Android Lint |
 | Unit tests | `./gradlew test` | Runs every flavor/build type; scope with e.g. `:feature:sun:test` |
 | Coverage | `./gradlew koverXmlReport` | |
 | Instrumented tests | `./gradlew aospGroupAospDebugAndroidTest` (or `gms…`) | Gradle Managed Devices |
@@ -49,7 +49,10 @@ CI (`.github/workflows/checks.yml`) runs all of the above as separate jobs.
 - Before adding entries to a `detekt-baseline.xml` or suppressing a Detekt finding.
 
 **ALWAYS**
-- Run `./gradlew detekt test` for the touched modules before calling a change done.
+- Before calling a change done, run Detekt, unit tests, and Android Lint for all four variants:
+  `./gradlew detekt test lintAospDebug lintAospRelease lintGmsDebug lintGmsRelease`. To save time,
+  prefix each task with the touched module's path (e.g. `:feature:location:lintGmsRelease`), but
+  omit the lint tasks for pure-Kotlin modules.
 - Keep comments evergreen: describe the code as it is, not the change that produced it.
 - Skip backward-compatibility shims unless asked; all modules ship together in one app.
 - Use conventional commits for commit messages and PR titles.
