@@ -7,6 +7,9 @@ paths:
 
 # View Model Rules
 
+Existing View Models predate these rules and are being migrated to them. Follow these rules, not
+the existing View Models' structure.
+
 - **MVI Architecture**: Follow Model-View-Intent (MVI) architecture with strict unidirectional data
   flow:
     - View observes state from View Models
@@ -44,9 +47,12 @@ paths:
 Example of View Model that follows all best practices:
 
 ```kotlin
-class ExampleViewModel @Inject constructor(
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey
+@Inject
+internal class ExampleViewModel(
     private val dataRepository: DataRepository,
-    private val createDataUseCase: CreateDataUseCase // Separate use case for complex or reusable logic
+    private val createData: CreateData // Use case for complex or reusable logic
 ) : ViewModel() {
 
     // Immutable data class for state
@@ -69,54 +75,35 @@ class ExampleViewModel @Inject constructor(
         data object Unexpected : Error
     }
 
-    private val errorFlow =
-        MutableStateFlow<Error?>(null) // Imperatively updated error state component
-    private val refreshingFlow =
-        MutableStateFlow(true) // Imperatively updated refreshing state component
+    private val errorFlow = MutableStateFlow<Error?>(null) // Imperatively updated
+    private val refreshingFlow = MutableStateFlow(true) // Imperatively updated
 
-    // Single state flow exposed to view
-    val stateFlow: StateFlow<State> =
-        // Declarative state combined with imperatively updated refreshing state
-        combine(
-            dataRepository.getDataFlow(),
-            refreshingFlow,
-            errorFlow
-        ) { data, refreshing, error ->
+    // Single state flow exposed to view: declarative data combined with imperative components
+    val state: StateFlow<State> =
+        combine(dataRepository.getDataFlow(), refreshingFlow, errorFlow) { data, refreshing, error ->
             State(data, error, refreshing)
         }.stateIn(viewModelScope, SharingStarted.ForViewModel, initialValue = State())
 
     // Single function to handle all actions from view
     fun onAction(action: Action) {
         when (action) {
-            is Action.CreateData -> handleCreateDataAction(action)
-            is Action.DismissError -> handleDismissErrorAction()
-            is Action.Refresh -> handleRefreshAction()
+            is Action.CreateData -> viewModelScope.launch { createData(action.value) }
+            is Action.DismissError -> errorFlow.update { null }
+            is Action.Refresh -> viewModelScope.launch { refresh() }
         }
     }
 
-    private fun handleCreateDataAction(action: Action.CreateData) {
-        viewModelScope.launch { createDataUseCase(action.value) }
-    }
-
-    private fun handleDismissErrorAction() {
-        errorFlow.update { null }
-    }
-
-    private fun handleRefreshAction() {
-        viewModelScope.launch { refresh() }
-    }
-
+    // The View Model is a UI boundary, so a broad catch via runCatchingExceptions is appropriate
+    @OptIn(BoundaryErrorHandling::class)
     private suspend fun refresh() {
-        try {
-            refreshingFlow.update { true }
-            dataRepository.refresh()
-        } catch (_: ConnectionException) {
-            errorFlow.update { Error.Connection }
-        } catch (_: Exception) {
-            errorFlow.update { Error.Unexpected }
-        } finally {
-            refreshingFlow.update { false }
-        }
+        refreshingFlow.update { true }
+        runCatchingExceptions { dataRepository.refresh() }
+            .onFailure { exception ->
+                errorFlow.update {
+                    if (exception is ConnectionException) Error.Connection else Error.Unexpected
+                }
+            }
+        refreshingFlow.update { false }
     }
 }
 ```
