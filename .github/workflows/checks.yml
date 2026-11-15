@@ -1,0 +1,127 @@
+name: Checks
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# Each check runs in its own job so that a failure in one never hides the result of another.
+# Within a job, --continue keeps one module's failure from hiding another module's.
+jobs:
+  detekt:
+    name: 'Detekt'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-build
+
+      - name: 'Run Detekt'
+        run: ./gradlew --warn --continue detekt
+
+      - name: 'Upload Detekt reports'
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: detekt-reports
+          path: '**/build/reports/detekt/'
+          if-no-files-found: ignore
+
+  lint:
+    name: 'Android Lint'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-build
+
+      - name: 'Run Android Lint'
+        run: >-
+          ./gradlew --warn --continue
+          lintAospDebug lintAospRelease lintGmsDebug lintGmsRelease
+
+      - name: 'Upload Android Lint reports'
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: lint-reports
+          path: '**/build/reports/lint-results-*'
+          if-no-files-found: ignore
+
+  unit-tests:
+    name: 'Unit Tests (JVM)'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-build
+
+      - name: 'Run unit tests w/ test coverage reports'
+        run: ./gradlew --warn --continue test koverXmlReport
+
+      - name: 'Upload test results'
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: unit-test-results
+          path: |
+            **/build/test-results/
+            **/build/reports/tests/
+          if-no-files-found: ignore
+
+      - name: 'Upload test coverage reports to Codecov'
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: 'build/reports/kover/report.xml'
+          disable_search: true
+
+  instrumented-tests:
+    name: 'Instrumented Tests (${{ matrix.flavor }})'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - flavor: 'aosp'
+            task: 'aospGroupAospDebugAndroidTest'
+          - flavor: 'gms'
+            task: 'gmsGroupGmsDebugAndroidTest'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-build
+
+      - name: 'Enable KVM for the Android emulator'
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: 'Run instrumented tests on Gradle Managed Devices'
+        run: ./gradlew --warn --continue ${{ matrix.task }}
+
+      - name: 'Upload test results'
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: instrumented-test-results-${{ matrix.flavor }}
+          path: '**/build/outputs/androidTest-results/'
+          if-no-files-found: ignore
+
+  # Single, stable status for branch protection; new check jobs only need adding to `needs`.
+  checks:
+    name: 'Checks'
+    if: ${{ always() }}
+    needs: [detekt, lint, unit-tests, instrumented-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Verify all checks passed'
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
