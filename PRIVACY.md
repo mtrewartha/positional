@@ -12,16 +12,12 @@ services offered by Google in order to help the developers create a better exper
 details.
 
 ### Third-Party Services
-Positional makes use of several third-party services in order to help the developers improve your experience in the app. These
-services include:
+Positional uses one third-party service to help the developers improve your experience in the app:
 
 - **Firebase Crashlytics** gathers information related to any crashes that the app experiences.
-- **Firebase Analytics** gathers information about how users in general use the app.
-- **Firebase Performance** gathers performance related information, e.g. how quickly the app was able to determine your device's
-location.
 
-All of these services collect an "advertising identifier", which is an identifier that is unique to every individual install of
-Positional. The identifier is not tied to any personal information.
+Crash reports are tied to a random identifier that Firebase creates for each install of Positional. The identifier is
+not tied to any personal information, and it is not an advertising identifier.
 
 ### Questions or Concerns?
 If you have any concerns regarding this policy or your privacy, please do not hesitate to get in touch. You can

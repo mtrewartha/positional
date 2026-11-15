@@ -89,9 +89,10 @@ navigation bar and a navigation rail based on window width class.
 
 - `feature:location`: `src/aosp` binds `Locator` to `AospLocator`; `src/gms` contributes
   `GmsLocator` and the `FusedLocationProviderClient`.
-- `app`: the `gms` flavor adds the Firebase Analytics dependency.
 
-Crashlytics ships in both flavors.
+`app` has no flavor-specific code or dependencies. Crashlytics ships in both flavors. The app has
+no Firebase Analytics: Crashlytics works without it, and it would add usage tracking and the
+advertising ID permission. Without it, Crashlytics reports have no breadcrumb logs.
 
 ## Build logic
 
