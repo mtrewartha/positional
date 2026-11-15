@@ -110,8 +110,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
 
-    "gmsImplementation"(libs.google.firebase.analytics)
-
     androidTestRuntimeOnly(libs.androidx.test.runner)
 }
 
