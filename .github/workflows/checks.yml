@@ -28,7 +28,7 @@ jobs:
 
       - name: 'Upload Detekt reports'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: detekt-reports
           path: '**/build/reports/detekt/'
@@ -41,9 +41,6 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-build
 
-      - name: 'TEMP: list tasks that plain lint would run'
-        run: ./gradlew lint --dry-run | grep -i lint
-
       - name: 'Run Android Lint'
         run: >-
           ./gradlew --warn --continue
@@ -51,7 +48,7 @@ jobs:
 
       - name: 'Upload Android Lint reports'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*'
@@ -69,7 +66,7 @@ jobs:
 
       - name: 'Upload test results'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: unit-test-results
           path: |
@@ -110,7 +107,7 @@ jobs:
 
       - name: 'Upload test results'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: instrumented-test-results-${{ matrix.flavor }}
           path: '**/build/outputs/androidTest-results/'
