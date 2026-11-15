@@ -79,6 +79,8 @@ jobs:
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: 'build/reports/kover/report.xml'
+          disable_search: true
 
   instrumented-tests:
     name: 'Instrumented Tests (${{ matrix.flavor }})'
