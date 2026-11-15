@@ -23,6 +23,8 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.markwon)
 
+    androidTestImplementation(libs.androidx.test.ext.junit.ktx)
+
     testImplementation(projects.core.test)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
