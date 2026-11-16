@@ -6,21 +6,21 @@
 [1-2 paragraphs: Why does this feature exist? What problem does it solve?
 What business or user need drives it?]
 
+#### Glossary
+[Optional. Define domain terms that the rest of the spec relies on for precise meaning.
+Omit if the feature has no specialized vocabulary.]
+- **[Term]:** [Definition]
+
 ### Architecture
-- **Data Models:**
-  - `[Model]` in `feature/[x]/src/main/kotlin/.../[Model].kt` — [What it represents]
-  - [Repeat for each model; reference shared types from `core:measurement`, e.g. `Angle`,
-    `GeodeticCoordinates`, rather than redefining them]
-- **Domain Interfaces:**
-  - `[Interface]` in `feature/[x]/src/main/kotlin/.../[Interface].kt` — [Its role in the feature]
-    - `[property]: [Model]` — [What it provides]
-    - `[function]([params]): [Model]` — [What it does]
-  - [Repeat for each interface]
-- **UI State:** `[Feature]State` exposed as `StateFlow` by `[Feature]ViewModel` in
-  `feature/[x]/ui/src/main/kotlin/.../[Feature]ViewModel.kt` — [What the View renders from it]
-- **Dependencies:**
-  - Depends on: [services, libraries, external APIs]
-  - Depended on by: [downstream consumers]
+- **Where it lives:** [Module paths for the feature's domain and UI code, plus any test fixtures
+  other modules use. Point at modules, not classes.]
+- **Behavior:**
+  - [A contract the feature upholds, described as a concept rather than a code symbol.
+    Litmus test: if a rename or refactor with no behavior change would force an edit, it belongs
+    in the code, not here.]
+- **Depended on by:**
+  - [Another feature, and what it relies on from this one, as a concept. Module dependencies
+    themselves live in the build files.]
 - **Constraints:** [Security, compliance, or architectural boundaries.
   State as facts: "All PII fields use column-level encryption."
   Reserve for rules that aren't already captured by the positive
