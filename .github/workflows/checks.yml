@@ -114,14 +114,3 @@ jobs:
           name: instrumented-test-results-${{ matrix.flavor }}
           path: '**/build/outputs/androidTest-results/'
           if-no-files-found: ignore
-
-  # Single, stable status for branch protection; new check jobs only need adding to `needs`.
-  checks:
-    name: 'Checks'
-    if: ${{ always() }}
-    needs: [detekt, lint, unit-tests, instrumented-tests]
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Verify all checks passed'
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
-        run: exit 1
