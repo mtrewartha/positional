@@ -191,14 +191,8 @@ private fun navigateToMap(
     val localDateTime = timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
     val formattedDateTime = dateTimeFormatter.formatDateTime(localDateTime)
     val label = context.getString(R.string.feature_location_ui_launch_label, formattedDateTime)
-    val geoUri = with(coordinates.asGeodeticCoordinates()) {
-        Uri.Builder()
-            .scheme("geo")
-            .path("$latitude,$longitude")
-            .appendQueryParameter("q", "$latitude,$longitude($label)")
-            .build()
-    }
-    context.startActivity(Intent(Intent.ACTION_VIEW, geoUri))
+    val uri = Uri.parse(geoUri(coordinates.asGeodeticCoordinates(), label))
+    context.startActivity(Intent(Intent.ACTION_VIEW, uri))
 }
 
 @Composable

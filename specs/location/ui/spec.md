@@ -70,7 +70,7 @@ The [Location spec](../spec.md#glossary) defines the location attributes.
   - The app relies on precise location only; approximate location alone keeps the user on the permission-required screen.
   - Coordinates shown to the user, copied, or shared are formatted with the user's locale. DD, DDM, and DMS therefore use the locale's decimal separator (for example, a comma in `de-DE`). MGRS and UTM contain no decimal separators.
   - In copied and shared coordinates, the separator between latitude and longitude can't be confused with the locale's decimal separator. _(pending [POS-82](https://linear.app/trewartha/issue/POS-82))_
-  - The `geo:` URI uses plain decimal degrees with a period as the decimal separator and no symbols, regardless of locale. _(pending [POS-72](https://linear.app/trewartha/issue/POS-72))_
+  - The `geo:` URI uses plain decimal degrees with a period as the decimal separator and no symbols, regardless of locale.
   - Crash reports contain no coordinates. _(pending [POS-76](https://linear.app/trewartha/issue/POS-76))_
 
 ## Contract
@@ -110,7 +110,7 @@ The [Location spec](../spec.md#glossary) defines the location attributes.
 - [ ] Share sends the same text that copy produces.
 - [ ] Share opens Android's share sheet. _(pending [POS-81](https://linear.app/trewartha/issue/POS-81))_
 - [ ] Share shows an error when no app can receive the text. _(pending [POS-81](https://linear.app/trewartha/issue/POS-81))_
-- [ ] The map action opens a `geo:` URI with the location's coordinates in plain decimal degrees. _(pending [POS-72](https://linear.app/trewartha/issue/POS-72))_
+- [ ] The map action opens a `geo:` URI with the location's coordinates in plain decimal degrees.
 - [ ] The map pin's label contains the date and time the location was determined.
 - [ ] The map action shows an error dialog when no app handles `geo:` URIs.
 - [ ] The screen stops observing location 5 seconds after backgrounding hides it.
@@ -320,7 +320,6 @@ Scenario: Share with no receiving app
   When the user taps share
   Then an error is shown instead of a crash
 
-@pending @POS-72
 Scenario: Map URI in a comma-decimal locale
   Given a location is loaded
   And the user's locale is de-DE
