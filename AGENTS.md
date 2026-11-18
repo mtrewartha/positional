@@ -56,6 +56,29 @@ CI (`.github/workflows/checks.yml`) runs all of the above as separate jobs.
 - Keep comments evergreen: describe the code as it is, not the change that produced it.
 - Skip backward-compatibility shims unless asked; all modules ship together in one app.
 - Use conventional commits for commit messages and PR titles.
+- Before changing a feature, read its spec in `specs/` (see Specs). When a change alters behavior a
+  spec describes, update the spec in the same commit, including removing any _(pending POS-n)_
+  marker the change resolves.
+
+## Specs
+
+Living feature specs live in `specs/`, mirroring the module layout (e.g. `specs/location/spec.md`
+for `feature/location`, `specs/location/ui/spec.md` for `feature/location/ui`). Start new specs from
+`specs/TEMPLATE.md`. A spec states intended behavior; items marked _(pending POS-n)_ (or tagged
+`@pending` in Gherkin) aren't implemented yet, and the linked Linear issue tracks the change.
+
+- **Adding intended behavior:** create the Linear issue first, linking the spec section and the
+  scenarios it will make pass, then mark each unimplemented
+  sentence and Definition of Done item with _(pending [POS-n](link))_ and tag each unimplemented
+  scenario `@pending @POS-n`. A marker covers only the sentence it follows; keep implemented
+  behavior in separate sentences and untagged scenarios.
+- **Implementing it:** in the same commit, remove the issue's markers and tags, and check each
+  Definition of Done item that a test now proves.
+- **Checking boxes:** check a Definition of Done item only when a test proves exactly that claim.
+  An item is in one of three states: checked (proven by a test), unchecked without a marker
+  (believed implemented, not yet proven), or unchecked with a marker (not implemented yet).
+- **Reviewing:** treat `@pending` scenarios as expected to fail; report them as tracked gaps, not
+  regressions. Report an untagged scenario the code doesn't satisfy as a defect.
 
 ## Skills
 
