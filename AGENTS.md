@@ -58,6 +58,8 @@ CI (`.github/workflows/checks.yml`) runs all of the above as separate jobs.
 - Structure each ViewModel as MVI: one `val state: StateFlow<State>` and one
   `fun onAction(action: Action)` taking a sealed `Action`; reduce one-shot events into `state`.
   Bring a ViewModel to this shape when you change it.
+- Throw specific exceptions. Catch broadly only at boundaries (third-party calls, the UI layer), and
+  do it with `runCatchingExceptions` from `:core:error`.
 - Use conventional commits for commit messages and PR titles.
 - Before changing a feature, read its spec in `specs/` (see Specs). When a change alters behavior a
   spec describes, update the spec in the same commit, including removing any _(pending POS-n)_
