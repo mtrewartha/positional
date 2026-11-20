@@ -4,22 +4,7 @@
   <CurrentIssues>
     <ID>ImplicitDefaultLocale:MgrsFormatter.kt:MgrsFormatter$EASTING_NORTHING_FORMAT.format(easting.inRoundedMeters())</ID>
     <ID>ImplicitDefaultLocale:MgrsFormatter.kt:MgrsFormatter$EASTING_NORTHING_FORMAT.format(northing.inRoundedMeters())</ID>
-    <ID>LongParameterList:LocationPermissionGrantedContent.kt:@Composable private fun ButtonRow</ID>
-    <ID>LongParameterList:LocationPermissionGrantedContent.kt:@Composable private fun CoordinatesView</ID>
-    <ID>LongParameterList:LocationPermissionGrantedContent.kt:@Composable public fun LocationPermissionGrantedContent</ID>
-    <ID>LongParameterList:LocationView.kt:@Composable public fun LocationView</ID>
-    <ID>LongParameterList:StatBlock.kt:@Composable public fun StatBlock</ID>
-    <ID>LongParameterList:StatsBlocks.kt:@Composable public fun AltitudeBlock</ID>
-    <ID>LongParameterList:StatsBlocks.kt:@Composable public fun SpeedBlock</ID>
     <ID>TooManyFunctions:LocationPermissionGrantedContent.kt:io.trewartha.positional.location.ui.LocationPermissionGrantedContent.kt</ID>
-    <ID>UnusedPrivateFunction:LocationHelpView.kt:@PreviewLightDark @Composable private fun Preview</ID>
-    <ID>UnusedPrivateFunction:LocationPermissionGrantedContent.kt:@PreviewFontScale @PreviewLightDark @PreviewScreenSizes @Preview @Composable private fun DataPreview</ID>
-    <ID>UnusedPrivateFunction:LocationPermissionGrantedContent.kt:@PreviewLightDark @Composable private fun LoadingPreview</ID>
-    <ID>UnusedPrivateFunction:LocationPermissionRequiredContent.kt:@PreviewLightDark @Composable private fun Preview</ID>
-    <ID>UnusedPrivateFunction:LocationView.kt:@PreviewFontScale @PreviewLightDark @PreviewScreenSizes @Preview @Composable private fun LoadedPreview</ID>
-    <ID>UnusedPrivateFunction:LocationView.kt:@PreviewLightDark @PreviewScreenSizes @Preview @Composable private fun LoadingPreview</ID>
-    <ID>UnusedPrivateFunction:StatBlock.kt:@PreviewFontScale @PreviewLightDark @Composable private fun LoadedPreview</ID>
-    <ID>UnusedPrivateFunction:StatBlock.kt:@PreviewFontScale @PreviewLightDark @Composable private fun LoadingPreview</ID>
     <ID>UseOrEmpty:LocationPermissionGrantedContent.kt:localTimestamp ?.let { stringResource( R.string.feature_location_ui_updated_at, LocalDateTimeFormatter.current.formatTime(it) ) } ?: ""</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<SmellBaseline>
-  <ManuallySuppressedIssues/>
-  <CurrentIssues>
-    <ID>LongParameterList:AutoShrinkingText.kt:@Composable public fun AutoShrinkingText</ID>
-    <ID>UnusedPrivateFunction:Markdown.kt:@PreviewLightDark @Composable private fun Preview</ID>
-  </CurrentIssues>
-</SmellBaseline>

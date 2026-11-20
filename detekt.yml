@@ -15,14 +15,24 @@ comments:
     active: true
     excludes: ['**/test/**', '**/testFixtures/**', '**/app/src/**']
 
+complexity:
+  LongParameterList:
+    ignoreAnnotated: ['Composable']
+
 style:
   ForbiddenMethodCall:
     active: true
     methods:
       - value: 'kotlin.runCatching'
-        reason: >-
+        reason: &catchingReason >-
           Also catches CancellationException and Error. At boundaries, use runCatchingExceptions
           from :core:error; elsewhere, catch specific exception types.
+      - value: 'kotlin.mapCatching'
+        reason: *catchingReason
+      - value: 'kotlin.recoverCatching'
+        reason: *catchingReason
+  UnusedPrivateFunction:
+    ignoreAnnotated: ['Preview', 'PreviewFontScale', 'PreviewLightDark', 'PreviewScreenSizes']
 
 naming:
   FunctionNaming:

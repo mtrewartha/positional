@@ -6,10 +6,5 @@
     <ID>CyclomaticComplexMethod:Compass.kt:@Composable private fun DirectionText</ID>
     <ID>LongMethod:Compass.kt:@Composable private fun CompassRose</ID>
     <ID>TooManyFunctions:CompassView.kt:io.trewartha.positional.compass.ui.CompassView.kt</ID>
-    <ID>UnusedPrivateFunction:Compass.kt:@PreviewLightDark @Composable private fun CompassPreview</ID>
-    <ID>UnusedPrivateFunction:CompassHelpView.kt:@PreviewLightDark @Composable private fun Preview</ID>
-    <ID>UnusedPrivateFunction:CompassView.kt:@PreviewLightDark @Composable private fun SensorsMissingPreview</ID>
-    <ID>UnusedPrivateFunction:CompassView.kt:@PreviewLightDark @Composable private fun SensorsPresentLoadingPreview</ID>
-    <ID>UnusedPrivateFunction:CompassView.kt:@PreviewLightDark @PreviewFontScale @PreviewScreenSizes @Composable private fun SensorsPresentLoadedPreview</ID>
   </CurrentIssues>
 </SmellBaseline>

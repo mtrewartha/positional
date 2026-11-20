@@ -3,22 +3,6 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>LongMethod:SettingsView.kt:@Composable @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter") public fun SettingsView</ID>
-    <ID>LongParameterList:ListSetting.kt:@Composable private fun &lt;T&gt; ValuesDialog</ID>
-    <ID>LongParameterList:ListSetting.kt:@Composable public fun &lt;T&gt; ListSetting</ID>
-    <ID>LongParameterList:SettingsView.kt:@Composable @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter") public fun SettingsView</ID>
-    <ID>LongParameterList:SwitchSetting.kt:@Composable public fun SwitchSetting</ID>
     <ID>NoNameShadowing:ListSetting.kt:value</ID>
-    <ID>UnusedPrivateFunction:CompassModeSetting.kt:@PreviewLightDark @Composable private fun Previews</ID>
-    <ID>UnusedPrivateFunction:CoordinatesFormatSetting.kt:@PreviewLightDark @Composable private fun Previews</ID>
-    <ID>UnusedPrivateFunction:ListSetting.kt:@Preview @Composable private fun LoadedPreview</ID>
-    <ID>UnusedPrivateFunction:ListSetting.kt:@Preview @Composable private fun LoadingPreview</ID>
-    <ID>UnusedPrivateFunction:ListSetting.kt:@PreviewLightDark @Composable private fun DialogPreviews</ID>
-    <ID>UnusedPrivateFunction:SettingsView.kt:@PreviewLightDark @Composable private fun LoadedPreviews</ID>
-    <ID>UnusedPrivateFunction:SettingsView.kt:@PreviewLightDark @Composable private fun LoadingPreviews</ID>
-    <ID>UnusedPrivateFunction:SwitchSetting.kt:@Preview @Composable private fun CheckedPreview</ID>
-    <ID>UnusedPrivateFunction:SwitchSetting.kt:@Preview @Composable private fun LoadingPreview</ID>
-    <ID>UnusedPrivateFunction:SwitchSetting.kt:@Preview @Composable private fun UncheckedPreview</ID>
-    <ID>UnusedPrivateFunction:ThemeSetting.kt:@PreviewLightDark @Composable private fun Previews</ID>
-    <ID>UnusedPrivateFunction:UnitsSetting.kt:@PreviewLightDark @Composable private fun Previews</ID>
   </CurrentIssues>
 </SmellBaseline>
