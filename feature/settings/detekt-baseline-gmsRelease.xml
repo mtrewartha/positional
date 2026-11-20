@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>TooManyFunctions:DataStoreSettingsRepository.kt:io.trewartha.positional.settings.DataStoreSettingsRepository.kt</ID>
+    <ID>UnusedPrivateFunction:DataStoreSettingsRepository.kt:private fun WireCompassMode.toData: CompassMode</ID>
+    <ID>UnusedPrivateFunction:DataStoreSettingsRepository.kt:private fun WireCompassNorthVibration.toData: CompassNorthVibration</ID>
+    <ID>UnusedPrivateFunction:DataStoreSettingsRepository.kt:private fun WireCoordinatesFormat.toData: CoordinatesFormat</ID>
+    <ID>UnusedPrivateFunction:DataStoreSettingsRepository.kt:private fun WireLocationAccuracyVisibility.toData: LocationAccuracyVisibility</ID>
+    <ID>UnusedPrivateFunction:DataStoreSettingsRepository.kt:private fun WireTheme.toData: Theme</ID>
+    <ID>UnusedPrivateFunction:DataStoreSettingsRepository.kt:private fun WireUnits.toData: Units</ID>
+  </CurrentIssues>
+</SmellBaseline>

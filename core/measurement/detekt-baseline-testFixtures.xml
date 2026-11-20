@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:RandomFixtures.kt:100000.0</ID>
+    <ID>MagicNumber:RandomFixtures.kt:180.0</ID>
+    <ID>MagicNumber:RandomFixtures.kt:360.0</ID>
+    <ID>MagicNumber:RandomFixtures.kt:60</ID>
+    <ID>MagicNumber:RandomFixtures.kt:899999.0</ID>
+    <ID>MagicNumber:RandomFixtures.kt:90.0</ID>
+    <ID>MagicNumber:RandomFixtures.kt:99999.0</ID>
+    <ID>MagicNumber:RandomFixtures.kt:9999999.0</ID>
+    <ID>TooManyFunctions:RandomFixtures.kt:io.trewartha.positional.core.measurement.RandomFixtures.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

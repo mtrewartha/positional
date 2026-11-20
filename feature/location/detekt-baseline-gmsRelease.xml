@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>InjectDispatcher:AospLocator.kt:AospLocator$Default</ID>
+    <ID>InjectDispatcher:GmsLocator.kt:GmsLocator$Default</ID>
+    <ID>UnusedPrivateProperty:GmsLocator.kt:GmsLocator$private val fusedLocationProviderClient: FusedLocationProviderClient</ID>
+  </CurrentIssues>
+</SmellBaseline>

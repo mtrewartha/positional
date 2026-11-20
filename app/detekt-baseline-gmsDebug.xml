@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>InjectDispatcher:AppProviders.kt:AppProviders$Default</ID>
+    <ID>LongMethod:MainView.kt:@Composable public fun MainView</ID>
+    <ID>MagicNumber:MainView.kt:3</ID>
+  </CurrentIssues>
+</SmellBaseline>

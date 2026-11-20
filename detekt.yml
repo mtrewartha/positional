@@ -15,6 +15,15 @@ comments:
     active: true
     excludes: ['**/test/**', '**/testFixtures/**', '**/app/src/**']
 
+style:
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - value: 'kotlin.runCatching'
+        reason: >-
+          Also catches CancellationException and Error. At boundaries, use runCatchingExceptions
+          from :core:error; elsewhere, catch specific exception types.
+
 naming:
   FunctionNaming:
     ignoreAnnotated: ['Composable']
