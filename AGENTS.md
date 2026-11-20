@@ -79,4 +79,3 @@ for `feature/location`, `specs/location/ui/spec.md` for `feature/location/ui`). 
   (believed implemented, not yet proven), or unchecked with a marker (not implemented yet).
 - **Reviewing:** treat `@pending` scenarios as expected to fail; report them as tracked gaps, not
   regressions. Report an untagged scenario the code doesn't satisfy as a defect.
-

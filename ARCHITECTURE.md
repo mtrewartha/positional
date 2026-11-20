@@ -1,7 +1,7 @@
 # ARCHITECTURE.md
 
-How Positional is put together. Rules, commands, and boundaries live in [AGENTS.md](AGENTS.md);
-coding conventions live in `.claude/rules/`. This document describes structure and data flow only.
+How Positional is put together. Rules, commands, and boundaries live in [AGENTS.md](AGENTS.md).
+This document describes structure and data flow only.
 
 ## Shape of the app
 
