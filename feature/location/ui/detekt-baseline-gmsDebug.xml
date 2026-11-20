@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ImplicitDefaultLocale:MgrsFormatter.kt:MgrsFormatter$EASTING_NORTHING_FORMAT.format(easting.inRoundedMeters())</ID>
+    <ID>ImplicitDefaultLocale:MgrsFormatter.kt:MgrsFormatter$EASTING_NORTHING_FORMAT.format(northing.inRoundedMeters())</ID>
+    <ID>TooManyFunctions:LocationPermissionGrantedContent.kt:io.trewartha.positional.location.ui.LocationPermissionGrantedContent.kt</ID>
+    <ID>UseOrEmpty:LocationPermissionGrantedContent.kt:localTimestamp ?.let { stringResource( R.string.feature_location_ui_updated_at, LocalDateTimeFormatter.current.formatTime(it) ) } ?: ""</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:Compass.kt:@Composable private fun CompassRose</ID>
+    <ID>CyclomaticComplexMethod:Compass.kt:@Composable private fun DirectionText</ID>
+    <ID>LongMethod:Compass.kt:@Composable private fun CompassRose</ID>
+    <ID>TooManyFunctions:CompassView.kt:io.trewartha.positional.compass.ui.CompassView.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

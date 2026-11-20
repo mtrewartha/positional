@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongMethod:SettingsView.kt:@Composable @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter") public fun SettingsView</ID>
+    <ID>NoNameShadowing:ListSetting.kt:value</ID>
+  </CurrentIssues>
+</SmellBaseline>

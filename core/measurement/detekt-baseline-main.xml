@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ImplicitDefaultLocale:Angle.kt:Angle$FORMAT_DEGREES.format(magnitude)</ID>
+    <ID>ImplicitDefaultLocale:GeodeticCoordinates.kt:GeodeticCoordinates$FORMAT.format( latitude.inDegrees().magnitude, longitude.inDegrees().magnitude )</ID>
+    <ID>ImplicitDefaultLocale:Speed.kt:Speed$FORMAT_KILOMETERS_PER_HOUR.format(magnitude)</ID>
+    <ID>ImplicitDefaultLocale:Speed.kt:Speed$FORMAT_METERS_PER_SECOND.format(magnitude)</ID>
+    <ID>ImplicitDefaultLocale:Speed.kt:Speed$FORMAT_MILES_PER_HOUR.format(magnitude)</ID>
+  </CurrentIssues>
+</SmellBaseline>
