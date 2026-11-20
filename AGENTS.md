@@ -80,7 +80,3 @@ for `feature/location`, `specs/location/ui/spec.md` for `feature/location/ui`). 
 - **Reviewing:** treat `@pending` scenarios as expected to fail; report them as tracked gaps, not
   regressions. Report an untagged scenario the code doesn't satisfy as a defect.
 
-## Skills
-
-Definitions live in `.agents/skills/` (symlinked into `.claude/skills/`): `kotlin-testing`,
-`kotlin-kdoc`, `kotlin-libraries`, `kotlin-metro`.
