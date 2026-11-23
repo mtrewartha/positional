@@ -1,14 +1,14 @@
 # ARCHITECTURE.md
 
-How Positional is put together. Rules, commands, and boundaries live in [AGENTS.md](AGENTS.md);
-coding conventions live in `.claude/rules/`. This document describes structure and data flow only.
+How Positional is put together. Rules, commands, and boundaries live in [AGENTS.md](AGENTS.md).
+This document describes structure and data flow only.
 
 ## Shape of the app
 
 One process, one Activity (`MainActivity`), all UI in Jetpack Compose. `MainView` gates everything
 behind the fine location permission, then shows four tabs: Location, Compass, Sun, and Settings.
 Each feature exposes a domain interface backed by an Android system service or a pure calculation,
-and a ViewModel per screen turns that interface's `Flow`s into a single `StateFlow` for its View.
+and a ViewModel per screen turns those `Flow`s into `StateFlow` state for its View.
 
 ```mermaid
 graph TD

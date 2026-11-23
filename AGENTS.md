@@ -10,7 +10,7 @@
 
 | Intent | Command | Notes |
 |---|---|---|
-| Lint (Kotlin) | `./gradlew detekt` | Config: `detekt.yml` over Detekt defaults; per-module `detekt-baseline.xml` |
+| Lint (Kotlin) | `./gradlew detekt` | Config: `detekt.yml` over Detekt defaults; per-module `detekt-baseline*.xml` |
 | Lint (Android) | `./gradlew :<module>:lint<Variant>` per variant | Plain `lint` checks only the default variant. List a module's lint tasks with `./gradlew :<module>:tasks --group verification`. Pure-Kotlin modules have no Android Lint |
 | Unit tests | `./gradlew test` | Runs every flavor/build type; scope with e.g. `:feature:sun:test` |
 | Coverage | `./gradlew koverXmlReport` | |
@@ -46,7 +46,7 @@ CI (`.github/workflows/checks.yml`) runs all of the above as separate jobs.
 
 **ASK**
 - Before adding a dependency, Android permission, or network access.
-- Before adding entries to a `detekt-baseline.xml` or suppressing a Detekt finding.
+- Before adding entries to a `detekt-baseline*.xml` or suppressing a Detekt finding.
 
 **ALWAYS**
 - Before calling a change done, run `detekt` and `test` for each touched module, plus
@@ -55,6 +55,9 @@ CI (`.github/workflows/checks.yml`) runs all of the above as separate jobs.
   them, not just `lint`.
 - Keep comments evergreen: describe the code as it is, not the change that produced it.
 - Skip backward-compatibility shims unless asked; all modules ship together in one app.
+- Structure each ViewModel as MVI: one `val state: StateFlow<State>` and one
+  `fun onAction(action: Action)` taking a sealed `Action`; reduce one-shot events into `state`.
+  Bring a ViewModel to this shape when you change it.
 - Use conventional commits for commit messages and PR titles.
 - Before changing a feature, read its spec in `specs/` (see Specs). When a change alters behavior a
   spec describes, update the spec in the same commit, including removing any _(pending POS-n)_
@@ -79,8 +82,3 @@ for `feature/location`, `specs/location/ui/spec.md` for `feature/location/ui`). 
   (believed implemented, not yet proven), or unchecked with a marker (not implemented yet).
 - **Reviewing:** treat `@pending` scenarios as expected to fail; report them as tracked gaps, not
   regressions. Report an untagged scenario the code doesn't satisfy as a defect.
-
-## Skills
-
-Definitions live in `.agents/skills/` (symlinked into `.claude/skills/`): `kotlin-testing`,
-`kotlin-kdoc`, `kotlin-libraries`, `kotlin-metro`.
