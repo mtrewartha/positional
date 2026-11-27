@@ -2,6 +2,8 @@ package io.trewartha.positional.core.measurement
 
 import earth.worldwind.geom.coords.MGRSCoord
 import earth.worldwind.geom.coords.UTMCoord
+import java.net.URLEncoder
+import java.util.Locale
 
 /**
  * Geodetic coordinates with latitude and longitude both given in decimal degrees. See this
@@ -68,6 +70,25 @@ public data class GeodeticCoordinates(val latitude: Angle, val longitude: Angle)
         longitude.inDegrees().magnitude
     )
 }
+
+/**
+ * Returns a `geo:` URI that drops a pin at these coordinates labeled with [label].
+ *
+ * Coordinates are plain decimal degrees with a period as the decimal separator and no grouping or
+ * symbols, regardless of the default locale. The label is percent-encoded.
+ */
+public fun GeodeticCoordinates.toUri(label: String): String {
+    val point = "${latitude.toPlainDegrees()},${longitude.toPlainDegrees()}"
+    return "geo:$point?q=$point(${label.percentEncoded()})"
+}
+
+private fun Angle.toPlainDegrees(): String {
+    val formatted = String.format(Locale.ROOT, "%.6f", inDegrees().magnitude)
+    return if (formatted == "-0.000000") "0.000000" else formatted
+}
+
+private fun String.percentEncoded(): String =
+    URLEncoder.encode(this, "UTF-8").replace("+", "%20")
 
 private const val FORMAT = "%.5f, %.5f"
 private const val UTM_NORTHERN_BOUND = 84.0
