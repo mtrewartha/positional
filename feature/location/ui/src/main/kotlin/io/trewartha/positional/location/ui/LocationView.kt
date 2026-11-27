@@ -48,6 +48,7 @@ import io.trewartha.positional.core.measurement.Units
 import io.trewartha.positional.core.measurement.degrees
 import io.trewartha.positional.core.measurement.kph
 import io.trewartha.positional.core.measurement.meters
+import io.trewartha.positional.core.measurement.toUri
 import io.trewartha.positional.core.ui.PositionalTheme
 import io.trewartha.positional.core.ui.R as CoreR
 import io.trewartha.positional.core.ui.State
@@ -191,7 +192,7 @@ private fun navigateToMap(
     val localDateTime = timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
     val formattedDateTime = dateTimeFormatter.formatDateTime(localDateTime)
     val label = context.getString(R.string.feature_location_ui_launch_label, formattedDateTime)
-    val uri = Uri.parse(geoUri(coordinates.asGeodeticCoordinates(), label))
+    val uri = Uri.parse(coordinates.asGeodeticCoordinates().toUri(label))
     context.startActivity(Intent(Intent.ACTION_VIEW, uri))
 }
 

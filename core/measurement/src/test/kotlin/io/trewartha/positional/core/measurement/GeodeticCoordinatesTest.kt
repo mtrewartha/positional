@@ -4,6 +4,7 @@ import earth.worldwind.geom.Angle
 import earth.worldwind.geom.coords.MGRSCoord
 import earth.worldwind.geom.coords.UTMCoord
 import io.kotest.assertions.withClue
+import io.kotest.core.annotation.Isolate
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -14,12 +15,14 @@ import io.kotest.property.Exhaustive
 import io.kotest.property.checkAll
 import io.kotest.property.exhaustive.cartesian
 import io.kotest.property.exhaustive.ints
+import java.util.Locale
 
+@Isolate // Some tests change the JVM default locale, which specs running concurrently would observe
 class GeodeticCoordinatesTest : DescribeSpec({
 
     // Many complicated tests would be required to properly verify conversion between coordinates
     // formats. These tests would be difficult to make comprehensive for every location on Earth
-    // since there are so many nuances in the various formats. They would also be very error prone.
+    // since there are so many nuances in the various formats. They would also be very error-prone.
     // WorldWind's coordinates conversions are highly trusted, so we verify against them instead.
 
     describe("converting to geodetic coordinates") {
@@ -107,6 +110,38 @@ class GeodeticCoordinatesTest : DescribeSpec({
             }
         }
     }
+
+    describe("conversion to a geo: URI") {
+        context("in a locale that uses a period decimal separator") {
+            it("uses plain decimal degrees") {
+                withDefaultLocale(Locale.US) {
+                    GeodeticCoordinates(52.52.degrees, 13.405.degrees).toUri("Pin")
+                }.shouldStartWith("geo:52.520000,13.405000?q=52.520000,13.405000(")
+            }
+        }
+
+        context("in a locale that uses a non-period decimal separator") {
+            it("uses periods as decimal separators") {
+                withDefaultLocale(Locale.GERMANY) {
+                    GeodeticCoordinates((-33.8688).degrees, 151.2093.degrees).toUri("Pin")
+                }.shouldStartWith("geo:-33.868800,151.209300?q=-33.868800,151.209300(")
+            }
+        }
+
+        context("when a coordinate rounds to zero from below") {
+            it("shows zero without a sign") {
+                GeodeticCoordinates((-0.0000001).degrees, (-0.0).degrees).toUri("Pin")
+                    .shouldStartWith("geo:0.000000,0.000000?q=0.000000,0.000000(")
+            }
+        }
+
+        context("when the label contains spaces, commas, colons, and parentheses") {
+            it("percent-encodes the label") {
+                GeodeticCoordinates(1.degrees, 2.degrees).toUri("Nov 18, 2026 (5:30 PM)")
+                    .shouldEndWith("(Nov%2018%2C%202026%20%285%3A30%20PM%29)")
+            }
+        }
+    }
 })
 
 private fun Exhaustive.Companion.geodeticCoordinates() =
@@ -120,3 +155,13 @@ private fun GeodeticCoordinates.toWorldWindMgrsString() = MGRSCoord.fromLatLon(
 ).toString()
 
 private fun String.filterWordCharacters() = replace(Regex("\\W"), "")
+
+private fun <T> withDefaultLocale(locale: Locale, block: () -> T): T {
+    val original = Locale.getDefault()
+    Locale.setDefault(locale)
+    try {
+        return block()
+    } finally {
+        Locale.setDefault(original)
+    }
+}
